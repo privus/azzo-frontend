@@ -14,11 +14,11 @@ const Routing: Routes = [
   //   loadChildren: () => import('../modules/profile/profile.module').then((m) => m.ProfileModule),
   //   // data: { layout: 'light-sidebar' },
   // },
-  // {
-  //   path: 'crafted/account',
-  //   loadChildren: () => import('../modules/account/account.module').then((m) => m.AccountModule),
-  //   // data: { layout: 'dark-header' },
-  // },
+  {
+    path: 'crafted/account',
+    loadChildren: () => import('../modules/account/account.module').then((m) => m.AccountModule),
+    // data: { layout: 'dark-header' },
+  },
   // {
   //   path: 'crafted/pages/wizards',
   //   loadChildren: () => import('../modules/wizards/wizards.module').then((m) => m.WizardsModule),

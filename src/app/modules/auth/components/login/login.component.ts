@@ -1,48 +1,38 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription, Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
-import { UserModel } from '../../models/user.model';
+import { Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthLogin, Cargo } from '../../models/auth.model';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit, OnDestroy {
-  // KeenThemes mock, change it to:
-  defaultAuth: any = {
-    email: 'admin@demo.com',
-    password: 'demo',
-  };
+export class LoginComponent {
   loginForm: FormGroup;
-  hasError: boolean;
+  hasError = false;
   returnUrl: string;
   isLoading$: Observable<boolean>;
-
-  // private fields
-  private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
+  errorMessage: string = '';
 
   constructor(
-    private fb: FormBuilder,
+    private readonly formBuilder: FormBuilder,
     private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router
+    private router: Router,    
+    private cdr: ChangeDetectorRef 
+    
   ) {
-    this.isLoading$ = this.authService.isLoading$;
-    // redirect to home if already logged in
-    if (this.authService.currentUserValue) {
-      this.router.navigate(['/']);
-    }
-  }
+    this.loginForm = this.formBuilder.group({
+      password: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+    });
 
-  ngOnInit(): void {
-    this.initForm();
-    // get return url from route parameters or default to '/'
-    this.returnUrl =
-      this.route.snapshot.queryParams['returnUrl'.toString()] || '/';
+    // // redirect to home if already logged in
+    // if (this.authService.getToken()) {
+    //   this.router.navigate(['/']);
+    // }
   }
 
   // convenience getter for easy access to form fields
@@ -50,44 +40,25 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.loginForm.controls;
   }
 
-  initForm() {
-    this.loginForm = this.fb.group({
-      email: [
-        this.defaultAuth.email,
-        Validators.compose([
-          Validators.required,
-          Validators.email,
-          Validators.minLength(3),
-          Validators.maxLength(320), // https://stackoverflow.com/questions/386294/what-is-the-maximum-length-of-a-valid-email-address
-        ]),
-      ],
-      password: [
-        this.defaultAuth.password,
-        Validators.compose([
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(100),
-        ]),
-      ],
-    });
-  }
-
-  submit() {
+  async submit() {
     this.hasError = false;
-    const loginSubscr = this.authService
-      .login(this.f.email.value, this.f.password.value)
-      .pipe(first())
-      .subscribe((user: UserModel | undefined) => {
-        if (user) {
-          this.router.navigate([this.returnUrl]);
-        } else {
-          this.hasError = true;
-        }
-      });
-    this.unsubscribe.push(loginSubscr);
-  }
 
-  ngOnDestroy() {
-    this.unsubscribe.forEach((sb) => sb.unsubscribe());
+    const login: AuthLogin = { email: this.f.email.value, senha: this.f.password.value };
+
+    try {
+      const cargo: Cargo = await this.authService.login(login);
+      console.log('Login bem-sucedido, cargo:', cargo);
+
+      if (cargo && cargo.nome === 'Desenvolvedor') {
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.router.navigate(['/crafted/account/overview']);
+      }
+    } catch (error) {
+      console.error('Erro durante o login:', error);
+      this.hasError = true;
+      this.errorMessage = (error as any)?.error?.message || 'Erro no login.';
+      this.cdr.detectChanges(); 
+    }
   }
 }
