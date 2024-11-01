@@ -47,7 +47,7 @@
                   cursor-pointer
                 "
               >
-                Max Smith
+                {{ user?.username }}
               </a>
               <a class="cursor-pointer">
                 <app-keenicon name="verify" class="fs-1 text-primary"></app-keenicon>
@@ -81,7 +81,7 @@
                 "
               >
                 <app-keenicon name="profile-circle" class="fs-4 me-1"></app-keenicon>
-                Developer
+                {{ user?.cargo?.nome }}
               </a>
               <a
                 class="
@@ -94,7 +94,7 @@
                 "
               >
                 <app-keenicon name="geolocation" class="fs-4 me-1"></app-keenicon>
-                SF, Bay Area
+                {{ user?.cidade?.estado?.sigla }}, {{ user?.cidade?.nome }}
               </a>
               <a
                 class="
@@ -106,7 +106,7 @@
                 "
               >
                 <app-keenicon name="geolocation" class="fs-4 me-1"></app-keenicon>
-                max&#64;kt.com
+                {{ user?.email}}
               </a>
             </div>
           </div>
