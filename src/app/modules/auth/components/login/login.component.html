@@ -11,7 +11,7 @@
       Your Social Campaigns
     </div>
     <!--end::Subtitle--->
-    <!-- <div class="text-gray-500 fw-bold fs-4">
+    <!-- <div class="text-gray-500 fw-bold fs-4">   
       New Here?
       <a
         routerLink="/auth/registration"
@@ -59,14 +59,14 @@
   <!--end::Separator-->
 
   <!-- begin::Alert info-->
-  <ng-container *ngIf="!hasError">
+  <!-- <ng-container *ngIf="!hasError">
     <div class="mb-10 bg-light-info p-8 rounded">
       <div class="text-info">
         Use account <strong>{{ defaultAuth.email }}</strong> and password
         <strong>{{ defaultAuth.password }}</strong> to continue.
       </div>
     </div>
-  </ng-container>
+  </ng-container> -->
   <!-- end::Alert info-->
 
 
@@ -74,7 +74,7 @@
   <ng-container *ngIf="hasError">
     <div class="mb-lg-15 alert alert-danger">
       <div class="alert-text font-weight-bold">
-        The login details are incorrect
+        {{ errorMessage }}
       </div>
     </div>
   </ng-container>
@@ -155,13 +155,13 @@
   <!--begin::Action-->
   <div class="d-grid mb-10">
     <button type="submit" id="kt_sign_in_submit" class="btn btn-primary" [disabled]="loginForm.invalid">
-      <ng-container *ngIf="isLoading$ | async">
+      <!-- <ng-container>
         <span class="indicator-progress" [style.display]="'block'">
           Please wait...
           <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
         </span>
-      </ng-container>
-      <ng-container *ngIf="(isLoading$ | async) === false">
+      </ng-container> -->
+      <ng-container>
         <span class="indicator-label">Continue</span>
       </ng-container>
     </button>
@@ -183,7 +183,7 @@
   <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
     <div class="fv-plugins-message-container">
       <span role="alert">
-        {{ message }}
+        {{ this.message || message }}
       </span>
     </div>
   </ng-container>

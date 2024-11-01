@@ -1,0 +1,226 @@
+<div class="card mb-5 mb-xl-10">
+  <div
+    class="card-header border-0 cursor-pointer"
+    role="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#kt_account_profile_details"
+    aria-expanded="true"
+    aria-controls="kt_account_profile_details"
+  >
+    <div class="card-title m-0">
+      <h3 class="fw-bolder m-0">Profile Details</h3>
+    </div>
+  </div>
+  <div id="kt_account_profile_details" class="collapse show">
+    <form class="form" [formGroup]="profileForm" >
+      <div class="card-body border-top p-9">
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">Avatar</label>
+          <div class="col-lg-8">
+            <div
+              class="image-input image-input-outline"
+              data-kt-image-input="true"
+              [style.background-image]="'url(./assets/media/avatars/blank.png'"
+            >
+              <div
+                class="image-input-wrapper w-125px h-125px"
+                [style.background-image]="
+                  'url(./assets/media/avatars/300-1.jpg'
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label required fw-bold fs-6"
+            >Nome</label
+          >
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="nome"
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              placeholder="Company name"
+              name="company"
+            />
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label required fw-bold fs-6">Cargo</label>
+          <div class="col-lg-8 fv-row">
+            <select
+              formControlName="cargo"
+              class="form-select form-select-solid form-select-lg"
+              name="cargo"
+            >
+              <!-- Exibir o cargo atual do usuário como a opção selecionada -->
+              <option [value]="user?.cargo?.nome" selected>{{ user?.cargo?.nome }}</option>
+        
+              <!-- Iterar pela lista de cargos para exibir as opções -->
+              <option *ngFor="let cargo of cargos | removeCurrentCargo:user?.cargo?.cargoId" [value]="cargo.cargoId">
+                {{ cargo.nome }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            ><span class="required">Data de Nascimento</span></label
+          >
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="nascimento"
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              placeholder="Data de Nascimento"
+              name="dataNascimento"
+              mask="00/00/0000"
+            />
+          </div>
+        </div>
+
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            ><span class="required">Celular</span></label
+          >
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="celular"
+              type="tel"
+              class="form-control form-control-lg form-control-solid"
+              placeholder="Phone number"
+              name="contactPhone"
+            />
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            ><span class="required">Email</span></label
+          >
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="email"
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              placeholder="Email"
+              name="companySite"
+            />
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            ><span class="required">Endereço</span></label
+          >
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="endereco"
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              placeholder="Company website"
+              name="companySite"
+              [value]="user?.endereco"
+            />
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label required fw-bold fs-6">Cidade</label>
+          <div class="col-lg-8 fv-row">
+            <mat-form-field class="w-100">
+              <input
+                type="text"
+                class="form-control form-control-lg form-control-solid"
+                matInput
+                placeholder="Cidade"
+                aria-label="Cidade"
+                formControlName="cidade"
+                [matAutocomplete]="auto"
+              />
+              <mat-autocomplete
+                class="my-custom-autocomplete"                
+                #auto="matAutocomplete"
+                [displayWith]="displayCidade"
+                (optionSelected)="onCidadeSelected($event)"
+              >
+                <mat-option *ngIf="isLoading">
+                  <mat-spinner diameter="20"></mat-spinner> Carregando...
+                </mat-option>
+                <ng-container *ngIf="!isLoading">
+                  <mat-option
+                    *ngFor="let cidade of filteredCidades | async"
+                    [value]="cidade"
+                  >
+                    {{ cidade.nome }}
+                  </mat-option>
+                </ng-container>
+              </mat-autocomplete>
+              <mat-error *ngIf="f.cidade.invalid && (f.cidade.dirty || f.cidade.touched)">
+                Por favor, selecione uma cidade válida.
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            ><span class="required">Estado</span></label
+          >
+          <div class="col-lg-8 fv-row">
+            <input
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              placeholder="Company website"
+              name="companySite"
+              [value]="user?.cidade?.estado?.nome"
+              readonly
+            />
+          </div>
+        </div>
+        <div class="row mb-6" *ngIf="user?.regiao">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            ><span class="required">Regiao</span></label
+          >
+          <div class="col-lg-8 fv-row">
+            <input
+              formControlName="regiao"              
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              placeholder="Company website"
+              name="companySite"
+            />
+          </div>
+        </div>
+        <div class="row mb-0">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            >Allow Marketing</label
+          >
+          <div class="col-lg-8 d-flex align-items-center">
+            <div class="form-check form-check-solid form-switch fv-row">
+              <input
+                class="form-check-input w-45px h-30px"
+                type="checkbox"
+                id="allowmarketing"
+              /><label class="form-check-label"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-end py-6 px-9">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="isLoading"
+          (click)="saveSettings()"
+        >
+          <ng-container *ngIf="!isLoading">Save Changes</ng-container>
+          <ng-container *ngIf="isLoading">
+            <span clas="indicator-progress" [style.display]="'block'">
+              Please wait...{{ " " }}
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+          </ng-container>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

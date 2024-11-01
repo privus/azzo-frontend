@@ -1,0 +1,105 @@
+<div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+  <div class="card-header cursor-pointer">
+    <div class="card-title m-0">
+      <h3 class="fw-bolder m-0">Profile Details</h3>
+    </div>
+
+    <a
+      routerLink="/crafted/account/settings"
+      class="btn btn-primary align-self-center"
+    >
+      Editar Perfil
+    </a>
+  </div>
+
+  <div class="card-body p-9">
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">Nome</label>
+
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-gray-900">{{ user?.nome}}</span>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">Cargo</label>
+
+      <div class="col-lg-8 fv-row">
+        <span class="fw-bold fs-6">{{ user?.cargo?.nome}}</span>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">
+        Data Nascimento
+      </label>
+
+      <div class="col-lg-8 d-flex align-items-center">
+        <span class="fw-bolder fs-6 me-2">{{ user?.nascimento }}</span>
+      </div>
+    </div>
+    
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">Email</label>
+
+      <div class="col-lg-8 fv-row">
+        <span class="fw-bold fs-6">{{ user?.email }}</span>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">
+        Celular
+        <i
+          class="fas fa-exclamation-circle ms-1 fs-7"
+          data-bs-toggle="tooltip"
+          title="Phone number must be active"
+        ></i>
+      </label>
+
+      <div class="col-lg-8 d-flex align-items-center">
+        <span class="fw-bolder fs-6 me-2">{{ user?.celular}}</span>
+
+        <span class="badge badge-success">Verified</span>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">Endereço</label>
+
+      <div class="col-lg-8">
+        <a href="#" class="fw-bold fs-6 text-gray-900 text-hover-primary">
+          {{ user?.endereco }}
+        </a>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">
+        Cidade
+      </label>
+
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-gray-900">{{ user?.cidade?.nome}}</span>
+      </div>
+    </div>
+
+    <div class="row mb-7">
+      <label class="col-lg-4 fw-bold text-muted">Estado</label>
+
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-gray-900">{{ user?.cidade?.estado?.nome}}</span>
+      </div>
+    </div>
+
+    <div class="row mb-10" *ngIf="user?.regiao">
+      <label class="col-lg-4 fw-bold text-muted">Regiao</label>
+
+      <div class="col-lg-8">
+        <span class="fw-bold fs-6">{{user?.regiao?.nome}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
