@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthLogin, Cargo } from '../../models/auth.model';
+import { AuthLogin } from '../../models/auth.model';
+import { Cargo } from 'src/app/modules/account/models/user.model';
 
 @Component({
   selector: 'app-login',

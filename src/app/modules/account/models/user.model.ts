@@ -21,14 +21,27 @@ export interface Regiao {
 }
 
 export interface Usuario {
-  usuarioId: number;
+  usuario_id: number;
   nome: string;
   email: string;
   celular: string;
   endereco: string;
-  dataNascimento: string;
+  nascimento: string;
   username: string;
   cargo: Cargo;
   cidade: Cidade;
   regiao: Regiao | null;
+}
+
+export interface UserUpdate {
+  usuario_id?: number;
+  nome?: string;
+  username?: string;
+  email?: string;
+  celular?: string;
+  endereco?: string;
+  nascimento?: string;
+  cargo_id?: number;
+  cidade_id?: number;
+  regiao_id?: number | null;
 }

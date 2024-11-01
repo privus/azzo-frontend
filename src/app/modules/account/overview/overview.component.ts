@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Usuario } from '../models/user.model';
 import { AccountService } from '../services/account.service';
+import { Usuario } from '../models/user.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-overview',
@@ -9,16 +10,11 @@ import { AccountService } from '../services/account.service';
 export class OverviewComponent implements OnInit {
   user: Usuario | null = null;
 
-  constructor(private accountService: AccountService) {}
+  constructor(private accountService: AccountService) { }
 
   ngOnInit(): void {
-    this.getUserInfo(); // Chama o método getUserInfo ao iniciar o componente
-  }
-
-  getUserInfo(): void {
-    this.accountService.getUserInfo().subscribe((user) => {
+    this.accountService.user$.subscribe((user) => {
       this.user = user;
-      console.log('USER ====>>>>', user)
     });
   }
 }
