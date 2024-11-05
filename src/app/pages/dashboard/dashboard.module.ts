@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { ModalsModule } from '../../_metronic/partials';
+import { AuthGuard } from 'src/app/core/guards/auth.guard';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -10,8 +11,9 @@ import { ModalsModule } from '../../_metronic/partials';
     CommonModule,
     RouterModule.forChild([
       {
-        path: '',
+        path: 'dashboard',
         component: DashboardComponent,
+        canActivate: [AuthGuard],
       },
     ]),
     ModalsModule,

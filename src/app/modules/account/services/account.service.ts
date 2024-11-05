@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AzzoService } from '../../../core/services/azzo.service';
-import { Cidade, UserUpdate, Usuario } from '../models/user.model';
+import { Cidade, NewUser, UserUpdate, Usuario } from '../models/user.model';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { LocalStorageService } from 'src/app/core/services/local-storage/local-storage.service';
 import { AuthUser } from '../../auth/models/auth.model';
@@ -51,6 +51,10 @@ export class AccountService {
   searchCitiesPartial(query: string): Observable<Cidade[]> {
     console.log('searchCitiesPartial called with query:', query);
     return this.azzoService.getCitiesPartial(query).pipe();
+  }
+
+  createAccount(user: NewUser): Observable<Usuario> {
+    return this.azzoService.newUser(user).pipe();
   }
 
 }

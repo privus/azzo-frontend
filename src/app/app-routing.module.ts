@@ -15,6 +15,11 @@ export const routes: Routes = [
   },
   {
     path: '',
+    redirectTo: 'auth/login',  // Redireciona a raiz para a tela de login
+    pathMatch: 'full',          // Usa correspondência exata para garantir o redirecionamento correto
+  }, 
+  {
+    path: '',
     // canActivate: [AuthGuard],
     loadChildren: () =>
       import('./_metronic/layout/layout.module').then((m) => m.LayoutModule),

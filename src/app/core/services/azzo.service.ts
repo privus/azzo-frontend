@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthLogin, AuthTokens } from '../../modules/auth/models/auth.model';
-import { Cidade, UserUpdate, Usuario } from 'src/app/modules/account/models/user.model';
+import { Cidade, NewUser, UserUpdate, Usuario } from 'src/app/modules/account/models/user.model';
 
 
 @Injectable()
@@ -32,5 +32,9 @@ export class AzzoService {
     return this.http.get<Cidade[]>(`${this.baseUrl}shared/cities/partial`, {
       params: { q: query },
     });
-  }  
+  }
+  
+  newUser(user: NewUser) {
+    return this.http.post<Usuario>(`${this.baseUrl}auth/register`, user);
+  }
 }

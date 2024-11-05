@@ -18,13 +18,13 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   user: Usuario | null = null;
   filteredCidades: Observable<Cidade[]>;
   cargos: Cargo[] = [
-    { cargoId: 1, nome: 'Desenvolvedor' },
-    { cargoId: 2, nome: 'Vendedor' },
-    { cargoId: 3, nome: 'Designer' },
-    { cargoId: 4, nome: 'Gerente' },
-    { cargoId: 5, nome: 'Analista' },
-    { cargoId: 6, nome: 'Estagiário' },
-    { cargoId: 7, nome: 'Auxiliar' },
+    { cargo_id: 1, nome: 'Desenvolvedor' },
+    { cargo_id: 2, nome: 'Vendedor' },
+    { cargo_id: 3, nome: 'Designer' },
+    { cargo_id: 4, nome: 'Gerente' },
+    { cargo_id: 5, nome: 'Analista' },
+    { cargo_id: 6, nome: 'Estagiário' },
+    { cargo_id: 7, nome: 'Auxiliar' },
   ];
 
   constructor(
@@ -126,9 +126,9 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
       celular: this.f.celular.value,
       endereco: this.f.endereco.value,
       nascimento: this.f.nascimento.value,
-      cargo_id: this.f.cargo.value !== currentUser.cargo.cargoId ? Number(this.f.cargo.value) : null,
-      cidade_id: this.f.cidade.value !== currentUser.cidade?.cidadeId ? this.f.cidade.value.cidade_id : null,
-      regiao_id: this.f.regiao.value && this.f.regiao.value !== currentUser.regiao?.regiaoId ? this.f.regiao.value.regiao_id : null,
+      cargo_id: this.f.cargo.value !== currentUser.cargo.cargo_id ? Number(this.f.cargo.value) : null,
+      cidade_id: this.f.cidade.value !== currentUser.cidade?.cidade_id ? this.f.cidade.value.cidade_id : null,
+      regiao_id: this.f.regiao.value && this.f.regiao.value !== currentUser.regiao?.regiao_id ? this.f.regiao.value.regiao_id : null,
     };
   
     // Preenche updatedFields apenas com os valores que foram alterados

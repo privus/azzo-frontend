@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { AuthLogin } from '../models/auth.model';
 import { LocalStorageService } from '../../../core/services/local-storage/local-storage.service';
 import { AzzoService } from '../../../core/services/azzo.service';
@@ -17,6 +17,7 @@ export class AuthService {
   constructor(
     private readonly localStorageService: LocalStorageService,
     private readonly azzoService: AzzoService,
+
   ) {}
 
   async login(data: AuthLogin): Promise<Cargo> {
@@ -42,7 +43,7 @@ export class AuthService {
     }
   }
 
-  private hasToken(): boolean {
+   hasToken(): boolean {
     return !!localStorage.getItem(this.tokenKey);
   }
 
@@ -50,6 +51,10 @@ export class AuthService {
     this.localStorageService.remove(this.tokenKey);
     this.authStatus.next(false);
   }
+
+  isAuthenticated(): Observable<boolean> {
+    return this.authStatus.asObservable();
+  }   
 }
 
 

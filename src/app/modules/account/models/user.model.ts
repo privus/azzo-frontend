@@ -5,18 +5,18 @@ export interface Estado {
 }
 
 export interface Cidade {
-  cidadeId: number;
+  cidade_id: number;
   nome: string;
   estado: Estado;
 }
 
 export interface Cargo {
-  cargoId: number;
+  cargo_id: number;
   nome: string;
 }
 
 export interface Regiao {
-  regiaoId: number;
+  regiao_id: number;
   nome: string;
 }
 
@@ -31,6 +31,19 @@ export interface Usuario {
   cargo: Cargo;
   cidade: Cidade;
   regiao: Regiao | null;
+}
+
+export interface NewUser {
+  nome: string;
+  email: string;
+  celular: string;
+  endereco: string;
+  nascimento: string;
+  username: string;
+  senha: string;
+  cargo_id: number;
+  cidade_id: number;
+  regiao_id?: Number | null;
 }
 
 export interface UserUpdate {
