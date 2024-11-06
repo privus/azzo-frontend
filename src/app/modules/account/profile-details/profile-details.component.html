@@ -8,7 +8,7 @@
     aria-controls="kt_account_profile_details"
   >
     <div class="card-title m-0">
-      <h3 class="fw-bolder m-0">Profile Details</h3>
+      <h3 class="fw-bolder m-0">Detalhes</h3>
     </div>
   </div>
   <div id="kt_account_profile_details" class="collapse show">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label required fw-bold fs-6"
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
             >Nome</label
           >
           <div class="col-lg-8 fv-row">
@@ -46,7 +46,7 @@
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label required fw-bold fs-6">Cargo</label>
+          <label class="col-lg-4 col-form-label fw-bold fs-6">Cargo</label>
           <div class="col-lg-8 fv-row">
             <select
               formControlName="cargo"
@@ -57,7 +57,7 @@
               <option [value]="user?.cargo?.nome" selected>{{ user?.cargo?.nome }}</option>
         
               <!-- Iterar pela lista de cargos para exibir as opções -->
-              <option *ngFor="let cargo of cargos | removeCurrentCargo:user?.cargo?.cargoId" [value]="cargo.cargoId">
+              <option *ngFor="let cargo of cargos | removeCurrentCargo:user?.cargo?.cargo_id" [value]="cargo.cargo_id">
                 {{ cargo.nome }}
               </option>
             </select>
@@ -65,7 +65,7 @@
         </div>
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6"
-            ><span class="required">Data de Nascimento</span></label
+            ><span>Data de Nascimento</span></label
           >
           <div class="col-lg-8 fv-row">
             <input
@@ -81,7 +81,7 @@
 
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6"
-            ><span class="required">Celular</span></label
+            ><span>Celular</span></label
           >
           <div class="col-lg-8 fv-row">
             <input
@@ -90,12 +90,13 @@
               class="form-control form-control-lg form-control-solid"
               placeholder="Phone number"
               name="contactPhone"
+              mask="(00) 00000-0000"
             />
           </div>
         </div>
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6"
-            ><span class="required">Email</span></label
+            ><span>Email</span></label
           >
           <div class="col-lg-8 fv-row">
             <input
@@ -109,7 +110,7 @@
         </div>
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6"
-            ><span class="required">Endereço</span></label
+            ><span>Endereço</span></label
           >
           <div class="col-lg-8 fv-row">
             <input
@@ -123,7 +124,7 @@
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label required fw-bold fs-6">Cidade</label>
+          <label class="col-lg-4 col-form-label fw-bold fs-6">Cidade</label>
           <div class="col-lg-8 fv-row">
             <mat-form-field class="w-100">
               <input
@@ -161,7 +162,7 @@
         </div>
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6"
-            ><span class="required">Estado</span></label
+            ><span>Estado</span></label
           >
           <div class="col-lg-8 fv-row">
             <input
@@ -176,7 +177,7 @@
         </div>
         <div class="row mb-6" *ngIf="user?.regiao">
           <label class="col-lg-4 col-form-label fw-bold fs-6"
-            ><span class="required">Regiao</span></label
+            ><span class="required">Região</span></label
           >
           <div class="col-lg-8 fv-row">
             <input
