@@ -1,10 +1,10 @@
-# Usa a imagem oficial do Node.js
-FROM node:18-alpine
+# Usa a imagem oficial do Node.js para construir o frontend
+FROM node:18-alpine AS build
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /usr/src/app
 
-# Copia o arquivo de dependências para o container
+# Copia os arquivos de dependências para o container
 COPY package*.json ./
 
 # Instala as dependências
@@ -13,8 +13,17 @@ RUN npm install
 # Copia o código do projeto para o diretório de trabalho
 COPY . .
 
-# Exponha a porta que o Angular utiliza para rodar o servidor de desenvolvimento
-EXPOSE 4200
+# Gera o build de produção do Angular
+RUN npm run build -- --output-path=dist
 
-# Comando para rodar o servidor de desenvolvimento do Angular
-CMD ["npm", "run", "start"]
+# Usa a imagem do Nginx para servir o aplicativo estático
+FROM nginx:alpine
+
+# Copia os arquivos construídos do Angular para o diretório padrão do Nginx
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+
+# Expor a porta padrão do Nginx
+EXPOSE 80
+
+# Inicia o Nginx para servir o aplicativo Angular
+CMD ["nginx", "-g", "daemon off;"]

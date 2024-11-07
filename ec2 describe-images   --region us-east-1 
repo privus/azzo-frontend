@@ -1,0 +1,2630 @@
+{
+    "Images": [
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-090b63e125dcdff2a",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "ansible, ansible tower, ansible playbook, chef, puppet, automation, automate, testing, CI, continuous integration, an, ans, ansi, ansib, ansibl, ansible automation platform, ansible awx, Ubuntu ansible, ansible Ubuntu, ansible control node",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": " (SupportedImages) - Ansible - Ubuntu 24.04 - 20241014-prod-kss55dmezsz22",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2026-10-14T20:04:35.000Z",
+            "ImdsSupport": "v2.0",
+            "ImageId": "ami-00019d13bf3341812",
+            "ImageLocation": "aws-marketplace/ (SupportedImages) - Ansible - Ubuntu 24.04 - 20241014-prod-kss55dmezsz22",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-10-14T20:04:35.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "c4w15hfl11j8xgcn40y5d3sny",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-0fee1647d04bf6d3d",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "Description": "Teleport using Hardened Amazon Linux 2023 (arm64) AMI",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "teleport-ent-16.1.4-arm64-20240807-221545UTC",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi",
+            "DeprecationTime": "2026-08-07T22:19:17.000Z",
+            "ImdsSupport": "v2.0",
+            "ImageId": "ami-0002c0dfe5823a1e4",
+            "ImageLocation": "146628656107/teleport-ent-16.1.4-arm64-20240807-221545UTC",
+            "State": "available",
+            "OwnerId": "146628656107",
+            "CreationDate": "2024-08-07T22:19:17.000Z",
+            "Public": true,
+            "Architecture": "arm64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-078caad558093ab55",
+                        "VolumeSize": 20,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "chatwoot-marketplace-listing",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "chatwoot-v2024-04-26T10-01-38.495Z-28eb226c-174b-42ef-acdf-ca0f82854ec8",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-04-26T11:22:10.000Z",
+            "ImageId": "ami-0029ea84fa4f0a3f6",
+            "ImageLocation": "aws-marketplace/chatwoot-v2024-04-26T10-01-38.495Z-28eb226c-174b-42ef-acdf-ca0f82854ec8",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-04-26T11:22:10.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "2f7ixvr8u19phh74q4eherq2w",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-0451d42ef6497ac62",
+                        "VolumeSize": 30,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "SDC_CSP_AMI_R6.0.0-SNAPSHOT-092824_210104",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2026-09-28T21:09:04.000Z",
+            "ImdsSupport": "v2.0",
+            "ImageId": "ami-00238825d18bb49ef",
+            "ImageLocation": "181232990041/SDC_CSP_AMI_R6.0.0-SNAPSHOT-092824_210104",
+            "State": "available",
+            "OwnerId": "181232990041",
+            "CreationDate": "2024-09-28T21:09:04.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Windows with SQL Server Standard",
+            "UsageOperation": "RunInstances:0006",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-00ba9de534683bee1",
+                        "VolumeSize": 65,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "xvdca",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "xvdcb",
+                    "VirtualName": "ephemeral1"
+                },
+                {
+                    "DeviceName": "xvdcc",
+                    "VirtualName": "ephemeral2"
+                },
+                {
+                    "DeviceName": "xvdcd",
+                    "VirtualName": "ephemeral3"
+                },
+                {
+                    "DeviceName": "xvdce",
+                    "VirtualName": "ephemeral4"
+                },
+                {
+                    "DeviceName": "xvdcf",
+                    "VirtualName": "ephemeral5"
+                },
+                {
+                    "DeviceName": "xvdcg",
+                    "VirtualName": "ephemeral6"
+                },
+                {
+                    "DeviceName": "xvdch",
+                    "VirtualName": "ephemeral7"
+                },
+                {
+                    "DeviceName": "xvdci",
+                    "VirtualName": "ephemeral8"
+                },
+                {
+                    "DeviceName": "xvdcj",
+                    "VirtualName": "ephemeral9"
+                },
+                {
+                    "DeviceName": "xvdck",
+                    "VirtualName": "ephemeral10"
+                },
+                {
+                    "DeviceName": "xvdcl",
+                    "VirtualName": "ephemeral11"
+                },
+                {
+                    "DeviceName": "xvdcm",
+                    "VirtualName": "ephemeral12"
+                },
+                {
+                    "DeviceName": "xvdcn",
+                    "VirtualName": "ephemeral13"
+                },
+                {
+                    "DeviceName": "xvdco",
+                    "VirtualName": "ephemeral14"
+                },
+                {
+                    "DeviceName": "xvdcp",
+                    "VirtualName": "ephemeral15"
+                },
+                {
+                    "DeviceName": "xvdcq",
+                    "VirtualName": "ephemeral16"
+                },
+                {
+                    "DeviceName": "xvdcr",
+                    "VirtualName": "ephemeral17"
+                },
+                {
+                    "DeviceName": "xvdcs",
+                    "VirtualName": "ephemeral18"
+                },
+                {
+                    "DeviceName": "xvdct",
+                    "VirtualName": "ephemeral19"
+                },
+                {
+                    "DeviceName": "xvdcu",
+                    "VirtualName": "ephemeral20"
+                },
+                {
+                    "DeviceName": "xvdcv",
+                    "VirtualName": "ephemeral21"
+                },
+                {
+                    "DeviceName": "xvdcw",
+                    "VirtualName": "ephemeral22"
+                },
+                {
+                    "DeviceName": "xvdcx",
+                    "VirtualName": "ephemeral23"
+                },
+                {
+                    "DeviceName": "xvdcy",
+                    "VirtualName": "ephemeral24"
+                },
+                {
+                    "DeviceName": "xvdcz",
+                    "VirtualName": "ephemeral25"
+                }
+            ],
+            "Description": "Microsoft Windows Server 2019 Full Locale Japanese with SQL Standard 2019 AMI provided by Amazon",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "amazon",
+            "Name": "Windows_Server-2019-Japanese-Full-SQL_2019_Standard-2024.09.11",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-09-11T21:34:20.000Z",
+            "ImageId": "ami-00252fc4bcf5f6137",
+            "ImageLocation": "amazon/Windows_Server-2019-Japanese-Full-SQL_2019_Standard-2024.09.11",
+            "State": "available",
+            "OwnerId": "801119661308",
+            "CreationDate": "2024-09-11T21:34:20.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine",
+            "Platform": "windows"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0b37ccc297009735e",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp3",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "Description": "FreeBSD/amd64 stable/14@58ae50f31e95",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "FreeBSD 14.0-STABLE-amd64-20240208 UEFI-PREFERRED cloud-init ZFS",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2026-02-08T19:10:53.000Z",
+            "ImageId": "ami-000c5000e98880673",
+            "ImageLocation": "782442783595/FreeBSD 14.0-STABLE-amd64-20240208 UEFI-PREFERRED cloud-init ZFS",
+            "State": "available",
+            "OwnerId": "782442783595",
+            "CreationDate": "2024-02-08T19:10:53.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-026780a913d46f17f",
+                        "VolumeSize": 105,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "Description": "Supported EC2 instances: G3 (G3.16x not supported), P3, P3dn, Inf1. PyTorch-2.2, TensorFlow-2.16, Neuron. Release notes: https://docs.aws.amazon.com/dlami/latest/devguide/appendix-ami-release-notes.html",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "amazon",
+            "Name": "Deep Learning Proprietary Nvidia Driver AMI (Amazon Linux 2) Version 78.1",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-05-17T20:10:32.000Z",
+            "ImageId": "ami-003fc7d50722c7e99",
+            "ImageLocation": "amazon/Deep Learning Proprietary Nvidia Driver AMI (Amazon Linux 2) Version 78.1",
+            "State": "available",
+            "OwnerId": "898082745236",
+            "CreationDate": "2024-05-17T20:10:32.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-086e5056e80c791b1",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                },
+                {
+                    "DeviceName": "/dev/sdd",
+                    "VirtualName": "ephemeral2"
+                },
+                {
+                    "DeviceName": "/dev/sde",
+                    "VirtualName": "ephemeral3"
+                }
+            ],
+            "Description": "This image is not the latest version available and might include security vulnerabilities. Please check the latest, up-to-date, available version at https://bitnami.com/stacks.",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "bitnami-nginx-1.27.0-1-r02-linux-debian-12-x86_64-hvm-ebs-nami",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-07-01T18:29:34.000Z",
+            "ImageId": "ami-002cd5442c2d8d56e",
+            "ImageLocation": "979382823631/bitnami-nginx-1.27.0-1-r02-linux-debian-12-x86_64-hvm-ebs-nami",
+            "State": "available",
+            "OwnerId": "979382823631",
+            "CreationDate": "2024-07-01T18:29:34.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-02ff511daab143572",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "Description": "Teleport using Hardened Amazon Linux 2023 (x86_64) AMI",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "teleport-oss-16.1.7-x86-64-20240814-175549UTC",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2026-08-14T18:01:26.000Z",
+            "ImdsSupport": "v2.0",
+            "ImageId": "ami-004bee86e46d6d5f1",
+            "ImageLocation": "146628656107/teleport-oss-16.1.7-x86-64-20240814-175549UTC",
+            "State": "available",
+            "OwnerId": "146628656107",
+            "CreationDate": "2024-08-14T18:01:26.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-09499a20c64f68672",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "API Server 22.0.8500",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "API Server 22.0.8500-prod-jmmfzy7xddy5c",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-08-28T19:12:49.000Z",
+            "ImageId": "ami-002c168d532efc0f5",
+            "ImageLocation": "aws-marketplace/API Server 22.0.8500-prod-jmmfzy7xddy5c",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2023-08-28T19:12:49.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "6g7579jdyjls65vtfef2c9u1z",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0cce68947171ba180",
+                        "VolumeSize": 20,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "Description": "EKS Kubernetes Worker AMI for Machine Learning Accelerated Workloads on AmazonLinux2 image, (k8s: 1.26.12, containerd: 1.7.*)",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "amazon",
+            "Name": "amazon-eks-gpu-node-1.26-v20240209",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-02-09T23:02:09.000Z",
+            "ImageId": "ami-0012460bcb4d546f2",
+            "ImageLocation": "amazon/amazon-eks-gpu-node-1.26-v20240209",
+            "State": "available",
+            "OwnerId": "602401143452",
+            "CreationDate": "2024-02-09T23:02:09.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-078c7abbc29b49697",
+                        "VolumeSize": 30,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "TRANSFORMER_CSP_AMI_R5.9.0-SNAPSHOT-2.12-090524_210533",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2026-09-05T21:17:54.000Z",
+            "ImdsSupport": "v2.0",
+            "ImageId": "ami-003563cdd2ed3452b",
+            "ImageLocation": "181232990041/TRANSFORMER_CSP_AMI_R5.9.0-SNAPSHOT-2.12-090524_210533",
+            "State": "available",
+            "OwnerId": "181232990041",
+            "CreationDate": "2024-09-05T21:17:54.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-014be02132eaf5f17",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                },
+                {
+                    "DeviceName": "/dev/sdd",
+                    "VirtualName": "ephemeral2"
+                },
+                {
+                    "DeviceName": "/dev/sde",
+                    "VirtualName": "ephemeral3"
+                }
+            ],
+            "Description": "This image is not the latest version available and might include security vulnerabilities. Please check the latest, up-to-date, available version at https://bitnami.com/stacks.",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "bitnami-postgresql-13.15.0-7-r09-linux-debian-12-x86_64-hvm-ebs-nami",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-06-11T11:43:09.000Z",
+            "ImageId": "ami-003ff8d01f72969c6",
+            "ImageLocation": "979382823631/bitnami-postgresql-13.15.0-7-r09-linux-debian-12-x86_64-hvm-ebs-nami",
+            "State": "available",
+            "OwnerId": "979382823631",
+            "CreationDate": "2024-06-11T11:43:09.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0c178e9241f56b0b1",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "Hanwei Pandas on CentOS Stream 9 Latest-prod-shpf6gtmiv6qo",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-09-03T08:20:46.000Z",
+            "ImageId": "ami-000ce0fc00104852c",
+            "ImageLocation": "aws-marketplace/Hanwei Pandas on CentOS Stream 9 Latest-prod-shpf6gtmiv6qo",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-09-03T08:20:46.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "vmraa2o9c24t0s0l8psesvpg",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0ad545a104e771c68",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "Description": "Cent OS 7, CentOS Minimal, Minimal CentOS, CentOS Latest, Latest CentOS, CentOS 7 ami, CentOS ami, CentOS 7 ami, CentOS Linux 7, Cent OS 7.9, centos 7 arm,centos7",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": " (SupportedImages) - CentOS 7 aarch64 LATEST - 20240402-75eafca5-b387-432b-9294-2b7d7b844df8",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi",
+            "DeprecationTime": "2026-04-02T15:04:25.000Z",
+            "ImageId": "ami-00276fca9b519c5c9",
+            "ImageLocation": "aws-marketplace/ (SupportedImages) - CentOS 7 aarch64 LATEST - 20240402-75eafca5-b387-432b-9294-2b7d7b844df8",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-04-02T15:04:25.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "6zber5dti4jyo9khb62tg49o8",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "arm64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0bf96a9f7faeb2156",
+                        "VolumeSize": 4,
+                        "VolumeType": "gp3",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "determinate/nixos/24.05.20240916.086b448-x86_64-linux.kf2x3qspivbqaq448gxz71rc564pca3v",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "legacy-bios",
+            "DeprecationTime": "2024-12-16T22:45:00.000Z",
+            "ImdsSupport": "v2.0",
+            "ImageId": "ami-0005192d254d042dc",
+            "ImageLocation": "535002876703/determinate/nixos/24.05.20240916.086b448-x86_64-linux.kf2x3qspivbqaq448gxz71rc564pca3v",
+            "State": "available",
+            "OwnerId": "535002876703",
+            "CreationDate": "2024-09-17T22:38:58.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Windows",
+            "UsageOperation": "RunInstances:0002",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-0908228003c100a8b",
+                        "VolumeSize": 75,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "xvdca",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "xvdcb",
+                    "VirtualName": "ephemeral1"
+                },
+                {
+                    "DeviceName": "xvdcc",
+                    "VirtualName": "ephemeral2"
+                },
+                {
+                    "DeviceName": "xvdcd",
+                    "VirtualName": "ephemeral3"
+                },
+                {
+                    "DeviceName": "xvdce",
+                    "VirtualName": "ephemeral4"
+                },
+                {
+                    "DeviceName": "xvdcf",
+                    "VirtualName": "ephemeral5"
+                },
+                {
+                    "DeviceName": "xvdcg",
+                    "VirtualName": "ephemeral6"
+                },
+                {
+                    "DeviceName": "xvdch",
+                    "VirtualName": "ephemeral7"
+                },
+                {
+                    "DeviceName": "xvdci",
+                    "VirtualName": "ephemeral8"
+                },
+                {
+                    "DeviceName": "xvdcj",
+                    "VirtualName": "ephemeral9"
+                },
+                {
+                    "DeviceName": "xvdck",
+                    "VirtualName": "ephemeral10"
+                },
+                {
+                    "DeviceName": "xvdcl",
+                    "VirtualName": "ephemeral11"
+                },
+                {
+                    "DeviceName": "xvdcm",
+                    "VirtualName": "ephemeral12"
+                },
+                {
+                    "DeviceName": "xvdcn",
+                    "VirtualName": "ephemeral13"
+                },
+                {
+                    "DeviceName": "xvdco",
+                    "VirtualName": "ephemeral14"
+                },
+                {
+                    "DeviceName": "xvdcp",
+                    "VirtualName": "ephemeral15"
+                },
+                {
+                    "DeviceName": "xvdcq",
+                    "VirtualName": "ephemeral16"
+                },
+                {
+                    "DeviceName": "xvdcr",
+                    "VirtualName": "ephemeral17"
+                },
+                {
+                    "DeviceName": "xvdcs",
+                    "VirtualName": "ephemeral18"
+                },
+                {
+                    "DeviceName": "xvdct",
+                    "VirtualName": "ephemeral19"
+                },
+                {
+                    "DeviceName": "xvdcu",
+                    "VirtualName": "ephemeral20"
+                },
+                {
+                    "DeviceName": "xvdcv",
+                    "VirtualName": "ephemeral21"
+                },
+                {
+                    "DeviceName": "xvdcw",
+                    "VirtualName": "ephemeral22"
+                },
+                {
+                    "DeviceName": "xvdcx",
+                    "VirtualName": "ephemeral23"
+                },
+                {
+                    "DeviceName": "xvdcy",
+                    "VirtualName": "ephemeral24"
+                },
+                {
+                    "DeviceName": "xvdcz",
+                    "VirtualName": "ephemeral25"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "cloudimg-odoo16-community-windows-server2022-23-09-2024-f3cef776-ad69-4a9d-9ff4-5d2af6e4485d",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-09-24T13:45:49.000Z",
+            "ImageId": "ami-0021679f373122e9a",
+            "ImageLocation": "aws-marketplace/cloudimg-odoo16-community-windows-server2022-23-09-2024-f3cef776-ad69-4a9d-9ff4-5d2af6e4485d",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-09-24T13:45:49.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "efmj36tic6uw6es2ws1smn3od",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine",
+            "Platform": "windows"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-0db2e4170aaa82eeb",
+                        "VolumeSize": 45,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "Supported EC2 instances: P5, P4d, P4de. Release notes: https://docs.aws.amazon.com/dlami/latest/devguide/appendix-ami-release-notes.html",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "amazon",
+            "Name": "Deep Learning OSS Nvidia Driver AMI GPU PyTorch 2.0.1 (Ubuntu 20.04) 20231205",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-12-06T23:39:46.000Z",
+            "ImageId": "ami-00431cde1839efca8",
+            "ImageLocation": "amazon/Deep Learning OSS Nvidia Driver AMI GPU PyTorch 2.0.1 (Ubuntu 20.04) 20231205",
+            "State": "available",
+            "OwnerId": "898082745236",
+            "CreationDate": "2023-12-06T23:39:46.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0a000fd06e278abb4",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "amazon",
+            "Name": "aws-elasticbeanstalk-amzn-2.0.20230418.64bit-eb_ecs_amazon_linux_2-hvm-2023-04-25T17-24",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-04-25T17:25:42.000Z",
+            "SourceInstanceId": "i-0167809b3bf55ad61",
+            "ImageId": "ami-003ab1f505266b33f",
+            "ImageLocation": "amazon/aws-elasticbeanstalk-amzn-2.0.20230418.64bit-eb_ecs_amazon_linux_2-hvm-2023-04-25T17-24",
+            "State": "available",
+            "OwnerId": "372448324479",
+            "CreationDate": "2023-04-25T17:25:42.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0ec64c96d7da50ab6",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                },
+                {
+                    "DeviceName": "/dev/sdd",
+                    "VirtualName": "ephemeral2"
+                },
+                {
+                    "DeviceName": "/dev/sde",
+                    "VirtualName": "ephemeral3"
+                }
+            ],
+            "Description": "This image is not the latest version available and might include security vulnerabilities. Please check the latest, up-to-date, available version at https://bitnami.com/stacks.",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "bitnami-clickhouse-23.10.2-0-linux-debian-11-x86_64-hvm-ebs-nami",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-11-09T04:21:36.000Z",
+            "ImageId": "ami-003afe00618853dc8",
+            "ImageLocation": "979382823631/bitnami-clickhouse-23.10.2-0-linux-debian-11-x86_64-hvm-ebs-nami",
+            "State": "available",
+            "OwnerId": "979382823631",
+            "CreationDate": "2023-11-09T04:21:36.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-099a660f276615bed",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "Coder v0.22.1: Self-Hosted Remote Development Environments\n\n  Ubuntu 22.04 AMI with Coder pre-installed, Docker, and TLS public tunnel.\n\n  https://github.com/coder/packer-images",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "coder-v0.22.1-f05aa401-1259-42af-a7f4-9c844723a604",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-04-16T18:58:12.000Z",
+            "ImageId": "ami-00407b1160a5d1337",
+            "ImageLocation": "aws-marketplace/coder-v0.22.1-f05aa401-1259-42af-a7f4-9c844723a604",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2023-04-16T18:58:12.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "e89hj0osq4t3jd39x1dojv9qc",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-094ce33fc7c41579a",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "Ruby, command-line tools, automation, static site generation, DevOps, web scraping, data processing, ubuntu",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "   (SupportedImages) -  Ruby - Ubuntu 20.04-prod-hzwnk3zbxrtzq",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-10-16T14:46:06.000Z",
+            "ImageId": "ami-0021f44dab1b7491f",
+            "ImageLocation": "aws-marketplace/   (SupportedImages) -  Ruby - Ubuntu 20.04-prod-hzwnk3zbxrtzq",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-10-16T14:46:06.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "6u361m81pi07ds30h0cy2zo9e",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-01ab39f4fc7a054ae",
+                        "VolumeSize": 20,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                },
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0bbd66084c8a3d113",
+                        "VolumeSize": 100,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sdb"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "Deadline Worker Base Image Linux 2 10.2.0.10 with Houdini 17.5.360 and Redshift 2.6.48 2022-11-22T232809Z",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2024-12-05T20:08:03.000Z",
+            "ImageId": "ami-0008dc24e5eebce76",
+            "ImageLocation": "357466774442/Deadline Worker Base Image Linux 2 10.2.0.10 with Houdini 17.5.360 and Redshift 2.6.48 2022-11-22T232809Z",
+            "State": "available",
+            "OwnerId": "357466774442",
+            "CreationDate": "2022-12-05T20:08:03.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-09b82464418e5830f",
+                        "VolumeSize": 10,
+                        "VolumeType": "standard",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "amzn-lnx2-hvm-nat-java-1.7.0-2024.05.03-05.20",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-05-03T05:43:52.000Z",
+            "ImageId": "ami-000b8a8e5eeaf7f79",
+            "ImageLocation": "710464970777/amzn-lnx2-hvm-nat-java-1.7.0-2024.05.03-05.20",
+            "State": "available",
+            "OwnerId": "710464970777",
+            "CreationDate": "2024-05-03T05:43:52.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-073ce45b2445dc30d",
+                        "VolumeSize": 20,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                },
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0a87efd77b1078a78",
+                        "VolumeSize": 100,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sdb"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "Deadline Worker Base Image Linux 2 10.3.2.1 2024-07-18T011453Z",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-07-22T20:17:24.000Z",
+            "ImageId": "ami-0032d058a50a1cd45",
+            "ImageLocation": "357466774442/Deadline Worker Base Image Linux 2 10.3.2.1 2024-07-18T011453Z",
+            "State": "available",
+            "OwnerId": "357466774442",
+            "CreationDate": "2024-07-22T20:17:24.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Red Hat Enterprise Linux",
+            "UsageOperation": "RunInstances:0010",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0502cd830e9ea70da",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "Description": "Bansir Red Hat Enterprise Linux 9",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "Bansir Red Hat Enterprise Linux 9-6b95e0af-181e-4c06-b4d3-f6ddb386066b",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-08-25T11:02:19.000Z",
+            "ImageId": "ami-000088f6c67b5fbaf",
+            "ImageLocation": "aws-marketplace/Bansir Red Hat Enterprise Linux 9-6b95e0af-181e-4c06-b4d3-f6ddb386066b",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2023-08-25T11:02:19.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "6damz3hglvnjo72hcv4m08bxn",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-088eb6d62efbf613b",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "Description": "Teleport using Hardened Amazon Linux 2023 AMI",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "teleport-ent-14.1.5-20231117-044843UTC",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2025-11-17T04:55:33.000Z",
+            "ImdsSupport": "v2.0",
+            "ImageId": "ami-00409fa78d3d30b98",
+            "ImageLocation": "146628656107/teleport-ent-14.1.5-20231117-044843UTC",
+            "State": "available",
+            "OwnerId": "146628656107",
+            "CreationDate": "2023-11-17T04:55:33.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-05ed306a2a46654cb",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "Apps4Rent Scikit-learn-PyTorch-on-Ubuntu-20.04",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "Apps4Rent Scikit-learn-PyTorch-on-Ubuntu-20.04-prod-ehyqbscpcyfvc",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-01-25T15:58:55.000Z",
+            "ImageId": "ami-002a6c39bb402a1c9",
+            "ImageLocation": "aws-marketplace/Apps4Rent Scikit-learn-PyTorch-on-Ubuntu-20.04-prod-ehyqbscpcyfvc",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-01-25T15:58:55.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "2uaadvbe89gkehamc61da7k3i",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0471273b239bd1003",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                },
+                {
+                    "DeviceName": "/dev/sdd",
+                    "VirtualName": "ephemeral2"
+                },
+                {
+                    "DeviceName": "/dev/sde",
+                    "VirtualName": "ephemeral3"
+                }
+            ],
+            "Description": "FreeBSD/amd64 main@51e7276365ba",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "FreeBSD 15.0-CURRENT-amd64-20231130 UEFI-PREFERRED cloud-init ZFS",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2025-11-30T16:09:23.000Z",
+            "ImageId": "ami-001a3bb6067ca132f",
+            "ImageLocation": "782442783595/FreeBSD 15.0-CURRENT-amd64-20231130 UEFI-PREFERRED cloud-init ZFS",
+            "State": "available",
+            "OwnerId": "782442783595",
+            "CreationDate": "2023-11-30T16:09:23.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-06b52b8caacc0e034",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "Description": "Teleport using Hardened Amazon Linux 2023 AMI",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "teleport-oss-14.3.33-20241030-232940UTC",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2026-10-30T23:35:15.000Z",
+            "ImdsSupport": "v2.0",
+            "ImageId": "ami-0026736de09da481c",
+            "ImageLocation": "146628656107/teleport-oss-14.3.33-20241030-232940UTC",
+            "State": "available",
+            "OwnerId": "146628656107",
+            "CreationDate": "2024-10-30T23:35:15.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-09ccec12d8a762f1c",
+                        "VolumeSize": 32,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "Description": "Dataiku Data Science Studio version 12.2.2, built 2023-09-26 15:49:35",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "dataiku-dss-12.2.2-20230926-32d84928-34c7-4dfb-a2ba-4e8ae6a402e2",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-09-26T14:53:08.000Z",
+            "ImageId": "ami-003a6f12f15aa9b9d",
+            "ImageLocation": "aws-marketplace/dataiku-dss-12.2.2-20230926-32d84928-34c7-4dfb-a2ba-4e8ae6a402e2",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2023-09-26T14:53:08.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "30d51v1ewvyexsejv0dwvv6qq",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-0b87d4e31b7a22db1",
+                        "VolumeSize": 20,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "Description": "EKS-optimized Kubernetes node based on Amazon Linux 2023, (k8s: 1.24.17, containerd: *)",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "amazon",
+            "Name": "amazon-eks-node-al2023-arm64-standard-1.24-v20240531",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi",
+            "DeprecationTime": "2026-05-31T16:00:38.000Z",
+            "ImdsSupport": "v2.0",
+            "ImageId": "ami-0009f74eb51d4b2ab",
+            "ImageLocation": "amazon/amazon-eks-node-al2023-arm64-standard-1.24-v20240531",
+            "State": "available",
+            "OwnerId": "602401143452",
+            "CreationDate": "2024-05-31T16:00:38.000Z",
+            "Public": true,
+            "Architecture": "arm64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-034e47624fa78a7c0",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "InterWorks Curator - 2024.01.23-eb8ecff6-92c9-4aff-a473-8dbd4f77cbf7",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-01-31T21:28:02.000Z",
+            "ImageId": "ami-0013539eb196c2b01",
+            "ImageLocation": "aws-marketplace/InterWorks Curator - 2024.01.23-eb8ecff6-92c9-4aff-a473-8dbd4f77cbf7",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-01-31T21:28:02.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "dy1hp9j19typsuo4usnrp0h6f",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-079896c0cc596f208",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                },
+                {
+                    "DeviceName": "/dev/sdd",
+                    "VirtualName": "ephemeral2"
+                },
+                {
+                    "DeviceName": "/dev/sde",
+                    "VirtualName": "ephemeral3"
+                }
+            ],
+            "Description": "This image is not the latest version available and might include security vulnerabilities. Please check the latest, up-to-date, available version at https://bitnami.com/stacks.",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "bitnami-node-22.3.0-1-r02-linux-debian-12-x86_64-hvm-ebs-nami",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-06-28T13:21:35.000Z",
+            "ImageId": "ami-001d602dd18acc7a0",
+            "ImageLocation": "979382823631/bitnami-node-22.3.0-1-r02-linux-debian-12-x86_64-hvm-ebs-nami",
+            "State": "available",
+            "OwnerId": "979382823631",
+            "CreationDate": "2024-06-28T13:21:35.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-07112cf90189d753f",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "LNMP on Amazon LInux 2023-prod-nshnvtv3cdvfs",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2026-07-28T17:43:19.000Z",
+            "ImdsSupport": "v2.0",
+            "ImageId": "ami-00307f63b81a53628",
+            "ImageLocation": "aws-marketplace/LNMP on Amazon LInux 2023-prod-nshnvtv3cdvfs",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-07-28T17:43:19.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "2orm7d38aqpts37icfqxldab7",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-0e415fa32d000a37c",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "Description": "Apps4rent-Scikit-learn-Debain12",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "Apps4rent-Scikit-learn-Debain12-prod-4hobnh2pvwenc",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-05-31T08:08:08.000Z",
+            "ImageId": "ami-0047dd00bcb4a850b",
+            "ImageLocation": "aws-marketplace/Apps4rent-Scikit-learn-Debain12-prod-4hobnh2pvwenc",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-05-31T08:08:08.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "95wbs1l8jjc6iremf3bpej94q",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-085b37c63753591f3",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "Description": "Postgre,Postgres,Postgre database, Postgres database, Postgresql database, Ubuntu Linux 16, Ubuntu 16,sql,Postgre sql,Postgresql db",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": " (SupportedImages) - PostgreSQL 9 - Ubuntu 16 x86_64 - 20241014-84d672ad-6042-402e-ad58-d43c441be103",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-10-14T22:37:19.000Z",
+            "ImageId": "ami-0014e2eab95a3401a",
+            "ImageLocation": "aws-marketplace/ (SupportedImages) - PostgreSQL 9 - Ubuntu 16 x86_64 - 20241014-84d672ad-6042-402e-ad58-d43c441be103",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-10-14T22:37:19.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "7v45d90x1rklzyrf5uxp7nqir",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0920b28c347f610d4",
+                        "VolumeSize": 4,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "IOanyT Innovations NIM with Alma lInux 8-prod-ebkp76spjp4a2",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-10-04T11:28:35.000Z",
+            "ImageId": "ami-00194864f7b4f241a",
+            "ImageLocation": "aws-marketplace/IOanyT Innovations NIM with Alma lInux 8-prod-ebkp76spjp4a2",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2023-10-04T11:28:35.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "dijfzsfg65j78t8xybun2tk17",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0efc3c9d87a437a07",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "Foundation ACSC Essential Compliant Rocky Linux 8 ARM 1.0.1-prod-y72mtyfmjqxoe",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2026-05-14T21:29:30.000Z",
+            "ImageId": "ami-0012193df8a249eab",
+            "ImageLocation": "aws-marketplace/Foundation ACSC Essential Compliant Rocky Linux 8 ARM 1.0.1-prod-y72mtyfmjqxoe",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-05-14T21:29:30.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "67w7ehpq5tj24jgtc3z2racrs",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "arm64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0cac2951bd26baa88",
+                        "VolumeSize": 4,
+                        "VolumeType": "gp3",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "Description": "Fedora-Cloud-39.20241001.0 (aarch64) for HVM Instances",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "Fedora-Cloud-Base-AmazonEC2.aarch64-39-20241001.0",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2026-10-01T07:51:22.000Z",
+            "ImdsSupport": "v2.0",
+            "ImageId": "ami-0043a2e08b96573eb",
+            "ImageLocation": "125523088429/Fedora-Cloud-Base-AmazonEC2.aarch64-39-20241001.0",
+            "State": "available",
+            "OwnerId": "125523088429",
+            "CreationDate": "2024-10-01T07:51:22.000Z",
+            "Public": true,
+            "Architecture": "arm64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-038e1269f18a34574",
+                        "VolumeSize": 50,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "cloudimg-oel79-26-09-2024-prod-cp5axd4hiqqq2",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-09-27T09:32:05.000Z",
+            "ImageId": "ami-003936854940ce299",
+            "ImageLocation": "aws-marketplace/cloudimg-oel79-26-09-2024-prod-cp5axd4hiqqq2",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-09-27T09:32:05.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "6wtzj9i66hk60admyxr2z7viq",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-0e85703eb80e19e5d",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "Description": "sq, sqli, sqlite, sqlite3, SQ, SQli, SQLite, SQLITE, SQLite3, Debian 12, Debian, SQLite3 Debian 12",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": " (SupportedImages) - SQLite - Debian 12 - 20241001-prod-xeq26rqfumstg",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-10-02T00:52:27.000Z",
+            "ImageId": "ami-002011451ad0c10f7",
+            "ImageLocation": "aws-marketplace/ (SupportedImages) - SQLite - Debian 12 - 20241001-prod-xeq26rqfumstg",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-10-02T00:52:27.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "cog8f7tljw36xjexd0ivxdam1",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-018cf688c7b434cc1",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "Apps4Rent-Pascal-Ubuntu22.04LTS",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "Apps4Rent-Pascal-Ubuntu22.04LTS-prod-yjn5aljhxx4l4",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-08-23T16:05:44.000Z",
+            "ImageId": "ami-00231db2172731be5",
+            "ImageLocation": "aws-marketplace/Apps4Rent-Pascal-Ubuntu22.04LTS-prod-yjn5aljhxx4l4",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2023-08-23T16:05:44.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "df3ko58mbc40x22bs60p6ty0z",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-04ad6247df1303559",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                },
+                {
+                    "DeviceName": "/dev/sdd",
+                    "VirtualName": "ephemeral2"
+                },
+                {
+                    "DeviceName": "/dev/sde",
+                    "VirtualName": "ephemeral3"
+                }
+            ],
+            "Description": "Bitnami package for PostgreSQL 14.10.0-5 (https://bitnami.com/stack/postgresql/cloud/aws)",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "bitnami-postgresql-14.10.0-5-r13-linux-debian-11-x86_64-hvm-ebs-nami",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-11-26T04:29:06.000Z",
+            "ImageId": "ami-003c816ce19b8faa8",
+            "ImageLocation": "979382823631/bitnami-postgresql-14.10.0-5-r13-linux-debian-11-x86_64-hvm-ebs-nami",
+            "State": "available",
+            "OwnerId": "979382823631",
+            "CreationDate": "2023-11-26T04:29:06.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-0f27e6c84bb8516da",
+                        "VolumeSize": 50,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-0edbf2b8d0a0d004a",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sdf"
+                }
+            ],
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "cloudimg-wildfly26-rocky-linux-8-26-09-2024-6d453bba-e6b6-4474-846b-8b7476abdb67",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-09-27T02:23:41.000Z",
+            "ImageId": "ami-0025dd6956d555aba",
+            "ImageLocation": "aws-marketplace/cloudimg-wildfly26-rocky-linux-8-26-09-2024-6d453bba-e6b6-4474-846b-8b7476abdb67",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-09-27T02:23:41.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "6gvx5b7sbmd8obgwwyvyl0lt3",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0a0b209e394b3f8d5",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "GitLab EE 17.1.0 AMI. https://about.gitlab.com/",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "GitLab EE 17.1.0",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-06-20T13:30:35.000Z",
+            "ImageId": "ami-0046fd2a6283fa213",
+            "ImageLocation": "782774275127/GitLab EE 17.1.0",
+            "State": "available",
+            "OwnerId": "782774275127",
+            "CreationDate": "2024-06-20T13:30:35.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-024290b5284fad3cb",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "AntMedia-AWS-Marketplace-CE-v2113",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "AntMedia-AWS-Marketplace-CE-v2113-b92feb5f-30b4-4344-8e65-f455de9e7bed",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2026-09-15T21:10:04.000Z",
+            "ImageId": "ami-0030c94e0b5c3e7e8",
+            "ImageLocation": "aws-marketplace/AntMedia-AWS-Marketplace-CE-v2113-b92feb5f-30b4-4344-8e65-f455de9e7bed",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-09-15T21:10:04.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "ayoqfo03dqk8uzpz19e76e6st",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0869494b66c2c32ce",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "Apps4Rent-Julia on Ubuntu 20.04",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "Apps4Rent-Julia on Ubuntu 20.04-prod-cigw3cq5xw3wk",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-07-19T09:28:51.000Z",
+            "ImageId": "ami-0018abccd4f4be220",
+            "ImageLocation": "aws-marketplace/Apps4Rent-Julia on Ubuntu 20.04-prod-cigw3cq5xw3wk",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2023-07-19T09:28:51.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "4ocggl7ez76j2jkwnxfvl7stm",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-029f83b7969d64c46",
+                        "VolumeSize": 20,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "Canonical, Ubuntu EKS Node OS (k8s_1.26), 20.04 LTS, arm64 focal image build on 2024-02-01",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "ubuntu-eks/k8s_1.26/images/hvm-ssd/ubuntu-focal-20.04-arm64-server-20240201-b8f031dc-d76f-4f99-86ed-61138b6dc8c0",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-02-01T17:13:01.000Z",
+            "ImageId": "ami-002825b0e9c1bfeb1",
+            "ImageLocation": "aws-marketplace/ubuntu-eks/k8s_1.26/images/hvm-ssd/ubuntu-focal-20.04-arm64-server-20240201-b8f031dc-d76f-4f99-86ed-61138b6dc8c0",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-02-01T17:13:01.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "ay5mvaegfqnlg8x91zo0pgla8",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "arm64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-01e928263b3870cce",
+                        "VolumeSize": 20,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "Description": "EKS Kubernetes Worker AMI with AmazonLinux2 image, (k8s: 1.24.17, docker: 25.0.*, containerd: 1.7.*)",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "amazon",
+            "Name": "amazon-eks-arm64-node-1.24-v20241024",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi",
+            "DeprecationTime": "2026-10-24T07:08:40.000Z",
+            "ImageId": "ami-0024b0603b2f617e0",
+            "ImageLocation": "amazon/amazon-eks-arm64-node-1.24-v20241024",
+            "State": "available",
+            "OwnerId": "602401143452",
+            "CreationDate": "2024-10-24T07:08:40.000Z",
+            "Public": true,
+            "Architecture": "arm64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": false,
+                        "SnapshotId": "snap-0979ab8d39859346e",
+                        "VolumeSize": 8,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "Description": "je, jen, jenk, jenki, jenkin, jenkins, automated testing, testing, tests, automation server, automation, build, deploy, CentOS Linux 7, CentOS 7",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": " (SupportedImages) - Jenkins - CentOS 7 x86_64 - 20240520-700047ff-d0ce-438e-a0ad-8e4ef41949d3",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-05-20T12:46:45.000Z",
+            "ImageId": "ami-004a9186443cedce2",
+            "ImageLocation": "aws-marketplace/ (SupportedImages) - Jenkins - CentOS 7 x86_64 - 20240520-700047ff-d0ce-438e-a0ad-8e4ef41949d3",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-05-20T12:46:45.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "6mpfmgeqs9u87g57imc2jnlxv",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-01fdfd2f2e06df48c",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "Description": "Provided by Red Hat, Inc.",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "RHEL-9.4-JB-EAP80-OPENJDK11-RHEL9-8.0_HVM-20240503-x86_64-4-f0f12aa6-8eb0-4759-8101-8ca2c8b92e64",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi-preferred",
+            "DeprecationTime": "2026-05-07T16:59:10.000Z",
+            "ImageId": "ami-004f1ec80eeb22a19",
+            "ImageLocation": "aws-marketplace/RHEL-9.4-JB-EAP80-OPENJDK11-RHEL9-8.0_HVM-20240503-x86_64-4-f0f12aa6-8eb0-4759-8101-8ca2c8b92e64",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-05-07T16:59:10.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "e9ilndnc6s13bptt722nqsr50",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-04a9b77280bd83063",
+                        "VolumeSize": 50,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                },
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": false,
+                        "Iops": 1600,
+                        "SnapshotId": "snap-00dc771bb93680072",
+                        "VolumeSize": 500,
+                        "VolumeType": "io2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sdb"
+                }
+            ],
+            "Description": "Sourcegraph-L (v5.3.1) m6a.12xlarge",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "Sourcegraph-L (v5.3.1) m6a.12xlarge",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-03-11T17:51:22.000Z",
+            "ImageId": "ami-0042d69ea76739ee8",
+            "ImageLocation": "840044800169/Sourcegraph-L (v5.3.1) m6a.12xlarge",
+            "State": "available",
+            "OwnerId": "840044800169",
+            "CreationDate": "2024-03-11T17:51:22.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Red Hat Enterprise Linux",
+            "UsageOperation": "RunInstances:0010",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0ae31dea29ac48e77",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                }
+            ],
+            "Description": "Powerful Survey Software On RedHat Linux 9-24x7 Supported by Cognosys",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "cognosys-4795-2404210231-prod-3bbeac3yoc6l2-powerful-survey-software-on-redhat-linux-9-24x7-supported-by-cogn-prod-3bbeac3yoc6l2",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-04-21T10:23:37.000Z",
+            "ImageId": "ami-0032e344da69c716e",
+            "ImageLocation": "aws-marketplace/cognosys-4795-2404210231-prod-3bbeac3yoc6l2-powerful-survey-software-on-redhat-linux-9-24x7-supported-by-cogn-prod-3bbeac3yoc6l2",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-04-21T10:23:37.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "9u33gjbw9yehe1s6joewv0wac",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-0ee2837b44bd653b3",
+                        "VolumeSize": 10,
+                        "VolumeType": "gp2",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                },
+                {
+                    "DeviceName": "/dev/sdd",
+                    "VirtualName": "ephemeral2"
+                },
+                {
+                    "DeviceName": "/dev/sde",
+                    "VirtualName": "ephemeral3"
+                }
+            ],
+            "Description": "Bitnami package for MariaDB 11.2.5-0 (https://bitnami.com/stack/mariadb/cloud/aws)",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "aws-marketplace",
+            "Name": "bitnami-mariadb-11.2.5-0-linux-debian-12-x86_64-hvm-ebs-nami-669f6b18-405a-49a7-8be5-d018f1142489",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2026-08-21T18:44:44.000Z",
+            "ImageId": "ami-0006a8c1a80ef0076",
+            "ImageLocation": "aws-marketplace/bitnami-mariadb-11.2.5-0-linux-debian-12-x86_64-hvm-ebs-nami-669f6b18-405a-49a7-8be5-d018f1142489",
+            "State": "available",
+            "OwnerId": "679593333241",
+            "CreationDate": "2024-08-21T18:44:44.000Z",
+            "Public": true,
+            "ProductCodes": [
+                {
+                    "ProductCodeId": "62pv6aejzht93dg6swwp13ibt",
+                    "ProductCodeType": "marketplace"
+                }
+            ],
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-0e4aea89d91f28d56",
+                        "VolumeSize": 45,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/sda1"
+                },
+                {
+                    "DeviceName": "/dev/sdb",
+                    "VirtualName": "ephemeral0"
+                },
+                {
+                    "DeviceName": "/dev/sdc",
+                    "VirtualName": "ephemeral1"
+                }
+            ],
+            "Description": "Supported EC2 instances: G5g. Release notes: https://docs.aws.amazon.com/dlami/latest/devguide/appendix-ami-release-notes.html",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "ImageOwnerAlias": "amazon",
+            "Name": "Deep Learning ARM64 AMI OSS Nvidia Driver GPU PyTorch 2.2.1 (Ubuntu 20.04) 20240430",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "BootMode": "uefi",
+            "DeprecationTime": "2026-04-30T18:21:53.000Z",
+            "ImageId": "ami-001ec8050da95f832",
+            "ImageLocation": "amazon/Deep Learning ARM64 AMI OSS Nvidia Driver GPU PyTorch 2.2.1 (Ubuntu 20.04) 20240430",
+            "State": "available",
+            "OwnerId": "898082745236",
+            "CreationDate": "2024-04-30T18:21:53.000Z",
+            "Public": true,
+            "Architecture": "arm64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "SnapshotId": "snap-00957bc39a0df72ea",
+                        "VolumeSize": 8,
+                        "VolumeType": "standard",
+                        "Encrypted": false
+                    },
+                    "DeviceName": "/dev/xvda"
+                }
+            ],
+            "Description": "Gravitational Teleport with FIPS support using AWS Linux AMI",
+            "EnaSupport": true,
+            "Hypervisor": "xen",
+            "Name": "gravitational-teleport-ami-ent-13.0.0-noquay-fips",
+            "RootDeviceName": "/dev/xvda",
+            "RootDeviceType": "ebs",
+            "SriovNetSupport": "simple",
+            "VirtualizationType": "hvm",
+            "DeprecationTime": "2025-04-19T16:30:59.000Z",
+            "ImageId": "ami-00488af5398dbf158",
+            "ImageLocation": "126027368216/gravitational-teleport-ami-ent-13.0.0-noquay-fips",
+            "State": "available",
+            "OwnerId": "126027368216",
+            "CreationDate": "2023-04-19T16:30:59.000Z",
+            "Public": true,
+            "Architecture": "x86_64",
+            "ImageType": "machine"
+        },
+        {
+            "PlatformDetails": "Linux/UNIX",
+            "UsageOperation": "RunInstances",
+            "BlockDeviceMappings": [
+                {
+                    "Ebs": {
+                        "DeleteOnTermination": true,
+                        "Iops": 3000,
+                        "SnapshotId": "snap-0790b4e989486f68f",
+                        "VolumeSize": 50,
+                        "VolumeType": "gp3",
+                        "Throughput": 125,
+                        "Encrypted": false
+                    },
+                    "DeviceName": 
