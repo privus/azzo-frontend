@@ -9,7 +9,7 @@ import { Cidade, NewUser, UserUpdate, Usuario } from 'src/app/modules/account/mo
 export class AzzoService {
     private baseUrl: string;
   constructor( private readonly http: HttpClient ) {
-    this.baseUrl = 'http://localhost:3000/';
+    this.baseUrl = 'http://52.67.57.159/';
   }
 
   login(login: AuthLogin) {
