@@ -1,4 +1,4 @@
-# Usa a imagem oficial do Node.js para construir o frontend
+# Etapa de build para o Angular
 FROM node:18-alpine AS build
 
 # Define o diretório de trabalho dentro do container
