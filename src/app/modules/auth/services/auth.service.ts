@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { AuthLogin } from '../models/auth.model';
-import { LocalStorageService } from '../../../core/services/local-storage/local-storage.service';
+import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { AzzoService } from '../../../core/services/azzo.service';
 import { decodeJwt } from '../../../shared/utils/decodeJwt';
 import { Cargo } from '../../account/models/user.model';

@@ -1,7 +1,7 @@
-<div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+<div *ngIf="user; else loading" class="card mb-5 mb-xl-10" id="kt_profile_details_view">
   <div class="card-header cursor-pointer">
     <div class="card-title m-0">
-      <h3 class="fw-bolder m-0">Profile Details</h3>
+      <h3 class="fw-bolder m-0">Detalhes</h3>
     </div>
 
     <a
@@ -17,7 +17,7 @@
       <label class="col-lg-4 fw-bold text-muted">Nome</label>
 
       <div class="col-lg-8">
-        <span class="fw-bolder fs-6 text-gray-900">{{ user?.nome}}</span>
+        <span class="fw-bolder fs-6 text-gray-900">{{ user.nome}}</span>
       </div>
     </div>
 
@@ -25,7 +25,7 @@
       <label class="col-lg-4 fw-bold text-muted">Cargo</label>
 
       <div class="col-lg-8 fv-row">
-        <span class="fw-bold fs-6">{{ user?.cargo?.nome}}</span>
+        <span class="fw-bold fs-6">{{ user.cargo.nome}}</span>
       </div>
     </div>
 
@@ -35,7 +35,7 @@
       </label>
 
       <div class="col-lg-8 d-flex align-items-center">
-        <span class="fw-bolder fs-6 me-2">{{ user?.nascimento }}</span>
+        <span class="fw-bolder fs-6 me-2">{{ user.nascimento }}</span>
       </div>
     </div>
     
@@ -44,7 +44,7 @@
       <label class="col-lg-4 fw-bold text-muted">Email</label>
 
       <div class="col-lg-8 fv-row">
-        <span class="fw-bold fs-6">{{ user?.email }}</span>
+        <span class="fw-bold fs-6">{{ user.email }}</span>
       </div>
     </div>
 
@@ -59,7 +59,7 @@
       </label>
 
       <div class="col-lg-8 d-flex align-items-center">
-        <span class="fw-bolder fs-6 me-2">{{ user?.celular}}</span>
+        <span class="fw-bolder fs-6 me-2">{{ user.celular}}</span>
 
         <span class="badge badge-success">Verified</span>
       </div>
@@ -70,7 +70,7 @@
 
       <div class="col-lg-8">
         <a href="#" class="fw-bold fs-6 text-gray-900 text-hover-primary">
-          {{ user?.endereco }}
+          {{ user.endereco }}
         </a>
       </div>
     </div>
@@ -81,7 +81,7 @@
       </label>
 
       <div class="col-lg-8">
-        <span class="fw-bolder fs-6 text-gray-900">{{ user?.cidade?.nome}}</span>
+        <span class="fw-bolder fs-6 text-gray-900">{{ user.cidade.nome}}</span>
       </div>
     </div>
 
@@ -89,7 +89,7 @@
       <label class="col-lg-4 fw-bold text-muted">Estado</label>
 
       <div class="col-lg-8">
-        <span class="fw-bolder fs-6 text-gray-900">{{ user?.cidade?.estado?.nome}}</span>
+        <span class="fw-bolder fs-6 text-gray-900">{{ user.cidade.estado.nome}}</span>
       </div>
     </div>
 
@@ -97,9 +97,16 @@
       <label class="col-lg-4 fw-bold text-muted">Regiao</label>
 
       <div class="col-lg-8">
-        <span class="fw-bold fs-6">{{user?.regiao?.nome}}</span>
+        <span class="fw-bold fs-6">{{user.regiao?.nome}}</span>
       </div>
     </div>
   </div>
 </div>
 
+<ng-template #loading>
+  <div class="text-center my-5">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Carregando...</span>
+    </div>
+  </div>
+</ng-template>

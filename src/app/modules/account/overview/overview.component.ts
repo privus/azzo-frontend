@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AccountService } from '../services/account.service';
 import { Usuario } from '../models/user.model';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-overview',
@@ -9,12 +9,15 @@ import { Observable } from 'rxjs';
 })
 export class OverviewComponent implements OnInit {
   user: Usuario | null = null;
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
 
-  constructor(private accountService: AccountService) { }
+  constructor(private accountService: AccountService, private cdr: ChangeDetectorRef,) {}
 
   ngOnInit(): void {
     this.accountService.user$.subscribe((user) => {
       this.user = user;
+      this.isLoading$.next(false);
+      this.cdr.detectChanges(); // Define como false após receber os dados do usuário
     });
   }
 }
