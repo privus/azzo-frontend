@@ -37,4 +37,13 @@ export class AzzoService {
   newUser(user: NewUser) {
     return this.http.post<Usuario>(`${this.baseUrl}auth/register`, user);
   }
+
+  getAllUsers() {
+    return this.http.get<Usuario[]>(`${this.baseUrl}users`);
+  }
+
+  deleteUser(userId: number) {
+    return this.http.delete(`${this.baseUrl}users/${userId}`);
+  }
+
 }

@@ -4,6 +4,7 @@ import { OverviewComponent } from './overview/overview.component';
 import { AccountComponent } from './account.component';
 import { SettingsComponent } from './settings/settings.component';
 import { NewAccountComponent } from './new-account/new-account.component';
+import { RoleGuard } from 'src/app/core/guards/role.guard';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
       {
         path: 'new-account',
         component: NewAccountComponent,
+        canActivate: [RoleGuard],
       },
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: '**', redirectTo: 'overview', pathMatch: 'full' },

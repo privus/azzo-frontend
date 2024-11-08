@@ -1,9 +1,4 @@
 <div class="card mb-5 mb-xl-10">
-    <div class="card-header border-0 cursor-pointer">
-      <div class="card-title m-0">
-        <h3 class="fw-bolder m-0">Novo Usúario</h3>
-      </div>
-    </div>
     <div class="card-body border-top p-9">
       <form [formGroup]="newAccountForm" (ngSubmit)="onSubmit()" autocomplete="off">
         <div class="row mb-6">
@@ -13,7 +8,7 @@
               formControlName="nome"
               type="text"
               class="form-control form-control-lg form-control-solid"
-              placeholder="Nome completo"
+              placeholder="Nome Completo"
             />
           </div>
         </div>
@@ -34,7 +29,7 @@
           <label class="col-lg-4 col-form-label required fw-bold fs-6">Cargo</label>
           <div class="col-lg-8 fv-row">
             <select formControlName="cargo" class="form-select form-select-solid form-select-lg">
-              <option value="" disabled selected>Selecione um cargo</option>
+              <option value="" disabled selected>Selecione um Cargo</option>
               <option *ngFor="let cargo of cargos" [value]="cargo.cargo_id">{{ cargo.nome }}</option>
             </select>
           </div>
@@ -104,7 +99,7 @@
               formControlName="endereco"
               type="text"
               class="form-control form-control-lg form-control-solid"
-              placeholder="Endereço completo"
+              placeholder="Endereço Completo"
             />
           </div>
         </div>

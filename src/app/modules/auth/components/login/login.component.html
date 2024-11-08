@@ -183,7 +183,7 @@
   <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
     <div class="fv-plugins-message-container">
       <span role="alert">
-        {{ this.message || message }}
+        {{ this.errorMessage || message }}
       </span>
     </div>
   </ng-container>

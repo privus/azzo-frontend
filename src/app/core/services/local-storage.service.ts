@@ -22,4 +22,13 @@ export class LocalStorageService {
     localStorage.clear();
     return true;
   }
+
+  getRole(): string | null {
+    const user = this.get('STORAGE_MY_INFO');
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      return parsedUser.cargo?.nome || null;
+    }
+    return null;
+  }
 }
