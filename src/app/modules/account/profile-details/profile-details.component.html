@@ -28,8 +28,8 @@
               formControlName="nome"
               type="text"
               class="form-control form-control-lg form-control-solid"
-              placeholder="Company name"
-              name="company"
+              placeholder="Nome Completo"
+              name="nome"
             />
           </div>
         </div>
@@ -76,8 +76,8 @@
               formControlName="celular"
               type="tel"
               class="form-control form-control-lg form-control-solid"
-              placeholder="Phone number"
-              name="contactPhone"
+              placeholder="Celular"
+              name="celular"
               mask="(00) 00000-0000"
             />
           </div>
@@ -92,7 +92,7 @@
               type="text"
               class="form-control form-control-lg form-control-solid"
               placeholder="Email"
-              name="companySite"
+              name="email"
             />
           </div>
         </div>
@@ -105,8 +105,8 @@
               formControlName="endereco"
               type="text"
               class="form-control form-control-lg form-control-solid"
-              placeholder="Company website"
-              name="companySite"
+              placeholder="Endereço"
+              name="endereco"
               [value]="user?.endereco"
             />
           </div>
@@ -130,10 +130,10 @@
                 [displayWith]="displayCidade"
                 (optionSelected)="onCidadeSelected($event)"
               >
-                <mat-option *ngIf="isLoading">
+                <mat-option *ngIf="isLoading$">
                   <mat-spinner diameter="20"></mat-spinner> Carregando...
                 </mat-option>
-                <ng-container *ngIf="!isLoading">
+                <ng-container *ngIf="!isLoading$">
                   <mat-option
                     *ngFor="let cidade of filteredCidades | async"
                     [value]="cidade"
@@ -156,8 +156,8 @@
             <input
               type="text"
               class="form-control form-control-lg form-control-solid"
-              placeholder="Company website"
-              name="companySite"
+              placeholder="Estado"
+              name="estado"
               [value]="user?.cidade?.estado?.nome"
               readonly
             />
@@ -168,46 +168,32 @@
             ><span class="required">Região</span></label
           >
           <div class="col-lg-8 fv-row">
-            <input
-              formControlName="regiao"              
-              type="text"
-              class="form-control form-control-lg form-control-solid"
-              placeholder="Company website"
-              name="companySite"
-            />
-          </div>
-        </div>
-        <div class="row mb-0">
-          <label class="col-lg-4 col-form-label fw-bold fs-6"
-            >Allow Marketing</label
-          >
-          <div class="col-lg-8 d-flex align-items-center">
-            <div class="form-check form-check-solid form-switch fv-row">
-              <input
-                class="form-check-input w-45px h-30px"
-                type="checkbox"
-                id="allowmarketing"
-              /><label class="form-check-label"></label>
-            </div>
+            <select formControlName="regiao" class="form-select form-select-solid">
+              <option value="" disabled>Selecione Uma Região</option>
+              <option *ngFor="let regiao of regioes" [value]="regiao.regiao_id">{{ regiao.nome }}</option>
+            </select>
           </div>
         </div>
       </div>
+      <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
       <div class="card-footer d-flex justify-content-end py-6 px-9">
-        <button
+          <button
           type="button"
           class="btn btn-primary"
-          [disabled]="isLoading"
-          (click)="saveSettings()"
+          [disabled]="!profileForm.valid || !profileForm.dirty || (isLoading$ | async)"
+          (click)="userUpdate()"
         >
-          <ng-container *ngIf="!isLoading">Save Changes</ng-container>
-          <ng-container *ngIf="isLoading">
-            <span clas="indicator-progress" [style.display]="'block'">
-              Please wait...{{ " " }}
-              <span
-                class="spinner-border spinner-border-sm align-middle ms-2"
-              ></span>
-            </span>
+          <ng-container *ngIf="!(isLoading$ | async); else loading">
+            Salvar
           </ng-container>
+          <ng-template #loading>
+            <span class="indicator-progress" style="display: block;">
+              Please wait... 
+              <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+            </span>
+          </ng-template>
         </button>
       </div>
     </form>

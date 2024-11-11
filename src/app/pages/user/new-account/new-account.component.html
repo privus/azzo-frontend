@@ -29,7 +29,7 @@
           <label class="col-lg-4 col-form-label required fw-bold fs-6">Cargo</label>
           <div class="col-lg-8 fv-row">
             <select formControlName="cargo" class="form-select form-select-solid form-select-lg">
-              <option value="" disabled selected>Selecione um Cargo</option>
+              <option value="" disabled selected>Selecione Um Cargo</option>
               <option *ngFor="let cargo of cargos" [value]="cargo.cargo_id">{{ cargo.nome }}</option>
             </select>
           </div>
@@ -147,32 +147,31 @@
             <label class="col-lg-4 col-form-label required fw-bold fs-6">Região</label>
             <div class="col-lg-8 fv-row">
               <select formControlName="regiao" class="form-select form-select-solid form-select-lg">
-                <option value="" disabled selected>Selecione uma região</option>
+                <option value="" disabled selected>Selecione Uma Região</option>
                 <option *ngFor="let regiao of regioes" [value]="regiao.regiao_id">{{ regiao.nome }}</option>
               </select>
             </div>
           </div>
-          <div *ngIf="hasError" class="alert alert-danger mt-3">
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3">
             {{ errorMessage }}
           </div>
-        
-        <div class="card-footer d-flex justify-content-end py-6 px-9">
-          <button
-            type="button"
-            class="btn btn-primary"
-            [disabled]="isLoading"
-            (click)="onSubmit()"
-          >
-            <ng-container *ngIf="!isLoading">Save Changes</ng-container>
-            <ng-container *ngIf="isLoading">
-              <span clas="indicator-progress" [style.display]="'block'">
-                Please wait...{{ " " }}
-                <span
-                  class="spinner-border spinner-border-sm align-middle ms-2"
-                ></span>
-              </span>
-            </ng-container>
-          </button>
+          <div class="card-footer d-flex justify-content-end py-6 px-9">
+              <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="!newAccountForm.valid || !newAccountForm.dirty || isLoading"
+              (click)="onSubmit()"
+            >
+              <ng-container *ngIf="!isLoading; else loading">
+                Salvar
+              </ng-container>
+              <ng-template #loading>
+                <span class="indicator-progress" style="display: block;">
+                  Please wait... 
+                  <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                </span>
+              </ng-template>
+            </button>
         </div>
       </form>
     </div>

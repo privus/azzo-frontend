@@ -27,11 +27,19 @@
 </ng-container>
 
 <!--begin::Secondary button-->
-<a href="javascript:;" class="btn btn-sm btn-flex btn-light fw-bold">
-  Filter
+<a href="javascript:;" class="btn btn-sm btn-flex btn-light fw-bold" routerLinkActive="active" routerLink="/apps/users">
+  Listar
 </a>
 <!--end::Secondary button-->
 
 <!--begin::Primary button--> 
-<a href="javascript:;" class="btn btn-sm fw-bold btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Create</a>
+<a 
+href="javascript:;" 
+class="btn btn-sm fw-bold btn-primary" 
+data-bs-toggle="modal" 
+data-bs-target="#kt_modal_create_app"
+routerLinkActive="active" 
+routerLink="/apps/users/new-account">
+Criar
+</a>
 <!--end::Primary button-->

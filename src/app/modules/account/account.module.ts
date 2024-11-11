@@ -14,7 +14,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { RemoveCurrentCargoPipe } from 'src/app/shared/pipes/remove-current-cargo.pipe';
-import { NewAccountComponent } from './new-account/new-account.component';
 
 @NgModule({
   providers: [AccountService, provideNgxMask()],
@@ -24,7 +23,6 @@ import { NewAccountComponent } from './new-account/new-account.component';
     SettingsComponent,
     ProfileDetailsComponent,
     RemoveCurrentCargoPipe,
-    NewAccountComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,89 @@
+<swal #noticeSwal [swalOptions]="swalOptions">
+</swal>
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  <div class="modal-header">
+    <h4 class="modal-title">Detalhes do Usuário</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="d-flex flex-column scroll-y me-n7 pe-7 mw-650px">
+      <!-- Formulário -->
+      <div class="fv-row mb-7">
+        <label class="required fw-semibold fs-6 mb-2">Nome</label>
+        <input type="text" class="form-control form-control-solid" formControlName="nome" />
+        <div *ngIf="f.nome.invalid && (f.nome.dirty || f.nome.touched)" class="invalid-feedback">
+          <div *ngIf="f.nome.errors?.['required']">Nome é obrigatório</div>
+          <div *ngIf="f.nome.errors?.['minlength']">Nome deve ter pelo menos 4 caracteres</div>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="fv-row mb-7">
+        <label class="required fw-semibold fs-6 mb-2">Email</label>
+        <input type="email" class="form-control form-control-solid" formControlName="email" />
+        <div *ngIf="f.email.invalid && (f.email.dirty || f.email.touched)" class="invalid-feedback">
+          <div *ngIf="f.email.errors?.['required']">Email é obrigatório</div>
+          <div *ngIf="f.email.errors?.['email']">Email não é válido</div>
+        </div>
+      </div>
+
+      <!-- Cargo -->
+      <div class="fv-row mb-7">
+        <label class="required fw-semibold fs-6 mb-2">Cargo</label>
+        <select formControlName="cargo" class="form-select form-select-solid">
+          <option value="" disabled>Selecione um Cargo</option>
+          <option *ngFor="let cargo of cargos" [value]="cargo.cargo_id">{{ cargo.nome }}</option>
+        </select>
+        <div *ngIf="f.cargo.invalid && (f.cargo.dirty || f.cargo.touched)" class="invalid-feedback">
+          <div *ngIf="f.cargo.errors?.['required']">Cargo é obrigatório</div>
+        </div>
+      </div>
+
+      <!-- Celular -->
+      <div class="fv-row mb-7">
+        <label class="required fw-semibold fs-6 mb-2">Celular</label>
+        <input type="text" mask="(00) 00000-0000" class="form-control form-control-solid" formControlName="celular" />
+        <div *ngIf="f.celular.invalid && (f.celular.dirty || f.celular.touched)" class="invalid-feedback">
+          <div *ngIf="f.celular.errors?.['required']">Celular é obrigatório</div>
+        </div>
+      </div>
+
+      <!-- Endereço -->
+      <div class="fv-row mb-7">
+        <label class="required fw-semibold fs-6 mb-2">Endereço</label>
+        <input type="text" class="form-control form-control-solid" formControlName="endereco" />
+        <div *ngIf="f.endereco.invalid && (f.endereco.dirty || f.endereco.touched)" class="invalid-feedback">
+          <div *ngIf="f.endereco.errors?.['required']">Endereço é obrigatório</div>
+        </div>
+      </div>
+
+      <!-- Nascimento -->
+      <div class="fv-row mb-7">
+        <label class="required fw-semibold fs-6 mb-2">Data de Nascimento</label>
+        <input type="text" mask="00/00/0000" class="form-control form-control-solid" formControlName="nascimento" />
+        <div *ngIf="f.nascimento.invalid && (f.nascimento.dirty || f.nascimento.touched)" class="invalid-feedback">
+          <div *ngIf="f.nascimento.errors?.['required']">Data de nascimento é obrigatória</div>
+        </div>
+      </div>
+
+      <!-- Região -->
+      <div *ngIf="f.cargo.value === 2" class="fv-row mb-7">
+        <label class="required fw-semibold fs-6 mb-2">Região</label>
+        <select formControlName="regiao" class="form-select form-select-solid">
+          <option value="" disabled>Selecione Uma Região</option>
+          <option *ngFor="let regiao of regioes" [value]="regiao.regiao_id">{{ regiao.nome }}</option>
+        </select>
+        <div *ngIf="f.regiao.invalid && (f.regiao.dirty || f.regiao.touched)" class="invalid-feedback">
+          <div *ngIf="f.regiao.errors?.['required']">Região é obrigatório</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer flex-center">
+    <button type="reset" class="btn btn-light me-3" (click)="activeModal.dismiss('cancel')">Cancelar</button>
+    <button type="submit" class="btn btn-primary" [disabled]="!profileForm.valid || !profileForm.dirty" (click)="onSubmit()">
+      <span class="indicator-label">Salvar</span>
+      <span class="indicator-progress">Por favor, aguarde... <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+    </button>
+  </div>
+</form>

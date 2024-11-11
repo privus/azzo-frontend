@@ -49,12 +49,7 @@ export class LoginComponent {
     try {
       const cargo: Cargo = await this.authService.login(login);
       console.log('Login bem-sucedido, cargo:', cargo);
-
-      if (cargo && cargo.nome === 'Desenvolvedor') {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.router.navigate(['/crafted/account/overview']);
-      }
+      this.router.navigate(['/dashboard']);
     } catch (error) {
       console.error('Erro durante o login:', error);
       this.hasError = true;

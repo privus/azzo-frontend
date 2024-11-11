@@ -5,9 +5,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
-import { SweetAlertOptions } from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { Usuario } from '../../../modules/account/models/user.model';
 import { AzzoService } from 'src/app/core/services/azzo.service';
+import { BehaviorSubject } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserEditModal } from '../user-edit-modal/user-edit-modal.component';
 
 @Component({
   selector: 'app-user-listing',
@@ -21,11 +24,11 @@ export class UserListingComponent implements OnInit {
   users: Usuario[] = [];
   filteredUsers: Usuario[] = [];
   searchQuery: string = '';
-  isLoading: boolean = false;
-
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   constructor(
-    private apiService: AzzoService,
-    private cdr: ChangeDetectorRef
+    private azzoService: AzzoService,
+    private cdr: ChangeDetectorRef,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -33,11 +36,15 @@ export class UserListingComponent implements OnInit {
   }
 
   loadUsers() {
-    this.apiService.getAllUsers().subscribe({
+    this.azzoService.getAllUsers().subscribe({
       next: (users) => {
         this.users = users;
         this.filteredUsers = users;
         this.cdr.detectChanges();
+        this.isLoading$.next(false);
+
+      // Log para verificar os dados dos usuários
+      console.log('Usuários carregados ======>', users);
       },
       error: (error) => {
         console.error('Erro ao carregar usuários:', error);
@@ -63,9 +70,16 @@ export class UserListingComponent implements OnInit {
   }
 
   edit(user: Usuario): void {
-    // Implemente a funcionalidade de edição conforme necessário
-    console.log('Editar usuário:', user);
-  }
+    const modalRef = this.modalService.open(UserEditModal);
+    modalRef.componentInstance.userModel = { ...user };
+    modalRef.result.then(
+      (result) => {
+        if (result === 'saved') {
+          this.loadUsers();
+        }
+      },
+    );
+  }  
 
   delete(user: Usuario): void {
     const confirmOptions: SweetAlertOptions = {
@@ -76,23 +90,27 @@ export class UserListingComponent implements OnInit {
       confirmButtonText: 'Sim, deletar!',
       cancelButtonText: 'Cancelar',
     };
+    
+    // Define as opções e abre o modal de confirmação
     this.swalOptions = confirmOptions;
+    this.cdr.detectChanges();
     this.noticeSwal.fire().then((result) => {
       if (result.isConfirmed) {
-        this.apiService.deleteUser(user.usuario_id).subscribe({
+        // Exclui o usuário apenas se confirmado
+        this.azzoService.deleteUser(user.usuario_id).subscribe({
           next: () => {
             this.showAlert({
               icon: 'success',
               title: 'Deletado!',
-              text: 'O usuário foi deletado.',
+              text: 'O usuário foi deletado com sucesso.',
             });
-            this.loadUsers();
+            this.loadUsers(); // Recarrega a lista após exclusão
           },
           error: (error) => {
             this.showAlert({
               icon: 'error',
               title: 'Erro!',
-              text: 'Ocorreu um erro ao deletar o usuário.',
+              text: 'Ocorreu um erro ao tentar excluir o usuário.',
             });
             console.error('Erro ao deletar usuário:', error);
           },
