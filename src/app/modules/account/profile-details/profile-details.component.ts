@@ -5,6 +5,7 @@ import { AccountService } from '../services/account.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, finalize, startWith, switchMap, tap } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { CARGOS, REGIOES } from '../../../shared/constants/user-constant';
 
 @Component({
   selector: 'app-profile-details',
@@ -17,15 +18,9 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
   user: Usuario | null = null;
   filteredCidades: Observable<Cidade[]>;
-  cargos: Cargo[] = [
-    { cargo_id: 1, nome: 'Desenvolvedor' },
-    { cargo_id: 2, nome: 'Vendedor' },
-    { cargo_id: 3, nome: 'Designer' },
-    { cargo_id: 4, nome: 'Gerente' },
-    { cargo_id: 5, nome: 'Analista' },
-    { cargo_id: 6, nome: 'Estagiário' },
-    { cargo_id: 7, nome: 'Auxiliar' },
-  ];
+  cargos = CARGOS;
+  regioes = REGIOES;
+  errorMessage: string;
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -61,7 +56,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
           endereco: this.user.endereco,
           cidade: this.user.cidade,
           nascimento: this.user.nascimento,
-          regiao: this.user.regiao,
+          regiao: this.user.regiao?.regiao_id,
         });
       } else {
         console.error('Usuário não está carregado.');
@@ -106,9 +101,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     // Você pode realizar ações adicionais aqui, se necessário
   }
 
-  saveSettings(): void {
+  userUpdate(): void {
     this.isLoading$.next(true);
-    console.log('PROFILE FORM ===>', this.profileForm);
   
     if (!this.profileForm.valid || !this.user) {
       console.warn('O formulário não está válido ou o usuário não está carregado.');
@@ -138,12 +132,6 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
       }
     });
   
-    if (Object.keys(updatedFields).length === 0) {
-      console.log('Nenhuma alteração detectada.');
-      this.isLoading$.next(false);
-      return;
-    }
-  
     this.accountService.updateUserInfo(currentUser.usuario_id, updatedFields).subscribe({
       complete: () => {
         this.isLoading$.next(false);
@@ -152,6 +140,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Erro ao atualizar o usuário:', error);
         this.isLoading$.next(false);
+        this.errorMessage = (error as any)?.error?.message || 'Erro no login.';
+        this.cdr.detectChanges(); 
       },
     });
   }

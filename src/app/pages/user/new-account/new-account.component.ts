@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { AccountService } from '../services/account.service';
-import { Cargo, Cidade, NewUser, Regiao } from '../models/user.model';
+import { Observable, of } from 'rxjs';
+import { AccountService } from '../../../modules/account/services/account.service';
+import { Cidade, NewUser } from '../../../modules/account/models/user.model';
 import { debounceTime, switchMap, finalize } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { end } from '@popperjs/core';
+import { CARGOS, REGIOES } from '../../../shared/constants/user-constant';
 
 @Component({
   selector: 'app-new-account',
@@ -13,32 +13,16 @@ import { end } from '@popperjs/core';
 })
 export class NewAccountComponent implements OnInit {
   newAccountForm: FormGroup;
-  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean = false;
-  hasError: boolean = false;
   errorMessage: string = '';
-  cargos: Cargo[] = [
-    { cargo_id: 1, nome: 'Desenvolvedor' },
-    { cargo_id: 2, nome: 'Vendedor' },
-    { cargo_id: 3, nome: 'Designer' },
-    { cargo_id: 4, nome: 'Gerente' },
-    { cargo_id: 5, nome: 'Analista' },
-    { cargo_id: 6, nome: 'Estagiário' },
-    { cargo_id: 7, nome: 'Auxiliar' },
-  ];
-  regioes: Regiao[] = [
-    { regiao_id: 1, nome: 'Norte' },
-    { regiao_id: 2, nome: 'Nordeste' },
-    { regiao_id: 3, nome: 'Centro-Oeste' },
-    { regiao_id: 4, nome: 'Sudeste' },
-    { regiao_id: 5, nome: 'Sul' },
-  ];
+  cargos = CARGOS;
+  regioes = REGIOES;
   filteredCidades: Observable<Cidade[]>;
-  cdr: any;
 
   constructor(
     private formBuilder: FormBuilder,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private cdr: ChangeDetectorRef // Injetando ChangeDetectorRef corretamente
   ) {
     this.newAccountForm = this.formBuilder.group({
       nome: ['', Validators.required],
@@ -74,12 +58,10 @@ export class NewAccountComponent implements OnInit {
 
   onCidadeSelected(event: MatAutocompleteSelectedEvent): void {
     const cidade: Cidade = event.option.value;
-    console.log('Cidade selecionada ======>>>>', cidade);
-    // Você pode realizar ações adicionais aqui, se necessário
+    console.log('Cidade selecionada:', cidade);
   }
 
   onSubmit(): void {
-
     this.isLoading = true;
     const newUser = this.newAccountForm.value;
     const formattedUser: NewUser = {
@@ -89,40 +71,24 @@ export class NewAccountComponent implements OnInit {
       senha: newUser.senha,
       cidade_id: newUser.cidade.cidade_id,
       cargo_id: Number(newUser.cargo),
-      nascimento: this.applyMask(newUser.nascimento, '00/00/0000'),
-      celular: this.applyMask(newUser.celular, '(00) 00000-0000'),
+      nascimento: newUser.nascimento.replace(/^(\d{2})(\d{2})(\d{4})$/, '$1/$2/$3'), 
+      celular: newUser.celular.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3'),
       regiao_id: Number(newUser.regiao) || null,
       endereco: newUser.endereco,
     };
+    
+    console.log('Usuário formatado:', formattedUser);
     this.accountService.createAccount(formattedUser).subscribe({
       complete: () => {
         this.isLoading = false;
         alert('Usuário criado com sucesso!');
       },
       error: (error) => {
+        console.error('Erro ao criar o usuário:', error);
         this.isLoading = false;
-        this.hasError = true;
-        this.errorMessage = error.error?.message || 'Erro ao criar usuário.'; 
-        this.cdr.detectChanges();
+        this.errorMessage = error.error?.message || 'Erro ao criar o usuário.';
+        this.cdr.detectChanges(); 
       },
     });
-  }
-  
-  applyMask(value: string, mask: string): string {
-    // Implement the mask logic here
-    // This is a simple example, you might need a more complex implementation
-    let maskedValue = '';
-    let maskIndex = 0;
-    for (let i = 0; i < value.length && maskIndex < mask.length; i++) {
-      if (mask[maskIndex] === '0') {
-        maskedValue += value[i];
-        maskIndex++;
-      } else {
-        maskedValue += mask[maskIndex];
-        maskIndex++;
-        i--;
-      }
-    }
-    return maskedValue;
   }
 }

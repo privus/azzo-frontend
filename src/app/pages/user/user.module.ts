@@ -7,31 +7,33 @@ import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { NgbCollapseModule, NgbDropdownModule, NgbNavModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { NewAccountComponent } from './new-account/new-account.component';
 
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { UserRoutingModule } from './user-routing.module';
+import { BrowserModule } from '@angular/platform-browser';
+import { UserEditModal } from './user-edit-modal/user-edit-modal.component';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @NgModule({
-  declarations: [UserListingComponent, UserDetailsComponent],
+  declarations: [UserListingComponent, UserDetailsComponent, NewAccountComponent, UserEditModal],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: UserListingComponent,
-      },
-      {
-        path: ':id',
-        component: UserDetailsComponent,
-      },
-    ]),
+    UserRoutingModule,
     SharedModule,
     NgbNavModule,
     NgbDropdownModule,
     NgbCollapseModule,
     NgbTooltipModule,
     SweetAlert2Module.forChild(),
+    MatAutocompleteModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+    NgxMaskDirective,
   ]
 })
 export class UserModule { }
