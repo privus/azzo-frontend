@@ -99,10 +99,13 @@ export class UserListingComponent implements OnInit {
         // Exclui o usuário apenas se confirmado
         this.azzoService.deleteUser(user.usuario_id).subscribe({
           next: () => {
+            // Configura o alerta de sucesso com apenas o botão "OK"
             this.showAlert({
               icon: 'success',
               title: 'Deletado!',
               text: 'O usuário foi deletado com sucesso.',
+              showCancelButton: false,
+              confirmButtonText: 'Ok',
             });
             this.loadUsers(); // Recarrega a lista após exclusão
           },
@@ -118,6 +121,7 @@ export class UserListingComponent implements OnInit {
       }
     });
   }
+  
 
   showAlert(swalOptions: SweetAlertOptions): void {
     this.swalOptions = swalOptions;
