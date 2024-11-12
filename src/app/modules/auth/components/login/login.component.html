@@ -3,58 +3,18 @@
   (ngSubmit)="submit()">
   <!--begin::Heading-->
   <div class="text-center mb-11">
-    <h1 class="text-gray-900 fw-bolder mb-3">
-      Sign In
+    <a href="#" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
+        <img alt="Logo" src="./assets/media/logos/logo_azzo.svg" class="h-50px me-3" />
+    </a>
+    <h1 class="fw-bolder mb-3" style="color: #606062;">
+      <br>
+      Login
     </h1>
-    <!--begin::Subtitle-->
-    <div class="text-gray-500 fw-semibold fs-6">
-      Your Social Campaigns
-    </div>
-    <!--end::Subtitle--->
-    <!-- <div class="text-gray-500 fw-bold fs-4">   
-      New Here?
-      <a
-        routerLink="/auth/registration"
-        id="kt_login_signup"
-        class="link-primary fw-bolder"
-        >{{ "AUTH.GENERAL.SIGNUP_BUTTON" | translate }}</a
-      >
-    </div> -->
   </div>
   <!--end::Heading-->
 
-  <!--begin::Login options-->
-  <div class="row g-3 mb-9">
-    <!--begin::Col-->
-    <div class="col-md-6">
-      <!--begin::Google link--->
-      <a href="#"
-        class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-        <img alt="Logo" src="./assets/media/svg/brand-logos/google-icon.svg" class="h-15px me-3" />
-        Sign in with Google
-      </a>
-      <!--end::Google link--->
-    </div>
-    <!--end::Col-->
-
-    <!--begin::Col-->
-    <div class="col-md-6">
-      <!--begin::Google link--->
-      <a href="#"
-        class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-        <img alt="Logo" src="./assets/media/svg/brand-logos/apple-black.svg" class="theme-light-show h-15px me-3" />
-        <img alt="Logo" src="./assets/media/svg/brand-logos/apple-black-dark.svg" class="theme-dark-show h-15px me-3" />
-        Sign in with Apple
-      </a>
-      <!--end::Google link--->
-    </div>
-    <!--end::Col-->
-  </div>
-  <!--end::Login options-->
-
   <!--begin::Separator-->
   <div class="separator separator-content my-14">
-    <span class="w-125px text-gray-500 fw-semibold fs-7">Or with email</span>
   </div>
   <!--end::Separator-->
 
@@ -82,7 +42,7 @@
 
   <!--begin::Form group-->
   <div class="fv-row mb-8">
-    <label class="form-label fs-6 fw-bolder text-gray-900">Email</label>
+    <label class="form-label fs-6 fw-bolder text-gray-700">Email</label>
     <input class="form-control bg-transparent" type="email" name="email" formControlName="email" autocomplete="off"
       [ngClass]="{
         'is-invalid': loginForm.controls['email'].invalid,
@@ -114,7 +74,7 @@
   <!--begin::Form group-->
   <div class="fv-row mb-3">
 
-    <label class="form-label fw-bolder text-gray-900 fs-6 mb-0">Password</label>
+    <label class="form-label fw-bolder text-gray-700 fs-6 mb-0">Senha</label>
 
     <input class="form-control bg-transparent" type="password" name="password" autocomplete="off"
       formControlName="password" [ngClass]="{
@@ -166,15 +126,6 @@
       </ng-container>
     </button>
   </div>
-
-  <div class="text-gray-500 text-center fw-semibold fs-6">
-    Not a Member yet?
-
-    <a routerLink="/auth/registration" class="link-primary">
-      Sign up
-    </a>
-  </div>
-
   <!--end::Action-->
 </form>
 <!--end::Form-->
