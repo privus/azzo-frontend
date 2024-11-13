@@ -2,10 +2,11 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { AccountService } from '../../../modules/account/services/account.service';
-import { Cidade, NewUser } from '../../../modules/account/models/user.model';
+import { Cargo, Cidade, NewUser } from '../../../modules/account/models/user.model';
 import { debounceTime, switchMap, finalize } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { CARGOS, REGIOES } from '../../../shared/constants/user-constant';
+import { REGIOES } from '../../../shared/constants/user-constant';
+import { AzzoService } from '../../../core/services/azzo.service';
 
 @Component({
   selector: 'app-new-account',
@@ -15,14 +16,15 @@ export class NewAccountComponent implements OnInit {
   newAccountForm: FormGroup;
   isLoading: boolean = false;
   errorMessage: string = '';
-  cargos = CARGOS;
+  cargos: Cargo[]
   regioes = REGIOES;
   filteredCidades: Observable<Cidade[]>;
 
   constructor(
     private formBuilder: FormBuilder,
     private accountService: AccountService,
-    private cdr: ChangeDetectorRef // Injetando ChangeDetectorRef corretamente
+    private cdr: ChangeDetectorRef, // Injetando ChangeDetectorRef corretamente
+    private azzoService: AzzoService
   ) {
     this.newAccountForm = this.formBuilder.group({
       nome: ['', Validators.required],
@@ -46,6 +48,9 @@ export class NewAccountComponent implements OnInit {
       ),
       finalize(() => (this.isLoading = false))
     );
+    this.azzoService.getRoles().subscribe((cargos) => {
+      this.cargos = cargos;
+    });
   }
 
   get f() {

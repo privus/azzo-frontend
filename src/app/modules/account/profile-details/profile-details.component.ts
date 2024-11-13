@@ -5,7 +5,8 @@ import { AccountService } from '../services/account.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, finalize, startWith, switchMap, tap } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { CARGOS, REGIOES } from '../../../shared/constants/user-constant';
+import { REGIOES } from '../../../shared/constants/user-constant';
+import { AzzoService } from '../../../core/services/azzo.service';
 
 @Component({
   selector: 'app-profile-details',
@@ -18,14 +19,15 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
   user: Usuario | null = null;
   filteredCidades: Observable<Cidade[]>;
-  cargos = CARGOS;
+  cargos: Cargo[]
   regioes = REGIOES;
   errorMessage: string;
 
   constructor(
     private cdr: ChangeDetectorRef,
     private accountService: AccountService,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private azzoService: AzzoService
   ) {
     this.profileForm = this.formBuilder.group({
       nome: ['', [Validators.required]],
@@ -44,6 +46,9 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
       .asObservable()
       .subscribe((res) => (this.isLoading = res));
     this.unsubscribe.push(loadingSubscr);
+    this.azzoService.getRoles().subscribe((cargos) => {
+      this.cargos = cargos;
+    });
 
     const userSubscr = this.accountService.user$.subscribe((user) => {
       this.user = user;

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthLogin, AuthTokens } from '../../modules/auth/models/auth.model';
-import { Cidade, NewUser, UserUpdate, Usuario } from 'src/app/modules/account/models/user.model';
+import { Cargo, Cidade, NewUser, UserUpdate, Usuario } from '../../modules/account/models/user.model';
 
 
 @Injectable()
@@ -44,6 +44,22 @@ export class AzzoService {
 
   deleteUser(userId: number) {
     return this.http.delete(`${this.baseUrl}users/${userId}`);
+  }
+
+  getRoles() {
+    return this.http.get<Cargo[]>(`${this.baseUrl}users/roles`);
+  }
+
+  createRole(cargo: Cargo) {
+    return this.http.post<Cargo>(`${this.baseUrl}users/roles/create`, cargo);
+  }
+
+  updateRole(roleId: number, cargo: Cargo) {
+    return this.http.put<Cargo>(`${this.baseUrl}users/roles/update/${roleId}`, cargo);
+  }
+
+  getRoleById(roleId: number) {
+    return this.http.get<Cargo>(`${this.baseUrl}users/roles/${roleId}`);
   }
 
 }

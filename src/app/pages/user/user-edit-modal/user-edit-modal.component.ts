@@ -4,10 +4,10 @@ import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AzzoService } from '../../../core/services/azzo.service';
-import { Cidade, UserUpdate, Usuario } from '../../../modules/account/models/user.model';
+import { Cidade, UserUpdate, Usuario, Cargo } from '../../../modules/account/models/user.model';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { CARGOS, REGIOES } from '../../../shared/constants/user-constant';
+import { REGIOES } from '../../../shared/constants/user-constant';
 import { AccountService } from '../../../modules/account/services/account.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class UserEditModal implements OnInit, AfterViewInit, OnDestroy {
   filteredCidades: Observable<Cidade[]>;
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   reloadEvent: EventEmitter<boolean> = new EventEmitter();
-  cargos = CARGOS;
+  cargos: Cargo[];
   regioes = REGIOES;
 
   @ViewChild('noticeSwal')
@@ -61,6 +61,9 @@ export class UserEditModal implements OnInit, AfterViewInit, OnDestroy {
         regiao: this.userModel.regiao?.regiao_id,
       });
     }
+    this.azzoService.getRoles().subscribe((cargos) => {
+      this.cargos = cargos;
+    });
   }
 
   ngAfterViewInit(): void {}

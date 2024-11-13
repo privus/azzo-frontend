@@ -32,6 +32,6 @@ import { SharedModule } from 'src/app/_metronic/shared/shared.module';
     NgbCollapseModule,
     NgbTooltipModule,
     SweetAlert2Module.forChild(),
-  ]
+  ],
 })
 export class RoleModule { }
