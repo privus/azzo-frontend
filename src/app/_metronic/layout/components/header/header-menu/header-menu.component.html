@@ -75,66 +75,37 @@
 </div>
 
   <!-- MegaMenu -->
-<div class="menu-item menu-lg-down-accordion me-lg-1" data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
-       data-kt-menu-placement="bottom-start">
-    <span class="menu-link py-3">
-      <span class="menu-title">Style Sidebar</span>
-      <span class="menu-arrow d-lg-none"></span>
-    </span>
-    <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown p-0 w-100 w-lg-850px">
-      <!--begin:Dashboards menu-->
-      <div class="menu-active-bg pt-1 pb-3 px-3 py-lg-6 px-lg-6" data-kt-menu-dismiss="true">
-        <!--begin:Row-->
-        <div class="row">
-          <!--begin:Col-->
-          <div class="col-lg-6">
-            <!--begin:Row-->
-            <div class="row">
-              <!--begin:Col-->
-              <div class="col-lg-6 mb-3">
-                <!--begin:Menu item-->
-                <div class="menu-item p-0 m-0">
-                  <!--begin:Menu link-->
-                  <a (click)="setBaseLayoutType('light-sidebar')" class="menu-link">
-                    <span class="menu-bullet">
-                      <span class="bullet bullet-dot bg-gray-300i h-6px w-6px"></span>
-                    </span>
-                    <span class="menu-title">Light Sidebar</span>
-                  </a>
-                  <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
-                <!--begin:Menu item-->
-                <div class="menu-item p-0 m-0">
-                  <!--begin:Menu link-->
-                  <a (click)="setBaseLayoutType('dark-sidebar')" class="menu-link">
-                    <span class="menu-bullet">
-                      <span class="bullet bullet-dot bg-gray-300i h-6px w-6px"></span>
-                    </span>
-                    <span class="menu-title">Dark Sidebar</span>
-                  </a>
-                  <!--end:Menu link-->
-                </div>
-                <!--end:Menu item-->
-                <!--begin:Menu item-->
-                <!--end:Menu item-->
-                <!--begin:Menu item-->
-                <!--end:Menu item-->
-              </div>
-              <!--end:Col-->
-            </div>
-            <!--end:Row-->
-            <div class="separator separator-dashed mx-lg-5 mt-2 mb-6"></div>
-          </div>
-          <!--end:Col-->
-          <!--begin:Col-->
-          <div class="col-lg-6 mb-3 py-lg-3 pe-lg-8 d-flex align-items-center">
-            <img src="./assets/media/stock/900x600/45.jpg" class="rounded mw-100" alt="">
-          </div>
-          <!--end:Col-->
+
+<div class="menu-item menu-lg-down-accordion me-lg-1 menu-dropdown"
+  data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start">
+  <span class="menu-link py-3" [ngClass]="calculateMenuItemCssClass('/crafted')">
+  <span class="menu-title">Style Sidebar</span>
+  <span class="menu-arrow d-lg-none"></span>
+  </span>
+    <div class="
+      menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0
+      py-lg-4
+      w-lg-225px
+    " data-kt-menu-dismiss="true" data-popper-placement="bottom-start">
+      <div class="menu-item p-0 m-0">
+        <!--begin:Menu link-->
+        <a (click)="setBaseLayoutType('light-sidebar')" class="menu-link">
+          <span class="menu-bullet">
+            <span class="bullet bullet-dot bg-gray-300i h-6px w-6px"></span>
+          </span>
+          <span class="menu-title">Light Sidebar</span>
+        </a>
+        <div class="menu-item p-0 m-0">
+          <!--begin:Menu link-->
+          <a (click)="setBaseLayoutType('dark-sidebar')" class="menu-link">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot bg-gray-300i h-6px w-6px"></span>
+            </span>
+            <span class="menu-title">Dark Sidebar</span>
+          </a>
+          <!--end:Menu link-->
         </div>
-        <!--end:Row-->
+        <!--end:Menu link-->
       </div>
-      <!--end:Dashboards menu-->
-    </div>
   </div>
+</div>
