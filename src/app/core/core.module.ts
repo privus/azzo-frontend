@@ -18,4 +18,3 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
   imports: [CommonModule],
 })
 export class CoreModule {}
-

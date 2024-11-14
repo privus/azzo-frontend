@@ -2,10 +2,11 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { AccountService } from '../../../modules/account/services/account.service';
-import { Cidade, NewUser } from '../../../modules/account/models/user.model';
+import { Cargo, Cidade, NewUser } from '../../../modules/account/models/user.model';
 import { debounceTime, switchMap, finalize } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { CARGOS, REGIOES } from '../../../shared/constants/user-constant';
+import { REGIOES } from '../../../shared/constants/user-constant';
+import { AzzoService } from '../../../core/services/azzo.service';
 
 @Component({
   selector: 'app-new-account',
@@ -15,14 +16,15 @@ export class NewAccountComponent implements OnInit {
   newAccountForm: FormGroup;
   isLoading: boolean = false;
   errorMessage: string = '';
-  cargos = CARGOS;
+  cargos: Cargo[];
   regioes = REGIOES;
   filteredCidades: Observable<Cidade[]>;
 
   constructor(
     private formBuilder: FormBuilder,
     private accountService: AccountService,
-    private cdr: ChangeDetectorRef // Injetando ChangeDetectorRef corretamente
+    private cdr: ChangeDetectorRef, // Injetando ChangeDetectorRef corretamente
+    private azzoService: AzzoService,
   ) {
     this.newAccountForm = this.formBuilder.group({
       nome: ['', Validators.required],
@@ -41,11 +43,12 @@ export class NewAccountComponent implements OnInit {
   ngOnInit(): void {
     this.filteredCidades = this.newAccountForm.get('cidade')!.valueChanges.pipe(
       debounceTime(300),
-      switchMap((value) =>
-        value ? this.accountService.searchCitiesPartial(value) : of([])
-      ),
-      finalize(() => (this.isLoading = false))
+      switchMap((value) => (value ? this.accountService.searchCitiesPartial(value) : of([]))),
+      finalize(() => (this.isLoading = false)),
     );
+    this.azzoService.getRoles().subscribe((cargos) => {
+      this.cargos = cargos;
+    });
   }
 
   get f() {
@@ -71,12 +74,12 @@ export class NewAccountComponent implements OnInit {
       senha: newUser.senha,
       cidade_id: newUser.cidade.cidade_id,
       cargo_id: Number(newUser.cargo),
-      nascimento: newUser.nascimento.replace(/^(\d{2})(\d{2})(\d{4})$/, '$1/$2/$3'), 
+      nascimento: newUser.nascimento.replace(/^(\d{2})(\d{2})(\d{4})$/, '$1/$2/$3'),
       celular: newUser.celular.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3'),
       regiao_id: Number(newUser.regiao) || null,
       endereco: newUser.endereco,
     };
-    
+
     console.log('Usuário formatado:', formattedUser);
     this.accountService.createAccount(formattedUser).subscribe({
       complete: () => {
@@ -87,7 +90,7 @@ export class NewAccountComponent implements OnInit {
         console.error('Erro ao criar o usuário:', error);
         this.isLoading = false;
         this.errorMessage = error.error?.message || 'Erro ao criar o usuário.';
-        this.cdr.detectChanges(); 
+        this.cdr.detectChanges();
       },
     });
   }

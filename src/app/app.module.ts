@@ -22,7 +22,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     TranslateModule.forRoot(),
     HttpClientModule,
     ClipboardModule,
-    CoreModule,           // Importa o CoreModule com o AuthInterceptor configurado
+    CoreModule, // Importa o CoreModule com o AuthInterceptor configurado
     AppRoutingModule,
     InlineSVGModule.forRoot(),
     NgbModule,
@@ -30,8 +30,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     AccountModule,
   ],
   bootstrap: [AppComponent],
-  providers: [
-    provideAnimationsAsync()
-  ],
+  providers: [provideAnimationsAsync()],
 })
 export class AppModule {}

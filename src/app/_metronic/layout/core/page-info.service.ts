@@ -17,13 +17,9 @@ export class PageInfo {
   providedIn: 'root',
 })
 export class PageInfoService {
-  public title: BehaviorSubject<string> = new BehaviorSubject<string>(
-    'Dashboard'
-  );
+  public title: BehaviorSubject<string> = new BehaviorSubject<string>('Dashboard');
   public description: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  public breadcrumbs: BehaviorSubject<Array<PageLink>> = new BehaviorSubject<
-    Array<PageLink>
-  >([]);
+  public breadcrumbs: BehaviorSubject<Array<PageLink>> = new BehaviorSubject<Array<PageLink>>([]);
 
   constructor() {}
 
@@ -70,17 +66,13 @@ export class PageInfoService {
       return;
     }
 
-    const allActiveMenuLinks = Array.from<HTMLLinkElement>(
-      menu.querySelectorAll('a.menu-link')
-    ).filter((link) => link.classList.contains('active'));
+    const allActiveMenuLinks = Array.from<HTMLLinkElement>(menu.querySelectorAll('a.menu-link')).filter((link) => link.classList.contains('active'));
 
     if (!allActiveMenuLinks || allActiveMenuLinks.length === 0) {
       return;
     }
 
-    const titleSpan = allActiveMenuLinks[0].querySelector(
-      'span.menu-title'
-    ) as HTMLSpanElement | null;
+    const titleSpan = allActiveMenuLinks[0].querySelector('span.menu-title') as HTMLSpanElement | null;
     if (!titleSpan) {
       return;
     }
@@ -100,27 +92,21 @@ export class PageInfoService {
     this.setBreadcrumbs(bc);
   }
 
-  public calculateBreadcrumbsInMenu(
-    menuId: string
-  ): Array<PageLink> | undefined {
+  public calculateBreadcrumbsInMenu(menuId: string): Array<PageLink> | undefined {
     const result: Array<PageLink> = [];
     const menu = document.getElementById(menuId);
     if (!menu) {
       return;
     }
 
-    const allActiveParents = Array.from<HTMLDivElement>(
-      menu.querySelectorAll('div.menu-item')
-    ).filter((link) => link.classList.contains('here'));
+    const allActiveParents = Array.from<HTMLDivElement>(menu.querySelectorAll('div.menu-item')).filter((link) => link.classList.contains('here'));
 
     if (!allActiveParents || allActiveParents.length === 0) {
       return;
     }
 
     allActiveParents.forEach((parent) => {
-      const titleSpan = parent.querySelector(
-        'span.menu-title'
-      ) as HTMLSpanElement | null;
+      const titleSpan = parent.querySelector('span.menu-title') as HTMLSpanElement | null;
       if (!titleSpan) {
         return;
       }

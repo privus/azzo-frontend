@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LayoutType } from '../../../core/configs/config';
 import { LayoutInitService } from '../../../core/layout-init.service';
@@ -10,7 +10,11 @@ import { LayoutService } from '../../../core/layout.service';
   styleUrls: ['./header-menu.component.scss'],
 })
 export class HeaderMenuComponent implements OnInit {
-  constructor(private router: Router, private layout: LayoutService, private layoutInit: LayoutInitService) {}
+  constructor(
+    private router: Router,
+    private layout: LayoutService,
+    private layoutInit: LayoutInitService,
+  ) {}
 
   ngOnInit(): void {}
 
@@ -23,10 +27,10 @@ export class HeaderMenuComponent implements OnInit {
   }
 
   setToolbar(toolbarLayout: 'classic' | 'accounting' | 'extended' | 'reports' | 'saas') {
-    const currentConfig = {...this.layout.layoutConfigSubject.value};
+    const currentConfig = { ...this.layout.layoutConfigSubject.value };
     if (currentConfig && currentConfig.app && currentConfig.app.toolbar) {
       currentConfig.app.toolbar.layout = toolbarLayout;
-      this.layout.saveBaseConfig(currentConfig)
+      this.layout.saveBaseConfig(currentConfig);
     }
   }
 }

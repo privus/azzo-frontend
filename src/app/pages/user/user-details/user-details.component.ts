@@ -5,19 +5,18 @@ import { IUserModel, UserService } from 'src/app/core/services/user-service';
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.scss']
+  styleUrls: ['./user-details.component.scss'],
 })
 export class UserDetailsComponent implements OnInit, AfterViewInit {
-
   isCollapsed: boolean;
 
-  user: IUserModel = { id: 0, name: '', email: '', };
+  user: IUserModel = { id: 0, name: '', email: '' };
 
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
-  ) { }
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -27,7 +26,5 @@ export class UserDetailsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-  }
-
+  ngAfterViewInit(): void {}
 }

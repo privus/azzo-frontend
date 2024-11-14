@@ -53,9 +53,6 @@ export class TranslationService {
    * Returns selected language
    */
   getSelectedLanguage(): any {
-    return (
-      localStorage.getItem(LOCALIZATION_LOCAL_STORAGE_KEY) ||
-      this.translate.getDefaultLang()
-    );
+    return localStorage.getItem(LOCALIZATION_LOCAL_STORAGE_KEY) || this.translate.getDefaultLang();
   }
 }

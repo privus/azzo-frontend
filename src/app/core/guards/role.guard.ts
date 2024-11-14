@@ -8,7 +8,7 @@ import { LocalStorageService } from '../services/local-storage.service';
 export class RoleGuard implements CanActivate {
   constructor(
     private localStorageService: LocalStorageService,
-    private router: Router
+    private router: Router,
   ) {}
 
   canActivate(): boolean {

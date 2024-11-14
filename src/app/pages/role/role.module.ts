@@ -7,10 +7,10 @@ import { RouterModule } from '@angular/router';
 import { NgbNavModule, NgbDropdownModule, NgbCollapseModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
-
+import { RoleModalComponent } from './role-modal/role-modal.component';
 
 @NgModule({
-  declarations: [RoleDetailsComponent, RoleListingComponent],
+  declarations: [RoleDetailsComponent, RoleListingComponent, RoleModalComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -25,13 +25,12 @@ import { SharedModule } from 'src/app/_metronic/shared/shared.module';
         component: RoleDetailsComponent,
       },
     ]),
-
     SharedModule,
     NgbNavModule,
     NgbDropdownModule,
     NgbCollapseModule,
     NgbTooltipModule,
     SweetAlert2Module.forChild(),
-  ]
+  ],
 })
-export class RoleModule { }
+export class RoleModule {}

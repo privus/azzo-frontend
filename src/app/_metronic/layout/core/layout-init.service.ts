@@ -12,11 +12,9 @@ export class LayoutInitService {
 
   reInitProps(layoutType?: LayoutType) {
     this.layout.reInitProps();
-    const currentLayoutType = layoutType
-      ? layoutType
-      : this.layout.getBaseLayoutTypeFromRouteOrLocalStorage();
+    const currentLayoutType = layoutType ? layoutType : this.layout.getBaseLayoutTypeFromRouteOrLocalStorage();
     const config = this.layout.getLayoutConfig(currentLayoutType);
-    this.layout.currentLayoutTypeSubject.next(currentLayoutType)
+    this.layout.currentLayoutTypeSubject.next(currentLayoutType);
     this.config.next({ ...config });
 
     // init base layout
@@ -36,9 +34,7 @@ export class LayoutInitService {
     const bodyClasses = document.body.classList.value.split(' ');
     bodyClasses.forEach((cssClass) => document.body.classList.remove(cssClass));
     // clear body attributes
-    const bodyAttributes = document.body
-      .getAttributeNames()
-      .filter((t) => t.indexOf('data-') > -1);
+    const bodyAttributes = document.body.getAttributeNames().filter((t) => t.indexOf('data-') > -1);
     bodyAttributes.forEach((attr) => document.body.removeAttribute(attr));
     document.body.setAttribute('style', '');
     document.body.setAttribute('id', 'kt_app_body');

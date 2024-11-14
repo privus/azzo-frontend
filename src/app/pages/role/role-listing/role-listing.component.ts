@@ -1,198 +1,134 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
-import { Observable } from 'rxjs';
-import { DataTablesResponse, IRoleModel, RoleService } from 'src/app/core/services/role.service';
+import { Cargo, Permissao } from '../../../modules/account/models/user.model';
+import { PERMISOES } from '../../../shared/constants/user-constant';
 import { SweetAlertOptions } from 'sweetalert2';
+import { AzzoService } from '../../../core/services/azzo.service';
+import { Router } from '@angular/router';
+import { RoleModalComponent } from '../role-modal/role-modal.component';
 
 @Component({
   selector: 'app-role-listing',
   templateUrl: './role-listing.component.html',
-  styleUrls: ['./role-listing.component.scss']
+  styleUrls: ['./role-listing.component.scss'],
 })
 export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
-
-  isCollapsed1 = false;
-
   isLoading = false;
+  cargos: Cargo[] = [];
+  permissionsList: Permissao[] = PERMISOES;
+  cargoModel: Cargo = { cargo_id: 0, nome: '', somaPermissao: 0 };
 
-  roles$: Observable<DataTablesResponse>;
-
-  reloadEvent: EventEmitter<boolean> = new EventEmitter();
-
-  // Single model
-  role$: Observable<IRoleModel>;
-  roleModel: IRoleModel = { id: 0, name: '', permissions: [], users: [] };
-
-  @ViewChild('formModal')
-  formModal: TemplateRef<any>;
-
-  @ViewChild('noticeSwal')
-  noticeSwal!: SwalComponent;
-
+  @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
 
-  modalConfig: NgbModalOptions = {
-    modalDialogClass: 'modal-dialog modal-dialog-centered mw-650px',
-  };
-
+  private modalReference: NgbModalRef;
   private clickListener: () => void;
 
-  constructor(private apiService: RoleService, private cdr: ChangeDetectorRef, private renderer: Renderer2, private modalService: NgbModal) { }
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private renderer: Renderer2,
+    private modalService: NgbModal,
+    private azzoService: AzzoService,
+    private router: Router,
+  ) {}
+
+  ngOnInit(): void {
+    this.loadRoles();
+  }
 
   ngAfterViewInit(): void {
     this.clickListener = this.renderer.listen(document, 'click', (event) => {
-      const closestBtn = event.target.closest('.btn');
+      const closestBtn = (event.target as HTMLElement).closest('.btn');
       if (closestBtn) {
-        const { action, id } = closestBtn.dataset;
-
+        const action = closestBtn.getAttribute('data-action');
+        const id = closestBtn.getAttribute('data-id');
         switch (action) {
           case 'view':
+            this.router.navigate(['/apps/roles', Number(id)]);
             break;
-
           case 'create':
-            this.create();
-            this.modalService.open(this.formModal, this.modalConfig);
+            this.openRoleModal();
             break;
-
           case 'edit':
-            this.edit(id);
-            this.modalService.open(this.formModal, this.modalConfig);
+            const cargo = this.cargos.find((c) => c.cargo_id === Number(id));
+            this.openRoleModal(cargo);
             break;
-
           case 'delete':
+            // Implementar a lógica de exclusão, se necessário
             break;
         }
       }
     });
   }
 
-  ngOnInit(): void {
-    this.roles$ = this.apiService.getRoles();
-  }
-
-  delete(id: number) {
-    this.apiService.deleteRole(id).subscribe(() => {
+  loadRoles(): void {
+    this.azzoService.getRoles().subscribe({
+      next: (cargos) => {
+        this.cargos = cargos;
+        this.cdr.detectChanges();
+      },
+      error: (error) => console.error('Error loading roles:', error),
     });
   }
 
-  edit(id: number) {
-    this.role$ = this.apiService.getRole(id);
-    this.role$.subscribe((user: IRoleModel) => {
-      this.roleModel = user;
+  openRoleModal(cargo?: Cargo) {
+    this.modalReference = this.modalService.open(RoleModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
     });
-  }
 
-  create() {
-    this.roleModel = { id: 0, name: '', permissions: [], users: [] };
-  }
+    const modalComponentInstance = this.modalReference.componentInstance as RoleModalComponent;
+    modalComponentInstance.cargoModel = cargo ? { ...cargo } : { cargo_id: 0, nome: '', somaPermissao: 0 };
+    modalComponentInstance.permissionsList = this.permissionsList;
 
-  onSubmit(event: Event, myForm: NgForm) {
-    if (myForm && myForm.invalid) {
-      return;
-    }
-
-    this.isLoading = true;
-
-    const successAlert: SweetAlertOptions = {
-      icon: 'success',
-      title: 'Success!',
-      text: this.roleModel.id > 0 ? 'User updated successfully!' : 'User created successfully!',
-    };
-    const errorAlert: SweetAlertOptions = {
-      icon: 'error',
-      title: 'Error!',
-      text: '',
-    };
-
-    const completeFn = () => {
-      this.isLoading = false;
-      this.modalService.dismissAll();
-      this.roles$ = this.apiService.getRoles();
-      this.cdr.detectChanges();
-    };
-
-    const updateFn = () => {
-      this.apiService.updateRole(this.roleModel.id, this.roleModel).subscribe({
-        next: () => {
-          this.showAlert(successAlert);
-          this.reloadEvent.emit(true);
-        },
-        error: (error) => {
-          errorAlert.text = this.extractText(error.error);
-          this.showAlert(errorAlert);
-          this.isLoading = false;
-        },
-        complete: completeFn,
-      });
-    };
-
-    const createFn = () => {
-      this.apiService.createRole(this.roleModel).subscribe({
-        next: () => {
-          this.showAlert(successAlert);
-          this.reloadEvent.emit(true);
-        },
-        error: (error) => {
-          errorAlert.text = this.extractText(error.error);
-          this.showAlert(errorAlert);
-          this.isLoading = false;
-        },
-        complete: completeFn,
-      });
-    };
-
-    if (this.roleModel.id > 0) {
-      updateFn();
-    } else {
-      createFn();
-    }
-  }
-
-  extractText(obj: any): string {
-    var textArray: string[] = [];
-
-    for (var key in obj) {
-      if (typeof obj[key] === 'string') {
-        // If the value is a string, add it to the 'textArray'
-        textArray.push(obj[key]);
-      } else if (typeof obj[key] === 'object') {
-        // If the value is an object, recursively call the function and concatenate the results
-        textArray = textArray.concat(this.extractText(obj[key]));
-      }
-    }
-
-    // Use a Set to remove duplicates and convert back to an array
-    var uniqueTextArray = Array.from(new Set(textArray));
-
-    // Convert the uniqueTextArray to a single string with line breaks
-    var text = uniqueTextArray.join('\n');
-
-    return text;
+    this.modalReference.result.then(
+      (updatedCargo: Cargo) => {
+        if (updatedCargo) {
+          if (updatedCargo.cargo_id > 0) {
+            const index = this.cargos.findIndex((c) => c.cargo_id === updatedCargo.cargo_id);
+            if (index !== -1) {
+              this.cargos[index] = updatedCargo;
+            }
+          } else {
+            this.cargos.push(updatedCargo);
+          }
+          this.cdr.detectChanges();
+          this.loadRoles();
+          this.showAlert({
+            icon: 'success',
+            title: 'Success!',
+            text: updatedCargo.cargo_id > 0 ? 'Role updated successfully!' : 'Role created successfully!',
+          });
+        }
+      },
+      () => {
+        // Modal dismissed, nenhuma ação necessária
+      },
+    );
   }
 
   showAlert(swalOptions: SweetAlertOptions) {
-    let style = swalOptions.icon?.toString() || 'success';
-    if (swalOptions.icon === 'error') {
-      style = 'danger';
-    }
-    this.swalOptions = Object.assign({
+    this.swalOptions = {
+      ...swalOptions,
       buttonsStyling: false,
-      confirmButtonText: "Ok, got it!",
+      confirmButtonText: 'Ok, got it!',
       customClass: {
-        confirmButton: "btn btn-" + style
-      }
-    }, swalOptions);
+        confirmButton: `btn btn-${swalOptions.icon === 'error' ? 'danger' : 'success'}`,
+      },
+    };
     this.cdr.detectChanges();
     this.noticeSwal.fire();
   }
 
   ngOnDestroy(): void {
-    if (this.clickListener) {
-      this.clickListener();
-    }
+    if (this.clickListener) this.clickListener();
     this.modalService.dismissAll();
+  }
+
+  // Method to get permissions from somaPermissao
+  getPermissionsFromSoma(somaPermissao: number): Permissao[] {
+    return this.permissionsList.filter((p) => (somaPermissao & p.permissao) !== 0);
   }
 }

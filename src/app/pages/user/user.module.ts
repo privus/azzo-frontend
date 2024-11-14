@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserListingComponent } from './user-listing/user-listing.component';
-import { RouterModule } from '@angular/router';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { NgbCollapseModule, NgbDropdownModule, NgbNavModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +12,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserRoutingModule } from './user-routing.module';
-import { BrowserModule } from '@angular/platform-browser';
 import { UserEditModal } from './user-edit-modal/user-edit-modal.component';
 import { NgxMaskDirective } from 'ngx-mask';
 
@@ -34,6 +32,6 @@ import { NgxMaskDirective } from 'ngx-mask';
     MatInputModule,
     MatProgressSpinnerModule,
     NgxMaskDirective,
-  ]
+  ],
 })
-export class UserModule { }
+export class UserModule {}

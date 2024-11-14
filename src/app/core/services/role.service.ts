@@ -21,14 +21,13 @@ export interface IRoleModel {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RoleService {
-
   private apiUrl = 'https://preview.keenthemes.com/starterkit/metronic/laravel/api/v1/roles';
   // private apiUrl = 'http://127.0.0.1:8000/api/v1/roles';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getUsers(id: number, dataTablesParameters: any): Observable<DataTablesResponse> {
     const url = `${this.apiUrl}/${id}/users`;

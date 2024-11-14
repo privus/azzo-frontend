@@ -1,14 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import {
-  DrawerComponent,
-  MenuComponent,
-  ScrollComponent,
-  ScrollTopComponent,
-  StickyComponent,
-  ToggleComponent,
-} from '../../../_metronic/kt/components';
 import { ThemeModeService } from '../../../_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
 
 @Component({
@@ -19,14 +11,14 @@ import { ThemeModeService } from '../../../_metronic/partials/layout/theme-mode-
 export class Error500Component implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
-  constructor(private router: Router, private modeService: ThemeModeService) {}
+  constructor(
+    private router: Router,
+    private modeService: ThemeModeService,
+  ) {}
 
   ngOnInit(): void {
     const subscr = this.modeService.mode.asObservable().subscribe((mode) => {
-      document.body.style.backgroundImage =
-        mode === 'dark'
-          ? 'url(./assets/media/auth/bg7-dark.jpg)'
-          : 'url(./assets/media/auth/bg7.jpg)';
+      document.body.style.backgroundImage = mode === 'dark' ? 'url(./assets/media/auth/bg7-dark.jpg)' : 'url(./assets/media/auth/bg7.jpg)';
     });
     this.unsubscribe.push(subscr);
   }

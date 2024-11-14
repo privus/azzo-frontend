@@ -6,7 +6,7 @@ import { OverviewComponent } from './overview/overview.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ProfileDetailsComponent } from './profile-details/profile-details.component';
 import { DropdownMenusModule } from '../../_metronic/partials';
-import {SharedModule} from "../../_metronic/shared/shared.module";
+import { SharedModule } from '../../_metronic/shared/shared.module';
 import { AccountService } from './services/account.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -17,25 +17,19 @@ import { RemoveCurrentCargoPipe } from 'src/app/shared/pipes/remove-current-carg
 
 @NgModule({
   providers: [AccountService, provideNgxMask()],
-  declarations: [
-    AccountComponent,
-    OverviewComponent,
-    SettingsComponent,
-    ProfileDetailsComponent,
-    RemoveCurrentCargoPipe,
-  ],
+  declarations: [AccountComponent, OverviewComponent, SettingsComponent, ProfileDetailsComponent, RemoveCurrentCargoPipe],
   imports: [
     CommonModule,
     AccountRoutingModule,
     DropdownMenusModule,
-    SharedModule,    
+    SharedModule,
     ReactiveFormsModule,
     FormsModule,
     MatAutocompleteModule,
     MatInputModule,
     MatProgressSpinnerModule,
-    NgxMaskDirective, 
+    NgxMaskDirective,
     ReactiveFormsModule,
-  ]
+  ],
 })
 export class AccountModule {}

@@ -1,4 +1,4 @@
-<div class="card mb-5 mb-xl-10">
+<div *ngIf="user; else loading"  class="card mb-5 mb-xl-10">
   <div id="kt_account_profile_details" class="collapse show">
     <form class="form" [formGroup]="profileForm" >
       <div class="card-body border-top p-9">
@@ -42,7 +42,7 @@
               name="cargo"
             >
               <!-- Exibir o cargo atual do usuário como a opção selecionada -->
-              <option [value]="user?.cargo?.nome" selected>{{ user?.cargo?.nome }}</option>
+              <option [value]="user.cargo.nome" selected>{{ user.cargo.nome }}</option>
         
               <!-- Iterar pela lista de cargos para exibir as opções -->
               <option *ngFor="let cargo of cargos | removeCurrentCargo:user?.cargo?.cargo_id" [value]="cargo.cargo_id">
@@ -107,12 +107,12 @@
               class="form-control form-control-lg form-control-solid"
               placeholder="Endereço"
               name="endereco"
-              [value]="user?.endereco"
+              [value]="user.endereco"
             />
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">Cidade</label>
+          <label class="col-lg-4 col-form-label required fw-bold fs-6">Cidade</label>
           <div class="col-lg-8 fv-row">
             <mat-form-field class="w-100">
               <input
@@ -122,18 +122,18 @@
                 placeholder="Cidade"
                 aria-label="Cidade"
                 formControlName="cidade"
+                autocomplete="new-city"
                 [matAutocomplete]="auto"
               />
               <mat-autocomplete
                 class="my-custom-autocomplete"                
                 #auto="matAutocomplete"
                 [displayWith]="displayCidade"
-                (optionSelected)="onCidadeSelected($event)"
               >
-                <mat-option *ngIf="isLoading$">
+                <mat-option *ngIf="isLoading">
                   <mat-spinner diameter="20"></mat-spinner> Carregando...
                 </mat-option>
-                <ng-container *ngIf="!isLoading$">
+                <ng-container *ngIf="!isLoading">
                   <mat-option
                     *ngFor="let cidade of filteredCidades | async"
                     [value]="cidade"
@@ -158,12 +158,12 @@
               class="form-control form-control-lg form-control-solid"
               placeholder="Estado"
               name="estado"
-              [value]="user?.cidade?.estado?.nome"
+              [value]="user.cidade.estado.nome"
               readonly
             />
           </div>
         </div>
-        <div class="row mb-6" *ngIf="user?.regiao">
+        <div class="row mb-6" *ngIf="user.regiao?.regiao_id || f.cargo.value === '2'">
           <label class="col-lg-4 col-form-label fw-bold fs-6"
             ><span class="required">Região</span></label
           >
@@ -199,3 +199,9 @@
     </form>
   </div>
 </div>
+<ng-template #loading>
+  <div id="splash-screen" class="splash-screen">
+    <img src="./assets/media/logos/azzo_simbolo.svg" alt="Azzo logo" />
+    <span>Loading ...</span>
+  </div>
+</ng-template>

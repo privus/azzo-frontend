@@ -8,7 +8,10 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   canActivate(): Observable<boolean> {
     return this.authService.isAuthenticated().pipe(
@@ -18,7 +21,7 @@ export class AuthGuard implements CanActivate {
           return false;
         }
         return true;
-      })
+      }),
     );
   }
 }

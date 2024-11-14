@@ -13,10 +13,16 @@ export interface Cidade {
 export interface Cargo {
   cargo_id: number;
   nome: string;
+  somaPermissao: number;
 }
 
 export interface Regiao {
   regiao_id: number;
+  nome: string;
+}
+
+export interface Permissao {
+  permissao: number;
   nome: string;
 }
 
@@ -43,7 +49,7 @@ export interface NewUser {
   senha: string;
   cargo_id: number;
   cidade_id: number;
-  regiao_id?: Number | null;
+  regiao_id?: number | null;
 }
 
 export interface UserUpdate {
@@ -70,5 +76,5 @@ export interface UserList {
   senha: string;
   cargo_id: number;
   cidade_id: number;
-  regiao_id?: Number | null;
+  regiao_id?: number | null;
 }

@@ -8,7 +8,7 @@ describe('PermissionListingComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [PermissionListingComponent]
+      declarations: [PermissionListingComponent],
     });
     fixture = TestBed.createComponent(PermissionListingComponent);
     component = fixture.componentInstance;

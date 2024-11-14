@@ -200,10 +200,4 @@ const messageFromClient: MessageModel = {
   time: 'Just now',
 };
 
-export {
-  MessageModel,
-  defaultMessages,
-  UserInfoModel,
-  defaultUserInfos,
-  messageFromClient,
-};
+export { MessageModel, defaultMessages, UserInfoModel, defaultUserInfos, messageFromClient };

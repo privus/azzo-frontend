@@ -1,19 +1,6 @@
-import {
-  Component,
-  ElementRef,
-  HostBinding,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import {
-  defaultMessages,
-  defaultUserInfos,
-  messageFromClient,
-  MessageModel,
-  UserInfoModel,
-} from './dataExample';
+import { defaultMessages, defaultUserInfos, messageFromClient, MessageModel, UserInfoModel } from './dataExample';
 
 @Component({
   selector: 'app-chat-inner',
@@ -22,15 +9,11 @@ import {
 export class ChatInnerComponent implements OnInit {
   @Input() isDrawer: boolean = false;
   @HostBinding('class') class = 'card-body';
-  @HostBinding('id') id = this.isDrawer
-    ? 'kt_drawer_chat_messenger_body'
-    : 'kt_chat_messenger_body';
+  @HostBinding('id') id = this.isDrawer ? 'kt_drawer_chat_messenger_body' : 'kt_chat_messenger_body';
   @ViewChild('messageInput', { static: true })
   messageInput: ElementRef<HTMLTextAreaElement>;
 
-  private messages$: BehaviorSubject<Array<MessageModel>> = new BehaviorSubject<
-    Array<MessageModel>
-  >(defaultMessages);
+  private messages$: BehaviorSubject<Array<MessageModel>> = new BehaviorSubject<Array<MessageModel>>(defaultMessages);
   messagesObs: Observable<Array<MessageModel>>;
 
   constructor() {
