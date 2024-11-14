@@ -2,12 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { BehaviorSubject } from 'rxjs';
 import * as objectPath from 'object-path';
-import {
-  LayoutType,
-  ILayout,
-  CSSClassesType,
-  HTMLAttributesType,
-} from './configs/config';
+import { LayoutType, ILayout, CSSClassesType, HTMLAttributesType } from './configs/config';
 import { DarkHeaderConfig } from './configs/dark-header.config';
 import { DarkSidebarConfig } from './configs/dark-sidebar.config';
 import { LightHeaderConfig } from './configs/light-header.config';
@@ -53,26 +48,21 @@ export function getEmptyCssClasses(): CSSClassesType {
   providedIn: 'root',
 })
 export class LayoutService {
-  public currentLayoutTypeSubject = new BehaviorSubject<LayoutType | null>(
-    null
+  public currentLayoutTypeSubject = new BehaviorSubject<LayoutType | null>(null);
+
+  public layoutConfigSubject: BehaviorSubject<ILayout> = new BehaviorSubject<ILayout>(
+    this.getLayoutConfig(this.getBaseLayoutTypeFromRouteOrLocalStorage()),
   );
 
-  public layoutConfigSubject: BehaviorSubject<ILayout> =
-    new BehaviorSubject<ILayout>(
-      this.getLayoutConfig(this.getBaseLayoutTypeFromRouteOrLocalStorage())
-    );
-
   // scope list of css classes
-  private classes: BehaviorSubject<CSSClassesType> =
-    new BehaviorSubject<CSSClassesType>(getEmptyCssClasses());
+  private classes: BehaviorSubject<CSSClassesType> = new BehaviorSubject<CSSClassesType>(getEmptyCssClasses());
 
   // scope list of html attributes
-  private attrs: BehaviorSubject<HTMLAttributesType> =
-    new BehaviorSubject<HTMLAttributesType>(getEmptyHTMLAttributes());
+  private attrs: BehaviorSubject<HTMLAttributesType> = new BehaviorSubject<HTMLAttributesType>(getEmptyHTMLAttributes());
 
   constructor(private activatedRoute: ActivatedRoute) {}
 
-  getProp(path: string, config?: ILayout): string | boolean | undefined | Object {
+  getProp(path: string, config?: ILayout): string | boolean | undefined | object {
     if (config) {
       return objectPath.get(config, path);
     }
@@ -87,9 +77,7 @@ export class LayoutService {
       updatedCssClasses[path] = [];
     }
 
-    classesInStr
-      .split(' ')
-      .forEach((cssClass: string) => updatedCssClasses[path].push(cssClass));
+    classesInStr.split(' ').forEach((cssClass: string) => updatedCssClasses[path].push(cssClass));
 
     this.classes.next(updatedCssClasses);
   }
@@ -138,9 +126,7 @@ export class LayoutService {
 
   getBaseLayoutTypeFromLocalStorage(): LayoutType {
     if (localStorage) {
-      const layoutType = localStorage.getItem(
-        BASE_LAYOUT_TYPE_LOCAL_STORAGE_KEY
-      );
+      const layoutType = localStorage.getItem(BASE_LAYOUT_TYPE_LOCAL_STORAGE_KEY);
       if (layoutType) {
         return layoutType as LayoutType;
       }
@@ -168,9 +154,7 @@ export class LayoutService {
   getLayoutConfig(layoutType: LayoutType): ILayout {
     const storedLayoutType = this.getBaseLayoutTypeFromLocalStorage();
     if (layoutType && storedLayoutType) {
-      const configInString = localStorage.getItem(
-        `${layoutType}-${LAYOUT_CONFIG_LOCAL_STORAGE_KEY}`
-      );
+      const configInString = localStorage.getItem(`${layoutType}-${LAYOUT_CONFIG_LOCAL_STORAGE_KEY}`);
 
       if (configInString) {
         try {
@@ -188,10 +172,7 @@ export class LayoutService {
     const config = this.getLayoutByType(layoutType);
     if (localStorage) {
       localStorage.setItem(BASE_LAYOUT_TYPE_LOCAL_STORAGE_KEY, layoutType);
-      localStorage.setItem(
-        `${layoutType}-${LAYOUT_CONFIG_LOCAL_STORAGE_KEY}`,
-        JSON.stringify(config)
-      );
+      localStorage.setItem(`${layoutType}-${LAYOUT_CONFIG_LOCAL_STORAGE_KEY}`, JSON.stringify(config));
     }
     // document.location.reload();
   }
@@ -199,10 +180,7 @@ export class LayoutService {
   saveBaseConfig(config: ILayout) {
     const baseLayoutType = this.getBaseLayoutTypeFromLocalStorage();
     if (localStorage) {
-      localStorage.setItem(
-        `${baseLayoutType}-${LAYOUT_CONFIG_LOCAL_STORAGE_KEY}`,
-        JSON.stringify(config)
-      );
+      localStorage.setItem(`${baseLayoutType}-${LAYOUT_CONFIG_LOCAL_STORAGE_KEY}`, JSON.stringify(config));
     }
 
     document.location.reload();
@@ -212,9 +190,7 @@ export class LayoutService {
     const layoutType = this.getBaseLayoutTypeFromLocalStorage;
 
     if (localStorage) {
-      localStorage.removeItem(
-        `${layoutType}-${LAYOUT_CONFIG_LOCAL_STORAGE_KEY}`
-      );
+      localStorage.removeItem(`${layoutType}-${LAYOUT_CONFIG_LOCAL_STORAGE_KEY}`);
     }
 
     document.location.reload();

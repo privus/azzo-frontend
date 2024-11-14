@@ -17,9 +17,7 @@ export class BuilderComponent implements OnInit {
   constructor(private layout: LayoutService) {}
 
   ngOnInit(): void {
-    this.model = this.layout.getLayoutConfig(
-      this.layout.getBaseLayoutTypeFromLocalStorage()
-    );
+    this.model = this.layout.getLayoutConfig(this.layout.getBaseLayoutTypeFromLocalStorage());
   }
 
   setActiveTab(tab: Tabs) {

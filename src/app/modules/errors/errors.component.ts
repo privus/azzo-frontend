@@ -1,13 +1,5 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  DrawerComponent,
-  MenuComponent,
-  ScrollComponent,
-  ScrollTopComponent,
-  StickyComponent,
-  ToggleComponent,
-} from '../../_metronic/kt/components';
 
 const BODY_CLASSES = ['bgi-size-cover', 'bgi-position-center', 'bgi-no-repeat'];
 

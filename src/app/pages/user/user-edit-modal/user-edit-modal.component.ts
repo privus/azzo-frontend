@@ -5,7 +5,6 @@ import { SweetAlertOptions } from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AzzoService } from '../../../core/services/azzo.service';
 import { Cidade, UserUpdate, Usuario, Cargo } from '../../../modules/account/models/user.model';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { REGIOES } from '../../../shared/constants/user-constant';
 import { AccountService } from '../../../modules/account/services/account.service';
@@ -13,7 +12,7 @@ import { AccountService } from '../../../modules/account/services/account.servic
 @Component({
   selector: 'app-user-edit-modal',
   templateUrl: './user-edit-modal.component.html',
-  styleUrls: ['./user-edit-modal.component.scss']
+  styleUrls: ['./user-edit-modal.component.scss'],
 })
 export class UserEditModal implements OnInit, AfterViewInit, OnDestroy {
   @Input() userModel!: Usuario;
@@ -34,7 +33,7 @@ export class UserEditModal implements OnInit, AfterViewInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     public activeModal: NgbActiveModal,
     private readonly formBuilder: FormBuilder,
-    private accountService: AccountService
+    private accountService: AccountService,
   ) {}
 
   ngOnInit(): void {
@@ -86,7 +85,7 @@ export class UserEditModal implements OnInit, AfterViewInit, OnDestroy {
 
     const updatedFields: Partial<UserUpdate> = {};
     const currentUser = this.userModel;
-  
+
     // Verifica cada campo e só adiciona ao updatedFields se for diferente
     const fieldsToUpdate: { [key: string]: any } = {
       nome: this.f.nome.value,
@@ -98,7 +97,7 @@ export class UserEditModal implements OnInit, AfterViewInit, OnDestroy {
       cidade_id: this.f.cidade.value !== currentUser.cidade?.cidade_id ? this.f.cidade.value.cidade_id : null,
       regiao_id: this.f.regiao.value && this.f.regiao.value !== currentUser.regiao?.regiao_id ? this.f.regiao.value.regiao_id : null,
     };
-  
+
     // Preenche updatedFields apenas com os valores que foram alterados
     Object.keys(fieldsToUpdate).forEach((key) => {
       if (fieldsToUpdate[key] !== null && fieldsToUpdate[key] !== currentUser[key as keyof Usuario]) {
@@ -121,10 +120,6 @@ export class UserEditModal implements OnInit, AfterViewInit, OnDestroy {
 
   displayCidade(cidade: Cidade): string {
     return cidade && cidade.nome ? cidade.nome : '';
-  }
-
-  onCidadeSelected(event: MatAutocompleteSelectedEvent): void {
-    const cidade: Cidade = event.option.value;
   }
 
   showAlert(swalOptions: SweetAlertOptions) {

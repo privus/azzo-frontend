@@ -1,4 +1,4 @@
-import { Cargo } from "../../account/models/user.model";
+import { Cargo } from '../../account/models/user.model';
 
 export interface AuthLogin {
   email: string;
@@ -21,9 +21,9 @@ export interface AuthUser {
 }
 
 export interface AuthDecodedToken {
-  userId: number;     
-  email: string;      
-  cargo: Cargo;        
-  iat: number;        
-  exp: number;  
+  userId: number;
+  email: string;
+  cargo: Cargo;
+  iat: number;
+  exp: number;
 }

@@ -1,6 +1,6 @@
-import {DataUtil, EventHandlerUtil, getUniqueIdWithPrefix,} from '../_utils/index';
+import { DataUtil, EventHandlerUtil, getUniqueIdWithPrefix } from '../_utils/index';
 // Helpers
-import {CookieComponent} from './_CookieComponent';
+import { CookieComponent } from './_CookieComponent';
 
 export interface ToggleOptions {
   saveState: boolean;
@@ -27,9 +27,7 @@ class ToggleComponent {
     this.instanceUid = getUniqueIdWithPrefix('toggle');
     this.element = _element;
 
-    const elementTargetAttr = this.element.getAttribute(
-      'data-kt-toggle-target'
-    );
+    const elementTargetAttr = this.element.getAttribute('data-kt-toggle-target');
     if (elementTargetAttr) {
       this.target = document.querySelector(elementTargetAttr);
     }
@@ -37,8 +35,7 @@ class ToggleComponent {
     this.state = elementToggleAttr || '';
     const elementModeAttr = this.element.getAttribute('data-kt-toggle-mode');
     this.mode = elementModeAttr || '';
-    this.attribute =
-      'data-kt-' + this.element.getAttribute('data-kt-toggle-name');
+    this.attribute = 'data-kt-' + this.element.getAttribute('data-kt-toggle-name');
 
     // Event Handlers
     this._handlers();
@@ -125,9 +122,7 @@ class ToggleComponent {
       return false;
     }
 
-    return (
-      String(this.target.getAttribute(this.attribute)).toLowerCase() === 'on'
-    );
+    return String(this.target.getAttribute(this.attribute)).toLowerCase() === 'on';
   };
 
   ///////////////////////
@@ -192,14 +187,14 @@ class ToggleComponent {
 
         // Add a class to prevent sidebar hover effect after toggle click
         // @ts-ignore
-        toggleObj.on("kt.toggle.change", function () {
+        toggleObj.on('kt.toggle.change', function () {
           // Set animation state
-          el.closest('#kt_app_sidebar')?.classList.add("animating");
+          el.closest('#kt_app_sidebar')?.classList.add('animating');
 
           // Wait till animation finishes
           setTimeout(function () {
             // Remove animation state
-            el.closest('#kt_app_sidebar')?.classList.remove("animating");
+            el.closest('#kt_app_sidebar')?.classList.remove('animating');
           }, 300);
         });
       }
@@ -215,4 +210,4 @@ class ToggleComponent {
   };
 }
 
-export {ToggleComponent, defaultToggleOptions};
+export { ToggleComponent, defaultToggleOptions };

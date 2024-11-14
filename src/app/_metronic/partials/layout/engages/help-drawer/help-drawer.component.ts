@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {environment} from 'src/environments/environment';
+import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-help-drawer',
@@ -9,9 +9,7 @@ export class HelpDrawerComponent implements OnInit {
   appThemeName: string = environment.appThemeName;
   appPurchaseUrl: string = environment.appPurchaseUrl;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

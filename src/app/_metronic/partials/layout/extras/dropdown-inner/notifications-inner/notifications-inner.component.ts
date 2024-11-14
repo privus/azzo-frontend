@@ -1,18 +1,13 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
-import { LayoutService } from '../../../../../layout';
 
-export type NotificationsTabsType =
-  | 'kt_topbar_notifications_1'
-  | 'kt_topbar_notifications_2'
-  | 'kt_topbar_notifications_3';
+export type NotificationsTabsType = 'kt_topbar_notifications_1' | 'kt_topbar_notifications_2' | 'kt_topbar_notifications_3';
 
 @Component({
   selector: 'app-notifications-inner',
   templateUrl: './notifications-inner.component.html',
 })
 export class NotificationsInnerComponent implements OnInit {
-  @HostBinding('class') class =
-    'menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px';
+  @HostBinding('class') class = 'menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px';
   @HostBinding('attr.data-kt-menu') dataKtMenu = 'true';
 
   activeTabId: NotificationsTabsType = 'kt_topbar_notifications_2';

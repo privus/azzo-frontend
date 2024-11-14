@@ -16,13 +16,6 @@ import { TranslationModule } from '../i18n/translation.module';
     LogoutComponent,
     AuthComponent,
   ],
-  imports: [
-    CommonModule,
-    TranslationModule,
-    AuthRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-  ],
+  imports: [CommonModule, TranslationModule, AuthRoutingModule, FormsModule, ReactiveFormsModule, HttpClientModule],
 })
 export class AuthModule {}

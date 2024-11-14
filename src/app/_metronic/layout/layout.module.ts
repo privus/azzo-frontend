@@ -2,11 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { RouterModule, Routes } from '@angular/router';
-import {
-  NgbDropdownModule,
-  NgbProgressbarModule,
-  NgbTooltipModule,
-} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbProgressbarModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { TranslationModule } from '../../modules/i18n';
 import { LayoutComponent } from './layout.component';
@@ -20,12 +16,7 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { TopbarComponent } from './components/topbar/topbar.component';
 import { PageTitleComponent } from './components/header/page-title/page-title.component';
 import { HeaderMenuComponent } from './components/header/header-menu/header-menu.component';
-import {
-  DrawersModule,
-  DropdownMenusModule,
-  ModalsModule,
-  EngagesModule,
-} from '../partials';
+import { DrawersModule, DropdownMenusModule, ModalsModule, EngagesModule } from '../partials';
 import { EngagesComponent } from '../partials/layout/engages/engages.component';
 import { ThemeModeModule } from '../partials/layout/theme-mode-switcher/theme-mode.module';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -38,7 +29,7 @@ import { ClassicComponent } from './components/toolbar/classic/classic.component
 import { ExtendedComponent } from './components/toolbar/extended/extended.component';
 import { ReportsComponent } from './components/toolbar/reports/reports.component';
 import { SaasComponent } from './components/toolbar/saas/saas.component';
-import {SharedModule} from "../shared/shared.module";
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {
@@ -86,7 +77,7 @@ const routes: Routes = [
     NgbTooltipModule,
     TranslateModule,
     ThemeModeModule,
-    SharedModule
+    SharedModule,
   ],
   exports: [RouterModule],
 })

@@ -104,8 +104,7 @@ export const LightHeaderConfig: ILayout = {
       componentName: 'footer',
       display: true,
       container: 'fluid',
-      containerClass:
-        'd-flex flex-column flex-md-row flex-center flex-md-stack py-3',
+      containerClass: 'd-flex flex-column flex-md-row flex-center flex-md-stack py-3',
       fixed: {
         desktop: false,
         mobile: false,

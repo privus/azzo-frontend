@@ -17,7 +17,6 @@ export class AuthService {
   constructor(
     private readonly localStorageService: LocalStorageService,
     private readonly azzoService: AzzoService,
-
   ) {}
 
   async login(data: AuthLogin): Promise<Cargo> {
@@ -28,14 +27,13 @@ export class AuthService {
 
       // Armazena o token no localStorage
       this.localStorageService.set(this.tokenKey, tokens.accessToken);
-      this.authStatus.next(true);  // Atualiza o estado de autenticação
-      
+      this.authStatus.next(true); // Atualiza o estado de autenticação
+
       // Decodifica o token para obter o cargo
       const decodedToken = decodeJwt(tokens.accessToken);
       this.localStorageService.set(this.myInfoKey, decodedToken);
-      
-      return decodedToken.cargo;
 
+      return decodedToken.cargo;
     } catch (error) {
       console.error('Erro durante o login:', error);
       this.logOut();
@@ -43,7 +41,7 @@ export class AuthService {
     }
   }
 
-   hasToken(): boolean {
+  hasToken(): boolean {
     return !!localStorage.getItem(this.tokenKey);
   }
 
@@ -54,7 +52,5 @@ export class AuthService {
 
   isAuthenticated(): Observable<boolean> {
     return this.authStatus.asObservable();
-  }   
+  }
 }
-
-

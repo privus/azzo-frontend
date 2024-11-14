@@ -49,7 +49,7 @@ export interface NewUser {
   senha: string;
   cargo_id: number;
   cidade_id: number;
-  regiao_id?: Number | null;
+  regiao_id?: number | null;
 }
 
 export interface UserUpdate {
@@ -76,5 +76,5 @@ export interface UserList {
   senha: string;
   cargo_id: number;
   cidade_id: number;
-  regiao_id?: Number | null;
+  regiao_id?: number | null;
 }

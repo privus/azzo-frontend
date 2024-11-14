@@ -5,24 +5,21 @@ import { Routes, RouterModule } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'auth',
-    loadChildren: () =>
-      import('./modules/auth/auth.module').then((m) => m.AuthModule),
+    loadChildren: () => import('./modules/auth/auth.module').then((m) => m.AuthModule),
   },
   {
     path: 'error',
-    loadChildren: () =>
-      import('./modules/errors/errors.module').then((m) => m.ErrorsModule),
+    loadChildren: () => import('./modules/errors/errors.module').then((m) => m.ErrorsModule),
   },
   {
     path: '',
-    redirectTo: 'auth/login',  // Redireciona a raiz para a tela de login
-    pathMatch: 'full',          // Usa correspondência exata para garantir o redirecionamento correto
-  }, 
+    redirectTo: 'auth/login', // Redireciona a raiz para a tela de login
+    pathMatch: 'full', // Usa correspondência exata para garantir o redirecionamento correto
+  },
   {
     path: '',
     // canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./_metronic/layout/layout.module').then((m) => m.LayoutModule),
+    loadChildren: () => import('./_metronic/layout/layout.module').then((m) => m.LayoutModule),
   },
   { path: '**', redirectTo: 'error/404' },
 ];

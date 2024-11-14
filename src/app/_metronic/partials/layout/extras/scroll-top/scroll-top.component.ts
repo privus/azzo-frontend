@@ -1,13 +1,7 @@
 import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import {
-  StickyComponent,
-  ScrollTopComponent,
-  MenuComponent,
-  ToggleComponent,
-  DrawerComponent,
-} from '../../../../kt/components';
+import { StickyComponent, ScrollTopComponent, MenuComponent, ToggleComponent, DrawerComponent } from '../../../../kt/components';
 
 @Component({
   selector: 'app-scroll-top',
@@ -39,13 +33,9 @@ export class LayoutScrollTopComponent implements OnInit, OnDestroy {
   }
 
   updateHeaderSticky() {
-    const stickyHeader = document.body.querySelectorAll(
-      `[data-kt-sticky-name="header"]`
-    );
+    const stickyHeader = document.body.querySelectorAll(`[data-kt-sticky-name="header"]`);
     if (stickyHeader && stickyHeader.length > 0) {
-      const sticky = StickyComponent.getInstance(
-        stickyHeader[0] as HTMLElement
-      );
+      const sticky = StickyComponent.getInstance(stickyHeader[0] as HTMLElement);
       if (sticky) {
         sticky.update();
       }

@@ -2,7 +2,7 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthLogin } from '../../models/auth.model';
 import { Cargo } from 'src/app/modules/account/models/user.model';
 
@@ -21,9 +21,8 @@ export class LoginComponent {
   constructor(
     private readonly formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router,    
-    private cdr: ChangeDetectorRef 
-    
+    private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {
     this.loginForm = this.formBuilder.group({
       password: ['', [Validators.required]],
@@ -54,7 +53,7 @@ export class LoginComponent {
       console.error('Erro durante o login:', error);
       this.hasError = true;
       this.errorMessage = (error as any)?.error?.message || 'Erro no login.';
-      this.cdr.detectChanges(); 
+      this.cdr.detectChanges();
     }
   }
 }

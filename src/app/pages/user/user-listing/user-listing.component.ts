@@ -1,11 +1,6 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
-import Swal, { SweetAlertOptions } from 'sweetalert2';
+import { SweetAlertOptions } from 'sweetalert2';
 import { Usuario } from '../../../modules/account/models/user.model';
 import { AzzoService } from 'src/app/core/services/azzo.service';
 import { BehaviorSubject } from 'rxjs';
@@ -28,7 +23,7 @@ export class UserListingComponent implements OnInit {
   constructor(
     private azzoService: AzzoService,
     private cdr: ChangeDetectorRef,
-    private modalService: NgbModal
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit(): void {
@@ -43,8 +38,8 @@ export class UserListingComponent implements OnInit {
         this.cdr.detectChanges();
         this.isLoading$.next(false);
 
-      // Log para verificar os dados dos usuários
-      console.log('Usuários carregados ======>', users);
+        // Log para verificar os dados dos usuários
+        console.log('Usuários carregados ======>', users);
       },
       error: (error) => {
         console.error('Erro ao carregar usuários:', error);
@@ -55,14 +50,14 @@ export class UserListingComponent implements OnInit {
   // Implementação do método onSearch
   onSearch(searchText: string): void {
     this.searchQuery = searchText.toLowerCase();
-    this.filteredUsers = this.users.filter((user) =>
-      user.nome.toLowerCase().includes(this.searchQuery) ||
-      user.email.toLowerCase().includes(this.searchQuery) ||
-      user.celular.toLowerCase().includes(this.searchQuery) ||
-      (user.cargo?.nome || '').toLowerCase().includes(this.searchQuery)
+    this.filteredUsers = this.users.filter(
+      (user) =>
+        user.nome.toLowerCase().includes(this.searchQuery) ||
+        user.email.toLowerCase().includes(this.searchQuery) ||
+        user.celular.toLowerCase().includes(this.searchQuery) ||
+        (user.cargo?.nome || '').toLowerCase().includes(this.searchQuery),
     );
   }
-
 
   getRandomColor(): string {
     const colors = ['success', 'info', 'warning', 'danger'];
@@ -72,14 +67,12 @@ export class UserListingComponent implements OnInit {
   edit(user: Usuario): void {
     const modalRef = this.modalService.open(UserEditModal);
     modalRef.componentInstance.userModel = { ...user };
-    modalRef.result.then(
-      (result) => {
-        if (result === 'saved') {
-          this.loadUsers();
-        }
-      },
-    );
-  }  
+    modalRef.result.then((result) => {
+      if (result === 'saved') {
+        this.loadUsers();
+      }
+    });
+  }
 
   delete(user: Usuario): void {
     const confirmOptions: SweetAlertOptions = {
@@ -90,7 +83,7 @@ export class UserListingComponent implements OnInit {
       confirmButtonText: 'Sim, deletar!',
       cancelButtonText: 'Cancelar',
     };
-    
+
     // Define as opções e abre o modal de confirmação
     this.swalOptions = confirmOptions;
     this.cdr.detectChanges();
@@ -121,7 +114,6 @@ export class UserListingComponent implements OnInit {
       }
     });
   }
-  
 
   showAlert(swalOptions: SweetAlertOptions): void {
     this.swalOptions = swalOptions;

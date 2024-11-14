@@ -3,12 +3,10 @@ import { Injectable } from '@angular/core';
 import { AuthLogin, AuthTokens } from '../../modules/auth/models/auth.model';
 import { Cargo, Cidade, NewUser, UserUpdate, Usuario } from '../../modules/account/models/user.model';
 
-
 @Injectable()
-
 export class AzzoService {
-    private baseUrl: string;
-  constructor( private readonly http: HttpClient ) {
+  private baseUrl: string;
+  constructor(private readonly http: HttpClient) {
     this.baseUrl = 'http://localhost:3000/';
   }
 
@@ -33,7 +31,7 @@ export class AzzoService {
       params: { q: query },
     });
   }
-  
+
   newUser(user: NewUser) {
     return this.http.post<Usuario>(`${this.baseUrl}auth/register`, user);
   }
@@ -61,5 +59,4 @@ export class AzzoService {
   getRoleById(roleId: number) {
     return this.http.get<Cargo>(`${this.baseUrl}users/roles/${roleId}`);
   }
-
 }

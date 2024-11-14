@@ -1,5 +1,5 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { TranslationService } from '../../../../../../modules/i18n/translation.service';
 // import { AuthService, UserType } from '../../../../../../modules/auth';
 
@@ -16,7 +16,7 @@ export class UserInnerComponent implements OnInit, OnDestroy {
 
   constructor(
     // private auth: AuthService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
   ) {}
 
   ngOnInit(): void {
@@ -27,7 +27,6 @@ export class UserInnerComponent implements OnInit, OnDestroy {
   //   this.auth.logout();
   //   document.location.reload();
   // }
-
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());

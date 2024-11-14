@@ -1,8 +1,6 @@
-
 export interface DataTablesResponse {
-    draw?: number;
-    recordsTotal: number;
-    recordsFiltered: number;
-    data: any[];
+  draw?: number;
+  recordsTotal: number;
+  recordsFiltered: number;
+  data: any[];
 }
-

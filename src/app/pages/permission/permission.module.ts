@@ -8,8 +8,6 @@ import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { PermissionListingComponent } from './permission-listing/permission-listing.component';
 import { PermissionDetailsComponent } from './permission-details/permission-details.component';
 
-
-
 @NgModule({
   declarations: [PermissionListingComponent, PermissionDetailsComponent],
   imports: [
@@ -32,6 +30,6 @@ import { PermissionDetailsComponent } from './permission-details/permission-deta
     NgbCollapseModule,
     NgbTooltipModule,
     SweetAlert2Module.forChild(),
-  ]
+  ],
 })
-export class PermissionModule { }
+export class PermissionModule {}

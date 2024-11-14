@@ -10,8 +10,6 @@ import { locale as frLang } from './modules/i18n/vocabs/fr';
 import { ThemeModeService } from './_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
 
 @Component({
-  // tslint:disable-next-line:component-selector
-  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'body[root]',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
@@ -20,17 +18,10 @@ import { ThemeModeService } from './_metronic/partials/layout/theme-mode-switche
 export class AppComponent implements OnInit {
   constructor(
     private translationService: TranslationService,
-    private modeService: ThemeModeService
+    private modeService: ThemeModeService,
   ) {
     // register translations
-    this.translationService.loadTranslations(
-      enLang,
-      chLang,
-      esLang,
-      jpLang,
-      deLang,
-      frLang
-    );
+    this.translationService.loadTranslations(enLang, chLang, esLang, jpLang, deLang, frLang);
   }
 
   ngOnInit() {

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -11,9 +11,7 @@ export class ExploreMainDrawerComponent implements OnInit {
   appPreviewUrl: string = environment.appPreviewUrl;
   appDemos = environment.appDemos;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

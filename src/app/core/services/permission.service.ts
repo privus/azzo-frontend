@@ -17,14 +17,13 @@ export interface IPermissionModel {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PermissionService {
-
   private apiUrl = 'https://preview.keenthemes.com/starterkit/metronic/laravel/api/v1/permissions';
   // private apiUrl = 'http://127.0.0.1:8000/api/v1/permissions';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getPermissions(dataTablesParameters: any): Observable<DataTablesResponse> {
     const url = `${this.apiUrl}-list`;
