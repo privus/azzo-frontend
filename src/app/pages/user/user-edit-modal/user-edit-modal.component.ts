@@ -51,7 +51,7 @@ export class UserEditModal implements OnInit, AfterViewInit, OnDestroy {
     if (this.userModel) {
       this.profileForm.patchValue({
         nome: this.userModel.nome,
-        cargo: this.userModel.cargo.cargo_id,
+        cargo: this.userModel.cargo?.cargo_id || null,
         email: this.userModel.email,
         celular: this.userModel.celular,
         endereco: this.userModel.endereco,
@@ -93,7 +93,7 @@ export class UserEditModal implements OnInit, AfterViewInit, OnDestroy {
       celular: this.f.celular.value,
       endereco: this.f.endereco.value,
       nascimento: this.f.nascimento.value,
-      cargo_id: this.f.cargo.value !== currentUser.cargo.cargo_id ? Number(this.f.cargo.value) : null,
+      cargo_id: currentUser.cargo && this.f.cargo.value !== currentUser.cargo.cargo_id ? Number(this.f.cargo.value) : null,
       cidade_id: this.f.cidade.value !== currentUser.cidade?.cidade_id ? this.f.cidade.value.cidade_id : null,
       regiao_id: this.f.regiao.value && this.f.regiao.value !== currentUser.regiao?.regiao_id ? this.f.regiao.value.regiao_id : null,
     };

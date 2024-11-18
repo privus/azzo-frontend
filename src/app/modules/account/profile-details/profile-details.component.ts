@@ -52,7 +52,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
         this.user = user;
         this.profileForm.patchValue({
           nome: this.user.nome,
-          cargo: this.user.cargo.nome,
+          cargo: user.cargo?.nome || '',
           email: this.user.email,
           celular: this.user.celular,
           endereco: this.user.endereco,
@@ -151,7 +151,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
       celular: this.f.celular.value,
       endereco: this.f.endereco.value,
       nascimento: this.f.nascimento.value,
-      cargo_id: this.f.cargo.value !== this.user.cargo.cargo_id ? Number(this.f.cargo.value) : undefined,
+      cargo_id: this.f.cargo.value !== this.user?.cargo?.cargo_id ? Number(this.f.cargo.value) : undefined,
       regiao_id: this.f.regiao.value !== this.user.regiao?.regiao_id ? Number(this.f.regiao.value) : undefined,
     };
 
