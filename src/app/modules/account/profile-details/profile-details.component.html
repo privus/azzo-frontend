@@ -42,7 +42,7 @@
               name="cargo"
             >
               <!-- Exibir o cargo atual do usuário como a opção selecionada -->
-              <option [value]="user.cargo.nome" selected>{{ user.cargo.nome }}</option>
+              <option [value]="user.cargo?.nome" selected>{{ user.cargo?.nome }}</option>
         
               <!-- Iterar pela lista de cargos para exibir as opções -->
               <option *ngFor="let cargo of cargos | removeCurrentCargo:user?.cargo?.cargo_id" [value]="cargo.cargo_id">
@@ -112,7 +112,7 @@
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label required fw-bold fs-6">Cidade</label>
+          <label class="col-lg-4 col-form-label fw-bold fs-6">Cidade</label>
           <div class="col-lg-8 fv-row">
             <mat-form-field class="w-100">
               <input

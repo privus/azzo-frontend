@@ -18,6 +18,7 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
   cargos: Cargo[] = [];
   permissionsList: Permissao[] = PERMISOES;
   cargoModel: Cargo = { cargo_id: 0, nome: '', somaPermissao: 0 };
+  userCounts: { [key: number]: number } = {};
 
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
@@ -54,9 +55,6 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
             const cargo = this.cargos.find((c) => c.cargo_id === Number(id));
             this.openRoleModal(cargo);
             break;
-          case 'delete':
-            // Implementar a lógica de exclusão, se necessário
-            break;
         }
       }
     });
@@ -66,9 +64,22 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.azzoService.getRoles().subscribe({
       next: (cargos) => {
         this.cargos = cargos;
+        this.fetchUserCounts();
         this.cdr.detectChanges();
       },
       error: (error) => console.error('Error loading roles:', error),
+    });
+  }
+
+  fetchUserCounts(): void {
+    this.cargos.forEach((role) => {
+      this.azzoService.getUsersByRole(role.cargo_id).subscribe({
+        next: (users) => {
+          this.userCounts[role.cargo_id] = users.length;
+          this.cdr.detectChanges();
+        },
+        error: (error) => console.error(`Erro ao buscar usuários para o cargo ${role.nome}:`, error),
+      });
     });
   }
 
@@ -110,14 +121,7 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   showAlert(swalOptions: SweetAlertOptions) {
-    this.swalOptions = {
-      ...swalOptions,
-      buttonsStyling: false,
-      confirmButtonText: 'Ok, got it!',
-      customClass: {
-        confirmButton: `btn btn-${swalOptions.icon === 'error' ? 'danger' : 'success'}`,
-      },
-    };
+    this.swalOptions = swalOptions;
     this.cdr.detectChanges();
     this.noticeSwal.fire();
   }
@@ -130,5 +134,44 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
   // Method to get permissions from somaPermissao
   getPermissionsFromSoma(somaPermissao: number): Permissao[] {
     return this.permissionsList.filter((p) => (somaPermissao & p.permissao) !== 0);
+  }
+
+  deleteRole(role: Cargo): void {
+    const confirmOptions: SweetAlertOptions = {
+      title: 'Tem certeza?',
+      text: 'Esta ação não pode ser desfeita!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, deletar!',
+      cancelButtonText: 'Cancelar',
+    };
+    this.swalOptions = confirmOptions;
+    this.cdr.detectChanges();
+
+    this.noticeSwal.fire().then((result) => {
+      if (result.isConfirmed) {
+        this.azzoService.deleteRole(role.cargo_id).subscribe({
+          next: () => {
+            this.cargos = this.cargos.filter((c) => c.cargo_id !== role.cargo_id);
+            this.showAlert({
+              icon: 'success',
+              title: 'Deletado!',
+              text: 'O cargo foi deletado com sucesso.',
+              showCancelButton: false,
+              confirmButtonText: 'Ok',
+            });
+            this.cdr.detectChanges();
+          },
+          error: (error) => {
+            console.error('Error deleting role:', error);
+            this.showAlert({
+              icon: 'error',
+              title: 'Erro!',
+              text: 'Ocorreu um erro ao tentar excluir o cargo.',
+            });
+          },
+        });
+      }
+    });
   }
 }

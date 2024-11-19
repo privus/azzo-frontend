@@ -1,9 +1,12 @@
 // role-details.component.ts
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Cargo, Permissao } from 'src/app/modules/account/models/user.model';
+import { Cargo, Permissao, Usuario } from '../../../modules/account/models/user.model';
 import { AzzoService } from '../../../core/services/azzo.service';
 import { PERMISOES } from 'src/app/shared/constants/user-constant';
+import { Config } from 'datatables.net';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { SweetAlertOptions } from 'sweetalert2';
 
 @Component({
   selector: 'app-role-details',
@@ -14,6 +17,12 @@ export class RoleDetailsComponent implements OnInit {
   role: Cargo;
   permissionsList: Permissao[] = PERMISOES;
   rolePermissions: Permissao[] = [];
+  users: Usuario[] = [];
+  datatableConfig: Config = {};
+  reloadEvent: EventEmitter<boolean> = new EventEmitter();
+  @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
+  swalOptions: SweetAlertOptions = {};
+
   constructor(
     private route: ActivatedRoute,
     private azzoService: AzzoService,
@@ -37,6 +46,16 @@ export class RoleDetailsComponent implements OnInit {
         console.error('Erro ao buscar os dados da role:', error);
       },
     });
+    this.azzoService.getUsersByRole(roleId).subscribe({
+      next: (usersData) => {
+        this.users = usersData;
+        this.cdr.detectChanges();
+        console.log('Usuários da role:', usersData);
+      },
+      error: (error) => {
+        console.error('Erro ao buscar os usuários da role:', error);
+      },
+    });
   }
 
   // Method to get permissions from somaPermissao
@@ -44,9 +63,8 @@ export class RoleDetailsComponent implements OnInit {
     return this.permissionsList.filter((p) => (somaPermissao & p.permissao) !== 0);
   }
 
-  // Method to handle edit role action
-  editRole(): void {
-    // Implement role editing logic here
-    // For example, open a modal to edit the role
+  getRandomColor(): string {
+    const colors = ['success', 'info', 'warning', 'danger'];
+    return colors[Math.floor(Math.random() * colors.length)];
   }
 }

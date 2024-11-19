@@ -16,7 +16,9 @@
               <!--begin::Card body-->
               <div class="card-body pt-1">
                   <!--begin::Users-->
-                  <div class="fw-bold text-gray-600 mb-5">Total users with this role: 0</div>
+                  <div class="fw-bold text-gray-600 mb-5">
+                    Usuários: {{ userCounts[role.cargo_id] || 0 }}
+                  </div>
                   <!--end::Users-->
                   <!--begin::Permissions-->
                   <div class="d-flex flex-column text-gray-600">
@@ -28,7 +30,7 @@
                       <div *ngIf="getPermissionsFromSoma(role.somaPermissao).length > 5 || getPermissionsFromSoma(role.somaPermissao).length === 0" class='d-flex align-items-center py-2'>
                           <span class='bullet bg-primary me-3'></span>
                           <em>
-                              {{ getPermissionsFromSoma(role.somaPermissao).length === 0 ? 'No permissions given...' : 'and ' + (getPermissionsFromSoma(role.somaPermissao).length - 5) + ' more...' }}
+                              {{ getPermissionsFromSoma(role.somaPermissao).length === 0 ? 'Sem Permissões Concedidas' : 'and ' + (getPermissionsFromSoma(role.somaPermissao).length - 5) + ' more...' }}
                           </em>
                       </div>
                   </div>
@@ -36,10 +38,37 @@
               </div>
               <!--end::Card body-->
               <!--begin::Card footer-->
-              <div class="card-footer flex-wrap pt-0">
-                  <button type="button" class="btn btn-light btn-active-light-primary my-1 me-2" [attr.data-id]="role.cargo_id" data-action="view">View Role</button>
-                  <button type="button" class="btn btn-light btn-active-light-primary my-1" [attr.data-id]="role.cargo_id" data-action="edit">Edit Role</button>
+              <div class="card-footer d-flex align-items-center justify-content-between pt-0">
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-light btn-active-light-primary my-1 me-2"
+                    [attr.data-id]="role.cargo_id"
+                    data-action="view"
+                  >
+                    Info
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-light btn-active-light-primary my-1"
+                    [attr.data-id]="role.cargo_id"
+                    data-action="edit"
+                  >
+                    Editar
+                  </button>
+                </div>
+                <button
+                  class="btn btn-icon btn-active-danger"
+                  (click)="deleteRole(role)"
+                >
+                  <i class="ki-duotone ki-trash fs-3">
+                    <span class="path1"></span><span class="path2"></span>
+                    <span class="path3"></span><span class="path4"></span>
+                    <span class="path5"></span>
+                  </i>
+                </button>
               </div>
+              
               <!--end::Card footer-->
           </div>
           <!--end::Card-->

@@ -45,18 +45,26 @@ export class AzzoService {
   }
 
   getRoles() {
-    return this.http.get<Cargo[]>(`${this.baseUrl}users/roles`);
+    return this.http.get<Cargo[]>(`${this.baseUrl}roles`);
   }
 
   createRole(cargo: Cargo) {
-    return this.http.post<Cargo>(`${this.baseUrl}users/roles/create`, cargo);
+    return this.http.post<Cargo>(`${this.baseUrl}roles/create`, cargo);
   }
 
   updateRole(roleId: number, cargo: Cargo) {
-    return this.http.put<Cargo>(`${this.baseUrl}users/roles/update/${roleId}`, cargo);
+    return this.http.put<Cargo>(`${this.baseUrl}roles/update/${roleId}`, cargo);
   }
 
   getRoleById(roleId: number) {
-    return this.http.get<Cargo>(`${this.baseUrl}users/roles/${roleId}`);
+    return this.http.get<Cargo>(`${this.baseUrl}roles/${roleId}`);
+  }
+
+  deleteRole(roleId: number) {
+    return this.http.delete(`${this.baseUrl}roles/delete/${roleId}`);
+  }
+
+  getUsersByRole(roleId: number) {
+    return this.http.get<Usuario[]>(`${this.baseUrl}roles/${roleId}/users`);
   }
 }

@@ -25,7 +25,7 @@
       <label class="col-lg-4 fw-bold text-muted">Cargo</label>
 
       <div class="col-lg-8 fv-row">
-        <span class="fw-bold fs-6">{{ user.cargo.nome }}</span>
+        <span class="fw-bold fs-6">{{ user.cargo?.nome }}</span>
       </div>
     </div>
 
@@ -60,8 +60,6 @@
 
       <div class="col-lg-8 d-flex align-items-center">
         <span class="fw-bolder fs-6 me-2">{{ user.celular}}</span>
-
-        <span class="badge badge-success">Verified</span>
       </div>
     </div>
 

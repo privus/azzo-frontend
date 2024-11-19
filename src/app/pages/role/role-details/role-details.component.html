@@ -5,29 +5,18 @@
     <div class="card card-flush">
       <!--begin::Card header-->
       <div class="card-header">
-        <!--begin::Card title-->
         <div class="card-title">
-          <h2 class="mb-0">
-            {{ role.nome | titlecase }}
-          </h2>
+          <h2 class="mb-0">{{ role.nome | titlecase }}</h2>
         </div>
-        <!--end::Card title-->
       </div>
       <!--end::Card header-->
       <!--begin::Card body-->
       <div class="card-body pt-0">
-        <!--begin::Permissions-->
         <div class="d-flex flex-column text-gray-600">
           <ng-container *ngIf="rolePermissions && rolePermissions.length > 0; else noPermissions">
-            <ng-container *ngFor="let permission of rolePermissions; let i = index">
-              <div class="d-flex align-items-center py-2" *ngIf="i < 5">
-                <span class="bullet bg-primary me-3"></span>
-                {{ permission.nome }}
-              </div>
-            </ng-container>
-            <div class="d-flex align-items-center py-2" *ngIf="rolePermissions.length > 5">
+            <div class="d-flex align-items-center py-2" *ngFor="let permission of rolePermissions">
               <span class="bullet bg-primary me-3"></span>
-              <em>e mais {{ rolePermissions.length - 5 }}...</em>
+              {{ permission.nome }}
             </div>
           </ng-container>
           <ng-template #noPermissions>
@@ -37,41 +26,65 @@
             </div>
           </ng-template>
         </div>
-        <!--end::Permissions-->
       </div>
       <!--end::Card body-->
-      <!--begin::Card footer-->
-      <div class="card-footer pt-0">
-        <button type="button" class="btn btn-light btn-active-primary" (click)="editRole()">Editar Role</button>
-      </div>
       <!--end::Card footer-->
     </div>
-    <!--end::Card-->
   </div>
   <!--end::Sidebar-->
   <!--begin::Content-->
   <div class="flex-lg-row-fluid ms-lg-10">
     <!--begin::Card-->
     <div class="card card-flush mb-6 mb-xl-9">
-      <!--begin::Card header-->
       <div class="card-header pt-5">
-        <!--begin::Card title-->
         <div class="card-title">
           <h2 class="d-flex align-items-center">
             Usuários Atribuídos
-            <span class="text-gray-600 fs-6 ms-1">(0)</span>
+            <span class="text-gray-600 fs-6 ms-1">({{ users.length }})</span>
           </h2>
         </div>
-        <!--end::Card title-->
       </div>
       <!--end::Card header-->
-      <!--begin::Card body-->
-      <div class="card-body pt-0">
-        <!--begin::Table-->
-        <p>Nenhum usuário atribuído a este cargo no momento.</p>
-        <!--end::Table-->
+      <div class="card-body pt-0" *ngIf="users.length > 0; else noUsers">
+        <table class="table align-middle table-row-dashed fs-6 gy-5">
+          <thead>
+            <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody class="fw-semibold text-gray-600">
+            <tr *ngFor="let user of users">
+              <div
+                class="symbol symbol-circle symbol-50px overflow-hidden me-3"
+              >
+                <a href="javascript:;">
+                  <div
+                    class="symbol-label fs-3 bg-light-{{ getRandomColor() }} text-{{ getRandomColor() }}"
+                  >
+                    {{ user.nome.charAt(0).toUpperCase() }}
+                  </div>
+                </a>
+              </div>
+              <td>{{ user.nome }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                <button class="btn btn-sm btn-light-danger">
+                  <i class="ki-duotone ki-trash fs-4"></i> Remover
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <!--end::Card body-->
+      <ng-template #noUsers>
+        <div class="card-body pt-0">
+          <!--begin::Table-->
+          <p>Nenhum usuário atribuído a este cargo no momento.</p>
+          <!--end::Table-->
+        </div>
+      </ng-template>
     </div>
     <!--end::Card-->
   </div>

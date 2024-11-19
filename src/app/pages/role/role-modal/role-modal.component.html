@@ -1,41 +1,66 @@
 <div class="modal-content">
-    <!-- Modal Header -->
-    <div class="modal-header">
-      <h2 class="fw-bold">{{ cargoModel.cargo_id > 0 ? 'Update Role' : 'Create Role' }}</h2>
-      <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
-    </div>  
-    <!-- Modal Body -->
-    <div class="modal-body scroll-y mx-5 my-7">
-      <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)">        
-          <!-- Lista de Permissões -->
-          <div class="fv-row">
-            <label class="fs-5 fw-bold form-label mb-2">Permissões</label>
-            <div class="d-flex flex-column">
-              <div *ngFor="let permission of permissionsList" class="form-check form-check-custom form-check-solid mb-2">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  [id]="'perm-' + permission.permissao"
-                  [checked]="hasPermission(permission)"
-                  (change)="togglePermission(permission)"
-                />
-                <label class="form-check-label" [for]="'perm-' + permission.permissao">
-                  {{ permission.nome }}
-                </label>
-              </div>
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <h2 class="fw-bold">{{ cargoModel.cargo_id > 0 ? 'Atualizar' : 'Criar' }}</h2>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+  </div>
+
+  <!-- Modal Body -->
+  <div class="modal-body scroll-y mx-5 my-7">
+    <form #myForm="ngForm" (ngSubmit)="onSubmit(myForm)">
+      <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_update_role_scroll">
+        <!-- Role Name Input -->
+        <div class="fv-row mb-10">
+          <label class="fs-5 fw-bold form-label mb-2">
+            <span class="required">Cargo</span>
+          </label>
+          <input
+            class="form-control form-control-solid"
+            placeholder="Enter a role name"
+            name="nome"
+            [(ngModel)]="cargoModel.nome"
+            #nome="ngModel"
+            required
+            minlength="3"
+          />
+          <div
+            *ngIf="myForm.submitted && myForm.invalid"
+            class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"
+          >
+            <div *ngIf="nome.errors?.['required']">Role name is required</div>
+            <div *ngIf="nome.errors?.['minlength']">Role name must be at least 3 characters long</div>
+          </div>
+        </div>
+        <!-- Permissions List -->
+        <div class="fv-row">
+          <label class="fs-5 fw-bold form-label mb-2">Permissões</label>
+          <div class="d-flex flex-column">
+            <div *ngFor="let permission of permissionsList" class="form-check form-check-custom form-check-solid mb-2">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [id]="'perm-' + permission.permissao"
+                [checked]="hasPermission(permission)"
+                (change)="togglePermission(permission)"
+              />
+              <label class="form-check-label" [for]="'perm-' + permission.permissao">
+                {{ permission.nome }}
+              </label>
             </div>
           </div>
-        <!-- Actions -->
-        <div class="text-center pt-15">
-          <button type="button" class="btn btn-light me-3" (click)="closeModal()">Discard</button>
-          <button type="submit" class="btn btn-primary" [disabled]="isLoading">
-            <span class="indicator-label">Submit</span>
-            <span class="indicator-progress">
-              Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-            </span>
-          </button>
         </div>
-      </form>
-    </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="text-center pt-15">
+        <button type="button" class="btn btn-light me-3" (click)="closeModal()">Discard</button>
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+          <span class="indicator-label">Submit</span>
+          <span class="indicator-progress">
+            Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+          </span>
+        </button>
+      </div>
+    </form>
   </div>
-  
+</div>

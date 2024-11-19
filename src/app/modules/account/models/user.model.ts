@@ -34,9 +34,9 @@ export interface Usuario {
   endereco: string;
   nascimento: string;
   username: string;
-  cargo: Cargo;
+  cargo?: Cargo;
   cidade: Cidade;
-  regiao: Regiao | null;
+  regiao?: Regiao;
 }
 
 export interface NewUser {
