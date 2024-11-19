@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { RemoveCurrentCargoPipe } from 'src/app/shared/pipes/remove-current-cargo.pipe';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
   providers: [AccountService, provideNgxMask()],
@@ -30,6 +31,7 @@ import { RemoveCurrentCargoPipe } from 'src/app/shared/pipes/remove-current-carg
     MatProgressSpinnerModule,
     NgxMaskDirective,
     ReactiveFormsModule,
+    SweetAlert2Module.forChild(),
   ],
 })
 export class AccountModule {}

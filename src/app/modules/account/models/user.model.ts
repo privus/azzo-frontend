@@ -60,8 +60,8 @@ export interface UserUpdate {
   celular?: string;
   endereco?: string;
   nascimento?: string;
-  cargo_id?: number;
-  cidade_id?: number;
+  cargo_id?: number | null;
+  cidade_id?: number | null;
   regiao_id?: number | null;
 }
 

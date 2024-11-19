@@ -163,7 +163,7 @@
             />
           </div>
         </div>
-        <div class="row mb-6" *ngIf="user.regiao?.regiao_id || f.cargo.value === '2'">
+        <div class="row mb-6" *ngIf="f.cargo.value === '2' || user.regiao?.regiao_id">
           <label class="col-lg-4 col-form-label fw-bold fs-6"
             ><span class="required">Região</span></label
           >
@@ -205,3 +205,4 @@
     <span>Loading ...</span>
   </div>
 </ng-template>
+<swal #noticeSwal [swalOptions]="swalOptions"></swal>

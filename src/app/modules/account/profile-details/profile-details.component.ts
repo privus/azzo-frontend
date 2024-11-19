@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { Cargo, Cidade, UserUpdate, Usuario } from '../models/user.model';
 import { AccountService } from '../services/account.service';
@@ -6,6 +6,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, finalize, startWith, switchMap, tap } from 'rxjs/operators';
 import { REGIOES } from '../../../shared/constants/user-constant';
 import { AzzoService } from '../../../core/services/azzo.service';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { SweetAlertOptions } from 'sweetalert2';
 
 @Component({
   selector: 'app-profile-details',
@@ -21,6 +23,8 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   cargos: Cargo[];
   regioes = REGIOES;
   errorMessage: string;
+  @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
+  swalOptions: SweetAlertOptions = {};
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -107,24 +111,31 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const updatedFields: Partial<UserUpdate> = {};
+    // Monta o objeto completo com os valores do formulário
     const cidadeValue = this.f.cidade.value;
+    const updatedUser: UserUpdate = {
+      nome: this.f.nome.value,
+      email: this.f.email.value,
+      celular: this.f.celular.value,
+      endereco: this.f.endereco.value,
+      nascimento: this.f.nascimento.value,
+      cargo_id: this.f.cargo.value.length > 2 ? this.user.cargo?.cargo_id : Number(this.f.cargo.value),
+      cidade_id: typeof cidadeValue === 'string' ? null : cidadeValue?.cidade_id,
+      regiao_id: this.f.regiao.value ? Number(this.f.regiao.value) : null,
+    };
 
-    // Verifica a cidade antes de atualizar os outros campos
+    // Verifica se a cidade é uma string e tenta localizar no backend
     if (typeof cidadeValue === 'string' && cidadeValue.trim()) {
-      // Busca exata pela cidade digitada
       this.accountService.searchCitiesPartial(cidadeValue).subscribe({
         next: (cidades) => {
           const cidadeExata = cidades.find((cidade) => cidade.nome.trim().toLowerCase() === cidadeValue.trim().toLowerCase());
 
           if (cidadeExata) {
-            updatedFields.cidade_id = cidadeExata.cidade_id;
-            this.errorMessage = ''; // Limpa a mensagem de erro se uma cidade exata for encontrada
-            this.proceedWithUpdate(updatedFields); // Chama a função para continuar com o update
+            updatedUser.cidade_id = cidadeExata.cidade_id; // Atualiza com o ID da cidade encontrada
+            this.sendUpdateRequest(updatedUser);
           } else {
-            // Exibe mensagem de erro e interrompe o processo
-            this.errorMessage = `Cidade "${cidadeValue}" não encontrada.`;
             this.isLoading$.next(false);
+            this.errorMessage = `Cidade "${cidadeValue}" não encontrada.`;
             this.cdr.detectChanges();
           }
         },
@@ -134,52 +145,45 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         },
       });
-      return;
-    } else if (cidadeValue && cidadeValue.cidade_id) {
-      updatedFields.cidade_id = cidadeValue.cidade_id;
+    } else {
+      // Envia a requisição diretamente
+      this.sendUpdateRequest(updatedUser);
     }
-
-    // Se não há erro de cidade, continua com o update
-    this.proceedWithUpdate(updatedFields);
   }
 
-  // Função auxiliar para continuar o update após validações
-  private proceedWithUpdate(updatedFields: Partial<UserUpdate>): void {
-    const fieldsToCheck: { [key in keyof UserUpdate]?: any } = {
-      nome: this.f.nome.value,
-      email: this.f.email.value,
-      celular: this.f.celular.value,
-      endereco: this.f.endereco.value,
-      nascimento: this.f.nascimento.value,
-      cargo_id: this.f.cargo.value !== this.user?.cargo?.cargo_id ? Number(this.f.cargo.value) : undefined,
-      regiao_id: this.f.regiao.value !== this.user.regiao?.regiao_id ? Number(this.f.regiao.value) : undefined,
-    };
-
-    Object.keys(fieldsToCheck).forEach((key) => {
-      const fieldValue = fieldsToCheck[key as keyof UserUpdate];
-      if (fieldValue !== undefined && fieldValue !== this.user[key as keyof Usuario]) {
-        updatedFields[key as keyof UserUpdate] = fieldValue;
-      }
-    });
-
-    if (Object.keys(updatedFields).length === 0) {
-      this.isLoading$.next(false);
-      console.log('Nenhuma alteração detectada.');
-      return;
-    }
-
-    this.accountService.updateUserInfo(this.user.usuario_id, updatedFields).subscribe({
+  private sendUpdateRequest(updatedUser: UserUpdate): void {
+    this.accountService.updateUserInfo(this.user.usuario_id, updatedUser).subscribe({
       complete: () => {
         this.isLoading$.next(false);
+        this.showAlert({
+          icon: 'success',
+          title: 'Usuário atualizado!',
+          text: 'O usuário foi atualizado com sucesso.',
+          confirmButtonText: 'Ok',
+        });
         this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err) => {
         this.isLoading$.next(false);
         this.errorMessage = 'Erro ao atualizar o usuário.';
+        this.showAlert({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Não foi possível atualizar o usuário.',
+          confirmButtonText: 'Ok',
+        });
         this.cdr.detectChanges();
+        console.error(err);
       },
     });
   }
+
+  showAlert(swalOptions: SweetAlertOptions) {
+    this.swalOptions = swalOptions;
+    this.cdr.detectChanges();
+    this.noticeSwal.fire();
+  }
+
   ngOnDestroy(): void {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }

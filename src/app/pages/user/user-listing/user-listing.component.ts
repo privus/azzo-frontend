@@ -68,7 +68,7 @@ export class UserListingComponent implements OnInit {
     const modalRef = this.modalService.open(UserEditModal);
     modalRef.componentInstance.userModel = { ...user };
     modalRef.result.then((result) => {
-      if (result === 'saved') {
+      if (result === 'updated') {
         this.loadUsers();
       }
     });

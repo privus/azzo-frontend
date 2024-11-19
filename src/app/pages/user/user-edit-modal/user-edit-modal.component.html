@@ -66,8 +66,22 @@
         </div>
       </div>
 
+      <!-- Cidade -->
+      <div class="fv-row mb-7">
+        <label class="required fw-semibold fs-6 mb-2">Cidade</label>
+        <input
+          type="text"
+          class="form-control form-control-solid"
+          placeholder="Digite o nome completo da cidade"
+          formControlName="cidade"
+        />
+        <div *ngIf="f.cidade.invalid && (f.cidade.dirty || f.cidade.touched)" class="invalid-feedback">
+          <div *ngIf="f.cidade.errors?.['required']">Cidade é obrigatória</div>
+          <div *ngIf="f.cidade.errors?.['cidadeNaoEncontrada']">Cidade não encontrada</div>
+        </div>        
+      </div>
       <!-- Região -->
-      <div *ngIf="f.cargo.value === 2" class="fv-row mb-7">
+      <div *ngIf="f.cargo.value === '2' || userModel.regiao?.regiao_id" class="fv-row mb-7">
         <label class="required fw-semibold fs-6 mb-2">Região</label>
         <select formControlName="regiao" class="form-select form-select-solid">
           <option value="" disabled>Selecione Uma Região</option>

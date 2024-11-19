@@ -1,8 +1,8 @@
 <div class="card mb-5 mb-xl-10">
-    <div class="card-body border-top p-9">
-      <form [formGroup]="newAccountForm" (ngSubmit)="onSubmit()" autocomplete="off">
-        <div class="row mb-6">
-          <label class="col-lg-4 col-form-label required fw-bold fs-6">Nome</label>
+  <div class="card-body border-top p-9">
+    <form [formGroup]="newAccountForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="row mb-6">
+        <label class="col-lg-4 col-form-label required fw-bold fs-6">Nome</label>
           <div class="col-lg-8 fv-row">
             <input
               formControlName="nome"
@@ -103,7 +103,7 @@
             />
           </div>
         </div>
-        
+
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label required fw-bold fs-6">Cidade</label>
           <div class="col-lg-8 fv-row">
@@ -156,24 +156,25 @@
             {{ errorMessage }}
           </div>
           <div class="card-footer d-flex justify-content-end py-6 px-9">
-              <button
-              type="button"
-              class="btn btn-primary"
-              [disabled]="!newAccountForm.valid || !newAccountForm.dirty || isLoading"
-              (click)="onSubmit()"
-            >
-              <ng-container *ngIf="!isLoading; else loading">
-                Salvar
-              </ng-container>
-              <ng-template #loading>
-                <span class="indicator-progress" style="display: block;">
-                  Please wait... 
-                  <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                </span>
-              </ng-template>
-            </button>
-        </div>
-      </form>
-    </div>
+            <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="!newAccountForm.valid || !newAccountForm.dirty || isLoading"
+            (click)="onSubmit()"
+          >
+            <ng-container *ngIf="!isLoading; else loading">
+              Salvar
+            </ng-container>
+            <ng-template #loading>
+              <span class="indicator-progress" style="display: block;">
+                Please wait... 
+                <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+              </span>
+            </ng-template>
+          </button>
+      </div>
+    </form>
   </div>
-  
+</div>
+<swal #noticeSwal [swalOptions]="swalOptions"></swal>
+ 

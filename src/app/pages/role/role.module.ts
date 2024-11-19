@@ -4,9 +4,7 @@ import { RoleListingComponent } from './role-listing/role-listing.component';
 import { RoleDetailsComponent } from './role-details/role-details.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgbNavModule, NgbDropdownModule, NgbCollapseModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { RoleModalComponent } from './role-modal/role-modal.component';
 
 @NgModule({
@@ -25,11 +23,6 @@ import { RoleModalComponent } from './role-modal/role-modal.component';
         component: RoleDetailsComponent,
       },
     ]),
-    SharedModule,
-    NgbNavModule,
-    NgbDropdownModule,
-    NgbCollapseModule,
-    NgbTooltipModule,
     SweetAlert2Module.forChild(),
   ],
 })

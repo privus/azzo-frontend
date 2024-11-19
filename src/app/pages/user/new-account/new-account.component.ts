@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { AccountService } from '../../../modules/account/services/account.service';
@@ -7,6 +7,8 @@ import { debounceTime, switchMap, finalize } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { REGIOES } from '../../../shared/constants/user-constant';
 import { AzzoService } from '../../../core/services/azzo.service';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { SweetAlertOptions } from 'sweetalert2';
 
 @Component({
   selector: 'app-new-account',
@@ -19,6 +21,8 @@ export class NewAccountComponent implements OnInit {
   cargos: Cargo[];
   regioes = REGIOES;
   filteredCidades: Observable<Cidade[]>;
+  @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
+  swalOptions: SweetAlertOptions = {};
 
   constructor(
     private formBuilder: FormBuilder,
@@ -84,14 +88,33 @@ export class NewAccountComponent implements OnInit {
     this.accountService.createAccount(formattedUser).subscribe({
       complete: () => {
         this.isLoading = false;
-        alert('Usuário criado com sucesso!');
-      },
-      error: (error) => {
-        console.error('Erro ao criar o usuário:', error);
-        this.isLoading = false;
-        this.errorMessage = error.error?.message || 'Erro ao criar o usuário.';
+        this.showAlert({
+          icon: 'success',
+          title: 'Usuário criado!',
+          text: 'O usuário foi criado com sucesso.',
+          confirmButtonText: 'Ok',
+        });
         this.cdr.detectChanges();
+        this.newAccountForm.reset();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        this.showAlert({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Não foi possível criar o usuário.',
+          confirmButtonText: 'Ok',
+        });
+        this.errorMessage = err.error?.message || 'Erro ao criar o usuário.';
+        this.cdr.detectChanges();
+        console.error('Erro ao criar o usuário:', err);
       },
     });
+  }
+
+  showAlert(swalOptions: SweetAlertOptions) {
+    this.swalOptions = swalOptions;
+    this.cdr.detectChanges();
+    this.noticeSwal.fire();
   }
 }
