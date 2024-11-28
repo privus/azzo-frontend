@@ -56,14 +56,14 @@
               class="d-flex align-items-center"
             >
               <div
-                class="symbol symbol-circle symbol-50px overflow-hidden me-3"
+                class="symbol symbol-circle symbol-50px overflow-hidden me-3"                
               >
                 <a href="javascript:;">
                   <div
-                    class="symbol-label fs-3 bg-light-{{ getRandomColor() }} text-{{ getRandomColor() }}"
-                  >
-                    {{ user.nome.charAt(0).toUpperCase() }}
-                  </div>
+                  class="symbol-label fs-3 bg-light-{{ getRandomColor() }} text-{{ getRandomColor() }}"
+                  [ngStyle]="{'background-image': 'url(' + user.fotoUrl + ')'}"
+                >
+                </div>
                 </a>
               </div>
               <div class="d-flex flex-column">
