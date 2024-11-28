@@ -8,6 +8,7 @@ import { REGIOES } from '../../../shared/constants/user-constant';
 import { AzzoService } from '../../../core/services/azzo.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile-details',
@@ -32,6 +33,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private readonly formBuilder: FormBuilder,
     private azzoService: AzzoService,
+    private route: ActivatedRoute,
   ) {
     this.profileForm = this.formBuilder.group({
       nome: ['', [Validators.required]],
@@ -55,23 +57,19 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
       this.cargos = cargos;
     });
 
-    const userSubscr = this.accountService.user$.subscribe((user) => {
-      if (user) {
-        this.user = user;
-        this.profileForm.patchValue({
-          nome: this.user.nome,
-          cargo: user.cargo?.nome || '',
-          email: this.user.email,
-          celular: this.user.celular,
-          endereco: this.user.endereco,
-          cidade: this.user.cidade,
-          nascimento: this.user.nascimento,
-          regiao: this.user.regiao?.regiao_id,
-        });
-      }
-      console.log('Usuário carregado:', user);
-    });
-    this.unsubscribe.push(userSubscr);
+    this.user = this.route.parent?.snapshot.data['user'];
+    if (this.user) {
+      this.profileForm.patchValue({
+        nome: this.user.nome,
+        cargo: this.user.cargo?.nome || '',
+        email: this.user.email,
+        celular: this.user.celular,
+        endereco: this.user.endereco,
+        cidade: this.user.cidade,
+        nascimento: this.user.nascimento,
+        regiao: this.user.regiao?.regiao_id,
+      });
+    }
 
     this.filteredCidades = this.profileForm.get('cidade')!.valueChanges.pipe(
       startWith(''),

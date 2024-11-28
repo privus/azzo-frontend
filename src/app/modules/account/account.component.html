@@ -1,33 +1,17 @@
 <div class="card mb-5 mb-xl-10">
-  <div class="card-body pt-9 pb-0">
+  <div class="card-body pt-8 pb-0">
     <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
       <div class="me-7 mb-4">
         <div
           class="
-            symbol symbol-100px symbol-lg-160px symbol-fixed
+            symbol symbol-100px symbol-lg-200px symbol-fixed
             position-relative
           "
         >
             <img
-            [src]="user?.fotoUrl ? user?.fotoUrl : './assets/media/avatars/300-1.jpg'"
+            [src]="user?.fotoUrl ? user?.fotoUrl : './assets/media/avatars/blank.png'"
             alt="Foto do usuário"
-            class="symbol symbol-125px"
-            style="object-fit: cover; width: 125px; height: 125px;"
           />
-          <div
-            class="
-              position-absolute
-              translate-middle
-              bottom-0
-              start-100
-              mb-6
-              bg-success
-              rounded-circle
-              border border-4 border-white
-              h-20px
-              w-20px
-            "
-          ></div>
         </div>
       </div>
 
@@ -47,15 +31,12 @@
                 class="
                   text-gray-800 text-hover-primary
                   fs-2
-                  fw-bolder
+                  fw-bold
                   me-1
                   cursor-pointer
                 "
               >
                 {{ user?.username }}
-              </a>
-              <a class="cursor-pointer">
-                <app-keenicon name="verify" class="fs-1 text-primary"></app-keenicon>
               </a>
             </div>
 
@@ -84,7 +65,7 @@
                 "
               >
                 <app-keenicon name="geolocation" class="fs-4 me-1"></app-keenicon>
-                {{ user?.cidade?.estado?.sigla }}, {{ user?.cidade?.nome }}
+                {{ user?.cidade?.nome }}, {{ user?.cidade?.estado?.sigla }}
               </a>
               <a
                 class="
@@ -95,13 +76,12 @@
                   cursor-pointer
                 "
               >
-                <app-keenicon name="geolocation" class="fs-4 me-1"></app-keenicon>
+                <app-keenicon name="sms" class="fs-4 me-1"></app-keenicon>
                 {{ user?.email}}
               </a>
             </div>
           </div>
         </div>
-
         <div class="d-flex flex-wrap flex-stack">
           <div class="d-flex flex-column flex-grow-1 pe-8">
             <div class="d-flex flex-wrap">
@@ -118,7 +98,7 @@
               >
                 <div class="d-flex align-items-center">
                   <app-keenicon name="arrow-up" class="fs-3 text-success me-2"></app-keenicon>
-                  <div class="fs-2 fw-bolder">4500$</div>
+                  <div class="fs-2 fw-bold counted" >$4,500</div>
                 </div>
 
                 <div class="fw-bold fs-6 text-gray-500">Comissão</div>
@@ -137,7 +117,7 @@
               >
                 <div class="d-flex align-items-center">
                   <app-keenicon name="phone" class="fs-3 text-danger me-2"></app-keenicon>
-                  <div class="fs-2 fw-bolder">75</div>
+                  <div class="fs-2 fw-bold">75</div>
                 </div>
 
                 <div class="fw-bold fs-6 text-gray-500">Clientes</div>
@@ -156,7 +136,7 @@
               >
                 <div class="d-flex align-items-center">
                   <app-keenicon name="arrow-up" class="fs-3 text-success me-2"></app-keenicon>
-                  <div class="fs-2 fw-bolder">60%</div>
+                  <div class="fs-2 fw-bold">60%</div>
                 </div>
 
                 <div class="fw-bold fs-6 text-gray-500">Conversão</div>
@@ -224,4 +204,15 @@
   </div>
 </div>
 
-<router-outlet></router-outlet>
+<!-- Template do AccountComponent -->
+<ng-container *ngIf="user; else loading">
+  <router-outlet></router-outlet>
+</ng-container>
+
+<ng-template #loading>
+  <div id="splash-screen" class="splash-screen">
+    <img src="./assets/media/logos/azzo_simbolo.svg" alt="Azzo logo" />
+    <span>Loading ...</span>
+  </div>
+</ng-template>
+
