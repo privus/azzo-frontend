@@ -8,6 +8,8 @@ import { Usuario } from './models/user.model';
 })
 export class AccountComponent implements OnInit {
   user: Usuario | null = null;
+  meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+  mesAtual = this.meses[new Date().getMonth()];
 
   constructor(private accountService: AccountService) {}
 

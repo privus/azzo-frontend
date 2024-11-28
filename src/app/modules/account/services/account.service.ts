@@ -20,7 +20,7 @@ export class AccountService {
 
   getUserInfo(): Observable<Usuario | null> {
     // Obtém o item de localStorage como string e parseia para JSON
-    const userJson = localStorage.getItem(this.myInfoKey);
+    const userJson = this.localStorageService.get(this.myInfoKey);
 
     if (userJson) {
       try {
@@ -57,5 +57,9 @@ export class AccountService {
 
   createAccount(user: NewUser): Observable<Usuario> {
     return this.azzoService.newUser(user).pipe();
+  }
+
+  uploadUserPhoto(userId: number, formData: FormData): Observable<{ message: string; fotoUrl: string }> {
+    return this.azzoService.uploadUserPhoto(userId, formData).pipe();
   }
 }

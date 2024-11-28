@@ -8,7 +8,12 @@
             position-relative
           "
         >
-          <img src="./assets/media/avatars/300-1.jpg" alt="Metronic" />
+            <img
+            [src]="user?.fotoUrl ? user?.fotoUrl : './assets/media/avatars/300-1.jpg'"
+            alt="Foto do usuário"
+            class="symbol symbol-125px"
+            style="object-fit: cover; width: 125px; height: 125px;"
+          />
           <div
             class="
               position-absolute
@@ -51,21 +56,6 @@
               </a>
               <a class="cursor-pointer">
                 <app-keenicon name="verify" class="fs-1 text-primary"></app-keenicon>
-              </a>
-              <a
-                class="
-                  btn btn-sm btn-light-success
-                  fw-bolder
-                  ms-2
-                  fs-8
-                  py-1
-                  px-3
-                  cursor-pointer
-                "
-                data-bs-toggle="modal"
-                data-bs-target="#kt_modal_upgrade_plan"
-              >
-                Upgrade to Pro
               </a>
             </div>
 
@@ -110,42 +100,6 @@
               </a>
             </div>
           </div>
-
-          <div class="d-flex my-4">
-            <a
-              class="btn btn-sm btn-light me-2 cursor-pointer"
-              id="kt_user_follow_button"
-            >
-              <app-keenicon name="phone" class="fs-3 d-none"></app-keenicon>
-              <span class="indicator-label">Follow</span>
-              <span class="indicator-progress">
-                Please wait...
-                <span
-                  class="spinner-border spinner-border-sm align-middle ms-2"
-                ></span>
-              </span>
-            </a>
-            <a
-              class="btn btn-sm btn-primary me-3 cursor-pointer"
-              data-bs-toggle="modal"
-              data-bs-target="#kt_modal_offer_a_deal"
-            >
-              Hire Me
-            </a>
-            <div class="me-0">
-              <button
-                class="
-                  btn btn-sm btn-icon btn-bg-light btn-active-color-primary
-                "
-                data-kt-menu-trigger="click"
-                data-kt-menu-placement="bottom-end"
-                data-kt-menu-flip="top-end"
-              >
-                <i class="bi bi-three-dots fs-3"></i>
-              </button>
-              <app-dropdown-menu1></app-dropdown-menu1>
-            </div>
-          </div>
         </div>
 
         <div class="d-flex flex-wrap flex-stack">
@@ -167,7 +121,7 @@
                   <div class="fs-2 fw-bolder">4500$</div>
                 </div>
 
-                <div class="fw-bold fs-6 text-gray-500">Earnings</div>
+                <div class="fw-bold fs-6 text-gray-500">Comissão</div>
               </div>
 
               <div
@@ -186,7 +140,7 @@
                   <div class="fs-2 fw-bolder">75</div>
                 </div>
 
-                <div class="fw-bold fs-6 text-gray-500">Projects</div>
+                <div class="fw-bold fs-6 text-gray-500">Clientes</div>
               </div>
 
               <div
@@ -205,7 +159,7 @@
                   <div class="fs-2 fw-bolder">60%</div>
                 </div>
 
-                <div class="fw-bold fs-6 text-gray-500">Success Rate</div>
+                <div class="fw-bold fs-6 text-gray-500">Conversão</div>
               </div>
             </div>
           </div>
@@ -221,15 +175,15 @@
           >
             <div class="d-flex justify-content-between w-100 mt-auto mb-2">
               <span class="fw-bold fs-6 text-gray-500"
-                >Profile Compleation</span
+                >Meta {{ mesAtual }}</span
               >
-              <span class="fw-bolder fs-6">50%</span>
+              <span class="fw-bolder fs-6">95%</span>
             </div>
             <div class="h-5px mx-3 w-100 bg-light mb-3">
               <div
                 class="bg-success rounded h-5px"
                 role="progressbar"
-                [style.width]="'50%'"
+                [style.width]="'95%'"
               ></div>
             </div>
           </div>
