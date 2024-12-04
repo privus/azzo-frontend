@@ -1,8 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
-import { Cargo, Permissao } from '../../../modules/account/models/user.model';
-import { PERMISOES } from '../../../shared/constants/user-constant';
+import { Cargo } from '../../../modules/account/models/user.model';
 import { SweetAlertOptions } from 'sweetalert2';
 import { AzzoService } from '../../../core/services/azzo.service';
 import { Router } from '@angular/router';
@@ -16,8 +15,7 @@ import { RoleModalComponent } from '../role-modal/role-modal.component';
 export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = false;
   cargos: Cargo[] = [];
-  permissionsList: Permissao[] = PERMISOES;
-  cargoModel: Cargo = { cargo_id: 0, nome: '', somaPermissao: 0 };
+  cargoModel: Cargo = { cargo_id: 0, nome: '' };
   userCounts: { [key: number]: number } = {};
 
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
@@ -64,6 +62,7 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.azzoService.getRoles().subscribe({
       next: (cargos) => {
         this.cargos = cargos;
+        console.log('cargo ========>', this.cargos);
         this.fetchUserCounts();
         this.cdr.detectChanges();
       },
@@ -91,8 +90,7 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     const modalComponentInstance = this.modalReference.componentInstance as RoleModalComponent;
-    modalComponentInstance.cargoModel = cargo ? { ...cargo } : { cargo_id: 0, nome: '', somaPermissao: 0 };
-    modalComponentInstance.permissionsList = this.permissionsList;
+    modalComponentInstance.cargoModel = cargo ? { ...cargo } : { cargo_id: 0, nome: '' };
 
     this.modalReference.result.then(
       (updatedCargo: Cargo) => {
@@ -129,11 +127,6 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.clickListener) this.clickListener();
     this.modalService.dismissAll();
-  }
-
-  // Method to get permissions from somaPermissao
-  getPermissionsFromSoma(somaPermissao: number): Permissao[] {
-    return this.permissionsList.filter((p) => (somaPermissao & p.permissao) !== 0);
   }
 
   deleteRole(role: Cargo): void {

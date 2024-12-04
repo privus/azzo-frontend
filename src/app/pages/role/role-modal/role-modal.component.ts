@@ -1,6 +1,5 @@
-import { Component, Input, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Cargo, Permissao } from '../../../modules/account/models/user.model';
-import { NgForm } from '@angular/forms';
 import { AzzoService } from '../../../core/services/azzo.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -10,91 +9,149 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./role-modal.component.scss'],
 })
 export class RoleModalComponent implements OnInit {
-  @Input() cargoModel: Cargo;
-  @Input() permissionsList: Permissao[];
-  isLoading = false;
-  errorMessage = '';
-  isAdminSelected = false;
+  @Input() cargoModel: Cargo = { cargo_id: 0, nome: '', cargoPermissoes: [] };
+  permissionsList: Permissao[] = [];
+  permissionStates: { [key: number]: { ler: boolean; editar: boolean; criar: boolean } } = {};
+
+  isAdmin: boolean = false;
 
   constructor(
     private azzoService: AzzoService,
     public activeModal: NgbActiveModal,
-    private cdr: ChangeDetectorRef,
   ) {}
 
-  ngOnInit() {
-    // Inicializa o estado do checkbox "Administrador"
-    this.isAdminSelected = this.hasPermission(this.getAdminPermission());
+  ngOnInit(): void {
+    // Inicializa permissões carregando da API
+    this.azzoService.getPermissions().subscribe((permissions: Permissao[]) => {
+      this.permissionsList = permissions;
+      this.initializePermissionStates();
+    });
   }
 
-  // Obtém a permissão "Administrador"
-  getAdminPermission(): Permissao {
-    return this.permissionsList.find((perm) => perm.nome === 'Administrador')!;
+  initializePermissionStates(): void {
+    // Marca todas as permissões como desmarcadas inicialmente
+    this.permissionsList.forEach((perm) => {
+      this.permissionStates[perm.permissao_id] = { ler: false, editar: false, criar: false };
+    });
+
+    // Atualiza com base nas permissões do cargo
+    if (this.cargoModel?.cargoPermissoes) {
+      this.cargoModel.cargoPermissoes.forEach((perm) => {
+        if (perm.permissao?.permissao_id !== undefined) {
+          this.permissionStates[perm.permissao.permissao_id] = {
+            ler: perm.ler === 1,
+            editar: perm.editar === 1,
+            criar: perm.criar === 1,
+          };
+        }
+      });
+    }
+
+    // Verifica se o usuário é 'Administrador' com base nas permissões atuais
+    this.checkIfAdminSelected();
   }
 
-  // Verifica se uma permissão específica está ativa
-  hasPermission(permissao: Permissao): boolean {
-    return (this.cargoModel.somaPermissao & permissao.permissao) !== 0;
+  onAdminChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const isChecked = input.checked;
+    this.isAdmin = isChecked;
+
+    // Atualiza todas as permissões
+    this.permissionsList.forEach((perm) => {
+      this.permissionStates[perm.permissao_id] = {
+        ler: isChecked,
+        editar: isChecked,
+        criar: isChecked,
+      };
+    });
   }
 
-  // Alterna uma permissão específica
-  togglePermission(permissao: Permissao): void {
-    if (permissao.nome === 'Administrador') {
-      // Alterna todas as permissões
-      if (this.hasPermission(permissao)) {
-        // Desativa "Administrador" e todas as permissões
-        this.cargoModel.somaPermissao = 0;
-        this.isAdminSelected = false;
-      } else {
-        // Ativa "Administrador" e todas as permissões
-        this.cargoModel.somaPermissao = this.permissionsList.reduce((acc, perm) => acc | perm.permissao, 0);
-        this.isAdminSelected = true;
+  onPermissionChange(event: Event, permissionId: number, type: 'ler' | 'editar' | 'criar'): void {
+    const input = event.target as HTMLInputElement;
+    const isChecked = input.checked;
+
+    if (this.permissionStates[permissionId]) {
+      // Atualiza o estado do checkbox que foi alterado
+      this.permissionStates[permissionId][type] = isChecked;
+
+      if (type === 'criar') {
+        if (isChecked) {
+          // Se 'Criar' for marcado, 'Editar' e 'Ler' também são marcados
+          this.permissionStates[permissionId]['editar'] = true;
+          this.permissionStates[permissionId]['ler'] = true;
+        }
       }
-    } else {
-      if (this.hasPermission(permissao)) {
-        // Desativa a permissão
-        this.cargoModel.somaPermissao &= ~permissao.permissao;
-      } else {
-        // Ativa a permissão
-        this.cargoModel.somaPermissao |= permissao.permissao;
+
+      if (type === 'editar') {
+        if (isChecked) {
+          // Se 'Editar' for marcado, 'Ler' também é marcado
+          this.permissionStates[permissionId]['ler'] = true;
+        } else {
+          // Se 'Editar' for desmarcado
+          if (this.permissionStates[permissionId]['criar']) {
+            // Não permite desmarcar 'Editar' se 'Criar' estiver marcado
+            setTimeout(() => {
+              this.permissionStates[permissionId]['editar'] = true;
+              input.checked = true;
+            }, 0);
+          }
+        }
       }
-      // Atualiza o estado do "Administrador"
-      const allPermissionsExceptAdmin = this.permissionsList.filter((perm) => perm.nome !== 'Administrador');
-      const allPermissionsSelected = allPermissionsExceptAdmin.every((perm) => this.hasPermission(perm));
-      if (allPermissionsSelected) {
-        // Ativa "Administrador"
-        this.cargoModel.somaPermissao |= this.getAdminPermission().permissao;
-        this.isAdminSelected = true;
-      } else {
-        // Desativa "Administrador"
-        this.cargoModel.somaPermissao &= ~this.getAdminPermission().permissao;
-        this.isAdminSelected = false;
+
+      if (type === 'ler') {
+        if (!isChecked) {
+          // Se 'Ler' for desmarcado
+          if (this.permissionStates[permissionId]['editar'] || this.permissionStates[permissionId]['criar']) {
+            // Não permite desmarcar 'Ler' se 'Editar' ou 'Criar' estiverem marcados
+            setTimeout(() => {
+              this.permissionStates[permissionId]['ler'] = true;
+              input.checked = true;
+            }, 0);
+          }
+        }
       }
+
+      // Atualiza o estado do checkbox 'Administrador'
+      this.checkIfAdminSelected();
     }
   }
 
-  onSubmit(form: NgForm) {
-    if (form.invalid) return;
-    this.isLoading = true;
-    this.errorMessage = '';
+  checkIfAdminSelected(): void {
+    const allSelected = this.permissionsList.every(
+      (perm) =>
+        this.permissionStates[perm.permissao_id].ler &&
+        this.permissionStates[perm.permissao_id].editar &&
+        this.permissionStates[perm.permissao_id].criar,
+    );
+    this.isAdmin = allSelected;
+  }
 
-    const action$ =
-      this.cargoModel.cargo_id > 0
-        ? this.azzoService.updateRole(this.cargoModel.cargo_id, this.cargoModel)
-        : this.azzoService.createRole(this.cargoModel);
+  onSubmit() {
+    // Filtra as permissões com pelo menos uma ação selecionada
+    const permissoes = Object.keys(this.permissionStates)
+      .map((key) => ({
+        permissao_id: Number(key),
+        ler: this.permissionStates[Number(key)].ler ? 1 : 0,
+        editar: this.permissionStates[Number(key)].editar ? 1 : 0,
+        criar: this.permissionStates[Number(key)].criar ? 1 : 0,
+      }))
+      .filter((perm) => perm.ler === 1 || perm.editar === 1 || perm.criar === 1);
 
-    action$.subscribe({
-      next: (responseCargo) => {
-        this.isLoading = false;
-        this.activeModal.close(responseCargo);
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.errorMessage = error.error?.message || 'Falha ao processar o cargo.';
-        console.error('Error processing role:', error);
-        this.cdr.detectChanges();
-      },
-    });
+    const payload = {
+      nome: this.cargoModel.nome,
+      permissoes,
+    };
+    console.log('payload', payload);
+
+    if (this.cargoModel.cargo_id > 0) {
+      this.azzoService.updateRole(this.cargoModel.cargo_id, payload).subscribe(() => {
+        this.activeModal.close(this.cargoModel);
+      });
+    } else {
+      this.azzoService.createRole(payload).subscribe((newCargo: Cargo) => {
+        this.activeModal.close(newCargo);
+      });
+    }
   }
 
   closeModal() {

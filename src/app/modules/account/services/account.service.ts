@@ -38,7 +38,7 @@ export class AccountService {
   }
 
   updateUserInfo(userId: number, user: UserUpdate): Observable<UserUpdate> {
-    const user$ = this.azzoService.UpdateUser(userId, user);
+    const user$ = this.azzoService.updateUser(userId, user);
     user$.subscribe((userInfo) => {
       const updatedUserInfo = { ...this.userSubject.value, ...userInfo };
       this.userSubject.next(updatedUserInfo);

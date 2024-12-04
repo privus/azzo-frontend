@@ -1,5 +1,5 @@
 export interface Estado {
-  estadoId: number;
+  estado_id: number;
   nome: string;
   sigla: string;
 }
@@ -13,7 +13,7 @@ export interface Cidade {
 export interface Cargo {
   cargo_id: number;
   nome: string;
-  somaPermissao: number;
+  cargoPermissoes?: CargoPermissao[]; // Relacionamento com permissões
 }
 
 export interface Regiao {
@@ -22,8 +22,16 @@ export interface Regiao {
 }
 
 export interface Permissao {
-  permissao: number;
+  permissao_id: number;
   nome: string;
+}
+
+export interface CargoPermissao {
+  id?: number; // Opcional ao criar
+  ler: number;
+  editar: number;
+  criar: number;
+  permissao?: Permissao; // Relacionamento com detalhes da permissão
 }
 
 export interface Usuario {

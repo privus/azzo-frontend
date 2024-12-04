@@ -1,22 +1,25 @@
 <div *ngIf="role; else loading" class="d-flex flex-column flex-lg-row">
-  <!--begin::Sidebar-->
+  <!-- Sidebar -->
   <div class="flex-column flex-lg-row-auto w-100 w-lg-200px w-xl-300px mb-10">
-    <!--begin::Card-->
     <div class="card card-flush">
-      <!--begin::Card header-->
       <div class="card-header">
         <div class="card-title">
           <h2 class="mb-0">{{ role.nome | titlecase }}</h2>
         </div>
       </div>
-      <!--end::Card header-->
-      <!--begin::Card body-->
       <div class="card-body pt-0">
         <div class="d-flex flex-column text-gray-600">
-          <ng-container *ngIf="rolePermissions && rolePermissions.length > 0; else noPermissions">
-            <div class="d-flex align-items-center py-2" *ngFor="let permission of rolePermissions">
+          <ng-container>
+            <div *ngFor="let rolePermission of role.cargoPermissoes" class="d-flex align-items-center py-2">
               <span class="bullet bg-primary me-3"></span>
-              {{ permission.nome }}
+              <span>{{ rolePermission.permissao?.nome }}</span>
+              <span class="badge badge-light-primary fs-7 m-1">
+                
+                <ng-container *ngIf="rolePermission.ler === 1">Ler</ng-container>
+                <ng-container *ngIf="rolePermission.editar === 1"> {{ rolePermission.ler === 1 ? '|' : '' }} Editar</ng-container>
+                <ng-container *ngIf="rolePermission.criar === 1"> {{ rolePermission.ler === 1 || rolePermission.editar === 1 ? '|' : '' }} Criar</ng-container>
+                
+              </span>
             </div>
           </ng-container>
           <ng-template #noPermissions>
@@ -27,14 +30,10 @@
           </ng-template>
         </div>
       </div>
-      <!--end::Card body-->
-      <!--end::Card footer-->
     </div>
   </div>
-  <!--end::Sidebar-->
-  <!--begin::Content-->
+  <!-- Content -->
   <div class="flex-lg-row-fluid ms-lg-10">
-    <!--begin::Card-->
     <div class="card card-flush mb-6 mb-xl-9">
       <div class="card-header pt-5">
         <div class="card-title">
@@ -44,30 +43,17 @@
           </h2>
         </div>
       </div>
-      <!--end::Card header-->
       <div class="card-body pt-0" *ngIf="users.length > 0; else noUsers">
         <table class="table align-middle table-row-dashed fs-6 gy-5">
           <thead>
             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-              <th></th>
               <th>Nome</th>
               <th>Email</th>
               <th></th>
             </tr>
           </thead>
-          <tbody class="fw-semibold text-gray-600">
+          <tbody>
             <tr *ngFor="let user of users">
-              <div
-                class="symbol symbol-circle symbol-50px overflow-hidden me-3"
-              >
-                <a href="javascript:;">
-                  <div
-                    class="symbol-label fs-3 bg-light-{{ getRandomColor() }} text-{{ getRandomColor() }}"
-                  >
-                    {{ user.nome.charAt(0).toUpperCase() }}
-                  </div>
-                </a>
-              </div>
               <td>{{ user.nome }}</td>
               <td>{{ user.email }}</td>
               <td>
@@ -80,16 +66,10 @@
         </table>
       </div>
       <ng-template #noUsers>
-        <div class="card-body pt-0">
-          <!--begin::Table-->
-          <p>Nenhum usuário atribuído a este cargo no momento.</p>
-          <!--end::Table-->
-        </div>
+        <p>Nenhum usuário atribuído a este cargo no momento.</p>
       </ng-template>
     </div>
-    <!--end::Card-->
   </div>
-  <!--end::Content-->
 </div>
 <ng-template #loading>
   <div id="splash-screen" class="splash-screen">
