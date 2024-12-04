@@ -1,28 +1,17 @@
 <div class="card mb-5 mb-xl-10">
-  <div class="card-body pt-9 pb-0">
+  <div class="card-body pt-8 pb-0">
     <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
       <div class="me-7 mb-4">
         <div
           class="
-            symbol symbol-100px symbol-lg-160px symbol-fixed
+            symbol symbol-100px symbol-lg-200px symbol-fixed
             position-relative
           "
         >
-          <img src="./assets/media/avatars/300-1.jpg" alt="Metronic" />
-          <div
-            class="
-              position-absolute
-              translate-middle
-              bottom-0
-              start-100
-              mb-6
-              bg-success
-              rounded-circle
-              border border-4 border-white
-              h-20px
-              w-20px
-            "
-          ></div>
+            <img
+            [src]="user?.fotoUrl ? user?.fotoUrl : './assets/media/avatars/blank.png'"
+            alt="Foto do usuário"
+          />
         </div>
       </div>
 
@@ -42,30 +31,12 @@
                 class="
                   text-gray-800 text-hover-primary
                   fs-2
-                  fw-bolder
+                  fw-bold
                   me-1
                   cursor-pointer
                 "
               >
                 {{ user?.username }}
-              </a>
-              <a class="cursor-pointer">
-                <app-keenicon name="verify" class="fs-1 text-primary"></app-keenicon>
-              </a>
-              <a
-                class="
-                  btn btn-sm btn-light-success
-                  fw-bolder
-                  ms-2
-                  fs-8
-                  py-1
-                  px-3
-                  cursor-pointer
-                "
-                data-bs-toggle="modal"
-                data-bs-target="#kt_modal_upgrade_plan"
-              >
-                Upgrade to Pro
               </a>
             </div>
 
@@ -94,7 +65,7 @@
                 "
               >
                 <app-keenicon name="geolocation" class="fs-4 me-1"></app-keenicon>
-                {{ user?.cidade?.estado?.sigla }}, {{ user?.cidade?.nome }}
+                {{ user?.cidade?.nome }}, {{ user?.cidade?.estado?.sigla }}
               </a>
               <a
                 class="
@@ -105,49 +76,12 @@
                   cursor-pointer
                 "
               >
-                <app-keenicon name="geolocation" class="fs-4 me-1"></app-keenicon>
+                <app-keenicon name="sms" class="fs-4 me-1"></app-keenicon>
                 {{ user?.email}}
               </a>
             </div>
           </div>
-
-          <div class="d-flex my-4">
-            <a
-              class="btn btn-sm btn-light me-2 cursor-pointer"
-              id="kt_user_follow_button"
-            >
-              <app-keenicon name="phone" class="fs-3 d-none"></app-keenicon>
-              <span class="indicator-label">Follow</span>
-              <span class="indicator-progress">
-                Please wait...
-                <span
-                  class="spinner-border spinner-border-sm align-middle ms-2"
-                ></span>
-              </span>
-            </a>
-            <a
-              class="btn btn-sm btn-primary me-3 cursor-pointer"
-              data-bs-toggle="modal"
-              data-bs-target="#kt_modal_offer_a_deal"
-            >
-              Hire Me
-            </a>
-            <div class="me-0">
-              <button
-                class="
-                  btn btn-sm btn-icon btn-bg-light btn-active-color-primary
-                "
-                data-kt-menu-trigger="click"
-                data-kt-menu-placement="bottom-end"
-                data-kt-menu-flip="top-end"
-              >
-                <i class="bi bi-three-dots fs-3"></i>
-              </button>
-              <app-dropdown-menu1></app-dropdown-menu1>
-            </div>
-          </div>
         </div>
-
         <div class="d-flex flex-wrap flex-stack">
           <div class="d-flex flex-column flex-grow-1 pe-8">
             <div class="d-flex flex-wrap">
@@ -164,10 +98,10 @@
               >
                 <div class="d-flex align-items-center">
                   <app-keenicon name="arrow-up" class="fs-3 text-success me-2"></app-keenicon>
-                  <div class="fs-2 fw-bolder">4500$</div>
+                  <div class="fs-2 fw-bold counted" >$4,500</div>
                 </div>
 
-                <div class="fw-bold fs-6 text-gray-500">Earnings</div>
+                <div class="fw-bold fs-6 text-gray-500">Comissão</div>
               </div>
 
               <div
@@ -183,10 +117,10 @@
               >
                 <div class="d-flex align-items-center">
                   <app-keenicon name="phone" class="fs-3 text-danger me-2"></app-keenicon>
-                  <div class="fs-2 fw-bolder">75</div>
+                  <div class="fs-2 fw-bold">75</div>
                 </div>
 
-                <div class="fw-bold fs-6 text-gray-500">Projects</div>
+                <div class="fw-bold fs-6 text-gray-500">Clientes</div>
               </div>
 
               <div
@@ -202,10 +136,10 @@
               >
                 <div class="d-flex align-items-center">
                   <app-keenicon name="arrow-up" class="fs-3 text-success me-2"></app-keenicon>
-                  <div class="fs-2 fw-bolder">60%</div>
+                  <div class="fs-2 fw-bold">60%</div>
                 </div>
 
-                <div class="fw-bold fs-6 text-gray-500">Success Rate</div>
+                <div class="fw-bold fs-6 text-gray-500">Conversão</div>
               </div>
             </div>
           </div>
@@ -221,15 +155,15 @@
           >
             <div class="d-flex justify-content-between w-100 mt-auto mb-2">
               <span class="fw-bold fs-6 text-gray-500"
-                >Profile Compleation</span
+                >Meta {{ mesAtual }}</span
               >
-              <span class="fw-bolder fs-6">50%</span>
+              <span class="fw-bolder fs-6">95%</span>
             </div>
             <div class="h-5px mx-3 w-100 bg-light mb-3">
               <div
                 class="bg-success rounded h-5px"
                 role="progressbar"
-                [style.width]="'50%'"
+                [style.width]="'95%'"
               ></div>
             </div>
           </div>
@@ -270,4 +204,15 @@
   </div>
 </div>
 
-<router-outlet></router-outlet>
+<!-- Template do AccountComponent -->
+<ng-container *ngIf="user; else loading">
+  <router-outlet></router-outlet>
+</ng-container>
+
+<ng-template #loading>
+  <div id="splash-screen" class="splash-screen">
+    <img src="./assets/media/logos/azzo_simbolo.svg" alt="Azzo logo" />
+    <span>Loading ...</span>
+  </div>
+</ng-template>
+

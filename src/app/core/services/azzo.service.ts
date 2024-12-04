@@ -67,4 +67,8 @@ export class AzzoService {
   getUsersByRole(roleId: number) {
     return this.http.get<Usuario[]>(`${this.baseUrl}roles/${roleId}/users`);
   }
+
+  uploadUserPhoto(userId: number, formData: FormData) {
+    return this.http.post<{ message: string; fotoUrl: string }>(`${this.baseUrl}users/${userId}/foto`, formData);
+  }
 }

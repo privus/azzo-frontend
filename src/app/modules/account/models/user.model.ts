@@ -37,6 +37,7 @@ export interface Usuario {
   cargo?: Cargo;
   cidade: Cidade;
   regiao?: Regiao;
+  fotoUrl?: string;
 }
 
 export interface NewUser {

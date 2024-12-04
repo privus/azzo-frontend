@@ -30,6 +30,7 @@ import { ExtendedComponent } from './components/toolbar/extended/extended.compon
 import { ReportsComponent } from './components/toolbar/reports/reports.component';
 import { SaasComponent } from './components/toolbar/saas/saas.component';
 import { SharedModule } from '../shared/shared.module';
+import { UserService } from '../../core/services/user-service';
 
 const routes: Routes = [
   {
@@ -79,6 +80,7 @@ const routes: Routes = [
     ThemeModeModule,
     SharedModule,
   ],
+  providers: [UserService],
   exports: [RouterModule],
 })
 export class LayoutModule {}

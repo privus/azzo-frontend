@@ -8,6 +8,7 @@ import { REGIOES } from '../../../shared/constants/user-constant';
 import { AzzoService } from '../../../core/services/azzo.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-profile-details',
@@ -25,12 +26,14 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   errorMessage: string;
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
+  selectedFile: File | null;
 
   constructor(
     private cdr: ChangeDetectorRef,
     private accountService: AccountService,
     private readonly formBuilder: FormBuilder,
     private azzoService: AzzoService,
+    private route: ActivatedRoute,
   ) {
     this.profileForm = this.formBuilder.group({
       nome: ['', [Validators.required]],
@@ -45,31 +48,28 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.accountService.getUserInfo();
+
     const loadingSubscr = this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res));
     this.unsubscribe.push(loadingSubscr);
+
     this.azzoService.getRoles().subscribe((cargos) => {
       this.cargos = cargos;
     });
 
-    const userSubscr = this.accountService.user$.subscribe((user) => {
-      if (user) {
-        this.user = user;
-        this.profileForm.patchValue({
-          nome: this.user.nome,
-          cargo: user.cargo?.nome || '',
-          email: this.user.email,
-          celular: this.user.celular,
-          endereco: this.user.endereco,
-          cidade: this.user.cidade,
-          nascimento: this.user.nascimento,
-          regiao: this.user.regiao?.regiao_id,
-        });
-      } else {
-        console.error('Usuário não está carregado.');
-      }
-      console.log('Usuário carregado:', user);
-    });
-    this.unsubscribe.push(userSubscr);
+    this.user = this.route.parent?.snapshot.data['user'];
+    if (this.user) {
+      this.profileForm.patchValue({
+        nome: this.user.nome,
+        cargo: this.user.cargo?.nome || '',
+        email: this.user.email,
+        celular: this.user.celular,
+        endereco: this.user.endereco,
+        cidade: this.user.cidade,
+        nascimento: this.user.nascimento,
+        regiao: this.user.regiao?.regiao_id,
+      });
+    }
 
     this.filteredCidades = this.profileForm.get('cidade')!.valueChanges.pipe(
       startWith(''),
@@ -124,33 +124,9 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
       regiao_id: this.f.regiao.value ? Number(this.f.regiao.value) : null,
     };
 
-    // Verifica se a cidade é uma string e tenta localizar no backend
-    if (typeof cidadeValue === 'string' && cidadeValue.trim()) {
-      this.accountService.searchCitiesPartial(cidadeValue).subscribe({
-        next: (cidades) => {
-          const cidadeExata = cidades.find((cidade) => cidade.nome.trim().toLowerCase() === cidadeValue.trim().toLowerCase());
-
-          if (cidadeExata) {
-            updatedUser.cidade_id = cidadeExata.cidade_id; // Atualiza com o ID da cidade encontrada
-            this.sendUpdateRequest(updatedUser);
-          } else {
-            this.isLoading$.next(false);
-            this.errorMessage = `Cidade "${cidadeValue}" não encontrada.`;
-            this.cdr.detectChanges();
-          }
-        },
-        error: () => {
-          this.isLoading$.next(false);
-          this.errorMessage = 'Erro ao buscar a cidade.';
-          this.cdr.detectChanges();
-        },
-      });
-    } else {
-      // Envia a requisição diretamente
-      this.sendUpdateRequest(updatedUser);
-    }
+    // Envia a requisição diretamente
+    this.sendUpdateRequest(updatedUser);
   }
-
   private sendUpdateRequest(updatedUser: UserUpdate): void {
     this.accountService.updateUserInfo(this.user.usuario_id, updatedUser).subscribe({
       complete: () => {
@@ -186,5 +162,79 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
+  }
+
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validar tamanho (por exemplo, máximo de 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        this.showAlert({
+          icon: 'warning',
+          title: 'Arquivo muito grande!',
+          text: 'O arquivo deve ter no máximo 2MB.',
+          confirmButtonText: 'Ok',
+        });
+        return;
+      }
+
+      // Validar tipo de arquivo
+      if (!file.type.match(/image\/(jpeg|jpg|png)/)) {
+        this.showAlert({
+          icon: 'warning',
+          title: 'Tipo de arquivo inválido!',
+          text: 'Apenas imagens JPG e PNG são permitidas.',
+          confirmButtonText: 'Ok',
+        });
+        return;
+      }
+
+      this.selectedFile = file;
+
+      // Atualizar a pré-visualização imediatamente (opcional)
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.user.fotoUrl = reader.result as string;
+        this.cdr.detectChanges();
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  uploadPhoto(): void {
+    if (!this.selectedFile || !this.user) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+
+    this.isLoading$.next(true);
+
+    this.accountService
+      .uploadUserPhoto(this.user.usuario_id, formData)
+      .pipe(
+        finalize(() => {
+          this.isLoading$.next(false);
+          this.selectedFile = null; // Limpar o arquivo selecionado
+        }),
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Upload bem-sucedido:', response);
+          // Atualizar o usuário com o novo fotoUrl
+          this.user.fotoUrl = response.fotoUrl;
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Erro ao fazer upload da foto:', err);
+          this.showAlert({
+            icon: 'error',
+            title: 'Erro!',
+            text: 'Não foi possível atualizar a foto.',
+            confirmButtonText: 'Ok',
+          });
+        },
+      });
   }
 }

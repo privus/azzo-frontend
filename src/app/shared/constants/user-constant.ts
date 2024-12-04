@@ -9,7 +9,7 @@ export const REGIOES: Regiao[] = [
 ];
 export const PERMISOES: Permissao[] = [
   { permissao: 8, nome: 'Administrador' }, // 2^3
-  { permissao: 1, nome: 'Gerenciamento de usuários' }, // 2^0
+  { permissao: 1, nome: 'Gerenciamento de Usuários' }, // 2^0
   { permissao: 2, nome: 'Gerenciamento Financeiro' }, // 2^1
   { permissao: 4, nome: 'Gerenciamento Estoque' }, // 2^2
 ];
