@@ -47,6 +47,7 @@
         <table class="table align-middle table-row-dashed fs-6 gy-5">
           <thead>
             <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+              <th></th>
               <th>Nome</th>
               <th>Email</th>
               <th></th>
@@ -54,6 +55,15 @@
           </thead>
           <tbody>
             <tr *ngFor="let user of users">
+              <td>
+                <div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+                  <a href="javascript:;">
+                    <div
+                      class="symbol-label fs-3"
+                      [ngStyle]="{'background-image': 'url(' + user.fotoUrl + ')'}"
+                    ></div>
+                  </a>
+                </div>
               <td>{{ user.nome }}</td>
               <td>{{ user.email }}</td>
               <td>

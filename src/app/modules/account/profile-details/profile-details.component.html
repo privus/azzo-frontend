@@ -126,30 +126,22 @@
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6">Cidade</label>
           <div class="col-lg-8 fv-row">
-            <mat-form-field class="w-100">
+            <mat-form-field class="form-control-lg form-control-solid w-100 fv-row">
               <input
-                type="text"
-                class="form-control form-control-lg form-control-solid"
                 matInput
+                type="text"
                 placeholder="Cidade"
                 aria-label="Cidade"
                 formControlName="cidade"
                 autocomplete="new-city"
                 [matAutocomplete]="auto"
               />
-              <mat-autocomplete
-                class="my-custom-autocomplete"                
-                #auto="matAutocomplete"
-                [displayWith]="displayCidade"
-              >
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCidade">
                 <mat-option *ngIf="isLoading">
                   <mat-spinner diameter="20"></mat-spinner> Carregando...
                 </mat-option>
                 <ng-container *ngIf="!isLoading">
-                  <mat-option
-                    *ngFor="let cidade of filteredCidades | async"
-                    [value]="cidade"
-                  >
+                  <mat-option *ngFor="let cidade of filteredCidades | async" [value]="cidade">
                     {{ cidade.nome }}
                   </mat-option>
                 </ng-container>
@@ -160,6 +152,7 @@
             </mat-form-field>
           </div>
         </div>
+        
         <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6"
             ><span>Estado</span></label
