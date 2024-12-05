@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../models/user.model';
 import { ActivatedRoute } from '@angular/router';
 
@@ -8,10 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class OverviewComponent implements OnInit {
   user: Usuario | null = null;
-  constructor(
-    private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef,
-  ) {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.user = this.route.parent?.snapshot.data['user'];
