@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthLogin, AuthTokens } from '../../modules/auth/models/auth.model';
 import { Cargo, Cidade, NewUser, UserUpdate, Usuario, CargoPermissao, Permissao } from '../../modules/account/models/user.model';
+import { Produto } from '../../../app/modules/products/models/product.model';
 
 @Injectable()
 export class AzzoService {
@@ -87,5 +88,9 @@ export class AzzoService {
 
   getPermissions() {
     return this.http.get<Permissao[]>(`${this.baseUrl}roles/permission`);
+  }
+
+  getProducts() {
+    return this.http.get<Produto[]>(`${this.baseUrl}products`);
   }
 }

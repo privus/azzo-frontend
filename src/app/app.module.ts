@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { AccountModule } from './modules/account/account.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ProductModule } from './modules/products/product.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     NgbModule,
     SweetAlert2Module.forRoot(),
     AccountModule,
+    ProductModule,
   ],
   bootstrap: [AppComponent],
   providers: [provideAnimationsAsync()],

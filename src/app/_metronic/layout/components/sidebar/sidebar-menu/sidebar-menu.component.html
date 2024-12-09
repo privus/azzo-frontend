@@ -1,4 +1,3 @@
-<!--begin::Menu wrapper-->
 <div id="kt_app_sidebar_menu_scroll" class="scroll-y my-5 mx-3" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer" data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true">
   <!--begin::Menu-->
   <div class="menu menu-column menu-rounded menu-sub-indention fw-semibold fs-6" id="#kt_app_sidebar_menu" data-kt-menu="true" data-kt-menu-expand="false">
@@ -8,40 +7,63 @@
         <span class="menu-icon">
           <app-keenicon name="profile-user" class="fs-2"></app-keenicon>
         </span>
-        <span class="menu-title" data-link="/apps">Administrador
-        </span>
+        <span class="menu-title" data-link="/apps">Administrador</span>
         <span class="menu-arrow"></span>
       </span>
       <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
         <div class="menu-item">
           <a class="menu-link without-sub" routerLinkActive="active" routerLink="/apps/users/new-account">
-            <span
-              class="menu-bullet">
+            <span class="menu-bullet">
               <span class="bullet bullet-dot"></span>
             </span>
-            <span
-              class="menu-title">Criar
-            </span>
+            <span class="menu-title">Criar</span>
           </a>
-            <a class="menu-link without-sub" routerLinkActive="active" routerLink="/apps/users">
-              <span
-                class="menu-bullet">
-                <span class="bullet bullet-dot"></span>
-              </span>
-              <span class="menu-title">Usuários
-              </span>
-            </a>
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/apps/users">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title">Usuários</span>
+          </a>
           <a class="menu-link without-sub" routerLinkActive="active" routerLink="/apps/roles">
-            <span
-              class="menu-bullet">
+            <span class="menu-bullet">
               <span class="bullet bullet-dot"></span>
             </span>
-            <span class="menu-title">Roles
-            </span>
+            <span class="menu-title">Cargos</span>
           </a>
-          </div>
         </div>
       </div>
+    </div>
+    <!-- Catalog -->
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
+      <span class="menu-link">
+        <span class="menu-icon"><i class="ki-duotone ki-basket fs-2">
+          <span class="path1"></span>
+          <span class="path2"></span>
+          <span class="path3"></span>
+          <span class="path4"></span>
+        </i></span>
+        <span class="menu-title">Catálogo</span>
+        <span class="menu-arrow"></span>
+      </span>
+      <div class="menu-sub menu-sub-accordion">
+        <div class="menu-item">
+          <a class="menu-link active" href="">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title" href="/products">Lista de Produtos</span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link active" href="/products/register">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title">Produto</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <!--end::Menu wrapper-->
