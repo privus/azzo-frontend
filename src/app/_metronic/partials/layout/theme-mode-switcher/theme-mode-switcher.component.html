@@ -19,7 +19,7 @@
   <ng-container *ngIf="menuMode$ | async as menuMode">
     <!-- begin::Menu item  -->
     <div class='menu-item px-3 my-0'>
-      <a class="px-3 py-2" [ngClass]="{'active': menuMode === 'light'}" (click)="switchMode('light')">
+      <a class="menu-link px-3 py-2" [ngClass]="{'active': menuMode === 'light'}" (click)="switchMode('light')">
         <span class='menu-icon' data-kt-element='icon'>
           <app-keenicon name="night-day" class="fs-3"></app-keenicon>
         </span>
@@ -30,7 +30,7 @@
 
     <!-- begin::Menu item  -->
     <div class='menu-item px-3 my-0'>
-      <a class="px-3 py-2" [ngClass]="{'active': menuMode === 'dark'}" (click)="switchMode('dark')">
+      <a class="menu-link px-3 py-2" [ngClass]="{'active': menuMode === 'dark'}" (click)="switchMode('dark')">
         <span class='menu-icon' data-kt-element='icon'>
           <app-keenicon name="moon" class="fs-3"></app-keenicon>
         </span>

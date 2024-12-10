@@ -1,22 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProductDetailsComponent } from './product-details/product-details.component';
-import { ProductComponent } from './product.component';
+import { ProductsListingComponent } from './products-listing/products-listing.component';
 import { ProductResolver } from './product.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: ProductComponent,
+    component: ProductsListingComponent,
     resolve: {
       product: ProductResolver,
     },
-    children: [
-      {
-        path: 'register',
-        component: ProductDetailsComponent,
-      },
-    ],
+  },
+  {
+    path: ':id',
+    component: ProductDetailsComponent,
   },
 ];
 

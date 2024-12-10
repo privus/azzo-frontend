@@ -1,14 +1,14 @@
 export interface Produto {
   id: number;
   codigo: number;
-  name: string;
+  nome: string;
   ativo: number;
   desconto_maximo: number;
   preco_venda: number;
-  ncm: number;
-  ean: number;
+  ncm: string;
+  ean: string;
   preco_custo: number;
-  average_weight?: number;
+  peso_grs?: number;
   fotoUrl?: string;
   categoria: CategoriaProduto;
   fornecedor?: Fornecedor;

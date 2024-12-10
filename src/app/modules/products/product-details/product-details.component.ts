@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { CATEGORIAS } from 'src/app/shared/constants/user-constant';
 import { Produto } from '../models/product.model';
 import { ActivatedRoute } from '@angular/router';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-product-details',
@@ -13,22 +14,24 @@ export class ProductDetailsComponent implements OnInit {
   productForm: FormGroup;
   categorias = CATEGORIAS;
   product: Produto | null = null;
+  productCode: number;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private productService: ProductService,
   ) {}
 
   ngOnInit(): void {
     this.initializeForm();
 
-    // Obtém o primeiro produto da rota resolvida
-    this.product = this.route.parent?.snapshot.data['product'][1];
-    console.log('products-details ==========>>', this.product);
+    this.productCode = Number(this.route.snapshot.paramMap.get('id'));
+    console.log(this.productCode);
 
-    if (this.product) {
-      this.patchFormWithProduct(this.product);
-    }
+    this.productService.getProductByCode(this.productCode).subscribe((product) => {
+      this.product = product;
+      this.patchFormWithProduct(product);
+    });
   }
 
   /**
@@ -37,7 +40,7 @@ export class ProductDetailsComponent implements OnInit {
   private initializeForm(): void {
     this.productForm = this.fb.group({
       codigo: [{ value: '', disabled: true }],
-      name: [{ value: '', disabled: true }],
+      nome: [{ value: '', disabled: true }],
       ativo: [{ value: '', disabled: true }],
       desconto_maximo: [{ value: '', disabled: true }],
       preco_venda: [{ value: '', disabled: true }],
@@ -46,7 +49,7 @@ export class ProductDetailsComponent implements OnInit {
       preco_custo: [{ value: '', disabled: true }],
       average_weight: [{ value: '', disabled: true }],
       fotoUrl: [{ value: '', disabled: true }],
-      categoria_id: [{ value: '', disabled: true }],
+      categoria_nome: [{ value: '', disabled: true }],
       fornecedor_id: [{ value: '', disabled: true }],
     });
   }
@@ -58,16 +61,16 @@ export class ProductDetailsComponent implements OnInit {
   private patchFormWithProduct(product: Produto): void {
     this.productForm.patchValue({
       codigo: product.codigo,
-      name: product.name,
+      nome: product.nome,
       ativo: product.ativo,
       desconto_maximo: product.desconto_maximo,
       preco_venda: product.preco_venda,
       ncm: product.ncm,
       ean: product.ean,
       preco_custo: product.preco_custo,
-      average_weight: product.average_weight,
+      peso_grs: product.peso_grs,
       fotoUrl: product.fotoUrl,
-      categoria_id: product.categoria?.categoria_id || null,
+      categoria_nome: product.categoria?.nome || null,
       fornecedor_id: product.fornecedor?.fornecedor_id || null,
     });
   }

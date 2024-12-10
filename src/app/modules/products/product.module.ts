@@ -4,16 +4,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { ProductRoutingModule } from './product-routing.module';
 import { RouterModule } from '@angular/router';
-import { ProductComponent } from './product.component';
+import { ProductsListingComponent } from './products-listing/products-listing.component';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 
 @NgModule({
-  declarations: [ProductComponent, ProductDetailsComponent],
-  imports: [
-    RouterModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ProductRoutingModule, // Necessário para formulários reativos
-  ],
+  declarations: [ProductsListingComponent, ProductDetailsComponent],
+  imports: [SharedModule, RouterModule, CommonModule, FormsModule, ReactiveFormsModule, ProductRoutingModule, SweetAlert2Module.forChild()],
 })
 export class ProductModule {}

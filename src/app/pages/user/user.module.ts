@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserListingComponent } from './user-listing/user-listing.component';
-import { UserDetailsComponent } from './user-details/user-details.component';
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { NgbCollapseModule, NgbDropdownModule, NgbNavModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,7 +15,7 @@ import { UserEditModal } from './user-edit-modal/user-edit-modal.component';
 import { NgxMaskDirective } from 'ngx-mask';
 
 @NgModule({
-  declarations: [UserListingComponent, UserDetailsComponent, NewAccountComponent, UserEditModal],
+  declarations: [UserListingComponent, NewAccountComponent, UserEditModal],
   imports: [
     CommonModule,
     FormsModule,

@@ -10,4 +10,8 @@ export class ProductService {
   getAllProducts() {
     return this.azzoService.getProducts();
   }
+
+  getProductByCode(codigo: number) {
+    return this.azzoService.getProductByCode(codigo);
+  }
 }

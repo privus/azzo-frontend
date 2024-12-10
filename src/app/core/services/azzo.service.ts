@@ -93,4 +93,8 @@ export class AzzoService {
   getProducts() {
     return this.http.get<Produto[]>(`${this.baseUrl}products`);
   }
+
+  getProductByCode(codigo: number) {
+    return this.http.get<Produto>(`${this.baseUrl}products/${codigo}`);
+  }
 }
