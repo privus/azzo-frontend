@@ -48,7 +48,7 @@ const Routing: Routes = [
   },
   {
     path: 'products',
-    loadChildren: () => import('../modules/products/product.module').then((m) => m.ProductModule),
+    loadChildren: () => import('../modules/commerce/commerce.module').then((m) => m.ProductModule),
   },
   {
     path: '',

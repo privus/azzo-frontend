@@ -13,7 +13,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { AccountModule } from './modules/account/account.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { ProductModule } from './modules/products/product.module';
+import { ProductModule } from './modules/commerce/commerce.module';
 
 @NgModule({
   declarations: [AppComponent],

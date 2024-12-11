@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthLogin, AuthTokens } from '../../modules/auth/models/auth.model';
 import { Cargo, Cidade, NewUser, UserUpdate, Usuario, CargoPermissao, Permissao } from '../../modules/account/models/user.model';
-import { Produto } from '../../../app/modules/products/models/product.model';
+import { Produto } from '../../modules/commerce/models/product.model';
 
 @Injectable()
 export class AzzoService {

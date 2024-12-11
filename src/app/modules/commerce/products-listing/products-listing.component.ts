@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-products-listing',
   templateUrl: './products-listing.component.html',
-  styleUrls: ['./products-listing.component.scss'], // Adicione seus estilos aqui, se necessário
+  styleUrl: './products-listing.component.scss',
 })
 export class ProductsListingComponent implements OnInit {
   products: Produto[] = []; // Lista completa de produtos

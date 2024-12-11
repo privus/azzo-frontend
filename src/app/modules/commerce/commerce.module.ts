@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductDetailsComponent } from './product-details/product-details.component';
-import { ProductRoutingModule } from './product-routing.module';
+import { ProductRoutingModule } from './commerce-routing.module';
 import { RouterModule } from '@angular/router';
 import { ProductsListingComponent } from './products-listing/products-listing.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';

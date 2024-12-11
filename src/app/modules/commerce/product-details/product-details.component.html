@@ -156,12 +156,18 @@
                                 <div class="card-body pt-0">
                                     <div class="d-flex gap-5">
                                         <div class="w-100">
-                                            <label class="required form-label">Preço Base</label>
-                                            <input type="text" name="price" class="form-control mb-2" placeholder="Preço de Base" formControlName="preco_venda" disable />
+                                            <label class="required form-label">Preço de Venda</label>
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">R$</span>
+                                                <input type="text" name="price" class="form-control" placeholder="Preço de Venda" formControlName="preco_venda" disable />
+                                            </div>
                                         </div>
                                         <div class="w-100">
                                             <label class="required form-label">Preço de Custo</label>
-                                            <input type="text" name="cost_price" class="form-control mb-2" placeholder="Preço de Custo" formControlName="preco_custo" disable />
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">R$</span>
+                                                <input type="text" name="cost_price" class="form-control" placeholder="Preço de Custo" formControlName="preco_custo" disable />
+                                            </div>
                                         </div>
                                     </div>
 
