@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserListingComponent } from './user-listing/user-listing.component';
-import { UserDetailsComponent } from './user-details/user-details.component';
 import { NewAccountComponent } from './new-account/new-account.component';
 
 const routes: Routes = [
@@ -12,10 +11,6 @@ const routes: Routes = [
   {
     path: 'new-account',
     component: NewAccountComponent,
-  },
-  {
-    path: ':id',
-    component: UserDetailsComponent,
   },
 ];
 
