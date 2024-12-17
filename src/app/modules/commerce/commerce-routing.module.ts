@@ -3,18 +3,23 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { ProductsListingComponent } from './products-listing/products-listing.component';
 import { ProductResolver } from './product.resolver';
+import { CostumerComponent } from './customer/costumer.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'products',
     component: ProductsListingComponent,
     resolve: {
       product: ProductResolver,
     },
   },
   {
-    path: ':id',
+    path: 'products/:id',
     component: ProductDetailsComponent,
+  },
+  {
+    path: 'customers',
+    component: CostumerComponent,
   },
 ];
 
@@ -22,4 +27,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ProductRoutingModule {}
+export class CommerceRoutingModule {}

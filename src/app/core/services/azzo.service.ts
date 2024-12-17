@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthLogin, AuthTokens } from '../../modules/auth/models/auth.model';
 import { Cargo, Cidade, NewUser, UserUpdate, Usuario, CargoPermissao, Permissao } from '../../modules/account/models/user.model';
 import { Produto } from '../../modules/commerce/models/product.model';
+import { Cliente } from '../../modules/commerce/models/costumer.model';
 
 @Injectable()
 export class AzzoService {
@@ -96,5 +97,13 @@ export class AzzoService {
 
   getProductByCode(codigo: number) {
     return this.http.get<Produto>(`${this.baseUrl}products/${codigo}`);
+  }
+
+  getCustomers() {
+    return this.http.get<Cliente[]>(`${this.baseUrl}customers`);
+  }
+
+  getCustomerByCode(codigo: number) {
+    return this.http.get<Cliente>(`${this.baseUrl}customers/${codigo}`);
   }
 }

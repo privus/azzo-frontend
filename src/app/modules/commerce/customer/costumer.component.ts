@@ -4,8 +4,6 @@ import { Cliente } from '../models/costumer.model';
 
 @Component({
   selector: 'app-costumer',
-  standalone: true,
-  imports: [],
   templateUrl: './costumer.component.html',
   styleUrl: './costumer.component.scss',
 })
@@ -24,6 +22,7 @@ export class CostumerComponent implements OnInit {
 
   ngOnInit(): void {
     this.costumers = this.route.snapshot.data['costumer'] || [];
+    console.log('CLIENTE ===> ', this.costumers);
     this.applyFilter();
   }
 

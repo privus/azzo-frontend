@@ -36,10 +36,7 @@ export class ProductsListingComponent implements OnInit {
     } else {
       const term = this.searchTerm.toLowerCase();
       this.filteredProducts = this.products.filter(
-        (product) =>
-          product.nome.toLowerCase().includes(term) ||
-          product.categoria.nome.toLowerCase().includes(term) ||
-          product.ncm.toLowerCase().includes(term),
+        (product) => product.nome.toLowerCase().includes(term) || product.categoria.nome.toLowerCase().includes(term),
       );
     }
     this.currentPage = 1;
@@ -143,6 +140,6 @@ export class ProductsListingComponent implements OnInit {
 
   // Método para editar um produto (implementação fictícia)
   editProduct(codigo: number): void {
-    this.router.navigate(['/products', codigo]);
+    this.router.navigate(['commerce/products', codigo]);
   }
 }

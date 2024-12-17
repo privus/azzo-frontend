@@ -47,8 +47,8 @@ const Routing: Routes = [
     loadChildren: () => import('./permission/permission.module').then((m) => m.PermissionModule),
   },
   {
-    path: 'products',
-    loadChildren: () => import('../modules/commerce/commerce.module').then((m) => m.ProductModule),
+    path: 'commerce',
+    loadChildren: () => import('../modules/commerce/commerce.module').then((m) => m.CommerceModule),
   },
   {
     path: '',
