@@ -17,6 +17,7 @@ export interface Cliente {
   data_criacao?: string;
   ativo?: number;
   cidade: Cidade;
+  cidade_string: string;
   categoria: CategoriaCliente;
   status: StatusCliente;
 }

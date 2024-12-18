@@ -3,13 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Cliente } from '../models/costumer.model';
 
 @Component({
-  selector: 'app-costumer',
-  templateUrl: './costumer.component.html',
-  styleUrl: './costumer.component.scss',
+  selector: 'app-customer',
+  templateUrl: './customer-listing.component.html',
+  styleUrl: './customer-listing.component.scss',
 })
-export class CostumerComponent implements OnInit {
+export class CustomerListingComponent implements OnInit {
   costumers: Cliente[] = [];
-  filteredCostumers: Cliente[] = []; // Produtos filtrados após a busca
+  filteredCustomers: Cliente[] = []; // Produtos filtrados após a busca
   currentPage: number = 1;
   itemsPerPage: number = 50;
   totalPages: number = 0;
@@ -21,21 +21,18 @@ export class CostumerComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.costumers = this.route.snapshot.data['costumer'] || [];
+    this.costumers = this.route.snapshot.data['customers'];
     console.log('CLIENTE ===> ', this.costumers);
     this.applyFilter();
   }
 
   applyFilter(): void {
     if (this.searchTerm.trim() === '') {
-      this.filteredCostumers = [...this.costumers];
+      this.filteredCustomers = [...this.costumers];
     } else {
       const term = this.searchTerm.toLowerCase();
-      this.filteredCostumers = this.costumers.filter(
-        (costumer) =>
-          costumer.nome.toLowerCase().includes(term) ||
-          costumer.categoria.nome.toLowerCase().includes(term) ||
-          costumer.nome_empresa.toLowerCase().includes(term),
+      this.filteredCustomers = this.costumers.filter(
+        (costumer) => costumer.nome.toLowerCase().includes(term) || (costumer.numero_doc && costumer.numero_doc.includes(term)),
       );
     }
     this.currentPage = 1;
@@ -48,7 +45,7 @@ export class CostumerComponent implements OnInit {
   }
 
   calculatePagination(): void {
-    this.totalPages = Math.ceil(this.filteredCostumers.length / this.itemsPerPage);
+    this.totalPages = Math.ceil(this.filteredCustomers.length / this.itemsPerPage);
     if (this.currentPage > this.totalPages) {
       this.currentPage = this.totalPages || 1; // Se totalPages for 0, define como 1
     }
@@ -79,13 +76,13 @@ export class CostumerComponent implements OnInit {
   }
 
   updateDisplayedItems(): void {
-    this.startItem = this.filteredCostumers.length === 0 ? 0 : (this.currentPage - 1) * this.itemsPerPage + 1;
-    this.endItem = Math.min(this.currentPage * this.itemsPerPage, this.filteredCostumers.length);
+    this.startItem = this.filteredCustomers.length === 0 ? 0 : (this.currentPage - 1) * this.itemsPerPage + 1;
+    this.endItem = Math.min(this.currentPage * this.itemsPerPage, this.filteredCustomers.length);
   }
 
-  get paginatedCostumer(): Cliente[] {
+  get paginatedCustomer(): Cliente[] {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return this.filteredCostumers.slice(startIndex, startIndex + this.itemsPerPage);
+    return this.filteredCustomers.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
   previousPage(): void {

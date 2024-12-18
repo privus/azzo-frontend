@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { ProductsListingComponent } from './products-listing/products-listing.component';
 import { ProductResolver } from './product.resolver';
-import { CostumerComponent } from './customer/costumer.component';
+import { CustomerListingComponent } from './customer-listing/customer-listing.component';
+import { CustomerResolver } from './customer.resolver';
 
 const routes: Routes = [
   {
@@ -19,7 +20,10 @@ const routes: Routes = [
   },
   {
     path: 'customers',
-    component: CostumerComponent,
+    component: CustomerListingComponent,
+    resolve: {
+      customers: CustomerResolver,
+    },
   },
 ];
 
