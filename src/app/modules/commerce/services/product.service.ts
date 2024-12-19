@@ -11,7 +11,7 @@ export class ProductService {
     return this.azzoService.getProducts();
   }
 
-  getProductByCode(codigo: number) {
-    return this.azzoService.getProductByCode(codigo);
+  getProductById(id: number) {
+    return this.azzoService.getProductByCode(id);
   }
 }

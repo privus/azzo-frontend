@@ -19,12 +19,13 @@ export interface Cliente {
   cidade: Cidade;
   cidade_string: string;
   categoria: CategoriaCliente;
-  status: StatusCliente;
+  status: number;
 }
 
 export interface Cidade {
   cidade_id: number;
   nome: string;
+  estado: Estado;
 }
 
 export interface CategoriaCliente {
@@ -32,7 +33,8 @@ export interface CategoriaCliente {
   nome: string;
 }
 
-export interface StatusCliente {
-  status_id: number;
+export interface Estado {
+  estado_id: number;
   nome: string;
+  sigla: string;
 }

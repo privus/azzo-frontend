@@ -36,7 +36,7 @@
                 </thead>
                 <tbody class="fw-semibold text-gray-600">
                     <tr *ngFor="let customer of paginatedCustomer">
-                        <td>{{ customer.nome }}</td>
+                        <td>{{ customer.nome_empresa || customer.nome }}</td>
                         <td>{{ customer.numero_doc || customer.ie }}</td>
                         <td>{{ customer.cidade.nome }}</td>
                         <td>
@@ -47,7 +47,7 @@
                         <td class="text-end">
                             <button
                                 class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-
+                                (click)="editCustomer(customer.codigo)"
                             >
                                 <i class="ki-duotone ki-pencil fs-3">
                                     <span class="path1"></span><span class="path2"></span>

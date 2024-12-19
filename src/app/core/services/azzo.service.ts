@@ -95,8 +95,8 @@ export class AzzoService {
     return this.http.get<Produto[]>(`${this.baseUrl}products`);
   }
 
-  getProductByCode(codigo: number) {
-    return this.http.get<Produto>(`${this.baseUrl}products/${codigo}`);
+  getProductByCode(id: number) {
+    return this.http.get<Produto>(`${this.baseUrl}products/${id}`);
   }
 
   getCustomers() {

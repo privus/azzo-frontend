@@ -139,7 +139,11 @@ export class ProductsListingComponent implements OnInit {
   }
 
   // Método para editar um produto (implementação fictícia)
-  editProduct(codigo: number): void {
-    this.router.navigate(['commerce/products', codigo]);
+  editProduct(id: number) {
+    if (id !== undefined && id !== null) {
+      this.router.navigate(['commerce/products', id]);
+    } else {
+      console.error('ID do produto está indefinido ou nulo:', id);
+    }
   }
 }

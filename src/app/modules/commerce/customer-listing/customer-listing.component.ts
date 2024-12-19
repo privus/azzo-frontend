@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente } from '../models/costumer.model';
 
 @Component({
@@ -18,7 +18,10 @@ export class CustomerListingComponent implements OnInit {
   startItem: number = 0;
   endItem: number = 0;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.costumers = this.route.snapshot.data['customers'];
@@ -129,5 +132,9 @@ export class CustomerListingComponent implements OnInit {
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
+  }
+
+  editCustomer(codigo: number): void {
+    this.router.navigate(['commerce/customers', codigo]);
   }
 }

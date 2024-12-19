@@ -1,6 +1,6 @@
 export interface Produto {
-  id: number;
-  codigo: number;
+  produto_id: number;
+  codigo: string;
   nome: string;
   ativo: number;
   desconto_maximo: number;
@@ -12,6 +12,9 @@ export interface Produto {
   fotoUrl?: string;
   categoria: CategoriaProduto;
   fornecedor?: Fornecedor;
+  data_criacao?: string;
+  data_atualizacao?: string;
+  descricao_uni: string;
 }
 
 export interface CategoriaProduto {

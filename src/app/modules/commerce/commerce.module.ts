@@ -8,9 +8,10 @@ import { ProductsListingComponent } from './products-listing/products-listing.co
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { CustomerListingComponent } from './customer-listing/customer-listing.component';
+import { CustomersDetailsComponent } from './customers-details/customers-details.component';
 
 @NgModule({
-  declarations: [ProductsListingComponent, ProductDetailsComponent, CustomerListingComponent],
+  declarations: [ProductsListingComponent, ProductDetailsComponent, CustomerListingComponent, CustomersDetailsComponent],
   imports: [SharedModule, RouterModule, CommonModule, FormsModule, ReactiveFormsModule, CommerceRoutingModule, SweetAlert2Module.forChild()],
 })
 export class CommerceModule {}

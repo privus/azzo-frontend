@@ -5,6 +5,7 @@ import { ProductsListingComponent } from './products-listing/products-listing.co
 import { ProductResolver } from './product.resolver';
 import { CustomerListingComponent } from './customer-listing/customer-listing.component';
 import { CustomerResolver } from './customer.resolver';
+import { CustomersDetailsComponent } from './customers-details/customers-details.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
     resolve: {
       customers: CustomerResolver,
     },
+  },
+  {
+    path: 'customers/:id',
+    component: CustomersDetailsComponent,
   },
 ];
 
