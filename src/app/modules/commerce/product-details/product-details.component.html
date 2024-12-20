@@ -81,23 +81,19 @@
                         </div>
                     </div>
                     <div class="card-body pt-0">
-                        <label class="form-label">Categorias</label>
-                        <div class="mb-2 select2-hidden-accessible">
-                            <!-- Select desabilitado -->
-                            <select class="form-select form-select-solid" formControlName="categoria_nome" disable>
-                                <option [value]="product?.categoria?.nome" disabled>Selecione A Categoria</option>
-                                <option *ngFor="let categoria of categorias" [value]="">{{ categoria.nome }}</option>
-                            </select>
+                        <div class="w-100">
+                            <label class="form-label">Categoria</label>
+                            <input type="text" name="categoria" class="form-control mb-2" placeholder="Categoria" formControlName="categoria_nome" disable />
                         </div>
 
                         <div class="w-100">
                             <label class="form-label">NCM</label>
-                            <input type="text" name="ncm" class="form-control mb-2" placeholder="Ncm" formControlName="ncm" disable />
+                            <input type="text" name="ncm" class="form-control mb-2" placeholder="NCM" formControlName="ncm" disable />
                         </div>
 
                         <div class="w-100">
-                            <label class="form-label">Unidade</label>
-                            <input type="text" name="unidade" class="form-control mb-2" placeholder="Unidade" disabled />
+                            <label class="form-label">EAN</label>
+                            <input type="text" name="unidade" class="form-control mb-2" placeholder="EAN" formControlName="ean" disable />
                         </div>
                     </div>
                 </div>
@@ -156,24 +152,26 @@
                                 <div class="card-body pt-0">
                                     <div class="d-flex gap-5">
                                         <div class="w-100">
-                                            <label class="required form-label">Preço Base</label>
-                                            <input type="text" name="price" class="form-control mb-2" placeholder="Preço de Base" formControlName="preco_venda" disable />
+                                            <label class="required form-label">Preço de Venda</label>
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">R$</span>
+                                                <input type="text" name="price" class="form-control" placeholder="Preço de Venda" formControlName="preco_venda" disable />
+                                            </div>
                                         </div>
                                         <div class="w-100">
                                             <label class="required form-label">Preço de Custo</label>
-                                            <input type="text" name="cost_price" class="form-control mb-2" placeholder="Preço de Custo" formControlName="preco_custo" disable />
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">R$</span>
+                                                <input type="text" name="cost_price" class="form-control" placeholder="Preço de Custo" formControlName="preco_custo" disable />
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div class="card card-flush h-md-100">
-                                        <div class="card-body pt-5">
-                                            <div class="mb-10 fv-row">
-                                                <label class="form-label">Desconto Máximo (%)</label>
-                                                <input type="text" class="form-control mb-2" formControlName="desconto_maximo" min="0" max="100" disable />
-                                                <div class="text-muted fs-7">
-                                                    Insira um valor entre 0 e 100 para definir a porcentagem máxima de desconto.
-                                                </div>
-                                            </div>
+                                </div>
+                                <div class="card card-flush h-md-100">
+                                    <div class="card-body pt-5">
+                                        <div class="mb-10 fv-row">
+                                            <label class="form-label">Descrição Unidade</label>
+                                            <input type="text" class="form-control mb-2" formControlName="descricao_uni" disable />
                                         </div>
                                     </div>
                                 </div>

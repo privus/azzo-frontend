@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-products-listing',
   templateUrl: './products-listing.component.html',
-  styleUrls: ['./products-listing.component.scss'], // Adicione seus estilos aqui, se necessário
+  styleUrl: './products-listing.component.scss',
 })
 export class ProductsListingComponent implements OnInit {
   products: Produto[] = []; // Lista completa de produtos
@@ -36,10 +36,7 @@ export class ProductsListingComponent implements OnInit {
     } else {
       const term = this.searchTerm.toLowerCase();
       this.filteredProducts = this.products.filter(
-        (product) =>
-          product.nome.toLowerCase().includes(term) ||
-          product.categoria.nome.toLowerCase().includes(term) ||
-          product.ncm.toLowerCase().includes(term),
+        (product) => product.nome.toLowerCase().includes(term) || product.categoria.nome.toLowerCase().includes(term),
       );
     }
     this.currentPage = 1;
@@ -142,7 +139,11 @@ export class ProductsListingComponent implements OnInit {
   }
 
   // Método para editar um produto (implementação fictícia)
-  editProduct(codigo: number): void {
-    this.router.navigate(['/products', codigo]);
+  editProduct(id: number) {
+    if (id !== undefined && id !== null) {
+      this.router.navigate(['commerce/products', id]);
+    } else {
+      console.error('ID do produto está indefinido ou nulo:', id);
+    }
   }
 }

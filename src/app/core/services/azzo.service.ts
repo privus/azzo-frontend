@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthLogin, AuthTokens } from '../../modules/auth/models/auth.model';
 import { Cargo, Cidade, NewUser, UserUpdate, Usuario, CargoPermissao, Permissao } from '../../modules/account/models/user.model';
-import { Produto } from '../../../app/modules/products/models/product.model';
+import { Produto } from '../../modules/commerce/models/product.model';
+import { Cliente } from '../../modules/commerce/models/costumer.model';
 
 @Injectable()
 export class AzzoService {
@@ -94,7 +95,15 @@ export class AzzoService {
     return this.http.get<Produto[]>(`${this.baseUrl}products`);
   }
 
-  getProductByCode(codigo: number) {
-    return this.http.get<Produto>(`${this.baseUrl}products/${codigo}`);
+  getProductByCode(id: number) {
+    return this.http.get<Produto>(`${this.baseUrl}products/${id}`);
+  }
+
+  getCustomers() {
+    return this.http.get<Cliente[]>(`${this.baseUrl}customers`);
+  }
+
+  getCustomerByCode(codigo: number) {
+    return this.http.get<Cliente>(`${this.baseUrl}customers/${codigo}`);
   }
 }

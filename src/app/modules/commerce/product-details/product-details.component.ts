@@ -14,7 +14,7 @@ export class ProductDetailsComponent implements OnInit {
   productForm: FormGroup;
   categorias = CATEGORIAS;
   product: Produto | null = null;
-  productCode: number;
+  productId: number;
 
   constructor(
     private fb: FormBuilder,
@@ -25,11 +25,11 @@ export class ProductDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
 
-    this.productCode = Number(this.route.snapshot.paramMap.get('id'));
-    console.log(this.productCode);
+    this.productId = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.productService.getProductByCode(this.productCode).subscribe((product) => {
+    this.productService.getProductById(this.productId).subscribe((product) => {
       this.product = product;
+      console.log(this.product);
       this.patchFormWithProduct(product);
     });
   }
@@ -51,6 +51,7 @@ export class ProductDetailsComponent implements OnInit {
       fotoUrl: [{ value: '', disabled: true }],
       categoria_nome: [{ value: '', disabled: true }],
       fornecedor_id: [{ value: '', disabled: true }],
+      descricao_uni: [{ value: '', disabled: true }],
     });
   }
 
@@ -72,6 +73,7 @@ export class ProductDetailsComponent implements OnInit {
       fotoUrl: product.fotoUrl,
       categoria_nome: product.categoria?.nome || null,
       fornecedor_id: product.fornecedor?.fornecedor_id || null,
+      descricao_uni: product.descricao_uni
     });
   }
 }
