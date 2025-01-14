@@ -1,0 +1,179 @@
+<div class="card">
+    <div class="card-header border-0 pt-6">
+        <div class="card-title">
+            <div class="d-flex align-items-center position-relative my-1">
+                <app-keenicon name="magnifier" class="fs-3 position-absolute ms-5"></app-keenicon>
+                <input
+                    type="text"
+                    class="form-control form-control-solid w-250px ps-12"
+                    placeholder="Pesquisar Pedido"
+                    [(ngModel)]="searchTerm"
+                    (input)="onSearch()"
+                />
+            </div>
+        </div>
+        <div class="card-toolbar">
+            <div class="d-flex justify-content-end">
+                <!-- Caso seja necessário adicionar algum botão -->
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="paginatedOrders; else loading" class="card-body pt-0">
+        <div class="table-responsive">
+            <table
+                id="kt_ecommerce_orders_table"
+                class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer"
+            >
+                <thead>
+                    <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                        <th class="min-w-50px">Código</th>
+                        <th class="min-w-125px">Cliente</th>
+                        <th class="min-w-125px">Data Criação</th>
+                        <th class="min-w-125px">Valor Pedido</th>
+                        <th class="min-w-125px">Status Pagamento</th>
+                        <th class="min-w-125px">Status Venda</th>
+                        <th class="min-w-125px">Vendedor</th>
+                        <th class="text-end min-w-100px">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="fw-semibold text-gray-600">
+                    <tr *ngFor="let order of paginatedOrders">
+                        <td>{{ order.codigo }}</td>
+                        <td>{{ order.cliente ?  order.cliente.nome_empresa : 'Cliente Teste'  }}</td>
+                        <td>{{ order.data_criacao | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                        <td>{{ order.valor_pedido }}</td>
+                        <td>{{ order.status_pagamento.nome }}</td>
+                        <td>                            
+                            <span class="badge td" [ngClass]="getStatusClass(order.status_venda.status_venda_id)">
+                            {{ order.status_venda.nome }}
+                            </span>  
+                        </td>                                             
+                        <td>{{ order.vendedor ? order.vendedor.nome : 'Vendedor Teste' }}</td>
+                        <td class="text-end">
+                            <button
+                                class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+
+                            >
+                                <i class="ki-duotone ki-pencil fs-3">
+                                    <span class="path1"></span><span class="path2"></span>
+                                </i>
+                            </button>
+                            <button
+                                class="btn btn-icon btn-active-light-primary w-30px h-30px"
+                            >
+                                <i class="ki-duotone ki-trash fs-3">
+                                    <span class="path1"></span><span class="path2"></span>
+                                    <span class="path3"></span><span class="path4"></span>
+                                    <span class="path5"></span>
+                                </i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
+                <div class="fs-6 fw-bold text-gray-700">
+                    Mostrando {{ startItem }} - {{ endItem }} de {{ filteredOrders.length }} Pedidos.
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+                <ul class="pagination">
+                    <li
+                        class="page-item"
+                        [class.disabled]="currentPage === 1"
+                    >
+                        <button
+                            class="page-link first"
+                            role="link"
+                            type="button"
+                            aria-controls="kt_ecommerce_orders_table"
+                            [attr.aria-disabled]="currentPage === 1 ? 'true' : 'false'"
+                            aria-label="First"
+                            (click)="goToFirstPage()"
+                        >
+                            ‹‹
+                            <i class="ki-duotone ki-skip-back fs-5"></i>
+                        </button>
+                    </li>
+                    <li
+                        class="page-item"
+                        [class.disabled]="currentPage === 1"
+                    >
+                        <button
+                            class="page-link previous"
+                            role="link"
+                            type="button"
+                            aria-controls="kt_ecommerce_orders_table"
+                            [attr.aria-disabled]="currentPage === 1 ? 'true' : 'false'"
+                            aria-label="Previous"
+                            (click)="previousPage()"
+                        >
+                            ‹
+                            <i class="ki-duotone ki-left-arrow fs-5"></i>
+                        </button>
+                    </li>
+                    <li
+                        class="page-item"
+                        *ngFor="let page of displayedPages"
+                        [class.active]="currentPage === page"
+                    >
+                        <button
+                            class="page-link"
+                            role="link"
+                            type="button"
+                            aria-controls="kt_ecommerce_orders_table"
+                            [attr.aria-current]="currentPage === page ? 'page' : null"
+                            (click)="goToPage(page)"
+                        >
+                            {{ page }}
+                        </button>
+                    </li>
+                    <li
+                        class="page-item"
+                        [class.disabled]="currentPage === totalPages || totalPages === 0"
+                    >
+                        <button
+                            class="page-link next"
+                            role="link"
+                            type="button"
+                            aria-controls="kt_ecommerce_orders_table"
+                            [attr.aria-disabled]="currentPage === totalPages || totalPages === 0 ? 'true' : 'false'"
+                            aria-label="Next"
+                            (click)="nextPage()"
+                        >
+                            ›
+                            <i class="ki-duotone ki-right-arrow fs-5"></i>
+                        </button>
+                    </li>
+                    <li
+                        class="page-item"
+                        [class.disabled]="currentPage === totalPages || totalPages === 0"
+                    >
+                        <button
+                            class="page-link last"
+                            role="link"
+                            type="button"
+                            aria-controls="kt_ecommerce_orders_table"
+                            [attr.aria-disabled]="currentPage === totalPages || totalPages === 0 ? 'true' : 'false'"
+                            aria-label="Last"
+                            (click)="goToLastPage()"
+                        >
+                            ››
+                            <i class="ki-duotone ki-skip-forward fs-5"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <ng-template #loading>
+        <div id="splash-screen" class="splash-screen">
+            <img src="./assets/media/logos/azzo_simbolo.svg" alt="Azzo logo" />
+            <span>Loading ...</span>
+        </div>
+    </ng-template>
+</div>

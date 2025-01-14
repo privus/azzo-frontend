@@ -6,6 +6,8 @@ import { ProductResolver } from './product.resolver';
 import { CustomerListingComponent } from './customer-listing/customer-listing.component';
 import { CustomerResolver } from './customer.resolver';
 import { CustomersDetailsComponent } from './customers-details/customers-details.component';
+import { OrderListingComponent } from './order-listing/order-listing.component';
+import { OrderResolver } from './order.resolver';
 
 const routes: Routes = [
   {
@@ -29,6 +31,13 @@ const routes: Routes = [
   {
     path: 'customers/:id',
     component: CustomersDetailsComponent,
+  },
+  {
+    path: 'orders',
+    component: OrderListingComponent,
+    resolve: {
+      orders: OrderResolver,
+    },
   },
 ];
 
