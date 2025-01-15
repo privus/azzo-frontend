@@ -11,8 +11,38 @@
                     (input)="onSearch()"
                 />
             </div>
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select class="form-select form-select-solid form-select-lg" id="filterDate" (change)="onDateRangeChange($event)">
+                    <option value="today">Hoje</option>
+                    <option value="yesterday">Ontem</option>
+                    <option value="last7">Últimos 7 Dias</option>
+                    <option value="last30">Últimos 30 Dias</option>
+                    <option value="thisMonth">Este Mês</option>
+                    <option value="lastMonth">Mês Passado</option>
+                    <option value="custom">Entre Datas</option>
+                </select>
+                <div *ngIf="showCustomDatePicker" class="d-flex align-items-center position-relative my-1 ms-8">
+                    <label class="form-label">From:</label>
+                    <input type="date" class="form-control form-control-solid w-150px ps-12" [(ngModel)]="customDateRange.start" />
+                    <label class="form-label ms-3">To:</label>
+                    <input type="date" class="form-control form-control-solid w-150px ps-12 ms-3" [(ngModel)]="customDateRange.end" />
+                </div>
+            </div>
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select class="form-select form-select-solid form-select-lg" formControlName="status" data-control="select2" data-hide-search="true" data-placeholder="Select a status">
+                    <option value="">Status</option>
+                    <option value="11138">Aguardando Aprovação</option>
+                    <option value="11139">Pedido</option>
+                    <option value="11468">Reprovado</option>
+                    <option value="11491">Faturado</option>
+                    <option value="11541">Pronto para Envio</option>
+                    <option value="11542">Enviado</option>
+                    <option value="11543">Entregue</option>
+                </select>
+            </div>
+            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="applyCustomDateRange()">Apply</button>
         </div>
-        <div class="card-toolbar">
+            <div class="card-toolbar">
             <div class="d-flex justify-content-end">
                 <!-- Caso seja necessário adicionar algum botão -->
             </div>
@@ -26,7 +56,7 @@
                 class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer"
             >
                 <thead>
-                    <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                    <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0" >
                         <th class="min-w-50px">Código</th>
                         <th class="min-w-125px">Cliente</th>
                         <th class="min-w-125px">Data Criação</th>
@@ -42,7 +72,7 @@
                         <td>{{ order.codigo }}</td>
                         <td>{{ order.cliente ?  order.cliente.nome_empresa : 'Cliente Teste'  }}</td>
                         <td>{{ order.data_criacao | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-                        <td>{{ order.valor_pedido }}</td>
+                        <td>{{ order.valor_pedido | currency:'BRL' }}</td>
                         <td>{{ order.status_pagamento.nome }}</td>
                         <td>                            
                             <span class="badge td" [ngClass]="getStatusClass(order.status_venda.status_venda_id)">
@@ -52,20 +82,11 @@
                         <td>{{ order.vendedor ? order.vendedor.nome : 'Vendedor Teste' }}</td>
                         <td class="text-end">
                             <button
-                                class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-
+                             class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                             (click)="editOrder(order.venda_id)"       
                             >
                                 <i class="ki-duotone ki-pencil fs-3">
                                     <span class="path1"></span><span class="path2"></span>
-                                </i>
-                            </button>
-                            <button
-                                class="btn btn-icon btn-active-light-primary w-30px h-30px"
-                            >
-                                <i class="ki-duotone ki-trash fs-3">
-                                    <span class="path1"></span><span class="path2"></span>
-                                    <span class="path3"></span><span class="path4"></span>
-                                    <span class="path5"></span>
                                 </i>
                             </button>
                         </td>
@@ -73,7 +94,7 @@
                 </tbody>
             </table>
         </div>
-
+    
         <div class="row mt-5">
             <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
                 <div class="fs-6 fw-bold text-gray-700">

@@ -10,4 +10,8 @@ export class OrderService {
   getAllOrders() {
     return this.azzoService.getAllOrders();
   }
+
+  getOrderById(id: number) {
+    return this.azzoService.getOrderById(id);
+  }
 }

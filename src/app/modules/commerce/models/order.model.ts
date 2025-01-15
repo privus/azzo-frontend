@@ -1,4 +1,4 @@
-import { Cliente } from './costumer.model';
+import { Cliente, Produto } from './';
 
 export interface Pedido {
   venda_id: number;
@@ -34,6 +34,7 @@ export interface ItensVenda {
   quantidade: number;
   valor_unitario: string;
   valor_total: string;
+  produto: Produto;
 }
 
 export interface StatusPagamento {

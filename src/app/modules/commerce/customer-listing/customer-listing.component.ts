@@ -86,12 +86,12 @@ export class CustomerListingComponent implements OnInit {
     this.endItem = endItem;
   }
 
-  get paginatedCustomer(): Cliente[] {
-    return this.paginationService.getPaginatedItems(this.filteredCustomers, this.currentPage, this.itemsPerPage);
-  }
-
   editCustomer(codigo: number): void {
     this.router.navigate(['commerce/customers', codigo]);
+  }
+
+  get paginatedCustomer(): Cliente[] {
+    return this.paginationService.getPaginatedItems(this.filteredCustomers, this.currentPage, this.itemsPerPage);
   }
 
   previousPage(): void {

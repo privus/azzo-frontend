@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Produto } from '../models/product.model'; // Modelo de produto
 import { ActivatedRoute, Router } from '@angular/router';
+import { PaginationService } from '../../../core/services/pagination.service';
 
 @Component({
   selector: 'app-products-listing',
@@ -8,28 +9,27 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './products-listing.component.scss',
 })
 export class ProductsListingComponent implements OnInit {
-  products: Produto[] = []; // Lista completa de produtos
-  filteredProducts: Produto[] = []; // Produtos filtrados após a busca
+  products: Produto[] = [];
+  filteredProducts: Produto[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 50;
   totalPages: number = 0;
-  displayedPages: number[] = []; // Páginas a serem exibidas na paginação
+  displayedPages: number[] = [];
   searchTerm: string = '';
   startItem: number = 0;
   endItem: number = 0;
 
   constructor(
     private route: ActivatedRoute,
+    private paginationService: PaginationService,
     private router: Router,
   ) {}
 
   ngOnInit(): void {
-    // Supondo que você esteja usando um resolver para carregar os produtos
-    this.products = this.route.snapshot.data['product'] || [];
-    this.applyFilter(); // Inicializa filteredProducts e a paginação
+    this.products = this.route.snapshot.data['product'];
+    this.applyFilter();
   }
 
-  // Método para aplicar o filtro de busca
   applyFilter(): void {
     if (this.searchTerm.trim() === '') {
       this.filteredProducts = [...this.products];
@@ -44,7 +44,6 @@ export class ProductsListingComponent implements OnInit {
     this.updateDisplayedItems();
   }
 
-  // Método chamado quando o usuário digita na barra de busca
   onSearch(): void {
     this.applyFilter();
   }
@@ -52,7 +51,7 @@ export class ProductsListingComponent implements OnInit {
   calculatePagination(): void {
     this.totalPages = Math.ceil(this.filteredProducts.length / this.itemsPerPage);
     if (this.currentPage > this.totalPages) {
-      this.currentPage = this.totalPages || 1; // Se totalPages for 0, define como 1
+      this.currentPage = this.totalPages || 1;
     }
     this.updateDisplayedPages();
   }
@@ -82,48 +81,43 @@ export class ProductsListingComponent implements OnInit {
   }
 
   get paginatedProducts(): Produto[] {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return this.filteredProducts.slice(startIndex, startIndex + this.itemsPerPage);
+    return this.paginationService.getPaginatedItems(this.filteredProducts, this.currentPage, this.itemsPerPage);
+  }
+
+  updateDisplayedItems(): void {
+    const { startItem, endItem } = this.paginationService.updateDisplayedItems(this.currentPage, this.itemsPerPage, this.filteredProducts.length);
+    this.startItem = startItem;
+    this.endItem = endItem;
   }
 
   previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.updateDisplayedPages();
-      this.updateDisplayedItems();
-    }
+    this.currentPage = this.paginationService.navigateToPage(this.currentPage, this.totalPages, 'previous');
+    this.updateDisplayedPages();
+    this.updateDisplayedItems();
   }
 
   nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.updateDisplayedPages();
-      this.updateDisplayedItems();
-    }
+    this.currentPage = this.paginationService.navigateToPage(this.currentPage, this.totalPages, 'next');
+    this.updateDisplayedPages();
+    this.updateDisplayedItems();
   }
 
   goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.updateDisplayedPages();
-      this.updateDisplayedItems();
-    }
+    this.currentPage = this.paginationService.navigateToPage(this.currentPage, this.totalPages, page);
+    this.updateDisplayedPages();
+    this.updateDisplayedItems();
   }
 
   goToFirstPage(): void {
-    if (this.currentPage !== 1) {
-      this.currentPage = 1;
-      this.updateDisplayedPages();
-      this.updateDisplayedItems();
-    }
+    this.currentPage = this.paginationService.navigateToPage(this.currentPage, this.totalPages, 'first');
+    this.updateDisplayedPages();
+    this.updateDisplayedItems();
   }
 
   goToLastPage(): void {
-    if (this.currentPage !== this.totalPages) {
-      this.currentPage = this.totalPages;
-      this.updateDisplayedPages();
-      this.updateDisplayedItems();
-    }
+    this.currentPage = this.paginationService.navigateToPage(this.currentPage, this.totalPages, 'last');
+    this.updateDisplayedPages();
+    this.updateDisplayedItems();
   }
 
   onChangeItemsPerPage(): void {
@@ -132,13 +126,6 @@ export class ProductsListingComponent implements OnInit {
     this.updateDisplayedItems();
   }
 
-  // Atualiza as informações de exibição
-  updateDisplayedItems(): void {
-    this.startItem = this.filteredProducts.length === 0 ? 0 : (this.currentPage - 1) * this.itemsPerPage + 1;
-    this.endItem = Math.min(this.currentPage * this.itemsPerPage, this.filteredProducts.length);
-  }
-
-  // Método para editar um produto (implementação fictícia)
   editProduct(id: number) {
     if (id !== undefined && id !== null) {
       this.router.navigate(['commerce/products', id]);

@@ -112,4 +112,8 @@ export class AzzoService {
   getAllOrders() {
     return this.http.get<Pedido[]>(`${this.baseUrl}sells`);
   }
+
+  getOrderById(id: number) {
+    return this.http.get<Pedido>(`${this.baseUrl}sells/${id}`);
+  }
 }

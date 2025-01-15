@@ -8,6 +8,7 @@ import { CustomerResolver } from './customer.resolver';
 import { CustomersDetailsComponent } from './customers-details/customers-details.component';
 import { OrderListingComponent } from './order-listing/order-listing.component';
 import { OrderResolver } from './order.resolver';
+import { OrderDetailsComponent } from './order-details/order-details.component';
 
 const routes: Routes = [
   {
@@ -38,6 +39,10 @@ const routes: Routes = [
     resolve: {
       orders: OrderResolver,
     },
+  },
+  {
+    path: 'orders/:id',
+    component: OrderDetailsComponent,
   },
 ];
 
