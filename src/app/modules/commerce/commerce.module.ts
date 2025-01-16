@@ -9,9 +9,18 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { CustomerListingComponent } from './customer-listing/customer-listing.component';
 import { CustomersDetailsComponent } from './customers-details/customers-details.component';
+import { OrderListingComponent } from './order-listing/order-listing.component';
+import { OrderDetailsComponent } from './order-details/order-details.component';
 
 @NgModule({
-  declarations: [ProductsListingComponent, ProductDetailsComponent, CustomerListingComponent, CustomersDetailsComponent],
+  declarations: [
+    ProductsListingComponent,
+    ProductDetailsComponent,
+    CustomerListingComponent,
+    CustomersDetailsComponent,
+    OrderListingComponent,
+    OrderDetailsComponent,
+  ],
   imports: [SharedModule, RouterModule, CommonModule, FormsModule, ReactiveFormsModule, CommerceRoutingModule, SweetAlert2Module.forChild()],
 })
 export class CommerceModule {}

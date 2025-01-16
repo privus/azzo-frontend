@@ -1,25 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente } from '../models/costumer.model';
+import { PaginationService } from '../../../core/services/pagination.service';
 
 @Component({
   selector: 'app-customer',
   templateUrl: './customer-listing.component.html',
-  styleUrl: './customer-listing.component.scss',
+  styleUrls: ['./customer-listing.component.scss'],
 })
 export class CustomerListingComponent implements OnInit {
   costumers: Cliente[] = [];
-  filteredCustomers: Cliente[] = []; // Produtos filtrados após a busca
+  filteredCustomers: Cliente[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 50;
   totalPages: number = 0;
-  displayedPages: number[] = []; // Páginas a serem exibidas na paginação
+  displayedPages: number[] = [];
   searchTerm: string = '';
   startItem: number = 0;
   endItem: number = 0;
 
   constructor(
     private route: ActivatedRoute,
+    private paginationService: PaginationService,
     private router: Router,
   ) {}
 
@@ -35,7 +37,7 @@ export class CustomerListingComponent implements OnInit {
     } else {
       const term = this.searchTerm.toLowerCase();
       this.filteredCustomers = this.costumers.filter(
-        (costumer) => costumer.nome.toLowerCase().includes(term) || (costumer.numero_doc && costumer.numero_doc.includes(term)),
+        (costumer) => costumer.nome_empresa.toLowerCase().includes(term) || (costumer.numero_doc && costumer.numero_doc.includes(term)),
       );
     }
     this.currentPage = 1;
@@ -79,62 +81,52 @@ export class CustomerListingComponent implements OnInit {
   }
 
   updateDisplayedItems(): void {
-    this.startItem = this.filteredCustomers.length === 0 ? 0 : (this.currentPage - 1) * this.itemsPerPage + 1;
-    this.endItem = Math.min(this.currentPage * this.itemsPerPage, this.filteredCustomers.length);
+    const { startItem, endItem } = this.paginationService.updateDisplayedItems(this.currentPage, this.itemsPerPage, this.filteredCustomers.length);
+    this.startItem = startItem;
+    this.endItem = endItem;
+  }
+
+  editCustomer(codigo: number): void {
+    this.router.navigate(['commerce/customers', codigo]);
   }
 
   get paginatedCustomer(): Cliente[] {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    return this.filteredCustomers.slice(startIndex, startIndex + this.itemsPerPage);
+    return this.paginationService.getPaginatedItems(this.filteredCustomers, this.currentPage, this.itemsPerPage);
   }
 
   previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.updateDisplayedPages();
-      this.updateDisplayedItems();
-    }
+    this.currentPage = this.paginationService.navigateToPage(this.currentPage, this.totalPages, 'previous');
+    this.updateDisplayedPages();
+    this.updateDisplayedItems();
   }
 
   nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.updateDisplayedPages();
-      this.updateDisplayedItems();
-    }
+    this.currentPage = this.paginationService.navigateToPage(this.currentPage, this.totalPages, 'next');
+    this.updateDisplayedPages();
+    this.updateDisplayedItems();
   }
 
   goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.updateDisplayedPages();
-      this.updateDisplayedItems();
-    }
+    this.currentPage = this.paginationService.navigateToPage(this.currentPage, this.totalPages, page);
+    this.updateDisplayedPages();
+    this.updateDisplayedItems();
   }
 
   goToFirstPage(): void {
-    if (this.currentPage !== 1) {
-      this.currentPage = 1;
-      this.updateDisplayedPages();
-      this.updateDisplayedItems();
-    }
+    this.currentPage = this.paginationService.navigateToPage(this.currentPage, this.totalPages, 'first');
+    this.updateDisplayedPages();
+    this.updateDisplayedItems();
   }
 
   goToLastPage(): void {
-    if (this.currentPage !== this.totalPages) {
-      this.currentPage = this.totalPages;
-      this.updateDisplayedPages();
-      this.updateDisplayedItems();
-    }
+    this.currentPage = this.paginationService.navigateToPage(this.currentPage, this.totalPages, 'last');
+    this.updateDisplayedPages();
+    this.updateDisplayedItems();
   }
 
   onChangeItemsPerPage(): void {
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
-  }
-
-  editCustomer(codigo: number): void {
-    this.router.navigate(['commerce/customers', codigo]);
   }
 }

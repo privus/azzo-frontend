@@ -73,7 +73,7 @@ export class ProductDetailsComponent implements OnInit {
       fotoUrl: product.fotoUrl,
       categoria_nome: product.categoria?.nome || null,
       fornecedor_id: product.fornecedor?.fornecedor_id || null,
-      descricao_uni: product.descricao_uni
+      descricao_uni: product.descricao_uni,
     });
   }
 }
