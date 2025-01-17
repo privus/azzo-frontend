@@ -14,4 +14,8 @@ export class OrderService {
   getOrderById(id: number) {
     return this.azzoService.getOrderById(id);
   }
+
+  getOrdersByDate(fromDate: string) {
+    return this.azzoService.getOrdersByDate(fromDate);
+  }
 }

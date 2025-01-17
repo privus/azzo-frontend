@@ -116,4 +116,8 @@ export class AzzoService {
   getOrderById(id: number) {
     return this.http.get<Pedido>(`${this.baseUrl}sells/${id}`);
   }
+
+  getOrdersByDate(fromDate: string) {
+    return this.http.get<Pedido[]>(`${this.baseUrl}sells?fromDate=${fromDate}`);
+  }
 }

@@ -1,237 +1,405 @@
 <div id="kt_app_content_container" class="app-container container-xxl">
-    <div *ngIf="order; else loading" id="kt_app_content_container" class="app-container container-xxl">
-        <!--begin::Form-->
-        <form
-            id="kt_ecommerce_add_customer_form"
-            class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework"
-            [formGroup]="orderForm"
-        >
-            <!--begin::Aside column-->
-            <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
-                <!--begin::Thumbnail settings-->
-               
-                <!--end::Thumbnail settings-->
+    <div
+      *ngIf="order; else loading"
+      id="kt_app_content_container"
+      class="app-container container-xxl"
+    >
+      <!--begin::Form-->
+      <form
+        id="kt_ecommerce_add_customer_form"
+        class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework"
+        [formGroup]="orderForm"
+      >
+        <!--begin::Aside column-->
+        <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
+          <!--begin::Status-->
+          <div class="card card-flush py-4">
+            <div class="card-header">
+              <div class="card-title">
+                <h2>Detalhes</h2>
+              </div>
+            </div>
+            <div class="card-body pt-0">
+              <div class="w-100">
+                <label class="form-label">Data/Hora</label>
+                <input
+                  type="text"
+                  name="name"
+                  class="form-control mb-2"
+                  placeholder="Data Criação"
+                  [value]="order.data_criacao | date: 'dd/MM/yyyy | HH:mm:ss'"
+                  disabled
+                />
+              </div>
+  
+              <div class="w-100">
+                <label class="form-label">Código</label>
+                <input
+                  type="text"
+                  name="doc"
+                  class="form-control mb-2"
+                  placeholder="Código"
+                  formControlName="codigo"
+                  disable
+                />
+              </div>
+  
+              <div class="w-100">
+                <label class="form-label">Vendedor</label>
+                <input
+                  type="text"
+                  name="ie"
+                  class="form-control mb-2"
+                  placeholder="Vendedor"
+                  formControlName="vendedor"
+                  disable
+                />
+              </div>
+            </div>
+          </div>
+          <!--end::Status-->
+  
+          <div class="card card-flush py-4" data-select2-id="select2-data-147-3qmn">
+            <!--begin::Card header-->
+            <div class="card-header">
+              <!--begin::Card title-->
+              <div class="card-title">
+                <h2>Status</h2>
+              </div>
+              <!--end::Card title-->
+  
+              <!--begin::Card toolbar-->
+              <div class="card-toolbar">
+                <div
+                  class="rounded-circle bg-success w-15px h-15px"
+                  id="kt_ecommerce_add_product_status"
+                ></div>
+              </div>
+              <!--end::Card toolbar-->
+            </div>
+            <!--end::Card header-->
+  
+            <!--begin::Card body-->
+            <div class="card-body pt-0" data-select2-id="select2-data-146-bwni">
+              <!--begin::Select2-->
+              <select
+                class="form-select mb-2"
+                formControlName="status"
+                data-control="select2"
+                data-hide-search="true"
+                data-placeholder="Select a status"
+              >
+                <option value="11138">Aguardando Aprovação</option>
+                <option value="11139">Pedido</option>
+                <option value="11468">Reprovado</option>
+                <option value="11491">Faturado</option>
+                <option value="11541">Pronto para Envio</option>
+                <option value="11542">Enviado</option>
+                <option value="11543">Entregue</option>
+              </select>
+              <!--end::Select2-->
+  
+              <!--begin::Datepicker-->
+              <!--end::Datepicker-->
+            </div>
+            <!--end::Card body-->
+          </div>
+  
 
-                <!--begin::Status-->
-                <div class="card card-flush py-4">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h2>Detalhes</h2>
+                <div class="card card-flush h-xl-100">
+                <!--begin::Header-->
+                <div class="card-header pt-7">
+                    <!--begin::Title-->
+                    <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bold text-gray-900">Parcelas</span>
+                    <span class="text-gray-500 mt-1 fw-semibold fs-6">
+                        {{ order.parcela_credito.length || 0 }} Parcelas
+                    </span>
+                    </h3>
+                    <!--end::Title-->
+            
+                    <!--begin::Toolbar (opcional)-->
+                    <div class="card-toolbar">
+                    <a href="#" class="btn btn-sm btn-light">Detalhes do Pedido</a>
+                    </div>
+                    <!--end::Toolbar-->
+                </div>
+                <!--end::Header-->
+            
+                <!--begin::Body-->
+                <div class="card-body">
+                    <!--begin::Scroll (altura fixa p/ scroll interno, ajuste se preferir)-->
+                    <div class="hover-scroll-overlay-y pe-6 me-n6" style="height: 415px">
+                    <!--begin::Item (repete para cada parcela)-->
+                    <div
+                        class="border border-dashed border-gray-300 rounded px-7 py-3 mb-6"
+                        *ngFor="let parcela of order?.parcela_credito"
+                    >
+                        <!--begin::Info-->
+                        <div class="d-flex flex-stack mb-3">
+                        <!--begin::Wrapper-->
+                        <div class="me-3">
+                            <!--Título da parcela-->
+                            <a href="#" class="text-gray-800 text-hover-primary fw-bold"
+                            >Parcela #{{ parcela.numero }}</a
+                            >
                         </div>
+                        <!--end::Wrapper-->
+            
+                        <!--begin::Action (menu/botão) - opcional-->
+                        <div class="m-0">
+                            <button
+                            class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
+                            data-kt-menu-trigger="click"
+                            data-kt-menu-placement="bottom-end"
+                            data-kt-menu-overflow="true"
+                            >
+                            <i class="ki-duotone ki-dots-square fs-1">
+                                <span class="path1"></span><span class="path2"></span
+                                ><span class="path3"></span><span class="path4"></span>
+                            </i>
+                            </button>
+                            <!-- Você pode inserir aqui o mesmo menu dropdown do exemplo, se desejar -->
+                        </div>
+                        <!--end::Action-->
+                        </div>
+                        <!--end::Info-->
+            
+                        <!--begin::Customer (neste caso, exibindo vencimento e status)-->
+                        <div class="d-flex flex-stack">
+                        <!-- Vencimento -->
+                        <span class="text-gray-500 fw-bold"
+                            >Vencimento:
+                            <span class="text-gray-800 text-hover-primary fw-bold">
+                            {{ parcela.data_vencimento | date: 'dd/MM/yyyy' }}
+                            </span>
+                        </span>
+            
+                        <!-- Badge do status (Paga / Em Aberto) -->
+                        <span
+                            class="badge"
+                            [ngClass]="{
+                            'badge-light-success': parcela.data_pagamento,
+                            'badge-light-danger': !parcela.data_pagamento
+                            }"
+                        >
+                            {{ parcela.status_pagamento.nome }}
+                        </span>
+                        </div>
+                        <!--end::Customer-->
+            
+                        <!-- Valor da parcela -->
+                        <div class="d-flex flex-stack mt-3">
+                        <span class="text-gray-500 fw-bold"
+                            >Valor:
+                            <span class="text-gray-800 fw-bold"
+                            >{{ parcela.valor | currency: 'BRL' }}</span
+                            >
+                        </span>
+                        </div>
+                    </div>
+                    <!--end::Item-->
+                    </div>
+                    <!--end::Scroll-->
+                </div>
+                <!--end::Body-->
+                </div>
+                <!--end::List widget 5-->
+            </div>
+  
+        <!--begin::Main column-->
+        <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+          <div class="tab-content">
+            <div
+              class="tab-pane fade show active"
+              id="kt_ecommerce_add_customer_general"
+              role="tab-panel"
+            >
+              <div class="d-flex flex-column gap-7 gap-lg-10">
+                <!--begin::General options-->
+                <div class="card card-flush py-4">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <h2>Informações Cliente</h2>
+                    </div>
+                  </div>
+                  <div class="card-body pt-0">
+                    <div class="card-body pt-0">
+                      <label class="form-label">Nome Empresa</label>
+                      <input
+                        type="text"
+                        name="company_name"
+                        class="form-control mb-2"
+                        placeholder="Nome Empresa"
+                        formControlName="nome_empresa"
+                        disable
+                      />
                     </div>
                     <div class="card-body pt-0">
-                        <div class="w-100">
-                            <label class="form-label">Data/Hora</label>
-                            <input type="text" name="name" class="form-control mb-2" placeholder="Data Criação"  [value]="order.data_criacao | date:'dd/MM/yyyy | HH:mm:ss'" disabled/>
-                        </div>
-
-                        <div class="w-100">
-                            <label class="form-label">Código</label>
-                            <input type="text" name="doc" class="form-control mb-2" placeholder="Código" formControlName="codigo" disable />
-                        </div>
-
-                        <div class="w-100">
-                            <label class="form-label">Vendedor</label>
-                            <input type="text" name="ie" class="form-control mb-2" placeholder="Vendedor" formControlName="vendedor" disable />
-                        </div>
-
-                    </div>
-                </div>
-                <!--end::Status-->
-
-                <div class="card card-flush py-4" data-select2-id="select2-data-147-3qmn">
-                    <!--begin::Card header-->
-                    <div class="card-header">
-                        <!--begin::Card title-->
-                        <div class="card-title">
-                            <h2>Status</h2>
-                        </div>
-                        <!--end::Card title-->
-                
-                        <!--begin::Card toolbar-->
-                        <div class="card-toolbar">
-                            <div class="rounded-circle bg-success w-15px h-15px" id="kt_ecommerce_add_product_status"></div>
-                        </div>
-                        <!--end::Card toolbar-->
-                    </div>
-                    <!--end::Card header-->
-                
-                    <!--begin::Card body-->
-                    <div class="card-body pt-0" data-select2-id="select2-data-146-bwni">
-                        <!--begin::Select2-->
-                        <select class="form-select mb-2" formControlName="status" data-control="select2" data-hide-search="true" data-placeholder="Select a status">
-                            <option value="11138">Aguardando Aprovação</option>
-                            <option value="11139">Pedido</option>
-                            <option value="11468">Reprovado</option>
-                            <option value="11491">Faturado</option>
-                            <option value="11541">Pronto para Envio</option>
-                            <option value="11542">Enviado</option>
-                            <option value="11543">Entregue</option>
-                        </select>
-                        <!--end::Select2-->
-                
-                        <!--begin::Datepicker-->
-
-                        <!--end::Datepicker-->
-                    </div>
-                    <!--end::Card body-->
-                </div>             
-
-                <!--begin::Weekly sales-->
-                <div class="card card-flush py-4">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <h2>Weekly Sales</h2>
-                        </div>
+                      <div>
+                        <label class="form-label">CNPJ</label>
+                        <input
+                          type="text"
+                          name="email"
+                          class="form-control"
+                          placeholder="CNPJ"
+                          formControlName="cnpj"
+                          disable
+                        />
+                      </div>
                     </div>
                     <div class="card-body pt-0">
-                        <span class="text-muted">No data available. Sales data will begin capturing once customer has been added.</span>
+                      <div>
+                        <label class="form-label">Telefone</label>
+                        <input
+                          type="text"
+                          name="phone"
+                          class="form-control"
+                          placeholder="Telefone"
+                          formControlName="telefone"
+                          disable
+                        />
+                      </div>
                     </div>
-                </div>
-                <!--end::Weekly sales-->
-            </div>
-            <!--end::Aside column-->
-
-            <!--begin::Main column-->
-            <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="kt_ecommerce_add_customer_general" role="tab-panel">
-                        <div class="d-flex flex-column gap-7 gap-lg-10">
-                            <!--begin::General options-->
-                            <div class="card card-flush py-4">
-                                <div class="card-header">
-                                    <div class="card-title">
-                                        <h2>Informações Cliente</h2>
-                                    </div>
-                                </div>
-
-                                <div class="card-body pt-0">
-                                    <div class="card-body pt-0">
-                                        <label class="form-label">Nome Empresa</label>
-                                        <input type="text" name="company_name" class="form-control mb-2" placeholder="Nome Empresa" formControlName="nome_empresa" disable />
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <div>
-                                            <label class="form-label">CNPJ</label>
-                                            <input type="text" name="email" class="form-control" placeholder="CNPJ" formControlName="cnpj" disable />
-                                        </div>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <div>
-                                            <label class="form-label">Telefone</label>
-                                            <input type="text" name="phone" class="form-control" placeholder="Telefone" formControlName="telefone" disable />
-                                        </div>
-                                    </div>
-                                    <div class="card-body pt-0">
-                                        <div>
-                                            <label class="form-label">Email</label>
-                                            <input type="text" name="email" class="form-control" placeholder="Email" formControlName="email" disable />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--end::General options-->
-
-                            <!--begin::Pricing-->
-                            <div class="card card-flush py-4">
-                                <div class="card-header">
-                                    <div class="card-title">
-                                        <h2>Pedido</h2>
-                                    </div>
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="table-responsive">
-                                        <!--begin::Table-->
-                                        <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0">
-                                            <thead>
-                                                <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-                                                    <th class="min-w-175px">Product</th>
-                                                    <th class="min-w-100px text-end">Código</th>
-                                                    <th class="min-w-70px text-end">Qtd</th>
-                                                    <th class="min-w-100px text-end">Preço Tabela</th>
-                                                    <th class="min-w-100px text-end">Preço Venda</th>
-                                                    <th class="min-w-100px text-end">Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="fw-semibold text-gray-600">
-                                                <tr *ngFor="let item of order.itensVenda">
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <!--end::Thumbnail-->
-                                
-                                                            <!--begin::Title-->
-                                                            <div class="ms-5">
-                                                                <a href="#" class="fw-bold text-gray-600 text-hover-primary">{{ item.produto.nome }}</a>
-                                                                <div class="fs-7 text-muted">{{ item.produto.descricao_uni }}</div>
-                                                            </div>
-                                                            <!--end::Title-->
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-end">
-                                                        {{ item.produto.codigo}}
-                                                    </td>
-                                                    <td class="text-end">
-                                                        {{ item.quantidade }}
-                                                    </td>
-                                                    <td class="text-end">
-                                                        ${{ item.produto.preco_venda }}
-                                                    </td>
-                                                    <td class="text-end">
-                                                        ${{ item.valor_unitario }}
-                                                    </td>
-                                                    <td class="text-end">
-                                                        ${{ item.valor_total }}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="5" class="text-end">Flex Gerado</td>
-                                                    <td class="text-end">${{ order.flex_gerado }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="5" class="text-end">Desconto</td>
-                                                    <td class="text-end">${{ +order.desconto < 0 ? 0 : order.desconto }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="5" class="text-end">Valor Total</td>
-                                                    <td class="text-end fw-bold">${{ order.valor_final}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <!--end::Table-->
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            <!--end::Pricing-->
-                        </div>
+                    <div class="card-body pt-0">
+                      <div>
+                        <label class="form-label">Email</label>
+                        <input
+                          type="text"
+                          name="email"
+                          class="form-control"
+                          placeholder="Email"
+                          formControlName="email"
+                          disable
+                        />
+                      </div>
                     </div>
-                    <!--end::Tab pane-->
-
+                  </div>
                 </div>
-
-                <div class="d-flex justify-content-end">
-                    <a href="/metronic8/demo1/apps/ecommerce/customers.html" id="kt_ecommerce_add_customer_cancel" class="btn btn-light me-5" disabled>
-                        Cancel
-                    </a>
-
-                    <button type="submit" id="kt_ecommerce_add_customer_submit" class="btn btn-primary" disabled>
-                        <span class="indicator-label">
-                            Save Changes
-                        </span>
-                        <span class="indicator-progress">
-                            Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                        </span>
-                    </button>
+                <!--end::General options-->
+  
+                <!--begin::Pricing-->
+                <div class="card card-flush py-4">
+                  <div class="card-header">
+                    <div class="card-title">
+                      <h2>Pedido</h2>
+                    </div>
+                  </div>
+                  <div class="card-body pt-0">
+                    <div class="table-responsive">
+                      <!--begin::Table-->
+                      <table
+                        class="table align-middle table-row-dashed fs-6 gy-5 mb-0"
+                      >
+                        <thead>
+                          <tr
+                            class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0"
+                          >
+                            <th class="min-w-175px">Product</th>
+                            <th class="min-w-100px text-end">Código</th>
+                            <th class="min-w-70px text-end">Qtd</th>
+                            <th class="min-w-100px text-end">Preço Tabela</th>
+                            <th class="min-w-100px text-end">Preço Venda</th>
+                            <th class="min-w-100px text-end">Total</th>
+                          </tr>
+                        </thead>
+                        <tbody class="fw-semibold text-gray-600">
+                          <tr *ngFor="let item of order.itensVenda">
+                            <td>
+                              <div class="d-flex align-items-center">
+                                <!--begin::Title-->
+                                <div class="ms-5">
+                                  <a
+                                    href="#"
+                                    class="fw-bold text-gray-600 text-hover-primary"
+                                    >{{ item.produto.nome }}</a
+                                  >
+                                  <div class="fs-7 text-muted">
+                                    {{ item.produto.descricao_uni }}
+                                  </div>
+                                </div>
+                                <!--end::Title-->
+                              </div>
+                            </td>
+                            <td class="text-end">
+                              {{ item.produto.codigo }}
+                            </td>
+                            <td class="text-end">
+                              {{ item.quantidade }}
+                            </td>
+                            <td class="text-end">
+                              ${{ item.produto.preco_venda }}
+                            </td>
+                            <td class="text-end">
+                              ${{ item.valor_unitario }}
+                            </td>
+                            <td class="text-end">
+                              ${{ item.valor_total }}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="5" class="text-end">Flex Gerado</td>
+                            <td class="text-end">${{ order.flex_gerado }}</td>
+                          </tr>
+                          <tr>
+                            <td colspan="5" class="text-end">Desconto</td>
+                            <td class="text-end">
+                              ${{ +order.desconto < 0 ? 0 : order.desconto }}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="5" class="text-end">Valor Total</td>
+                            <td class="text-end fw-bold">
+                              ${{ order.valor_final }}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <!--end::Table-->
+                    </div>
+                  </div>
                 </div>
+                <!--end::Pricing-->
+              </div>
             </div>
-            <!--end::Main column-->
-        </form>
-        <!--end::Form-->
+            <!--end::Tab pane-->
+          </div>
+  
+          <div class="d-flex justify-content-end">
+            <a
+              href="/metronic8/demo1/apps/ecommerce/customers.html"
+              id="kt_ecommerce_add_customer_cancel"
+              class="btn btn-light me-5"
+              disabled
+            >
+              Cancel
+            </a>
+            <button
+              type="submit"
+              id="kt_ecommerce_add_customer_submit"
+              class="btn btn-primary"
+              disabled
+            >
+              <span class="indicator-label">Save Changes</span>
+              <span class="indicator-progress"
+                >Please wait...
+                <span
+                  class="spinner-border spinner-border-sm align-middle ms-2"
+                ></span>
+              </span>
+            </button>
+          </div>
+        </div>
+        <!--end::Main column-->
+      </form>
+      <!--end::Form-->
     </div>
-</div>
-<ng-template #loading>
+  </div>
+  
+  <ng-template #loading>
     <div id="splash-screen" class="splash-screen">
-        <img src="./assets/media/logos/azzo_simbolo.svg" alt="Azzo logo" />
-        <span>Loading ...</span>
+      <img src="./assets/media/logos/azzo_simbolo.svg" alt="Azzo logo" />
+      <span>Loading ...</span>
     </div>
-</ng-template>
+  </ng-template>
+  
