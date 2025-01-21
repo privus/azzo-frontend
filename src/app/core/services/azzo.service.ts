@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthLogin, AuthTokens } from '../../modules/auth/models/auth.model';
 import { Cargo, Cidade, NewUser, UserUpdate, Usuario, CargoPermissao, Permissao } from '../../modules/account/models/user.model';
 import { Produto, Cliente, Pedido } from '../../modules/commerce/models';
+import { Credito } from '../../modules/financial/modal/credit.modal';
 
 @Injectable()
 export class AzzoService {
@@ -119,5 +120,10 @@ export class AzzoService {
 
   getOrdersByDate(fromDate: string) {
     return this.http.get<Pedido[]>(`${this.baseUrl}sells?fromDate=${fromDate}`);
+  }
+
+  //Financeiro
+  getFinancialCredits() {
+    return this.http.get<Credito[]>(`${this.baseUrl}credits`);
   }
 }

@@ -14,6 +14,7 @@ import { CoreModule } from './core/core.module';
 import { AccountModule } from './modules/account/account.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { CommerceModule } from './modules/commerce/commerce.module';
+import { FinancialModule } from './modules/financial/financial.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,6 +31,7 @@ import { CommerceModule } from './modules/commerce/commerce.module';
     SweetAlert2Module.forRoot(),
     AccountModule,
     CommerceModule,
+    FinancialModule,
   ],
   bootstrap: [AppComponent],
   providers: [provideAnimationsAsync()],
