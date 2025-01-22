@@ -1,6 +1,5 @@
 // Content
 export * from './content/dropdown-menus/dropdown-menus.module';
-export * from './content/chat-inner/chat-inner.module';
 export * from './content/cards/cards.module';
 export * from './content/cards/icon-user.model';
 
