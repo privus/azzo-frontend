@@ -22,10 +22,6 @@ const Routing: Routes = [
     loadChildren: () => import('./role/role.module').then((m) => m.RoleModule),
   },
   {
-    path: 'apps/permissions',
-    loadChildren: () => import('./permission/permission.module').then((m) => m.PermissionModule),
-  },
-  {
     path: 'commerce',
     loadChildren: () => import('../modules/commerce/commerce.module').then((m) => m.CommerceModule),
   },
