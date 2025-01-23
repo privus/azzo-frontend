@@ -16,12 +16,15 @@
                 class="form-select form-select-solid form-select-lg"  
                 id="filterDate" 
                 [(ngModel)]="dataRange" 
-                (ngModelChange)="showCustomDatePicker = this.dataRange === 'custom'"
+                (ngModelChange)="showCustomDatePicker = dataRange === 'custom'"
                 >   
+                    <option value="">Data Vencimento</option>
                     <option value="today">Hoje</option>
-                    <option value="yesterday">Ontem</option>
-                    <option value="last7">Últimos 7 Dias</option>
-                    <option value="last30">Últimos 30 Dias</option>
+                    <option value="tomorrow">Amanhã</option>
+                    <option value="next7">Próximos 7 Dias</option>
+                    <option value="next15">Próximos 15 Dias</option>
+                    <option value="next30">Próximos 30 Dias</option>
+                    <option value="nextMonth">Próximos Mês</option>
                     <option value="thisMonth">Este Mês</option>
                     <option value="lastMonth">Mês Passado</option>
                     <option value="custom">Entre Datas</option>
@@ -33,7 +36,7 @@
                     <input type="date" class="form-control form-control-solid w-150px ps-12 ms-3" [(ngModel)]="customDateRange.end" />
                 </div>
             </div>         
-            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9">Apply</button>
+            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRangeChange()">Apply</button>
             <div class="d-flex align-items-center position-absolute my-1 ms-8 end-0  me-10">
               <select
                 class="form-select form-select-solid form-select-lg"
@@ -75,7 +78,11 @@
                         <td>{{ credit.valor | currency:'BRL' }}</td>
                         <td>{{ credit.juros || 0 | currency:'BRL' }}</td>
                         <td>{{ credit.data_vencimento | date:'dd/MM/yyyy'}}</td>
-                        <td>{{ credit.status_pagamento.nome }}</td>
+                        <td>                            
+                            <span class="badge td" [ngClass]="getStatusClass(credit.status_pagamento.status_pagamento_id)">
+                            {{ credit.status_pagamento.nome }}
+                            </span>  
+                        </td>   
 
                         <td class="text-end">
                             <button

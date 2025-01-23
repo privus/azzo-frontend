@@ -101,6 +101,23 @@ export class OrderListingComponent implements OnInit {
     }
   }
 
+  getStatusPagClass(statusId: number): string {
+    switch (statusId) {
+      case 1: // Pendente
+        return 'badge py-2 px-3 fs-7 badge-light-warning opacity-75 text-muted';
+      case 2: // Pago
+        return 'badge py-2 px-3 fs-7 badge-light-primary opacity-75 text-muted';
+      case 3: // Atrasado
+        return 'badge py-3 px-4 fs-7 badge-light-danger text-dark';
+      case 4: // Cancelado
+        return 'badge py-2 px-3 fs-7 badge-light-info opacity-75 text-muted';
+      default:
+        return 'badge py-2 px-3 fs-7 badge-light-secondary opacity-50 text-muted';
+    }
+  }
+  
+
+
   onDateChange(event: any): void {
     const selectedDate = new Date(event.target.value);
     this.filteredOrders = this.orders.filter((item) => {

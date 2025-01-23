@@ -4,13 +4,14 @@ import { AuthLogin, AuthTokens } from '../../modules/auth/models/auth.model';
 import { Cargo, Cidade, NewUser, UserUpdate, Usuario, CargoPermissao, Permissao } from '../../modules/account/models/user.model';
 import { Produto, Cliente, Pedido } from '../../modules/commerce/models';
 import { Credito } from '../../modules/financial/modal/credit.modal';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class AzzoService {
   private baseUrl: string;
 
   constructor(private readonly http: HttpClient) {
-    this.baseUrl = 'http://localhost:3000/';
+    this.baseUrl = environment.apiUrl;
   }
 
   // Autenticação
@@ -125,5 +126,9 @@ export class AzzoService {
   //Financeiro
   getFinancialCredits() {
     return this.http.get<Credito[]>(`${this.baseUrl}credits`);
+  }
+
+  getFinancialCreditsByDateRange(fromDate: string, toDate: string) {
+    return this.http.get<Credito[]>(`${this.baseUrl}credits/date?fromDate=${fromDate}&toDate=${toDate}`);
   }
 }

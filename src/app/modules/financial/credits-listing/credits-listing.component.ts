@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Credito } from '../modal/credit.modal';
 import { ActivatedRoute } from '@angular/router';
 import { PaginationService } from 'src/app/core/services/pagination.service';
+import { CreditService } from '../services/credit.service';
 
 @Component({
   selector: 'app-credits-listing',
@@ -26,6 +27,8 @@ export class CreditsListingComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private paginationService: PaginationService,
+    private readonly creditService: CreditService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -156,5 +159,106 @@ export class CreditsListingComponent implements OnInit {
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
+  }
+
+  getStatusClass(statusId: number): string {
+    switch (statusId) {
+      case 1: // Pendente
+        return 'badge py-3 px-4 fs-7 badge-light-warning';
+      case 2: // Pago
+        return 'badge py-3 px-4 fs-7 badge-light-primary';
+      case 3: // Atrasado
+        return 'badge py-3 px-4 fs-7 badge-light-danger';
+      case 4: // Cancelado
+        return 'badge py-3 px-4 fs-7 badge-light-info';
+      default:
+        return 'badge py-3 px-4 fs-7 badge-light-secondary';
+    }
+  }
+
+  onDateRangeChange(): void {
+    const selectedRange = this.dataRange;
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
+    let startDate = new Date(now);
+    let endDate = new Date(now);
+
+    switch (selectedRange) {
+      case 'today':
+        break;
+
+      case 'tomorrow':
+        startDate.setDate(now.getDate() + 1);
+        endDate = new Date(startDate);
+        break;
+
+      case 'next7':
+        endDate.setDate(now.getDate() + 7);
+        break;
+
+      case 'next15':
+        endDate.setDate(now.getDate() + 15);
+        break;
+
+      case 'next30':
+        endDate.setDate(now.getDate() + 30);
+        break;
+
+      case 'nextMonth':
+        startDate.setMonth(now.getMonth() + 1);
+        endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + 1);
+        endDate.setDate(0); // Último dia do mês
+        break;
+
+      case 'thisMonth':
+        startDate.setDate(1);
+        endDate.setMonth(now.getMonth() + 1);
+        endDate.setDate(0); // Último dia deste mês
+        break;
+
+      case 'lastMonth':
+        startDate.setMonth(now.getMonth() - 1);
+        startDate.setDate(1);
+        endDate = new Date(startDate);
+        endDate.setMonth(startDate.getMonth() + 1);
+        endDate.setDate(0); // Último dia do mês passado
+        break;
+
+      case 'custom':
+        this.showCustomDatePicker = true;
+        return;
+
+      default:
+        // Se não escolheu nada, pega tudo desde 1970 até hoje
+        startDate = new Date(0);
+        endDate = new Date(now);
+        break;
+    }
+
+    const fromDate = this.formatDate(startDate);
+    const toDate = this.formatDate(endDate);
+    console.log('Filtrando por intervalo de datas:', fromDate, toDate);
+
+    // Faz a requisição ao backend com ambos os parâmetros
+    this.creditService.getCreditsByDateRange(fromDate, toDate).subscribe({
+      next: (credits) => {
+        // Sobrescreve o array principal
+        this.credits = credits;
+        console.log('Pedidos filtrados:', credits);
+        this.applyFilter();
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Erro ao filtrar por intervalo de datas:', err),
+    });
+  }
+
+  // Utilitário para formatar data em yyyy-MM-dd
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

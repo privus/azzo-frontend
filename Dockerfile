@@ -1,5 +1,5 @@
 # Usa a imagem oficial do Node.js com Bullseye
-FROM node:18-bullseye
+FROM node:18
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /usr/src/app

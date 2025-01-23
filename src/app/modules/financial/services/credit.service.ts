@@ -10,4 +10,8 @@ export class CreditService {
   getAllCredits() {
     return this.azzoService.getFinancialCredits();
   }
+
+  getCreditsByDateRange(start: string, end: string) {
+    return this.azzoService.getFinancialCreditsByDateRange(start, end);
+  }
 }
