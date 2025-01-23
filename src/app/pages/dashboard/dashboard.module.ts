@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { ModalsModule } from '../../_metronic/partials';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
-import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -18,7 +17,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
       },
     ]),
     ModalsModule,
-    NgApexchartsModule,
   ],
 })
 export class DashboardModule {}

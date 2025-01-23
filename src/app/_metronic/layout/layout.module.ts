@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { RouterModule, Routes } from '@angular/router';
 import { NgbDropdownModule, NgbProgressbarModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
 import { TranslationModule } from '../../modules/i18n';
 import { LayoutComponent } from './layout.component';
 import { ExtrasModule } from '../partials/layout/extras/extras.module';
@@ -16,13 +15,11 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { TopbarComponent } from './components/topbar/topbar.component';
 import { PageTitleComponent } from './components/header/page-title/page-title.component';
 import { HeaderMenuComponent } from './components/header/header-menu/header-menu.component';
-import { DrawersModule, DropdownMenusModule, ModalsModule, EngagesModule } from '../partials';
-import { EngagesComponent } from '../partials/layout/engages/engages.component';
+import { DropdownMenusModule, ModalsModule } from '../partials';
 import { ThemeModeModule } from '../partials/layout/theme-mode-switcher/theme-mode.module';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SidebarLogoComponent } from './components/sidebar/sidebar-logo/sidebar-logo.component';
 import { SidebarMenuComponent } from './components/sidebar/sidebar-menu/sidebar-menu.component';
-import { SidebarFooterComponent } from './components/sidebar/sidebar-footer/sidebar-footer.component';
 import { NavbarComponent } from './components/header/navbar/navbar.component';
 import { AccountingComponent } from './components/toolbar/accounting/accounting.component';
 import { ClassicComponent } from './components/toolbar/classic/classic.component';
@@ -30,7 +27,6 @@ import { ExtendedComponent } from './components/toolbar/extended/extended.compon
 import { ReportsComponent } from './components/toolbar/reports/reports.component';
 import { SaasComponent } from './components/toolbar/saas/saas.component';
 import { SharedModule } from '../shared/shared.module';
-import { UserService } from '../../core/services/user-service';
 
 const routes: Routes = [
   {
@@ -51,11 +47,9 @@ const routes: Routes = [
     TopbarComponent,
     PageTitleComponent,
     HeaderMenuComponent,
-    EngagesComponent,
     SidebarComponent,
     SidebarLogoComponent,
     SidebarMenuComponent,
-    SidebarFooterComponent,
     NavbarComponent,
     AccountingComponent,
     ClassicComponent,
@@ -72,15 +66,11 @@ const routes: Routes = [
     NgbProgressbarModule,
     ExtrasModule,
     ModalsModule,
-    DrawersModule,
-    EngagesModule,
     DropdownMenusModule,
     NgbTooltipModule,
-    TranslateModule,
     ThemeModeModule,
     SharedModule,
   ],
-  providers: [UserService],
   exports: [RouterModule],
 })
 export class LayoutModule {}

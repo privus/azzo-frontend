@@ -1,5 +1,5 @@
-# Usa a imagem oficial do Node.js
-FROM node:18-alpine
+# Usa a imagem oficial do Node.js com Bullseye
+FROM node:18
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /usr/src/app
@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 # Copia o arquivo de dependências para o container
 COPY package*.json ./
 
-# Instala as dependências
+# Instalação de dependências
 RUN npm install
 
 # Copia o código do projeto para o diretório de trabalho
