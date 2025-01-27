@@ -1,9 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Pedido } from '../models/order.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationService } from '../../../core/services/pagination.service';
 import { OrderService } from '../services/order.service';
+import { SweetAlertOptions } from 'sweetalert2';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-order-listing',
@@ -24,6 +27,10 @@ export class OrderListingComponent implements OnInit {
   showCustomDatePicker: boolean = false;
   customDateRange: { start: string; end: string } = { start: '', end: '' };
   selectedStatus: string = '';
+  @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
+  swalOptions: SweetAlertOptions = {};
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  sortDirection: 'asc' | 'desc' = 'asc';
 
 
   constructor( 
@@ -37,19 +44,64 @@ export class OrderListingComponent implements OnInit {
   ngOnInit(): void {
     this.orders = this.route.snapshot.data['orders'];
     console.log('PEDIDOS ===> ', this.orders);
+    this.sortByDate('asc'); // Ordenação padrão em ordem ascendente
     this.applyFilter();
   }
+
+  sortByDate(direction: 'asc' | 'desc' = 'asc'): void {
+    this.filteredOrders.sort((a, b) => {
+      const dateA = new Date(a.data_criacao).getTime();
+      const dateB = new Date(b.data_criacao).getTime();
+  
+      return direction === 'desc' ? dateA - dateB : dateB - dateA;
+    });
+    this.sortDirection = direction;
+  }
+  
+
+  showAlert(swalOptions: SweetAlertOptions) {
+    this.swalOptions = swalOptions;
+    this.cdr.detectChanges();
+    this.noticeSwal.fire();
+  }
+
+  syncroSells(): void {
+    this.isLoading$.next(true);
+    this.orderService.syncroAllOrders().subscribe({
+      next: (resp) => {
+        this.showAlert({
+          icon: 'success',
+          title: 'Sincronização concluída com sucesso!',
+          text: resp.message,
+          confirmButtonText: 'Ok',
+        });
+        this.isLoading$.next(false);
+        this.onDateRangeChange()
+        this.cdr.detectChanges();
+      },
+      complete: () => {
+        console.log('Sync complete');
+      },
+      error: (err) => {
+        this.showAlert({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Não foi possível sincronizar os pedidos.',
+          confirmButtonText: 'Ok',
+        });
+        this.cdr.detectChanges();
+        console.error(err);
+      },
+    });
+  }  
 
   onSearch(): void {
     this.applyFilter();
   }
 
   applyFilter(): void {
-    // 1) Partir do array principal que está na memória.
-    //    (Esse array já pode ter sido atualizado pelo filtro de data ou pela API).
     let result = [...this.orders];
-  
-    // 2) Filtrar por texto (searchTerm) se houver
+
     const term = this.searchTerm.trim().toLowerCase();
     if (term) {
       result = result.filter((order) => {
@@ -71,6 +123,8 @@ export class OrderListingComponent implements OnInit {
   
     // 4) Atualiza filteredOrders e a paginação
     this.filteredOrders = result;
+      // Ordene os pedidos filtrados por data
+  this.sortByDate(this.sortDirection);
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
@@ -114,9 +168,7 @@ export class OrderListingComponent implements OnInit {
       default:
         return 'badge py-2 px-3 fs-7 badge-light-secondary opacity-50 text-muted';
     }
-  }
-  
-
+  } 
 
   onDateChange(event: any): void {
     const selectedDate = new Date(event.target.value);

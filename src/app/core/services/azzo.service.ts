@@ -123,6 +123,10 @@ export class AzzoService {
     return this.http.get<Pedido[]>(`${this.baseUrl}sells?fromDate=${fromDate}`);
   }
 
+  syncroAllOrders() {
+    return this.http.get<{ message: string }>(`${this.baseUrl}sells/syncro`);
+  }
+
   //Financeiro
   getFinancialCredits() {
     return this.http.get<Credito[]>(`${this.baseUrl}credits`);
