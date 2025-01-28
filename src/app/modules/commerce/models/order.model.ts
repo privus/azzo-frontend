@@ -20,6 +20,7 @@ export interface Pedido {
   status_pagamento: StatusPagamento;
   status_venda: StatusVenda;
   parcela_credito: ParcelaCredito[];
+  tipo_pedido: TipoPedido;
 }
 
 export interface Vendedor {
@@ -57,4 +58,9 @@ export interface ParcelaCredito {
   data_vencimento: string;
   data_pagamento: string | null;
   status_pagamento: StatusPagamento;
+}
+
+export interface TipoPedido {
+  tipo_pedido_id: number;
+  nome: string;
 }

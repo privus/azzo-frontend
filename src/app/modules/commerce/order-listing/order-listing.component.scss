@@ -1,42 +1,13 @@
-/* Cores baseadas no ID do status */
-.badge-11138 {
-    background-color: #ff2525 !important;
-    color: #ffffff !important;
-}
-
-.badge-11139 {
-    background-color: #00ff5d !important;
-    color: #000000 !important;
-}
-
-.badge-11468 {
-    background-color: #ff001f !important;
-    color: #ffffff !important;
-}
-
-.badge-11491 {
-    background-color: #0b00ff !important;
-    color: #ffffff !important;
-}
-
-.badge-11541 {
-    background-color: #8d7b06 !important;
-    color: #ffffff !important;
-}
-
-.badge-11542 {
-    background-color: #03ffb0 !important;
-    color: #000000 !important;
-}
-
-.badge-11543 {
-    background-color: #006b36 !important;
-    color: #ffffff !important;
-}
-
-/* Estilo padrão para IDs não mapeados */
-.badge-default {
-    background-color: #cccccc !important;
-    color: #000000 !important;
-}
-
+@keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .rotate {
+    animation: spin 1s linear infinite;
+  }
+  

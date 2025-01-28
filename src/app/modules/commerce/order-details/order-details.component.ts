@@ -57,6 +57,7 @@ export class OrderDetailsComponent implements OnInit {
       parcelas: [{ value: '', disabled: true }],
       data_criacao: [{ value: '', disabled: true }],
       cnpj: [{ value: '', disabled: true }],
+      metodo: [{ value: '', disabled: true }],
     });
   }
 
@@ -71,6 +72,7 @@ export class OrderDetailsComponent implements OnInit {
       valor_final: order.valor_final,
       vendedor: order.vendedor.nome,
       cnpj: order.cliente.numero_doc,
+      metodo: order.metodo_pagamento,
     });
   }
 }

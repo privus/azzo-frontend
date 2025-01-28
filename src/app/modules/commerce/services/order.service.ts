@@ -18,4 +18,8 @@ export class OrderService {
   getOrdersByDate(fromDate: string) {
     return this.azzoService.getOrdersByDate(fromDate);
   }
+
+  syncroAllOrders() {
+    return this.azzoService.syncroAllOrders();
+  }
 }

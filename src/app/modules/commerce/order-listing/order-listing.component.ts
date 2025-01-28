@@ -1,9 +1,11 @@
-/* eslint-disable prettier/prettier */
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Pedido } from '../models/order.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationService } from '../../../core/services/pagination.service';
 import { OrderService } from '../services/order.service';
+import { SweetAlertOptions } from 'sweetalert2';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-order-listing',
@@ -24,20 +26,70 @@ export class OrderListingComponent implements OnInit {
   showCustomDatePicker: boolean = false;
   customDateRange: { start: string; end: string } = { start: '', end: '' };
   selectedStatus: string = '';
+  @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
+  swalOptions: SweetAlertOptions = {};
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  sortDirection: 'asc' | 'desc' = 'asc';
 
-
-  constructor( 
-    private route: ActivatedRoute, 
-    private paginationService: PaginationService, 
+  constructor(
+    private route: ActivatedRoute,
+    private paginationService: PaginationService,
     private router: Router,
     private readonly orderService: OrderService,
-    private cdr: ChangeDetectorRef,    
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.orders = this.route.snapshot.data['orders'];
     console.log('PEDIDOS ===> ', this.orders);
+    this.sortByDate('asc'); // Ordenação padrão em ordem ascendente
     this.applyFilter();
+  }
+
+  sortByDate(direction: 'asc' | 'desc' = 'asc'): void {
+    this.filteredOrders.sort((a, b) => {
+      const dateA = new Date(a.data_criacao).getTime();
+      const dateB = new Date(b.data_criacao).getTime();
+
+      return direction === 'desc' ? dateA - dateB : dateB - dateA;
+    });
+    this.sortDirection = direction;
+  }
+
+  showAlert(swalOptions: SweetAlertOptions) {
+    this.swalOptions = swalOptions;
+    this.cdr.detectChanges();
+    this.noticeSwal.fire();
+  }
+
+  syncroSells(): void {
+    this.isLoading$.next(true);
+    this.orderService.syncroAllOrders().subscribe({
+      next: (resp) => {
+        this.showAlert({
+          icon: 'success',
+          title: 'Sincronização concluída com sucesso!',
+          text: resp.message,
+          confirmButtonText: 'Ok',
+        });
+        this.isLoading$.next(false);
+        this.onDateRangeChange();
+        this.cdr.detectChanges();
+      },
+      complete: () => {
+        console.log('Sync complete');
+      },
+      error: (err) => {
+        this.showAlert({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Não foi possível sincronizar os pedidos.',
+          confirmButtonText: 'Ok',
+        });
+        this.cdr.detectChanges();
+        console.error(err);
+      },
+    });
   }
 
   onSearch(): void {
@@ -45,11 +97,8 @@ export class OrderListingComponent implements OnInit {
   }
 
   applyFilter(): void {
-    // 1) Partir do array principal que está na memória.
-    //    (Esse array já pode ter sido atualizado pelo filtro de data ou pela API).
     let result = [...this.orders];
-  
-    // 2) Filtrar por texto (searchTerm) se houver
+
     const term = this.searchTerm.trim().toLowerCase();
     if (term) {
       result = result.filter((order) => {
@@ -61,16 +110,16 @@ export class OrderListingComponent implements OnInit {
         );
       });
     }
-  
+
     // 3) Filtrar por status (se selectedStatus não for vazio)
     if (this.selectedStatus) {
-      result = result.filter(
-        (order) => order.status_venda.status_venda_id === +this.selectedStatus
-      );
+      result = result.filter((order) => order.status_venda.status_venda_id === +this.selectedStatus);
     }
-  
+
     // 4) Atualiza filteredOrders e a paginação
     this.filteredOrders = result;
+    // Ordene os pedidos filtrados por data
+    this.sortByDate(this.sortDirection);
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
@@ -115,8 +164,6 @@ export class OrderListingComponent implements OnInit {
         return 'badge py-2 px-3 fs-7 badge-light-secondary opacity-50 text-muted';
     }
   }
-  
-
 
   onDateChange(event: any): void {
     const selectedDate = new Date(event.target.value);
@@ -125,7 +172,7 @@ export class OrderListingComponent implements OnInit {
       return itemDate.toDateString() === selectedDate.toDateString();
     });
   }
-    
+
   calculatePagination(): void {
     this.totalPages = Math.ceil(this.filteredOrders.length / this.itemsPerPage);
     if (this.currentPage > this.totalPages) {
@@ -206,7 +253,7 @@ export class OrderListingComponent implements OnInit {
   applyCustomDateRange(): void {
     const { start } = this.customDateRange;
     const fromDate = this.formatDate(new Date(start));
-  
+
     this.orderService.getOrdersByDate(fromDate).subscribe({
       next: (orders) => {
         this.orders = orders;
@@ -214,105 +261,105 @@ export class OrderListingComponent implements OnInit {
       },
       error: (err) => console.error('Erro ao filtrar por data (custom):', err),
     });
-  
+
     this.showCustomDatePicker = false;
   }
 
-    onDateRangeChange(): void {
-      const selectedRange = this.dataRange;
-      const now = new Date();
-      // Zeramos horas para pegar "início do dia" se necessário
-      now.setHours(0, 0, 0, 0);
+  onDateRangeChange(): void {
+    const selectedRange = this.dataRange;
+    const now = new Date();
+    // Zeramos horas para pegar "início do dia" se necessário
+    now.setHours(0, 0, 0, 0);
 
-      let startDate = new Date(now);
+    let startDate = new Date(now);
 
-      switch (selectedRange) {
-        case 'today':
-          // startDate fica como hoje às 00:00
-          break;
+    switch (selectedRange) {
+      case 'today':
+        // startDate fica como hoje às 00:00
+        break;
 
-        case 'yesterday':
-          // Ontem às 00:00
-          startDate.setDate(now.getDate() - 1);
-          break;
+      case 'yesterday':
+        // Ontem às 00:00
+        startDate.setDate(now.getDate() - 1);
+        break;
 
-        case 'last7':
-          // Últimos 7 dias
-          startDate.setDate(now.getDate() - 7);
-          break;
+      case 'last7':
+        // Últimos 7 dias
+        startDate.setDate(now.getDate() - 7);
+        break;
 
-        case 'last30':
-          startDate.setDate(now.getDate() - 30);
-          break;
+      case 'last30':
+        startDate.setDate(now.getDate() - 30);
+        break;
 
-        case 'thisMonth':
-          // Primeiro dia do mês atual
-          startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-          break;
+      case 'thisMonth':
+        // Primeiro dia do mês atual
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        break;
 
-        case 'lastMonth':
-          // Primeiro dia do mês anterior
-          startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-          break;
+      case 'lastMonth':
+        // Primeiro dia do mês anterior
+        startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        break;
 
-        case 'custom':
-          this.showCustomDatePicker = true;
-          return; // Mostra os inputs de data e sai
-        default:
-          // Se não escolheu nada, pega tudo desde 1970
-          startDate = new Date(0);
-          break;
-      }
-
-      // Converte a data para string no formato YYYY-MM-DD
-      const fromDate = this.formatDate(startDate);
-      console.log('Filtrando por data:', fromDate);
-
-      // Faz a requisição ao backend
-      this.orderService.getOrdersByDate(fromDate).subscribe({
-        next: (orders) => {
-          // Sobrescreve o array principal
-          this.orders = orders;
-          console.log('Pedidos filtrados:', orders);
-          this.applyFilter();
-          this.cdr.detectChanges();
-        },
-        error: (err) => console.error('Erro ao filtrar por data:', err),
-      });
+      case 'custom':
+        this.showCustomDatePicker = true;
+        return; // Mostra os inputs de data e sai
+      default:
+        // Se não escolheu nada, pega tudo desde 1970
+        startDate = new Date(0);
+        break;
     }
 
-    // Utilitário para formatar data em yyyy-MM-dd
-    private formatDate(date: Date): string {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
+    // Converte a data para string no formato YYYY-MM-DD
+    const fromDate = this.formatDate(startDate);
+    console.log('Filtrando por data:', fromDate);
 
-    get totalBruto(): number {
-      return this.filteredOrders.reduce((acc, order) => {
-        const valor = parseFloat(order.valor_pedido || '0');
-        return acc + valor;
-      }, 0);
-    }
+    // Faz a requisição ao backend
+    this.orderService.getOrdersByDate(fromDate).subscribe({
+      next: (orders) => {
+        // Sobrescreve o array principal
+        this.orders = orders;
+        console.log('Pedidos filtrados:', orders);
+        this.applyFilter();
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Erro ao filtrar por data:', err),
+    });
+  }
 
-    get totalLucro(): number {
-      let total = 0;
-    
-      for (const order of this.filteredOrders) {
-        if (order.itensVenda && order.itensVenda.length > 0) {
-          for (const item of order.itensVenda) {
-            const custoUnit = +item.produto?.preco_custo
-            const qtd = item.quantidade
-            const valorTotal = +item.valor_total
-            
-            // Lucro de cada item
-            const lucroItem = valorTotal - (custoUnit * qtd);
-            total += lucroItem;
-          }
+  // Utilitário para formatar data em yyyy-MM-dd
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  get totalBruto(): number {
+    return this.filteredOrders.reduce((acc, order) => {
+      const valor = parseFloat(order.valor_pedido || '0');
+      return acc + valor;
+    }, 0);
+  }
+
+  get totalLucro(): number {
+    let total = 0;
+
+    for (const order of this.filteredOrders) {
+      if (order.itensVenda && order.itensVenda.length > 0) {
+        for (const item of order.itensVenda) {
+          const custoUnit = +item.produto?.preco_custo;
+          const qtd = item.quantidade;
+          const valorTotal = +item.valor_total;
+
+          // Lucro de cada item
+          const lucroItem = valorTotal - custoUnit * qtd;
+          total += lucroItem;
         }
       }
-    
-      return total;
     }
+
+    return total;
+  }
 }
