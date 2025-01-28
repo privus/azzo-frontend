@@ -33,28 +33,9 @@
                     <label class="form-label ms-3">To:</label>
                     <input type="date" class="form-control form-control-solid w-150px ps-12 ms-3" [(ngModel)]="customDateRange.end" />
                 </div>
-            </div>
-
+            </div>         
             <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRangeChange(); applyCustomDateRange()">Apply</button>
-            <button
-            class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9"
-            data-bs-toggle="tooltip"
-            data-bs-dismiss="click"
-            data-bs-placement="top"
-            aria-label="Reload"
-            data-bs-original-title="Reload"
-            (click)="syncroSells()"
-            >
-            <i
-                class="ki-duotone ki-arrows-circle fs-2"
-                [ngClass]="{ 'rotate': isLoading$ | async }"
-            >
-                <span class="path1"></span>
-                <span class="path2"></span>
-            </i>
-            </button>       
-
-            <div class="d-flex align-items-center position-relative my-1 ms-8">
+            <div class="d-flex align-items-center position-absolute my-1 ms-8 end-0  me-10">
               <select
                 class="form-select form-select-solid form-select-lg"
                 [(ngModel)]="selectedStatus"
@@ -85,7 +66,6 @@
                         <th class="min-w-125px">Data Venda</th>
                         <th class="min-w-125px">Valor Pedido</th>
                         <th class="min-w-125px">Status Pagamento</th>
-                        <th class="min-w-125px">Tipo Pedido</th>
                         <th class="min-w-125px">Status Venda</th>
                         <th class="min-w-125px">Vendedor</th>
                         <th class="text-end min-w-100px">Ações</th>
@@ -95,14 +75,13 @@
                     <tr *ngFor="let order of paginatedOrders">
                         <td>{{ order.codigo }}</td>
                         <td>{{ order.cliente ?  order.cliente.nome_empresa : 'Cliente Teste'  }}</td>
-                        <td><div class="text-muted fs-7">{{ order.data_criacao | date:'dd/MM/yyyy HH:MM' }}</div></td>
+                        <td>{{ order.data_criacao | date:'dd/MM/yyyy HH:mm:ss' }}</td>
                         <td>{{ order.valor_pedido | currency:'BRL' }}</td>
                         <td>                            
                             <span class="badge td" [ngClass]="getStatusPagClass(order.status_pagamento.status_pagamento_id)">
                             {{ order.status_pagamento.nome }}
                             </span>  
-                        </td>
-                        <td>{{ order.tipo_pedido.nome }}</td>
+                        </td>   
                         <td>                            
                             <span class="badge td" [ngClass]="getStatusClass(order.status_venda.status_venda_id)">
                             {{ order.status_venda.nome }}
@@ -280,4 +259,3 @@
         </div>
     </ng-template>
 </div>
-<swal #noticeSwal [swalOptions]="swalOptions"></swal>

@@ -62,6 +62,7 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.azzoService.getRoles().subscribe({
       next: (cargos) => {
         this.cargos = cargos;
+        console.log('cargo ========>', this.cargos);
         this.fetchUserCounts();
         this.cdr.detectChanges();
       },
