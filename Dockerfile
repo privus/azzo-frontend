@@ -16,5 +16,5 @@ COPY . .
 # Exponha a porta que o Angular utiliza para rodar o servidor de desenvolvimento
 EXPOSE 4200
 
-# Comando para rodar o servidor de desenvolvimento do Angular
+# Comando para rodar o servidor de desenvolvimento
 CMD ["npm", "run", "start"]
