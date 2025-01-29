@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { AzzoService } from '../../../core/services/azzo.service';
+import { FinancialService } from '../../../core/services/';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CreditService {
-  constructor(private readonly azzoService: AzzoService) {}
+  constructor(private readonly finacialService: FinancialService) {}
 
   getAllCredits() {
-    return this.azzoService.getFinancialCredits();
+    return this.finacialService.getFinancialCredits();
   }
 
   getCreditsByDateRange(start: string, end: string) {
-    return this.azzoService.getFinancialCreditsByDateRange(start, end);
+    return this.finacialService.getFinancialCreditsByDateRange(start, end);
   }
 }

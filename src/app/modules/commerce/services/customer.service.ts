@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { AzzoService } from '../../../core/services/azzo.service';
+import { ClientService } from '../../../core/services/';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CustomerService {
-  constructor(private readonly azzoService: AzzoService) {}
+  constructor(private readonly clientService: ClientService) {}
 
   getAllCustomers() {
-    return this.azzoService.getCustomers();
+    return this.clientService.getCustomers();
   }
 
   getCustomerByCode(codigo: number) {
-    return this.azzoService.getCustomerByCode(codigo);
+    return this.clientService.getCustomerByCode(codigo);
   }
 }

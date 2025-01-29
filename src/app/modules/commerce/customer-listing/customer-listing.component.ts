@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente } from '../models/costumer.model';
-import { PaginationService } from '../../../core/services/pagination.service';
+import { PaginationService } from '../../../core/services/';
 
 @Component({
   selector: 'app-customer',

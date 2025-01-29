@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AzzoService } from '../../../core/services/azzo.service';
+import { UserService, SharedService, LoginService } from '../../../core/services';
 import { Cidade, NewUser, UserUpdate, Usuario } from '../models/user.model';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { LocalStorageService } from 'src/app/core/services/local-storage.service';
@@ -14,7 +14,9 @@ export class AccountService {
   user$: Observable<Usuario | null> = this.userSubject.asObservable();
 
   constructor(
-    private readonly azzoService: AzzoService,
+    private readonly userService: UserService,
+    private readonly sharedService: SharedService,
+    private readonly authService: LoginService,
     private readonly localStorageService: LocalStorageService,
   ) {}
 
@@ -26,7 +28,7 @@ export class AccountService {
       try {
         // Converte a string JSON para um objeto JavaScript
         const user: AuthUser = JSON.parse(userJson);
-        const user$ = this.azzoService.getUserById(user.userId);
+        const user$ = this.userService.getUserById(user.userId);
         user$.subscribe((userInfo) => this.userSubject.next(userInfo));
         return user$;
       } catch (error) {
@@ -38,7 +40,7 @@ export class AccountService {
   }
 
   updateUserInfo(userId: number, user: UserUpdate): Observable<UserUpdate> {
-    const user$ = this.azzoService.updateUser(userId, user);
+    const user$ = this.userService.updateUser(userId, user);
     user$.subscribe((userInfo) => {
       const updatedUserInfo = { ...this.userSubject.value, ...userInfo };
       this.userSubject.next(updatedUserInfo);
@@ -47,19 +49,19 @@ export class AccountService {
   }
 
   searchCities(): Observable<Cidade[]> {
-    return this.azzoService.getAllCities().pipe();
+    return this.sharedService.getAllCities().pipe();
   }
 
   searchCitiesPartial(query: string): Observable<Cidade[]> {
     console.log('searchCitiesPartial called with query:', query);
-    return this.azzoService.getCitiesPartial(query).pipe();
+    return this.sharedService.getCitiesPartial(query).pipe();
   }
 
   createAccount(user: NewUser): Observable<Usuario> {
-    return this.azzoService.newUser(user).pipe();
+    return this.authService.newUser(user).pipe();
   }
 
   uploadUserPhoto(userId: number, formData: FormData): Observable<{ message: string; fotoUrl: string }> {
-    return this.azzoService.uploadUserPhoto(userId, formData).pipe();
+    return this.userService.uploadUserPhoto(userId, formData).pipe();
   }
 }

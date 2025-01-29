@@ -13,7 +13,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   // Public props
   @Input() currentLayoutType: LayoutType | null;
-  @Input() appToolbarLayout: 'classic' | 'accounting' | 'extended' | 'reports' | 'saas';
 
   // toolbar
   appToolbarDisplay: boolean;
@@ -78,6 +77,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   showPageTitle() {
     const viewsWithPageTitles = ['classic', 'reports', 'saas'];
-    return this.appPageTitleDisplay && viewsWithPageTitles.some((t) => t === this.appToolbarLayout);
+    return this.appPageTitleDisplay && viewsWithPageTitles.some((t) => t === 'classic');
   }
 }

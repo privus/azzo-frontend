@@ -8,7 +8,7 @@
                     class="form-control form-control-solid w-360px ps-12"
                     placeholder="Pesquisar Pedido"
                     [(ngModel)]="searchTerm"
-                    (input)="onSearch()"
+                    (imput)="onSearch()"
                 />
             </div>
             <div class="d-flex align-items-center position-relative my-1 ms-8">
@@ -36,12 +36,37 @@
                     <input type="date" class="form-control form-control-solid w-150px ps-12 ms-3" [(ngModel)]="customDateRange.end" />
                 </div>
             </div>         
-            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRangeChange()">Apply</button>
+            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9">Apply</button>
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select
+                    class="form-select form-select-solid form-select-lg"
+                    [(ngModel)]="selectedDepartment"
+                >
+                    <!-- Exibir o departamento atual como a opção inicial -->
+                    <option value="">Departamento</option>                
+                    <!-- Listar todas as opções de departamentos disponíveis -->
+                    <option *ngFor="let d of departments" [value]="d.departamento_id">
+                    {{ d.nome }}
+                    </option>
+                </select>              
+            </div>
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select
+                    class="form-select form-select-solid form-select-lg"
+                    [(ngModel)]="selectedCategory"
+                >
+                    <!-- Exibir o departamento atual como a opção inicial -->
+                    <option value="">Categoria</option>                
+                    <!-- Listar todas as opções de departamentos disponíveis -->
+                    <option *ngFor="let c of categories" [value]="c.categoria_id">
+                    {{ c.nome }}
+                    </option>
+                </select>              
+            </div>
             <div class="d-flex align-items-center position-absolute my-1 ms-8 end-0  me-10">
               <select
                 class="form-select form-select-solid form-select-lg"
                 [(ngModel)]="selectedStatus"
-                (change)="applyFilter()"
               >
                 <option value="">Status</option>
                 <option value="1">Pendente</option>
@@ -52,36 +77,36 @@
             </div>
     </div>
 
-    <div *ngIf="paginatedCredits; else loading" class="card-body pt-0">
+    <div *ngIf="paginatedDebts; else loading" class="card-body pt-0">
         <div class="table-responsive">
             <table
-                id="kt_ecommerce_credits_table"
+                id="kt_ecommerce_debts_table"
                 class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer"
             >
                 <thead>
                     <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0" >
                         <th class="min-w-50px">ID</th>
-                        <th class="min-w-125px">Cliente</th>
+                        <th class="min-w-125px">Descrição</th>
                         <th class="min-w-125px">Data Criação</th>
-                        <th class="min-w-125px">Valor</th>
-                        <th class="min-w-125px">Juros</th>
-                        <th class="min-w-125px">Data Vencimento</th>
+                        <th class="min-w-125px">Valor Total</th>
+                        <th class="min-w-125px">Valor Parcela</th>
+                        <th class="min-w-125px">Próximo Vencimento</th>
                         <th class="min-w-125px">Status Pagamento</th>
                         <th class="text-end min-w-100px">Ações</th>
                     </tr>
                 </thead>
                 <tbody class="fw-semibold text-gray-600">
-                    <tr *ngFor="let credit of paginatedCredits">
-                        <td>{{ credit.parcela_id }}</td>
-                        <td>{{ credit.venda ? credit.venda.cliente.nome : 'Cliente Teste' }}</td>
-                        <td>{{ credit.data_criacao | date:'dd/MM/yyyy' }}</td>
-                        <td>{{ credit.valor | currency:'BRL' }}</td>
-                        <td>{{ credit.juros || 0 | currency:'BRL' }}</td>
-                        <td>{{ credit.data_vencimento | date:'dd/MM/yyyy'}}</td>
+                    <tr *ngFor="let debt of paginatedDebts">
+                        <td>{{ debt.debito_id }}</td>
+                        <td>{{ debt.descricao }}</td>
+                        <td>{{ debt.data_criacao | date:'dd/MM/yyyy'}}</td>
+                        <td>{{ debt.valor_total | currency:'BRL' }}</td>                        
+                        <td>{{ debt.valor_parcela | currency:'BRL' }}</td>
+                        <td>{{ getNextDueDate(debt) }}</td>
+                        <td>{{ debt.status_pagamento ? debt.status_pagamento.nome : '' }}</td>
+
                         <td>                            
-                            <span class="badge td" [ngClass]="getStatusClass(credit.status_pagamento.status_pagamento_id)">
-                            {{ credit.status_pagamento.nome }}
-                            </span>  
+
                         </td>   
 
                         <td class="text-end">
@@ -102,7 +127,7 @@
         <div class="row mt-5">
             <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
                 <div class="fs-6 fw-bold text-gray-700">
-                    Mostrando {{ startItem }} - {{ endItem }} de {{ filteredCredits.length }} Créditos.
+                    Mostrando {{ startItem }} - {{ endItem }} de {{ filteredDebts.length }} Débitos.
                 </div>
             </div>
             <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
@@ -115,7 +140,7 @@
                             class="page-link first"
                             role="link"
                             type="button"
-                            aria-controls="kt_ecommerce_credits_table"
+                            aria-controls="kt_ecommerce_debts_table"
                             [attr.aria-disabled]="currentPage === 1 ? 'true' : 'false'"
                             aria-label="First"
                             (click)="goToFirstPage()"
@@ -132,7 +157,7 @@
                             class="page-link previous"
                             role="link"
                             type="button"
-                            aria-controls="kt_ecommerce_credits_table"
+                            aria-controls="kt_ecommerce_debts_table"
                             [attr.aria-disabled]="currentPage === 1 ? 'true' : 'false'"
                             aria-label="Previous"
                             (click)="previousPage()"
@@ -150,7 +175,7 @@
                             class="page-link"
                             role="link"
                             type="button"
-                            aria-controls="kt_ecommerce_credits_table"
+                            aria-controls="kt_ecommerce_debts_table"
                             [attr.aria-current]="currentPage === page ? 'page' : null"
                             (click)="goToPage(page)"
                         >
@@ -165,7 +190,7 @@
                             class="page-link next"
                             role="link"
                             type="button"
-                            aria-controls="kt_ecommerce_credits_table"
+                            aria-controls="kt_ecommerce_debts_table"
                             [attr.aria-disabled]="currentPage === totalPages || totalPages === 0 ? 'true' : 'false'"
                             aria-label="Next"
                             (click)="nextPage()"
@@ -182,7 +207,7 @@
                             class="page-link last"
                             role="link"
                             type="button"
-                            aria-controls="kt_ecommerce_credits_table"
+                            aria-controls="kt_ecommerce_debts_table"
                             [attr.aria-disabled]="currentPage === totalPages || totalPages === 0 ? 'true' : 'false'"
                             aria-label="Last"
                             (click)="goToLastPage()"

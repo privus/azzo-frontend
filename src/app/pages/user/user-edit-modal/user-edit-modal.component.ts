@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors }
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { AzzoService } from '../../../core/services/azzo.service';
+import { RoleService } from '../../../core/services/';
 import { Cidade, UserUpdate, Usuario, Cargo } from '../../../modules/account/models/user.model';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -29,7 +29,7 @@ export class UserEditModal implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private azzoService: AzzoService,
+    private roleService: RoleService,
     private accountService: AccountService,
     public activeModal: NgbActiveModal,
     private readonly formBuilder: FormBuilder,
@@ -47,7 +47,7 @@ export class UserEditModal implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.azzoService.getRoles().subscribe((cargos) => {
+    this.roleService.getRoles().subscribe((cargos) => {
       this.cargos = cargos;
     });
 

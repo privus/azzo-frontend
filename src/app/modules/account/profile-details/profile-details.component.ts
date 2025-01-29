@@ -5,7 +5,7 @@ import { AccountService } from '../services/account.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, finalize, startWith, switchMap, tap } from 'rxjs/operators';
 import { REGIOES } from '../../../shared/constants/user-constant';
-import { AzzoService } from '../../../core/services/azzo.service';
+import { RoleService } from '../../../core/services/';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
@@ -32,7 +32,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private accountService: AccountService,
     private readonly formBuilder: FormBuilder,
-    private azzoService: AzzoService,
+    private roleService: RoleService,
     private route: ActivatedRoute,
   ) {
     this.profileForm = this.formBuilder.group({
@@ -53,7 +53,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
     const loadingSubscr = this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res));
     this.unsubscribe.push(loadingSubscr);
 
-    this.azzoService.getRoles().subscribe((cargos) => {
+    this.roleService.getRoles().subscribe((cargos) => {
       this.cargos = cargos;
     });
 

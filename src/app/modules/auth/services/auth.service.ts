@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { AuthLogin } from '../models/auth.model';
-import { LocalStorageService } from '../../../core/services/local-storage.service';
-import { AzzoService } from '../../../core/services/azzo.service';
+import { LocalStorageService, LoginService } from '../../../core/services';
 import { decodeJwt } from '../../../shared/utils/decodeJwt';
 import { Cargo } from '../../account/models/user.model';
 
@@ -16,14 +15,14 @@ export class AuthService {
 
   constructor(
     private readonly localStorageService: LocalStorageService,
-    private readonly azzoService: AzzoService,
+    private readonly loginService: LoginService,
   ) {}
 
   async login(data: AuthLogin): Promise<Cargo> {
     try {
       this.localStorageService.remove(this.tokenKey);
 
-      const tokens = await firstValueFrom(this.azzoService.login(data));
+      const tokens = await firstValueFrom(this.loginService.login(data));
 
       // Armazena o token no localStorage
       this.localStorageService.set(this.tokenKey, tokens.accessToken);

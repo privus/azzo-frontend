@@ -6,7 +6,7 @@ import { Cargo, Cidade, NewUser } from '../../../modules/account/models/user.mod
 import { debounceTime, switchMap, finalize } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { REGIOES } from '../../../shared/constants/user-constant';
-import { AzzoService } from '../../../core/services/azzo.service';
+import { RoleService } from '../../../core/services';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 
@@ -28,7 +28,7 @@ export class NewAccountComponent implements OnInit {
     private formBuilder: FormBuilder,
     private accountService: AccountService,
     private cdr: ChangeDetectorRef, // Injetando ChangeDetectorRef corretamente
-    private azzoService: AzzoService,
+    private roleService: RoleService,
   ) {
     this.newAccountForm = this.formBuilder.group({
       nome: ['', Validators.required],
@@ -50,7 +50,7 @@ export class NewAccountComponent implements OnInit {
       switchMap((value) => (value ? this.accountService.searchCitiesPartial(value) : of([]))),
       finalize(() => (this.isLoading = false)),
     );
-    this.azzoService.getRoles().subscribe((cargos) => {
+    this.roleService.getRoles().subscribe((cargos) => {
       this.cargos = cargos;
     });
   }
