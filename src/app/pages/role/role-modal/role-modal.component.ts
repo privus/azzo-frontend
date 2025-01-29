@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Cargo, Permissao } from '../../../modules/account/models/user.model';
-import { AzzoService } from '../../../core/services/azzo.service';
+import { RoleService } from '../../../core/services/';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -16,13 +16,13 @@ export class RoleModalComponent implements OnInit {
   isAdmin: boolean = false;
 
   constructor(
-    private azzoService: AzzoService,
+    private roleService: RoleService,
     public activeModal: NgbActiveModal,
   ) {}
 
   ngOnInit(): void {
     // Inicializa permissões carregando da API
-    this.azzoService.getPermissions().subscribe((permissions: Permissao[]) => {
+    this.roleService.getPermissions().subscribe((permissions: Permissao[]) => {
       this.permissionsList = permissions;
       this.initializePermissionStates();
     });
@@ -144,11 +144,11 @@ export class RoleModalComponent implements OnInit {
     console.log('payload', payload);
 
     if (this.cargoModel.cargo_id > 0) {
-      this.azzoService.updateRole(this.cargoModel.cargo_id, payload).subscribe(() => {
+      this.roleService.updateRole(this.cargoModel.cargo_id, payload).subscribe(() => {
         this.activeModal.close(this.cargoModel);
       });
     } else {
-      this.azzoService.createRole(payload).subscribe((newCargo: Cargo) => {
+      this.roleService.createRole(payload).subscribe((newCargo: Cargo) => {
         this.activeModal.close(newCargo);
       });
     }

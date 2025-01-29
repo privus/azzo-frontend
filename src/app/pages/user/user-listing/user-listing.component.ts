@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { Usuario } from '../../../modules/account/models/user.model';
-import { AzzoService } from 'src/app/core/services/azzo.service';
+import { UserService } from 'src/app/core/services/';
 import { BehaviorSubject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserEditModal } from '../user-edit-modal/user-edit-modal.component';
@@ -21,7 +21,7 @@ export class UserListingComponent implements OnInit {
   searchQuery: string = '';
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   constructor(
-    private azzoService: AzzoService,
+    private userService: UserService,
     private cdr: ChangeDetectorRef,
     private modalService: NgbModal,
   ) {}
@@ -31,7 +31,7 @@ export class UserListingComponent implements OnInit {
   }
 
   loadUsers() {
-    this.azzoService.getAllUsers().subscribe({
+    this.userService.getAllUsers().subscribe({
       next: (users) => {
         this.users = users;
         this.filteredUsers = users;
@@ -90,7 +90,7 @@ export class UserListingComponent implements OnInit {
     this.noticeSwal.fire().then((result) => {
       if (result.isConfirmed) {
         // Exclui o usuário apenas se confirmado
-        this.azzoService.deleteUser(user.usuario_id).subscribe({
+        this.userService.deleteUser(user.usuario_id).subscribe({
           next: () => {
             // Configura o alerta de sucesso com apenas o botão "OK"
             this.showAlert({

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Credito } from '../modal/credit.modal';
 import { ActivatedRoute } from '@angular/router';
-import { PaginationService } from 'src/app/core/services/pagination.service';
+import { PaginationService } from '../../../core/services';
 import { CreditService } from '../services/credit.service';
 
 @Component({

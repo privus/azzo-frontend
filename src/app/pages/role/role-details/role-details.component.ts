@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Cargo, Usuario } from '../../../modules/account/models/user.model';
-import { AzzoService } from '../../../core/services/azzo.service';
+import { RoleService } from '../../../core/services';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { AccountService } from '../../../modules/account/services/account.service';
@@ -20,7 +20,7 @@ export class RoleDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private azzoService: AzzoService,
+    private roleService: RoleService,
     private cdr: ChangeDetectorRef,
     private accountService: AccountService,
   ) {}
@@ -37,7 +37,7 @@ export class RoleDetailsComponent implements OnInit {
   }
 
   private loadRoleDetails(roleId: number): void {
-    this.azzoService.getRoleById(roleId).subscribe({
+    this.roleService.getRoleById(roleId).subscribe({
       next: (roleData) => {
         this.role = roleData;
         this.cdr.detectChanges();
@@ -49,7 +49,7 @@ export class RoleDetailsComponent implements OnInit {
   }
 
   private loadUsersByRole(roleId: number): void {
-    this.azzoService.getUsersByRole(roleId).subscribe({
+    this.roleService.getUsersByRole(roleId).subscribe({
       next: (usersData) => {
         this.users = usersData;
         this.cdr.detectChanges();

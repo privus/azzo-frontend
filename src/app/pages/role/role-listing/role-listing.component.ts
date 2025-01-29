@@ -3,7 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { Cargo } from '../../../modules/account/models/user.model';
 import { SweetAlertOptions } from 'sweetalert2';
-import { AzzoService } from '../../../core/services/azzo.service';
+import { RoleService } from '../../../core/services/';
 import { Router } from '@angular/router';
 import { RoleModalComponent } from '../role-modal/role-modal.component';
 
@@ -28,7 +28,7 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private renderer: Renderer2,
     private modalService: NgbModal,
-    private azzoService: AzzoService,
+    private roleService: RoleService,
     private router: Router,
   ) {}
 
@@ -59,7 +59,7 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadRoles(): void {
-    this.azzoService.getRoles().subscribe({
+    this.roleService.getRoles().subscribe({
       next: (cargos) => {
         this.cargos = cargos;
         console.log('cargo ========>', this.cargos);
@@ -72,7 +72,7 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   fetchUserCounts(): void {
     this.cargos.forEach((role) => {
-      this.azzoService.getUsersByRole(role.cargo_id).subscribe({
+      this.roleService.getUsersByRole(role.cargo_id).subscribe({
         next: (users) => {
           this.userCounts[role.cargo_id] = users.length;
           this.cdr.detectChanges();
@@ -143,7 +143,7 @@ export class RoleListingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.noticeSwal.fire().then((result) => {
       if (result.isConfirmed) {
-        this.azzoService.deleteRole(role.cargo_id).subscribe({
+        this.roleService.deleteRole(role.cargo_id).subscribe({
           next: () => {
             this.cargos = this.cargos.filter((c) => c.cargo_id !== role.cargo_id);
             this.showAlert({

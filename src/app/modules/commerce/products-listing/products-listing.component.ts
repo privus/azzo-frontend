@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Produto } from '../models/product.model'; // Modelo de produto
 import { ActivatedRoute, Router } from '@angular/router';
-import { PaginationService } from '../../../core/services/pagination.service';
+import { PaginationService } from '../../../core/services/';
 
 @Component({
   selector: 'app-products-listing',

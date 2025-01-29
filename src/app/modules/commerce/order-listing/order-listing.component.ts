@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Pedido } from '../models/order.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PaginationService } from '../../../core/services/pagination.service';
+import { PaginationService } from '../../../core/services';
 import { OrderService } from '../services/order.service';
 import { SweetAlertOptions } from 'sweetalert2';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';

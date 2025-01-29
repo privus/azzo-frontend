@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { RouterModule, Routes } from '@angular/router';
@@ -72,5 +72,6 @@ const routes: Routes = [
     SharedModule,
   ],
   exports: [RouterModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class LayoutModule {}

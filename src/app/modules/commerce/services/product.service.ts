@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { AzzoService } from '../../../core/services/azzo.service';
+import { ItemService } from '../../../core/services/';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  constructor(private readonly azzoService: AzzoService) {}
+  constructor(private readonly itemService: ItemService) {}
 
   getAllProducts() {
-    return this.azzoService.getProducts();
+    return this.itemService.getProducts();
   }
 
   getProductById(id: number) {
-    return this.azzoService.getProductByCode(id);
+    return this.itemService.getProductByCode(id);
   }
 }

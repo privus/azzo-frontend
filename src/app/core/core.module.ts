@@ -1,7 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LocalStorageService } from './services/local-storage.service';
-import { AzzoService } from './services/azzo.service';
+import {
+  ClientService,
+  FinancialService,
+  ItemService,
+  LocalStorageService,
+  LoginService,
+  PaginationService,
+  RoleService,
+  SellService,
+  SharedService,
+  UserService,
+} from './services/';
+
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
@@ -13,7 +24,15 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
       multi: true,
     },
     LocalStorageService,
-    AzzoService,
+    ItemService,
+    LoginService,
+    PaginationService,
+    RoleService,
+    SellService,
+    SharedService,
+    UserService,
+    ClientService,
+    FinancialService,
   ],
   imports: [CommonModule],
 })
