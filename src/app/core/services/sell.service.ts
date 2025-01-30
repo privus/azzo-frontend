@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Pedido } from '../../modules/commerce/models';
+import { Pedido, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 
 @Injectable()
@@ -23,5 +23,9 @@ export class SellService {
 
   syncroAllOrders() {
     return this.http.get<{ message: string }>(`${this.baseUrl}sells/syncro`);
+  }
+
+  updateSellStatus(updateStatus: UpdateSellStatus) {
+    return this.http.patch<{ message: string }>(`${this.baseUrl}sells/status`, updateStatus);
   }
 }

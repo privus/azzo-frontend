@@ -1,7 +1,7 @@
-import { Cliente } from './../../commerce/models/costumer.model';
+import { Cliente } from './../../commerce/models/';
 import { Pedido, StatusPagamento } from '../../commerce/models';
 
-export interface Credito {
+export interface Credit {
   parcela_id: number;
   numero: number;
   valor: string;

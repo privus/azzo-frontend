@@ -115,8 +115,6 @@
             </div>
             <!--end::Card body-->
           </div>
-  
-
                 <div class="card card-flush h-xl-100">
                 <!--begin::Header-->
                 <div class="card-header pt-7">
@@ -131,7 +129,7 @@
             
                     <!--begin::Toolbar (opcional)-->
                     <div class="card-toolbar">
-                    <a href="#" class="btn btn-sm btn-light">Detalhes do Pedido</a>
+                    <a href="#" class="btn btn-sm btn-light">{{ order.forma_pagamento }}</a>
                     </div>
                     <!--end::Toolbar-->
                 </div>
@@ -389,7 +387,8 @@
               type="submit"
               id="kt_ecommerce_add_customer_submit"
               class="btn btn-primary"
-              disabled
+              (click)="updateStatus()"
+              [disabled]="!orderForm.dirty"
             >
               <span class="indicator-label">Save Changes</span>
               <span class="indicator-progress"
@@ -405,12 +404,13 @@
       </form>
       <!--end::Form-->
     </div>
-  </div>
-  
+  </div>  
   <ng-template #loading>
     <div id="splash-screen" class="splash-screen">
       <img src="./assets/media/logos/azzo_simbolo.svg" alt="Azzo logo" />
       <span>Loading ...</span>
     </div>
   </ng-template>
+  <swal #noticeSwal [swalOptions]="swalOptions"></swal>
+
   

@@ -1,20 +1,31 @@
-# Usa a imagem oficial do Node.js com Bullseye
-FROM node:18
+# Etapa 1: Construir a aplicação Angular
+FROM node:18 AS build
 
-# Define o diretório de trabalho dentro do container
-WORKDIR /usr/src/app
+# Diretório de trabalho
+WORKDIR /app
 
-# Copia o arquivo de dependências para o container
+# Copiar arquivos de dependência e instalar
 COPY package*.json ./
-
-# Instalação de dependências
 RUN npm install
 
-# Copia o código do projeto para o diretório de trabalho
+# Copiar código da aplicação e construir em modo produção
 COPY . .
+RUN npm run build -- --configuration=production
 
-# Exponha a porta que o Angular utiliza para rodar o servidor de desenvolvimento
-EXPOSE 4200
+# Etapa 2: Configurar o Nginx para servir os arquivos estáticos
+FROM nginx:stable-alpine
 
-# Comando para rodar o servidor de desenvolvimento do Angular
-CMD ["npm", "run", "start"]
+# Remover configuração padrão do Nginx
+RUN rm -rf /etc/nginx/conf.d/default.conf
+
+# Copiar a configuração personalizada do Nginx com o nome correto
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copiar arquivos Angular para o diretório padrão do Nginx
+COPY --from=build /app/dist/demo1 /usr/share/nginx/html
+
+# Expor a porta usada pelo Nginx
+EXPOSE 80
+
+# Comando para iniciar o Nginx
+CMD ["nginx", "-g", "daemon off;"]

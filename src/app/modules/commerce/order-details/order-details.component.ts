@@ -1,8 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { CreditService } from './../../financial/services/credit.service';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../services/order.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Pedido } from '../models/order.model';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { SweetAlertOptions } from 'sweetalert2';
 
 @Component({
   selector: 'app-order-details',
@@ -13,12 +16,15 @@ export class OrderDetailsComponent implements OnInit {
   orderForm: FormGroup;
   order: Pedido;
   orderId: number;
+  @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
+  swalOptions: SweetAlertOptions = {};
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private orderService: OrderService,
     private cdr: ChangeDetectorRef,
+    private creditService: CreditService,
   ) {}
 
   ngOnInit(): void {
@@ -41,6 +47,12 @@ export class OrderDetailsComponent implements OnInit {
     } else {
       console.error('Invalid order ID:', this.orderId);
     }
+  }
+
+  showAlert(swalOptions: SweetAlertOptions) {
+    this.swalOptions = swalOptions;
+    this.cdr.detectChanges();
+    this.noticeSwal.fire();
   }
 
   private initializeForm(): void {
@@ -73,6 +85,33 @@ export class OrderDetailsComponent implements OnInit {
       vendedor: order.vendedor.nome,
       cnpj: order.cliente.numero_doc,
       metodo: order.metodo_pagamento,
+    });
+  }
+
+  updateStatus(): void {
+    const statusControl = this.orderForm.get('status');
+    const status = statusControl ? statusControl.value : null;
+    console.log('Updating status:', status);
+    this.orderService.updateSellStatus({ venda_id: this.orderId, status_venda_id: status }).subscribe({
+      next: (resp) => {
+        this.showAlert({
+          icon: 'success',
+          title: 'Pedido atualizado com sucesso!',
+          text: resp.message,
+          confirmButtonText: 'Ok',
+        });
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.showAlert({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Não foi possível atualizar o pedido.',
+          confirmButtonText: 'Ok',
+        });
+        this.cdr.detectChanges();
+        console.error(err);
+      },
     });
   }
 }
