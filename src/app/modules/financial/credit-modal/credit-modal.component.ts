@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreditService } from '../services/credit.service';
 import { Credit, UpdateInstallment } from '../modal';
@@ -13,8 +13,8 @@ import { SweetAlertOptions } from 'sweetalert2';
 })
 export class CreditModalComponent implements OnInit {
   @Input() parcelaModel: Credit;
+  @Output() onModalClose: EventEmitter<void> = new EventEmitter(); // Evento de saída para notificar o fechamento
   userEmail: string = '';
-  showObs: boolean = false;
   obs: string = '';
 
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
@@ -36,14 +36,18 @@ export class CreditModalComponent implements OnInit {
     this.activeModal.dismiss();
   }
 
-  showAlert(swalOptions: SweetAlertOptions) {
+  showAlert(swalOptions: SweetAlertOptions, callback?: () => void) {
     this.swalOptions = swalOptions;
     this.cdr.detectChanges();
-    this.noticeSwal.fire();
+    this.noticeSwal.fire().then(() => {
+      if (callback) {
+        callback();
+      }
+    });
   }
 
   onSubmit(): void {
-    // Check if 'Cancelado' status requires 'obs'
+    // Verifica se a justificativa é obrigatória
     if (+this.parcelaModel.status_pagamento.status_pagamento_id === 4 && (!this.obs || this.obs.trim() === '')) {
       this.showAlert({
         icon: 'warning',
@@ -51,7 +55,7 @@ export class CreditModalComponent implements OnInit {
         text: 'Por favor, insira uma justificativa para o cancelamento.',
         confirmButtonText: 'Ok',
       });
-      return; // Prevent form submission
+      return; // Impede o envio do formulário
     }
 
     const updateData: UpdateInstallment = {
@@ -65,13 +69,18 @@ export class CreditModalComponent implements OnInit {
 
     this.creditService.UpdateInstallment(updateData).subscribe({
       next: (resp) => {
-        this.showAlert({
-          icon: 'success',
-          title: 'Parcela atualizada com sucesso!',
-          text: resp.message,
-          confirmButtonText: 'Ok',
-        });
-        this.activeModal.close(); // Close modal on success
+        this.showAlert(
+          {
+            icon: 'success',
+            title: 'Parcela atualizada com sucesso!',
+            text: resp.message,
+            confirmButtonText: 'Ok',
+          },
+          () => {
+            this.activeModal.close('success');
+            window.location.reload(); // Recarrega a página inteira
+          },
+        );
       },
       error: (err) => {
         this.showAlert({

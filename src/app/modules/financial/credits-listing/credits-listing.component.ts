@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Credit } from './../modal/';
 import { PaginationService } from '../../../core/services';
 import { CreditService } from '../services/credit.service';
@@ -33,15 +33,12 @@ export class CreditsListingComponent implements OnInit {
     private readonly creditService: CreditService,
     private cdr: ChangeDetectorRef,
     private modalService: NgbModal,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.credits = this.route.snapshot.data['credits'];
-    console.log('Loaded credits:', this.credits);
-
-    this.applyFilter(); // Ensure filtering is applied after data is loaded
-    console.log('Filtered credits:', this.filteredCredits);
-    console.log('Paginated credits:', this.paginatedCredits);
+    this.applyFilter();
   }
 
   onSearch(): void {
@@ -274,6 +271,29 @@ export class CreditsListingComponent implements OnInit {
     });
 
     const modalComponentInstance = this.modalReference.componentInstance as CreditModalComponent;
-    modalComponentInstance.parcelaModel = { ...credito }; // Create a copy to avoid directly modifying the original
+    modalComponentInstance.parcelaModel = { ...credito };
+
+    // Captura o evento de fechamento e recarrega a lista de parcelas
+    modalComponentInstance.onModalClose.subscribe(() => {
+      this.loadingCredits();
+      this.cdr.detectChanges();
+    });
+  }
+
+  loadingCredits(): void {
+    this.creditService.getAllCredits().subscribe({
+      next: (credits) => {
+        this.credits = credits;
+        this.applyFilter();
+        this.recarregarPagina();
+      },
+      error: (err) => console.error('Erro ao carregar as parcelas atualizadas:', err),
+    });
+    this.cdr.detectChanges();
+  }
+  recarregarPagina(): void {
+    this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
+      this.router.navigate([this.route.snapshot.routeConfig?.path]);
+    });
   }
 }

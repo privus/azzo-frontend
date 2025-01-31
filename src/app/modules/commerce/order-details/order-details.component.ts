@@ -1,4 +1,3 @@
-import { CreditService } from './../../financial/services/credit.service';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../services/order.service';
@@ -6,6 +5,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Pedido } from '../models/order.model';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CreditModalComponent } from '../../financial/credit-modal/credit-modal.component';
+import { Credit } from '../../financial/modal';
 
 @Component({
   selector: 'app-order-details',
@@ -18,13 +20,14 @@ export class OrderDetailsComponent implements OnInit {
   orderId: number;
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
+  private modalReference: NgbModalRef;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private orderService: OrderService,
     private cdr: ChangeDetectorRef,
-    private creditService: CreditService,
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit(): void {
@@ -92,7 +95,7 @@ export class OrderDetailsComponent implements OnInit {
     const statusControl = this.orderForm.get('status');
     const status = statusControl ? statusControl.value : null;
     console.log('Updating status:', status);
-    this.orderService.updateSellStatus({ venda_id: this.orderId, status_venda_id: status }).subscribe({
+    this.orderService.updateSellStatus({ venda_id: this.orderId, status_venda_id: Number(status) }).subscribe({
       next: (resp) => {
         this.showAlert({
           icon: 'success',
@@ -113,5 +116,18 @@ export class OrderDetailsComponent implements OnInit {
         console.error(err);
       },
     });
+  }
+
+  openCreditModal(credito: Credit) {
+    credito = { ...credito, venda: this.order };
+    // Create a copy to avoid directly modifying the original and add the venda field
+    this.modalReference = this.modalService.open(CreditModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+    });
+    console.log('credito:', credito);
+    const modalComponentInstance = this.modalReference.componentInstance as CreditModalComponent;
+    modalComponentInstance.parcelaModel = { ...credito }; // Create a copy to avoid directly modifying the original
   }
 }
