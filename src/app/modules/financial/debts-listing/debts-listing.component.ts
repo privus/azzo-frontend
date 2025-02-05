@@ -77,15 +77,15 @@ export class DebtsListingComponent implements OnInit {
     if (this.customDateRange.start && this.customDateRange.end) {
       const startDate = new Date(this.customDateRange.start);
       const endDate = new Date(this.customDateRange.end);
-      result = result.filter((credit) => {
-        const creationDate = new Date(credit.data_criacao);
+      result = result.filter((debts) => {
+        const creationDate = new Date(debts.data_criacao);
         return creationDate >= startDate && creationDate <= endDate;
       });
     }
 
-    // Update filteredCredits and recalculate pagination
+    // Update filtereddebtss and recalculate pagination
     this.filteredDebts = result;
-    console.log('Filtered credits:', this.filteredDebts);
+    console.log('Filtered debtss:', this.filteredDebts);
 
     this.currentPage = 1;
     this.calculatePagination();
@@ -176,6 +176,7 @@ export class DebtsListingComponent implements OnInit {
 
     const nextParcel = debt.parcela_debito.find((parcela) => !parcela.data_pagamento);
 
-    return nextParcel ? new Date(nextParcel.data_vencimento).toLocaleDateString('pt-BR') : 'Todas pagas';
+    // Extrair diretamente a data no formato 'YYYY-MM-DD' sem conversão de fuso horário
+    return nextParcel ? nextParcel.data_vencimento : 'Todas pagas';
   }
 }

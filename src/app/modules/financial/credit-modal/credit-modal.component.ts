@@ -16,6 +16,7 @@ export class CreditModalComponent implements OnInit {
   @Output() onModalClose: EventEmitter<void> = new EventEmitter(); // Evento de saída para notificar o fechamento
   userEmail: string = '';
   obs: string = '';
+  isPaymentDateDisabled: boolean = false;
 
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
@@ -30,6 +31,7 @@ export class CreditModalComponent implements OnInit {
   ngOnInit(): void {
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
     this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
+    this.onStatusChange();
   }
 
   closeModal(): void {
@@ -92,6 +94,15 @@ export class CreditModalComponent implements OnInit {
         console.error(err);
       },
     });
+  }
+
+  onStatusChange(): void {
+    if (+this.parcelaModel.status_pagamento.status_pagamento_id === 3) {
+      this.isPaymentDateDisabled = true;
+      this.parcelaModel.data_pagamento = null; // Define como null se "Em Atraso"
+    } else {
+      this.isPaymentDateDisabled = false;
+    }
   }
 
   isJustificationRequired(): boolean {

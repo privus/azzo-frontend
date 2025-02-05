@@ -4,6 +4,7 @@ import { CreditsListingComponent } from './credits-listing/credits-listing.compo
 import { CreditResolver } from './credit.resolver';
 import { DebtsListingComponent } from './debts-listing/debts-listing.component';
 import { DebtResolver } from './debt.resolver';
+import { DebtDetailsComponent } from './debt-details/debt-details.component';
 
 const routes: Routes = [
   {
@@ -15,6 +16,10 @@ const routes: Routes = [
     path: 'debts',
     component: DebtsListingComponent,
     resolve: { debts: DebtResolver },
+  },
+  {
+    path: 'debts/:id',
+    component: DebtDetailsComponent,
   },
 ];
 

@@ -14,7 +14,7 @@ export interface Debt {
   parcela_debito: ParcelaDebito[];
   status_pagamento: StatusPagamento;
   departamento: Departamento;
-  categoria: Categoria
+  categoria: Categoria;
 }
 
 export interface ParcelaDebito {

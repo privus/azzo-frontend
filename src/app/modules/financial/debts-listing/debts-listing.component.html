@@ -87,11 +87,12 @@
                     <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0" >
                         <th class="min-w-50px">ID</th>
                         <th class="min-w-125px">Descrição</th>
-                        <th class="min-w-125px">Data Criação</th>
+                        <th class="min-w-125px">Data Competência</th>
                         <th class="min-w-125px">Valor Total</th>
                         <th class="min-w-125px">Valor Parcela</th>
                         <th class="min-w-125px">Próximo Vencimento</th>
                         <th class="min-w-125px">Status Pagamento</th>
+                        <th class="min-w-125p">Categoria</th>
                         <th class="text-end min-w-100px">Ações</th>
                     </tr>
                 </thead>
@@ -104,6 +105,7 @@
                         <td>{{ debt.valor_parcela | currency:'BRL' }}</td>
                         <td>{{ getNextDueDate(debt) }}</td>
                         <td>{{ debt.status_pagamento ? debt.status_pagamento.nome : '' }}</td>
+                        <td>{{ debt.categoria ? debt.categoria.nome : '' }}</td>
 
                         <td>                            
 

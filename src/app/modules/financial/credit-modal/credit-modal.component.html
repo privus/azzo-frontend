@@ -44,6 +44,7 @@
               type="date"
               class="form-control"
               [(ngModel)]="parcelaModel.data_pagamento"
+              [disabled]="isPaymentDateDisabled"
               name="data_pagamento"
               required
             />
@@ -58,7 +59,13 @@
         <!-- Right Column: Status Pagamento and Data Competência -->
         <div class="col-lg-6">
           <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Status de Pagamento</label>
-          <select class="form-control" [(ngModel)]="parcelaModel.status_pagamento.status_pagamento_id" name="status_pagamento_id" required>
+          <select 
+            class="form-control" 
+            [(ngModel)]="parcelaModel.status_pagamento.status_pagamento_id" 
+            name="status_pagamento_id" 
+            (ngModelChange)="onStatusChange()"
+            required
+            >
             <option [value]="1">Pendente</option>
             <option [value]="2">Pago</option>
             <option [value]="3">Em Atraso</option>
@@ -110,7 +117,7 @@
         <button
           type="submit"
           class="btn btn-primary"
-          [disabled]="!creditForm.dirty || !parcelaModel.data_pagamento || isJustificationRequired()"
+          [disabled]="!creditForm.dirty || (!parcelaModel.data_pagamento && +parcelaModel.status_pagamento.status_pagamento_id != 3) || isJustificationRequired()"
         >
           Salvar
         </button>
