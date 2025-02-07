@@ -1,8 +1,10 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Credito } from '../modal/credit.modal';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Credit } from './../modal/';
 import { PaginationService } from '../../../core/services';
 import { CreditService } from '../services/credit.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CreditModalComponent } from '../credit-modal/credit-modal.component';
 
 @Component({
   selector: 'app-credits-listing',
@@ -10,8 +12,8 @@ import { CreditService } from '../services/credit.service';
   styleUrls: ['./credits-listing.component.scss'],
 })
 export class CreditsListingComponent implements OnInit {
-  credits: Credito[] = [];
-  filteredCredits: Credito[] = [];
+  credits: Credit[] = [];
+  filteredCredits: Credit[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 50;
   totalPages: number = 0;
@@ -23,21 +25,20 @@ export class CreditsListingComponent implements OnInit {
   showCustomDatePicker: boolean = false;
   customDateRange: { start: string; end: string } = { start: '', end: '' };
   selectedStatus: string = '';
+  private modalReference: NgbModalRef;
 
   constructor(
     private route: ActivatedRoute,
     private paginationService: PaginationService,
     private readonly creditService: CreditService,
     private cdr: ChangeDetectorRef,
+    private modalService: NgbModal,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.credits = this.route.snapshot.data['credits'];
-    console.log('Loaded credits:', this.credits);
-
-    this.applyFilter(); // Ensure filtering is applied after data is loaded
-    console.log('Filtered credits:', this.filteredCredits);
-    console.log('Paginated credits:', this.paginatedCredits);
+    this.applyFilter();
   }
 
   onSearch(): void {
@@ -121,7 +122,7 @@ export class CreditsListingComponent implements OnInit {
     this.endItem = endItem;
   }
 
-  get paginatedCredits(): Credito[] {
+  get paginatedCredits(): Credit[] {
     return this.paginationService.getPaginatedItems(this.filteredCredits, this.currentPage, this.itemsPerPage);
   }
 
@@ -260,5 +261,39 @@ export class CreditsListingComponent implements OnInit {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  openCreditModal(credito: Credit) {
+    this.modalReference = this.modalService.open(CreditModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+    });
+
+    const modalComponentInstance = this.modalReference.componentInstance as CreditModalComponent;
+    modalComponentInstance.parcelaModel = { ...credito };
+
+    // Captura o evento de fechamento e recarrega a lista de parcelas
+    modalComponentInstance.onModalClose.subscribe(() => {
+      this.loadingCredits();
+      this.cdr.detectChanges();
+    });
+  }
+
+  loadingCredits(): void {
+    this.creditService.getAllCredits().subscribe({
+      next: (credits) => {
+        this.credits = credits;
+        this.applyFilter();
+        this.recarregarPagina();
+      },
+      error: (err) => console.error('Erro ao carregar as parcelas atualizadas:', err),
+    });
+    this.cdr.detectChanges();
+  }
+  recarregarPagina(): void {
+    this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
+      this.router.navigate([this.route.snapshot.routeConfig?.path]);
+    });
   }
 }

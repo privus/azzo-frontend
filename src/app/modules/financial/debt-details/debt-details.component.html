@@ -1,6 +1,6 @@
 <div id="kt_app_content_container" class="app-container container-xxl">
     <div
-      *ngIf="order; else loading"
+      *ngIf="debt; else loading"
       id="kt_app_content_container"
       class="app-container container-xxl"
     >
@@ -8,7 +8,7 @@
       <form
         id="kt_ecommerce_add_customer_form"
         class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework"
-        [formGroup]="orderForm"
+        [formGroup]="debtForm"
       >
         <!--begin::Aside column-->
         <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
@@ -20,51 +20,61 @@
               </div>
             </div>
             <div class="card-body pt-0">
-              <div class="w-100">
-                <label class="form-label">Data/Hora</label>
+                <div class="w-100">
+                    <label class="form-label">Id</label>
+                    <input
+                      type="text"
+                      name="doc"
+                      class="form-control mb-2"
+                      placeholder="Id"
+                      formControlName="id"
+                      disable
+                    />
+                </div>
+                <div class="w-100">
+                <label class="form-label">Data Competência</label>
                 <input
                   type="text"
                   name="name"
                   class="form-control mb-2"
                   placeholder="Data Criação"
-                  [value]="order.data_criacao | date: 'dd/MM/yyyy | HH:mm:ss'"
+                  [value]="debt.data_competencia | date: 'dd/MM/yyyy'"
                   disabled
                 />
-              </div>
-  
+              </div>  
               <div class="w-100">
-                <label class="form-label">Código</label>
-                <input
-                  type="text"
-                  name="doc"
-                  class="form-control mb-2"
-                  placeholder="Código"
-                  formControlName="codigo"
-                  disable
-                />
-              </div>
-  
-              <div class="w-100">
-                <label class="form-label">Vendedor</label>
+                <label class="form-label">Empresa</label>
                 <input
                   type="text"
                   name="ie"
                   class="form-control mb-2"
-                  placeholder="Vendedor"
-                  formControlName="vendedor"
+                  placeholder="Empresa"
+                  formControlName="empresa"
                   disable
                 />
               </div>
               <div class="w-100">
-                <label class="form-label">Método</label>
+                <label class="form-label">Conta</label>
                 <input
                   type="text"
                   name="ie"
                   class="form-control mb-2"
-                  placeholder="Metodo de Pagamento"
-                  formControlName="metodo"
+                  placeholder="conta"
+                  formControlName="conta"
                   disable
                 />
+              </div>
+              <br/>
+              <div class="w-100">
+                <label class="form-label">Depesa Grupo:
+                    <span class="text-gray-500 fw-bold"
+                    >
+                      <span class="text-gray-800 fw-bold"
+                    >   {{ debt.despesa_grupo ? 'Sim' : 'Não' }}
+                      </span
+                    >
+                </span>
+                </label>
               </div>
             </div>
           </div>
@@ -93,21 +103,17 @@
             <!--begin::Card body-->
             <div class="card-body pt-0" data-select2-id="select2-data-146-bwni">
               <!--begin::Select2-->
-              <select
-                class="form-select mb-2"
-                formControlName="status"
-                data-control="select2"
-                data-hide-search="true"
-                data-placeholder="Select a status"
+              <select 
+              class="form-control" 
+              name="status_pagamento_id" 
+              formControlName="status_pagamento"
+              required
               >
-                <option value="11138">Aguardando Aprovação</option>
-                <option value="11139">Pedido</option>
-                <option value="11468">Reprovado</option>
-                <option value="11491">Faturado</option>
-                <option value="11541">Pronto para Envio</option>
-                <option value="11542">Enviado</option>
-                <option value="11543">Entregue</option>
-              </select>
+              <option [value]="1">Pendente</option>
+              <option [value]="2">Pago</option>
+              <option [value]="3">Em Atraso</option>
+              <option [value]="4">Cancelado</option>
+            </select>
               <!--end::Select2-->
   
               <!--begin::Datepicker-->
@@ -120,17 +126,14 @@
                 <div class="card-header pt-7">
                     <!--begin::Title-->
                     <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bold text-gray-900">Parcelas</span>
+                    <span class="card-label fw-bold text-gray-900">Parcelas:</span>
                     <span class="text-gray-500 mt-1 fw-semibold fs-6">
-                        {{ order.parcela_credito.length || 0 }} Parcelas
+                        {{ debt.parcela_debito.length || 0 }} Parcelas
                     </span>
                     </h3>
                     <!--end::Title-->
             
                     <!--begin::Toolbar (opcional)-->
-                    <div class="card-toolbar">
-                    <a href="#" class="btn btn-sm btn-light">{{ order.forma_pagamento }}</a>
-                    </div>
                     <!--end::Toolbar-->
                 </div>
                 <!--end::Header-->
@@ -142,7 +145,7 @@
                     <!--begin::Item (repete para cada parcela)-->
                     <div
                         class="border border-dashed border-gray-300 rounded px-7 py-3 mb-6"
-                        *ngFor="let parcela of order?.parcela_credito"
+                        *ngFor="let parcela of debt?.parcela_debito"
                     >
                         <!--begin::Info-->
                         <div class="d-flex flex-stack mb-3">
@@ -162,7 +165,7 @@
                             data-kt-menu-trigger="click"
                             data-kt-menu-placement="bottom-end"
                             data-kt-menu-overflow="true"
-                            (click)="openCreditModal(parcela)"
+                            
                             >
                             <i class="ki-duotone ki-dots-square fs-1">
                                 <span class="path1"></span><span class="path2"></span
@@ -202,9 +205,8 @@
                         <div class="d-flex flex-stack mt-3">
                         <span class="text-gray-500 fw-bold"
                             >Valor:
-                              <span class="text-gray-800 fw-bold"
-                            >   {{ parcela.valor | currency: 'BRL' }}
-                              </span
+                            <span class="text-gray-800 fw-bold"
+                            >{{ parcela.valor | currency: 'BRL' }}</span
                             >
                         </span>
                         </div>
@@ -231,145 +233,98 @@
                 <div class="card card-flush py-4">
                   <div class="card-header">
                     <div class="card-title">
-                      <h2>Informações Cliente</h2>
+                      <h2>Informações Despesa</h2>
                     </div>
                   </div>
                   <div class="card-body pt-0">
                     <div class="card-body pt-0">
-                      <label class="form-label">Nome Empresa</label>
+                      <label class="form-label">Nome</label>
                       <input
                         type="text"
                         name="company_name"
                         class="form-control mb-2"
                         placeholder="Nome Empresa"
-                        formControlName="nome_empresa"
+                        formControlName="nome"
                         disable
                       />
                     </div>
                     <div class="card-body pt-0">
                       <div>
-                        <label class="form-label">CNPJ</label>
+                        <label class="form-label">Departamento</label>
                         <input
                           type="text"
                           name="email"
                           class="form-control"
                           placeholder="CNPJ"
-                          formControlName="cnpj"
+                          formControlName="departamento"
                           disable
                         />
                       </div>
                     </div>
                     <div class="card-body pt-0">
                       <div>
-                        <label class="form-label">Telefone</label>
+                        <label class="form-label">Categoria</label>
                         <input
                           type="text"
                           name="phone"
                           class="form-control"
                           placeholder="Telefone"
-                          formControlName="telefone"
+                          formControlName="categoria"
                           disable
                         />
                       </div>
                     </div>
                     <div class="card-body pt-0">
                       <div>
-                        <label class="form-label">Email</label>
+                        <label class="form-label">Criado por:</label>
                         <input
                           type="text"
                           name="email"
                           class="form-control"
-                          placeholder="Email"
-                          formControlName="email"
+                          placeholder="Email do User"
+                          formControlName="criado_por"
                           disable
                         />
                       </div>
                     </div>
+                    <div class="card-body pt-8">
+                        <div>
+                          <label class="form-label">Valor Total:
+                            <span 
+                                class="text-gray-500 fw-bold"
+                            >
+                              <span 
+                                class="text-gray-800 fw-bold"
+                              >   
+                                {{ debt.valor_total | currency: 'BRL' }}
+                              </span
+                            >
+                            </span>
+                          </label>                          
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div>
+                          <label class="form-label">Valor Juros:
+                            <span 
+                                class="text-gray-500 fw-bold"
+                            >
+                              <span 
+                                class="text-gray-800 fw-bold"
+                              >   
+                                {{ debt.juros | currency: 'BRL' }}
+                              </span
+                            >
+                            </span>
+                          </label>                          
+                        </div>
+                    </div>                     
                   </div>
                 </div>
                 <!--end::General options-->
   
                 <!--begin::Pricing-->
-                <div class="card card-flush py-4">
-                  <div class="card-header">
-                    <div class="card-title">
-                      <h2>Pedido</h2>
-                    </div>
-                  </div>
-                  <div class="card-body pt-0">
-                    <div class="table-responsive">
-                      <!--begin::Table-->
-                      <table
-                        class="table align-middle table-row-dashed fs-6 gy-5 mb-0"
-                      >
-                        <thead>
-                          <tr
-                            class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0"
-                          >
-                            <th class="min-w-175px">Product</th>
-                            <th class="min-w-100px text-end">Código</th>
-                            <th class="min-w-70px text-end">Qtd</th>
-                            <th class="min-w-100px text-end">Preço Tabela</th>
-                            <th class="min-w-100px text-end">Preço Venda</th>
-                            <th class="min-w-100px text-end">Total</th>
-                          </tr>
-                        </thead>
-                        <tbody class="fw-semibold text-gray-600">
-                          <tr *ngFor="let item of order.itensVenda">
-                            <td>
-                              <div class="d-flex align-items-center">
-                                <!--begin::Title-->
-                                <div class="ms-5">
-                                  <a
-                                    href="#"
-                                    class="fw-bold text-gray-600 text-hover-primary"
-                                    >{{ item.produto.nome }}</a
-                                  >
-                                  <div class="fs-7 text-muted">
-                                    {{ item.produto.descricao_uni }}
-                                  </div>
-                                </div>
-                                <!--end::Title-->
-                              </div>
-                            </td>
-                            <td class="text-end">
-                              {{ item.produto.codigo }}
-                            </td>
-                            <td class="text-end">
-                              {{ item.quantidade }}
-                            </td>
-                            <td class="text-end">
-                              ${{ item.produto.preco_venda }}
-                            </td>
-                            <td class="text-end">
-                              ${{ item.valor_unitario }}
-                            </td>
-                            <td class="text-end">
-                              ${{ item.valor_total }}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td colspan="5" class="text-end">Flex Gerado</td>
-                            <td class="text-end">${{ order.flex_gerado }}</td>
-                          </tr>
-                          <tr>
-                            <td colspan="5" class="text-end">Desconto</td>
-                            <td class="text-end">
-                              ${{ +order.desconto < 0 ? 0 : order.desconto }}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td colspan="5" class="text-end">Valor Total</td>
-                            <td class="text-end fw-bold">
-                              ${{ order.valor_final }}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <!--end::Table-->
-                    </div>
-                  </div>
-                </div>
+                
                 <!--end::Pricing-->
               </div>
             </div>
@@ -389,8 +344,8 @@
               type="submit"
               id="kt_ecommerce_add_customer_submit"
               class="btn btn-primary"
-              (click)="updateStatus()"
-              [disabled]="!orderForm.dirty"
+
+              [disabled]="!debtForm.dirty"
             >
               <span class="indicator-label">Save Changes</span>
               <span class="indicator-progress"

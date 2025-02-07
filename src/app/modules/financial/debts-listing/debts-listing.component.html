@@ -65,14 +65,14 @@
             </div>
             <div class="d-flex align-items-center position-absolute my-1 ms-8 end-0  me-10">
               <select
-                class="form-select form-select-solid form-select-lg"
-                [(ngModel)]="selectedStatus"
-              >
-                <option value="">Status</option>
-                <option value="1">Pendente</option>
-                <option value="2">Pago</option>
-                <option value="3">Em Atraso</option>
-                <option value="4">Cancelado</option>
+                    class="form-select form-select-solid form-select-lg"
+                    [(ngModel)]="selectedStatus"
+                >
+                    <option value="">Status</option>
+                    <option value="1">Pendente</option>
+                    <option value="2">Pago</option>
+                    <option value="3">Em Atraso</option>
+                    <option value="4">Cancelado</option>
               </select>
             </div>
     </div>
@@ -86,12 +86,14 @@
                 <thead>
                     <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0" >
                         <th class="min-w-50px">ID</th>
-                        <th class="min-w-125px">Descrição</th>
-                        <th class="min-w-125px">Data Criação</th>
+                        <th class="min-w-125px">Nome</th>
+                        <th class="min-w-125px">Data Competência</th>
                         <th class="min-w-125px">Valor Total</th>
                         <th class="min-w-125px">Valor Parcela</th>
-                        <th class="min-w-125px">Próximo Vencimento</th>
+                        <th class="min-w-125px">Próx. Vencimento</th>
                         <th class="min-w-125px">Status Pagamento</th>
+                        <th class="min-w-125p">Categoria</th>
+                        <th class="min-w-125p">Departamento</th>
                         <th class="text-end min-w-100px">Ações</th>
                     </tr>
                 </thead>
@@ -103,7 +105,9 @@
                         <td>{{ debt.valor_total | currency:'BRL' }}</td>                        
                         <td>{{ debt.valor_parcela | currency:'BRL' }}</td>
                         <td>{{ getNextDueDate(debt) }}</td>
-                        <td>{{ debt.status_pagamento ? debt.status_pagamento.nome : '' }}</td>
+                        <td>{{ debt.status_pagamento.nome }}</td>
+                        <td>{{ debt.categoria.nome }}</td>
+                        <td>{{ debt.departamento.nome }}</td>
 
                         <td>                            
 
@@ -112,7 +116,7 @@
                         <td class="text-end">
                             <button
                              class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-
+                             (click)="editOrder(debt.debito_id)"
                             >
                                 <i class="ki-duotone ki-pencil fs-3">
                                     <span class="path1"></span><span class="path2"></span>
@@ -127,7 +131,7 @@
         <div class="row mt-5">
             <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
                 <div class="fs-6 fw-bold text-gray-700">
-                    Mostrando {{ startItem }} - {{ endItem }} de {{ filteredDebts.length }} Débitos.
+                    Mostrando {{ startItem }} - {{ endItem }} de {{ filteredDebts.length }} Despesas.
                 </div>
             </div>
             <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">

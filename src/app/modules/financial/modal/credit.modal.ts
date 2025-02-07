@@ -1,7 +1,7 @@
-import { Cliente } from './../../commerce/models/costumer.model';
-import { Pedido, StatusPagamento } from '../../commerce/models';
+import { Cliente } from './../../commerce/models/';
+import { Order, StatusPagamento } from '../../commerce/models';
 
-export interface Credito {
+export interface Credit {
   parcela_id: number;
   numero: number;
   valor: string;
@@ -10,6 +10,6 @@ export interface Credito {
   data_vencimento: string;
   data_pagamento: string | null;
   status_pagamento: StatusPagamento;
-  venda: Pedido;
+  venda: Order;
   cliente: Cliente;
 }

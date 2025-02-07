@@ -1,3 +1,4 @@
+import { UpdateSellStatus } from './../models/';
 import { Injectable } from '@angular/core';
 import { SellService } from '../../../core/services/';
 
@@ -21,5 +22,9 @@ export class OrderService {
 
   syncroAllOrders() {
     return this.sellService.syncroAllOrders();
+  }
+
+  updateSellStatus(UpdateSellStatusDto: UpdateSellStatus) {
+    return this.sellService.updateSellStatus(UpdateSellStatusDto);
   }
 }

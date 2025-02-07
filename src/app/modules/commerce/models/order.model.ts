@@ -1,6 +1,7 @@
+import { Credit } from '../../financial/modal';
 import { Cliente, Produto } from './';
 
-export interface Pedido {
+export interface Order {
   venda_id: number;
   codigo: number;
   data_criacao: string;
@@ -19,7 +20,7 @@ export interface Pedido {
   itensVenda: ItensVenda[];
   status_pagamento: StatusPagamento;
   status_venda: StatusVenda;
-  parcela_credito: ParcelaCredito[];
+  parcela_credito: Credit[];
   tipo_pedido: TipoPedido;
 }
 
@@ -47,17 +48,6 @@ export interface StatusPagamento {
 export interface StatusVenda {
   status_venda_id: number;
   nome: string;
-}
-
-export interface ParcelaCredito {
-  parcela_id: number;
-  numero: number;
-  valor: string;
-  juros: string | null;
-  data_criacao: string;
-  data_vencimento: string;
-  data_pagamento: string | null;
-  status_pagamento: StatusPagamento;
 }
 
 export interface TipoPedido {

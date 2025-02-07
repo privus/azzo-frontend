@@ -64,7 +64,7 @@
                         <th class="min-w-125px">Cliente</th>
                         <th class="min-w-125px">Data Criação</th>
                         <th class="min-w-125px">Valor</th>
-                        <th class="min-w-125px">Juros</th>
+                        <th class="min-w-125px">Cód Pedido</th>
                         <th class="min-w-125px">Data Vencimento</th>
                         <th class="min-w-125px">Status Pagamento</th>
                         <th class="text-end min-w-100px">Ações</th>
@@ -73,21 +73,21 @@
                 <tbody class="fw-semibold text-gray-600">
                     <tr *ngFor="let credit of paginatedCredits">
                         <td>{{ credit.parcela_id }}</td>
-                        <td>{{ credit.venda ? credit.venda.cliente.nome : 'Cliente Teste' }}</td>
+                        <td>{{ credit.venda.cliente ? credit.venda.cliente.nome : 'Cliente Teste' }}</td>
                         <td>{{ credit.data_criacao | date:'dd/MM/yyyy' }}</td>
                         <td>{{ credit.valor | currency:'BRL' }}</td>
-                        <td>{{ credit.juros || 0 | currency:'BRL' }}</td>
+                        <td>{{ credit.venda.codigo }}</td>
                         <td>{{ credit.data_vencimento | date:'dd/MM/yyyy'}}</td>
                         <td>                            
                             <span class="badge td" [ngClass]="getStatusClass(credit.status_pagamento.status_pagamento_id)">
-                            {{ credit.status_pagamento.nome }}
+                            {{ credit.status_pagamento.nome ? credit.status_pagamento.nome : 'Pendente' }}
                             </span>  
                         </td>   
 
                         <td class="text-end">
                             <button
                              class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-
+                                (click)="openCreditModal(credit)"
                             >
                                 <i class="ki-duotone ki-pencil fs-3">
                                     <span class="path1"></span><span class="path2"></span>
@@ -102,7 +102,7 @@
         <div class="row mt-5">
             <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
                 <div class="fs-6 fw-bold text-gray-700">
-                    Mostrando {{ startItem }} - {{ endItem }} de {{ filteredCredits.length }} Créditos.
+                    Mostrando {{ startItem }} - {{ endItem }} de {{ filteredCredits.length }} Receitas.
                 </div>
             </div>
             <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
