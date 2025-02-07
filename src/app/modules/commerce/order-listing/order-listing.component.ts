@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { Pedido } from '../models/order.model';
+import { Order } from '../models/order.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationService } from '../../../core/services';
 import { OrderService } from '../services/order.service';
@@ -13,8 +13,8 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./order-listing.component.scss'],
 })
 export class OrderListingComponent implements OnInit {
-  orders: Pedido[] = [];
-  filteredOrders: Pedido[] = [];
+  orders: Order[] = [];
+  filteredOrders: Order[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 50;
   totalPages: number = 0;
@@ -210,7 +210,7 @@ export class OrderListingComponent implements OnInit {
     this.endItem = endItem;
   }
 
-  get paginatedOrders(): Pedido[] {
+  get paginatedOrders(): Order[] {
     return this.paginationService.getPaginatedItems(this.filteredOrders, this.currentPage, this.itemsPerPage);
   }
 

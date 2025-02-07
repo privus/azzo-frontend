@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Categoria, Debt, Departamento } from '../modal/debt.modal';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationService } from '../../../core/services';
 import { DebtService } from '../services/debt.service';
 
@@ -33,6 +33,7 @@ export class DebtsListingComponent implements OnInit {
     private paginationService: PaginationService,
     private debtService: DebtService,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -176,7 +177,15 @@ export class DebtsListingComponent implements OnInit {
 
     const nextParcel = debt.parcela_debito.find((parcela) => !parcela.data_pagamento);
 
-    // Extrair diretamente a data no formato 'YYYY-MM-DD' sem conversão de fuso horário
-    return nextParcel ? nextParcel.data_vencimento : 'Todas pagas';
+    if (nextParcel) {
+      const date = new Date(nextParcel.data_vencimento);
+      return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+    }
+
+    return 'Todas pagas';
+  }
+
+  editOrder(id: number): void {
+    this.router.navigate(['financial/debts', id]);
   }
 }

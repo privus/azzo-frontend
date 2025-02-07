@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LayoutService } from '../../../core/layout.service';
+import { Router } from '@angular/router';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DebtCreateModalComponent } from '../../../../../modules/financial/debt-create-modal/debt-create-modal.component';
 
 @Component({
   selector: 'app-classic',
@@ -9,6 +12,9 @@ import { LayoutService } from '../../../core/layout.service';
 })
 export class ClassicComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
+  currentRoute: string = '';
+  private modalReference: NgbModalRef;
+
   appToolbarPrimaryButton: boolean;
   appToolbarPrimaryButtonLabel: string = '';
   appToolbarPrimaryButtonUrl: string = '';
@@ -24,9 +30,14 @@ export class ClassicComponent implements OnInit, OnDestroy {
   filterButtonClass: string = '';
   daterangepickerButtonClass: string = '';
 
-  constructor(private layout: LayoutService) {}
+  constructor(
+    private layout: LayoutService,
+    private modalService: NgbModal,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
+    this.currentRoute = this.router.url;
     this.updateProps();
     const subscr = this.layout.layoutConfigSubject.asObservable().subscribe(() => {
       this.updateProps();
@@ -54,5 +65,52 @@ export class ClassicComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
+  }
+
+  openDebtModal() {
+    this.modalReference = this.modalService.open(DebtCreateModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+    });
+  }
+
+  getCurrentRouteSegment(): void {
+    // Captura o primeiro segmento da rota
+    const urlSegments = this.router.url.split('/');
+    this.currentRoute = urlSegments.length > 1 ? urlSegments[1] : '';
+  }
+
+  shouldDisplayButtons(): boolean {
+    return this.currentRoute !== 'commerce';
+  }
+
+  getSecondaryButtonLink(): string {
+    this.getCurrentRouteSegment();
+
+    switch (this.currentRoute) {
+      case 'apps':
+        return 'apps/users';
+      case 'financial/debts':
+        return '/financial/credts';
+      case 'financial/debts':
+        return '/financial/debts';
+      default:
+        return '';
+    }
+  }
+
+  createButton(): any {
+    const fullPath = this.router.url;
+    if (fullPath.includes('financial/debts')) {
+      this.openDebtModal();
+    }
+    if (this.currentRoute == 'apps') {
+      this.router.navigate(['/users/new-account']);
+    }
+  }
+
+  isDisabled(): boolean {
+    return this.currentRoute === 'commerce';
   }
 }

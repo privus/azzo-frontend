@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrderService } from '../services/order.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Pedido } from '../models/order.model';
+import { Order } from '../models/order.model';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -16,7 +16,7 @@ import { Credit } from '../../financial/modal';
 })
 export class OrderDetailsComponent implements OnInit {
   orderForm: FormGroup;
-  order: Pedido;
+  order: Order;
   orderId: number;
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
@@ -39,7 +39,7 @@ export class OrderDetailsComponent implements OnInit {
       this.orderService.getOrderById(this.orderId).subscribe({
         next: (order) => {
           this.order = order;
-          console.log('PEDIDO ===> ', this.order);
+          console.log('Order ===> ', this.order);
           this.cdr.detectChanges();
           this.patchFormWithOrder(order);
         },
@@ -76,7 +76,7 @@ export class OrderDetailsComponent implements OnInit {
     });
   }
 
-  private patchFormWithOrder(order: Pedido): void {
+  private patchFormWithOrder(order: Order): void {
     this.orderForm.patchValue({
       codigo: order.codigo,
       data_criacao: order.data_criacao,

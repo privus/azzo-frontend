@@ -1,7 +1,7 @@
 import { Credit } from '../../financial/modal';
 import { Cliente, Produto } from './';
 
-export interface Pedido {
+export interface Order {
   venda_id: number;
   codigo: number;
   data_criacao: string;
