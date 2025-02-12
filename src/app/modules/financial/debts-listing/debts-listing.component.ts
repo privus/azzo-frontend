@@ -38,9 +38,9 @@ export class DebtsListingComponent implements OnInit {
 
   ngOnInit(): void {
     this.debts = this.route.snapshot.data['debts'];
-    this.applyFilter();
     this.loadDepartments();
     this.loadCategories();
+    this.applyFilter();
     this.cdr.detectChanges();
 
     console.log('Loaded debts:', this.debts);
@@ -63,31 +63,43 @@ export class DebtsListingComponent implements OnInit {
   }
 
   applyFilter(): void {
-    console.log('Applying filter with searchTerm:', this.searchTerm);
-
     let result = [...this.debts];
 
+    // 1. Filter by search term
     const term = this.searchTerm.trim().toLowerCase();
     if (term) {
-      result = result.filter((debts) => {
-        const descricao = debts.descricao;
-        return descricao.includes(term);
-      });
+      result = result.filter(
+        (debt) => debt.descricao.toLowerCase().includes(term) || debt.nome.toLowerCase().includes(term) || debt.empresa?.toLowerCase().includes(term),
+      );
     }
 
+    // 2. Filter by category
+    if (this.selectedCategory) {
+      result = result.filter((debt) => debt.categoria.categoria_id === +this.selectedCategory);
+    }
+
+    // 3. Filter by department
+    if (this.selectedDepartment) {
+      result = result.filter((debt) => debt.departamento.departamento_id === +this.selectedDepartment);
+    }
+
+    // 4. Filter by status
+    if (this.selectedStatus) {
+      result = result.filter((debt) => debt.status_pagamento.status_pagamento_id === +this.selectedStatus);
+    }
+
+    // 5. Filter by date range (if custom dates are selected)
     if (this.customDateRange.start && this.customDateRange.end) {
       const startDate = new Date(this.customDateRange.start);
       const endDate = new Date(this.customDateRange.end);
-      result = result.filter((debts) => {
-        const creationDate = new Date(debts.data_criacao);
+      result = result.filter((debt) => {
+        const creationDate = new Date(debt.data_criacao);
         return creationDate >= startDate && creationDate <= endDate;
       });
     }
 
-    // Update filtereddebtss and recalculate pagination
+    // 6. Update filtered debts and pagination
     this.filteredDebts = result;
-    console.log('Filtered debtss:', this.filteredDebts);
-
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();

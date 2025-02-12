@@ -1,231 +1,234 @@
 <div class="modal-content rounded">
     <!-- Modal Header -->
     <div class="modal-header pb-0 border-0 justify-content-end">
-      <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" (click)="activeModal.dismiss()">
-        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
-      </button>
+    <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" (click)="activeModal.dismiss()">
+      <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+    </button>
+  </div>
+
+  <!-- Modal Body -->
+  <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+      <!-- Descrição -->
+    <div class="mb-13 text-center">
+      <h1 class="mb-3">Criar Nova Despesa</h1>
+      <div class="text-muted fw-semibold fs-5">Preencha os campos para registrar o débito</div>
     </div>
-  
-    <!-- Modal Body -->
-    <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
-        <!-- Descrição -->
-      <div class="mb-13 text-center">
-        <h1 class="mb-3">Criar Nova Despesa</h1>
-        <div class="text-muted fw-semibold fs-5">Preencha os campos para registrar o débito</div>
+
+    <form [formGroup]="debtForm" (ngSubmit)="submitForm()">
+      <!-- Numero Parcelas -->
+      <div class="d-flex flex-column mb-8">
+          <label class="required fs-6 fw-semibold mb-2">Nome</label>
+          <input type="text" class="form-control form-control-solid" formControlName="nome" placeholder="Nome débito" />
       </div>
-  
-      <form [formGroup]="debtForm" (ngSubmit)="submitForm()">
-        <!-- Numero Parcelas -->
-        <div class="d-flex flex-column mb-8">
-            <label class="required fs-6 fw-semibold mb-2">Nome</label>
-            <input type="text" class="form-control form-control-solid" formControlName="nome" placeholder="Nome débito" />
-        </div>
-        <div class="d-flex flex-column mb-8">
-            <label class="fs-6 fw-semibold mb-2">Descrição</label>
-            <input type="text" class="form-control form-control-solid" formControlName="descricao" placeholder="Descrição do débito" />
-        </div>
-        <div class="row g-9 mb-8">
-            <div class="col-md-6 fv-row">
-                <label class="required fs-6 fw-semibold mb-2">Data de Competência</label>
+      <div class="d-flex flex-column mb-8">
+          <label class="fs-6 fw-semibold mb-2">Descrição</label>
+          <input type="text" class="form-control form-control-solid" formControlName="descricao" placeholder="Descrição do débito" />
+      </div>
+      <div class="row g-9 mb-8">
+          <div class="col-md-6 fv-row">
+              <label class="required fs-6 fw-semibold mb-2">Data de Competência</label>
 
-                <!--begin::Input-->
-                <div class="position-relative d-flex align-items-center">
-                    <input type="date" class="form-control form-control-solid" formControlName="data_competencia" />
-                </div>
-                <!--end::Input-->
-            </div>
-            <!--end::Col-->
-
-            <!--begin::Col-->
-            <div class="col-md-6 fv-row">
-                <label class="required fw-semibold mb-2">Data Vencimento</label>
-
-                <!--begin::Input-->
-                <div class="position-relative d-flex align-items-center">
-                    <input type="date" class="form-control form-control-solid" formControlName="data_vencimento" />
-                </div>
-                <!--end::Input-->
-            </div>
-            <!--end::Col-->
-        </div>
-          <div class="row g-9 mb-8">
-            <div class="col-md-6 fv-row">
-                <label class="required fs-6 fw-semibold mb-2">Valor Total</label>
-
-                <!--begin::Input-->
-                <div class="position-relative d-flex align-items-center">
-                    <input type="number" class="form-control form-control-solid" formControlName="valor_total" placeholder="Valor Total" />
-                </div>
-                <!--end::Input-->
-            </div>
-            <!--end::Col-->
-
-            <!--begin::Col-->
-            <div class="col-md-6 fv-row">
-                <label class="fs-6 fw-semibold mb-2">Juros</label>
-
-                <!--begin::Input-->
-                <div class="position-relative d-flex align-items-center">
-                    <input type="number" class="form-control form-control-solid" formControlName="juros" placeholder="Valor do Juros" />
-                </div>
-                <!--end::Input-->
-            </div>
-            <!--end::Col-->
+              <!--begin::Input-->
+              <div class="position-relative d-flex align-items-center">
+                  <input type="date" class="form-control form-control-solid" formControlName="data_competencia" />
+              </div>
+              <!--end::Input-->
           </div>
+          <!--end::Col-->
 
+          <!--begin::Col-->
+          <div class="col-md-6 fv-row">
+              <label class="required fw-semibold mb-2">Data Vencimento</label>
+
+              <!--begin::Input-->
+              <div class="position-relative d-flex align-items-center">
+                  <input type="date" class="form-control form-control-solid" formControlName="data_vencimento" />
+              </div>
+              <!--end::Input-->
+          </div>
+          <!--end::Col-->
+      </div>
         <div class="row g-9 mb-8">
-            <div class="col-md-6 fv-row">
-                <label class="required fs-6 fw-semibold mb-2">Categoria</label>
-                <ng-container *ngIf="!showCategoryInput; else inputCategory">
-                    <select
-                      class="form-select form-select-solid"
-                      formControlName="categoria_id"
-                      (change)="toggleCategoryInput($event)"
-                    >
-                    <option value="">Selecione a Categoria</option>    
-                    <option *ngFor="let c of categories" [value]="c.categoria_id">{{ c.nome }}</option>
-                    <option value="">Cadastrar Categoria</option>
-                    </select>
-                </ng-container>
-                <ng-template #inputCategory>
-                    <input
-                        type="text"
-                        class="form-control form-control-solid"
-                        formControlName="categoria_nome"
-                        placeholder="Digite a nova categoria"
-                    />
-                </ng-template>
-            </div>
-            <!--end::Col-->
+          <div class="col-md-6 fv-row">
+              <label class="required fs-6 fw-semibold mb-2">Valor Total</label>
 
-            <!--begin::Col-->
-            <div class="col-md-6 fv-row">
-                <label class="required fs-6 fw-semibold mb-2">Departamento</label>
-                <ng-container *ngIf="!showDepartmentInput; else inputDepartment">
-                    <select
-                      class="form-select form-select-solid"
-                      formControlName="departamento_id"
-                      (change)="toggleDepartmentInput($event)"
-                    >
-                    <option value="">Selecione o Departamento</option>           
-        
-                    <option *ngFor="let d of departments" [value]="d.departamento_id">{{ d.nome }}</option>
-                    <option value="">Cadastrar Departamento</option>
-                    </select>
-                  </ng-container>
-                  <ng-template #inputDepartment>
-                    <input
+              <!--begin::Input-->
+              <div class="position-relative d-flex align-items-center">
+                  <input type="number" class="form-control form-control-solid" formControlName="valor_total" placeholder="Valor Total" />
+              </div>
+              <!--end::Input-->
+          </div>
+          <!--end::Col-->
+
+          <!--begin::Col-->
+          <div class="col-md-6 fv-row">
+              <label class="fs-6 fw-semibold mb-2">Juros</label>
+
+              <!--begin::Input-->
+              <div class="position-relative d-flex align-items-center">
+                  <input type="number" class="form-control form-control-solid" formControlName="juros" placeholder="Valor do Juros" />
+              </div>
+              <!--end::Input-->
+          </div>
+          <!--end::Col-->
+        </div>
+
+      <div class="row g-9 mb-8">
+          <div class="col-md-6 fv-row">
+              <label class="required fs-6 fw-semibold mb-2">Categoria</label>
+              <ng-container *ngIf="!showCategoryInput; else inputCategory">
+                  <select
+                    class="form-select form-select-solid"
+                    formControlName="categoria_id"
+                    (change)="toggleCategoryInput($event)"
+                  >
+                  <option value="">Selecione a Categoria</option>    
+                  <option *ngFor="let c of categories" [value]="c.categoria_id">{{ c.nome }}</option>
+                  <option value="">Cadastrar Categoria</option>
+                  </select>
+              </ng-container>
+              <ng-template #inputCategory>
+                  <input
                       type="text"
                       class="form-control form-control-solid"
-                      formControlName="departamento_nome"
-                      placeholder="Digite o novo departamento"
-                    />
-                  </ng-template>
-            </div>
-            <!--end::Col-->
-        </div>
-        <div class="row g-9 mb-8">
-            <div class="col-md-6 fv-row">
-              <label class="fs-6 fw-semibold">Pagamento já efetuado</label>
-              <label class="form-check form-switch form-check-custom form-check-solid">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  formControlName="pagamento_efetuado"
-                />
-                <span class="form-check-label fw-semibold text-muted">Sim</span>
-              </label>
-            </div>
-          
-            <!-- Campo Data de Pagamento: mostrado apenas se o checkbox for marcado -->
-            <div class="col-md-6 fv-row" *ngIf="debtForm.get('pagamento_efetuado')?.value">
-              <label class="required fw-semibold mb-2">Data Pagamento</label>
-              <div class="position-relative d-flex align-items-center">
-                <input type="date" class="form-control form-control-solid" formControlName="data_pagamento" placeholder="Selecione a data" />
-              </div>
-            </div>
-        </div>   
-        
-        <div class="d-flex flex-stack gap-1 mb-6">
-            <div >
-              <label class="fs-6 fw-semibold">Pagamento Recorrente</label>
-              <label class="form-check form-switch form-check-custom form-check-solid">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  formControlName="pagamento_recorrente"
-                />
-                <span class="form-check-label fw-semibold text-muted">Sim</span>
-              </label>
-            </div>
-          
-            <!-- Campo Data de Pagamento: mostrado apenas se o checkbox for marcado -->
-            <div class="d-flex align-items-center position-relative my-1 ms-8"  *ngIf="debtForm.get('pagamento_recorrente')?.value">
-              <label class="required fs-8 fw-semibold mb-3">Parcelas</label>
-              <div class="position-relative d-flex align-items-center">
-                <input type="number" class="form-control form-control-solid" formControlName="numero_parcelas" />
-              </div>
-              <label class="required fs-8 fw-semibold mb-3">Periodicidade</label>
-              <div class="position-relative d-flex align-items-center">
-                <input type="number" class="form-control form-control-solid" formControlName="periodicidade" />
-              </div>
-            </div>
-        </div>     
-        <div class="row g-9 mb-8">
-            <div class="col-md-6 fv-row">
-              <label class="required fs-6 fw-semibold mb-2">Despesa do Grupo</label>
-              <select
-                class="form-select form-select-solid form-select-lg"
-                formControlName="grupo"
-              >
-                <option value=""></option>
-                <option value="1">Sim</option>
-                <option value="0">Não</option>
-                </select>
-                <!--end::Input-->
-            </div>
-            <!--end::Col-->
-
-            <!--begin::Col-->
-            <div class="col-md-6 fv-row">
-              <label class="required fs-6 fw-semibold mb-2">Empresa</label>
-              <select
-                  class="form-select form-select-solid form-select-lg"
-                  formControlName="empresa"
-                >
-                  <option value=""></option>
-                  <option value="Azzo Distribuidora">Azzo Distribuidora</option>
-                  <option value="Personizi">Personizi</option>
-                  <option value="Pureli">Pureli</option>
-                </select>
-              <!--end::Input-->
-            </div>
-            <!--end::Col-->
+                      formControlName="categoria_nome"
+                      placeholder="Digite a nova categoria"
+                  />
+              </ng-template>
           </div>
-        <!-- Metodo de Pagamento -->
-        <div class="d-flex flex-column mb-8">
-            <label class="fs-6 fw-semibold mb-2">Conta</label>
+          <!--end::Col-->
+
+          <!--begin::Col-->
+          <div class="col-md-6 fv-row">
+              <label class="required fs-6 fw-semibold mb-2">Departamento</label>
+              <ng-container *ngIf="!showDepartmentInput; else inputDepartment">
+                  <select
+                    class="form-select form-select-solid"
+                    formControlName="departamento_id"
+                    (change)="toggleDepartmentInput($event)"
+                  >
+                  <option value="">Selecione o Departamento</option>           
+      
+                  <option *ngFor="let d of departments" [value]="d.departamento_id">{{ d.nome }}</option>
+                  <option value="">Cadastrar Departamento</option>
+                  </select>
+                </ng-container>
+                <ng-template #inputDepartment>
+                  <input
+                    type="text"
+                    class="form-control form-control-solid"
+                    formControlName="departamento_nome"
+                    placeholder="Digite o novo departamento"
+                  />
+                </ng-template>
+          </div>
+          <!--end::Col-->
+      </div>
+      <div class="row g-9 mb-8">
+          <div class="col-md-6 fv-row">
+            <label class="fs-6 fw-semibold">Pagamento já efetuado</label>
+            <label class="form-check form-switch form-check-custom form-check-solid">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                formControlName="pagamento_efetuado"
+              />
+              <span class="form-check-label fw-semibold text-muted">Sim</span>
+            </label>
+          </div>
+        
+          <!-- Campo Data de Pagamento: mostrado apenas se o checkbox for marcado -->
+          <div class="col-md-6 fv-row" *ngIf="debtForm.get('pagamento_efetuado')?.value">
+            <label class="required fw-semibold mb-2">Data Pagamento</label>
+            <div class="position-relative d-flex align-items-center">
+              <input type="date" class="form-control form-control-solid" formControlName="data_pagamento" placeholder="Selecione a data" />
+            </div>
+          </div>
+      </div>   
+      
+      <div class="d-flex flex-stack gap-1 mb-6">
+          <div >
+            <label class="fs-6 fw-semibold">Pagamento Recorrente</label>
+            <label class="form-check form-switch form-check-custom form-check-solid">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                formControlName="pagamento_recorrente"
+              />
+              <span class="form-check-label fw-semibold text-muted">Sim</span>
+            </label>
+          </div>
+        
+          <!-- Campo Data de Pagamento: mostrado apenas se o checkbox for marcado -->
+          <div class="d-flex align-items-center position-relative my-1 ms-8"  *ngIf="debtForm.get('pagamento_recorrente')?.value">
+            <label class="required fs-8 fw-semibold mb-3">Parcelas</label>
+            <div class="position-relative d-flex align-items-center">
+              <input type="number" class="form-control form-control-solid" formControlName="numero_parcelas" />
+            </div>
+            <label class="required fs-8 fw-semibold mb-3">Periodicidade</label>
+            <div class="position-relative d-flex align-items-center">
+              <input type="number" class="form-control form-control-solid" formControlName="periodicidade" />
+            </div>
+          </div>
+      </div>     
+      <div class="row g-9 mb-8">
+          <div class="col-md-6 fv-row">
+            <label class="required fs-6 fw-semibold mb-2">Despesa do Grupo</label>
+            <select
+              class="form-select form-select-solid form-select-lg"
+              formControlName="grupo"
+            >
+              <option value=""></option>
+              <option value="1">Sim</option>
+              <option value="0">Não</option>
+              </select>
+              <!--end::Input-->
+          </div>
+          <!--end::Col-->
+
+          <!--begin::Col-->
+          <div class="col-md-6 fv-row">
+            <label class="required fs-6 fw-semibold mb-2">Empresa</label>
             <select
                 class="form-select form-select-solid form-select-lg"
-                formControlName="conta"
-            >
-                <option value="Bradesco">Bradesco</option>
-                <option value="Gold">Gold</option>
-                <option value="Sicredi">Sicredi</option>
-                <option value="Sicoob Serrania">Sicoob Serrania</option>
-                <option value="Broker Green">Broker Green</option>
-                <option value="Broker Viceroy">Broker Viceroy</option>
-                <option value="Sicoob Alfenas">Sicoob Alfenas</option>
-                <option value="Itau">Itau</option>
-            </select>
+                formControlName="empresa"
+              >
+                <option value=""></option>
+                <option value="Azzo Distribuidora">Azzo Distribuidora</option>
+                <option value="Personizi">Personizi</option>
+                <option value="Pureli">Pureli</option>
+              </select>
+            <!--end::Input-->
+          </div>
+          <!--end::Col-->
         </div>
-  
-        <!-- Botões de Ação -->
-        <div class="text-center">
-          <button type="button" class="btn btn-light me-3" (click)="activeModal.dismiss()">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Criar Débito</button>
-        </div>
-      </form>
-    </div>
+      <!-- Metodo de Pagamento -->
+      <div class="d-flex flex-column mb-8">
+          <label class="required fw-semibold mb-2">Conta</label>
+          <select
+              class="form-select form-select-solid form-select-lg"
+              formControlName="conta"
+          >
+              <option value="Bradesco">Bradesco</option>
+              <option value="Gold">Gold</option>
+              <option value="Sicredi">Sicredi</option>
+              <option value="Sicoob Serrania">Sicoob Serrania</option>
+              <option value="Broker Green">Broker Green</option>
+              <option value="Broker Viceroy">Broker Viceroy</option>
+              <option value="Sicoob Alfenas">Sicoob Alfenas</option>
+              <option value="Itau">Itau</option>
+          </select>
+      </div>
+      <div *ngIf="debtForm.errors?.validCatDep">
+        <p class="text-danger">Pelo menos um dos campos de categoria deve ser preenchido.</p>
+      </div>
+
+      <!-- Botões de Ação -->
+      <div class="text-center">
+        <button type="button" class="btn btn-light me-3" (click)="activeModal.dismiss()">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!debtForm.valid">Criar Débito</button>
+      </div>
+    </form>
   </div>
-  
+</div>
+<swal #noticeSwal [swalOptions]="swalOptions"></swal>

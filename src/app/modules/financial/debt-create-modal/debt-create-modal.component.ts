@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DebtService } from '../services/debt.service';
 import { Categoria, Departamento, NewDebt } from '../modal';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { SweetAlertOptions } from 'sweetalert2';
 
 @Component({
   selector: 'app-debt-create-modal',
@@ -17,12 +19,15 @@ export class DebtCreateModalComponent implements OnInit {
   userEmail: string = '';
   showCategoryInput: boolean = false;
   showDepartmentInput: boolean = false;
+  @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
+  swalOptions: SweetAlertOptions = {};
 
   constructor(
     private fb: FormBuilder,
     public activeModal: NgbActiveModal,
     private debtService: DebtService,
     private localStorage: LocalStorageService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -45,33 +50,45 @@ export class DebtCreateModalComponent implements OnInit {
     });
   }
 
-  initializeForm() {
-    this.debtForm = this.fb.group({
-      nome: ['', [Validators.required]],
-      data_vencimento: [new Date().toISOString().substring(0, 10), [Validators.required]],
-      conta: ['', [Validators.required]],
-      grupo: ['', [Validators.required]],
-      empresa: ['', [Validators.required]],
-      numero_parcelas: [null, [Validators.required, Validators.min(1)]],
-      data_competencia: [new Date().toISOString().substring(0, 10), [Validators.required]],
-      data_pagamento: ['', [Validators.required]],
-      pagamento_efetuado: [false],
-      descricao: ['', [Validators.required]],
-      valor_total: [null, [Validators.required, Validators.min(0.01)]],
-      metodo_pagamento: ['', [Validators.required]],
-      datas_vencimento: ['', [Validators.required]],
-      juros: [null, [Validators.required, Validators.min(0)]],
-      categoria_id: ['', [Validators.required]],
-      categoria_nome: [''],
-      departamento_id: ['', [Validators.required]],
-      departamento_nome: [''],
-      pagamento_recorrente: [false],
-      periodicidade: [null, [Validators.required]],
+  showAlert(swalOptions: SweetAlertOptions, callback?: () => void) {
+    this.swalOptions = swalOptions;
+    this.cdr.detectChanges();
+    this.noticeSwal.fire().then(() => {
+      if (callback) {
+        callback();
+      }
     });
   }
 
+  initializeForm() {
+    this.debtForm = this.fb.group(
+      {
+        nome: ['', [Validators.required]],
+        data_vencimento: [new Date().toISOString().substring(0, 10), [Validators.required]],
+        conta: ['', [Validators.required]],
+        grupo: ['', [Validators.required]],
+        empresa: ['', [Validators.required]],
+        numero_parcelas: [1, [Validators.min(1)]],
+        data_competencia: [new Date().toISOString().substring(0, 10), [Validators.required]],
+        data_pagamento: [''],
+        pagamento_efetuado: [false],
+        descricao: [''],
+        valor_total: [null, [Validators.required, Validators.min(0.01)]],
+        juros: [null, [Validators.min(0)]],
+        categoria_id: [''],
+        categoria_nome: [''],
+        departamento_id: [''],
+        departamento_nome: [''],
+        pagamento_recorrente: [false],
+        periodicidade: [null],
+      },
+      { validators: this.validCatDep as any },
+    );
+  }
+
   submitForm() {
-    if (this.debtForm) {
+    console.log('Form:', this.debtForm);
+    if (this.debtForm.valid) {
       const newDebt = this.debtForm.value;
       const formattedDebt: NewDebt = {
         nome: newDebt.nome,
@@ -93,8 +110,30 @@ export class DebtCreateModalComponent implements OnInit {
         criado_por: this.userEmail,
       };
       console.log('Formatted debt:', formattedDebt);
-      this.debtService.createDebt(formattedDebt).subscribe(() => {
-        this.activeModal.close('Debt created');
+      this.debtService.createDebt(formattedDebt).subscribe({
+        next: () => {
+          this.showAlert(
+            {
+              icon: 'success',
+              title: 'Despesa criado com sucesso!',
+              text: '',
+              confirmButtonText: 'Ok',
+            },
+            () => {
+              this.activeModal.close('success');
+              window.location.reload();
+            },
+          );
+        },
+        error: (err) => {
+          this.showAlert({
+            icon: 'error',
+            title: 'Erro!',
+            text: 'Não foi possível criar a despesa.',
+            confirmButtonText: 'Ok',
+          });
+          console.error(err);
+        },
       });
     } else {
       console.log('Form is invalid');
@@ -109,5 +148,17 @@ export class DebtCreateModalComponent implements OnInit {
   toggleDepartmentInput(event: Event) {
     const value = (event.target as HTMLSelectElement).value;
     this.showDepartmentInput = value === '';
+  }
+
+  validCatDep(group: FormGroup) {
+    const category_id = group.get('categoria_id')?.value || null;
+    const category_nome = group.get('categoria_nome')?.value || null;
+    const departament_id = group.get('departamento_id')?.value || null;
+    const departament_nome = group.get('departamento_nome')?.value || null;
+
+    if ((!category_id && !category_nome) || (!departament_id && !departament_nome)) {
+      return { validCatDep: true };
+    }
+    return null;
   }
 }

@@ -6,10 +6,10 @@
                 <input
                     type="text"
                     class="form-control form-control-solid w-360px ps-12"
-                    placeholder="Pesquisar Pedido"
+                    placeholder="Pesquisar Débito"
                     [(ngModel)]="searchTerm"
-                    (imput)="onSearch()"
-                />
+                    (input)="onSearch()"
+                />                          
             </div>
             <div class="d-flex align-items-center position-relative my-1 ms-8">
                 <select 
@@ -40,26 +40,28 @@
             <div class="d-flex align-items-center position-relative my-1 ms-8">
                 <select
                     class="form-select form-select-solid form-select-lg"
-                    [(ngModel)]="selectedDepartment"
-                >
-                    <!-- Exibir o departamento atual como a opção inicial -->
-                    <option value="">Departamento</option>                
-                    <!-- Listar todas as opções de departamentos disponíveis -->
-                    <option *ngFor="let d of departments" [value]="d.departamento_id">
-                    {{ d.nome }}
-                    </option>
-                </select>              
-            </div>
-            <div class="d-flex align-items-center position-relative my-1 ms-8">
-                <select
-                    class="form-select form-select-solid form-select-lg"
                     [(ngModel)]="selectedCategory"
+                    (change)="applyFilter()"
                 >
                     <!-- Exibir o departamento atual como a opção inicial -->
                     <option value="">Categoria</option>                
                     <!-- Listar todas as opções de departamentos disponíveis -->
                     <option *ngFor="let c of categories" [value]="c.categoria_id">
                     {{ c.nome }}
+                    </option>
+                </select>              
+            </div>
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select
+                    class="form-select form-select-solid form-select-lg"
+                    [(ngModel)]="selectedDepartment"
+                    (change)="applyFilter()"
+                >
+                    <!-- Exibir o departamento atual como a opção inicial -->
+                    <option value="">Departamento</option>                
+                    <!-- Listar todas as opções de departamentos disponíveis -->
+                    <option *ngFor="let d of departments" [value]="d.departamento_id">
+                    {{ d.nome }}
                     </option>
                 </select>              
             </div>
@@ -100,8 +102,8 @@
                 <tbody class="fw-semibold text-gray-600">
                     <tr *ngFor="let debt of paginatedDebts">
                         <td>{{ debt.debito_id }}</td>
-                        <td>{{ debt.descricao }}</td>
-                        <td>{{ debt.data_criacao | date:'dd/MM/yyyy'}}</td>
+                        <td>{{ debt.nome }}</td>
+                        <td>{{ debt.data_competencia | date:'dd/MM/yyyy'}}</td>
                         <td>{{ debt.valor_total | currency:'BRL' }}</td>                        
                         <td>{{ debt.valor_parcela | currency:'BRL' }}</td>
                         <td>{{ getNextDueDate(debt) }}</td>
