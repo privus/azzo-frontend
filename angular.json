@@ -65,7 +65,8 @@
               }
             ],
             "outputHashing": "all",
-            "baseHref": "/azzo/"
+            "baseHref": "/azzo/",
+            "deployUrl": "/azzo/"
           },
           "development": {
             "buildOptimizer": false,
