@@ -3,11 +3,11 @@ const path = require('path');
 
 const app = express();
 
-// Caminho correto para os arquivos estáticos
-const publicPath = path.join(__dirname, 'public_html');
+// Caminho correto para os arquivos estáticos do Angular
+const publicPath = path.join(__dirname, 'dist');
 app.use('/azzo', express.static(publicPath));
 
-// Garantir que todas as rotas do Angular sejam redirecionadas para `index.html`
+// Redireciona todas as rotas para o `index.html`
 app.get('/azzo/*', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
