@@ -4,11 +4,12 @@ const path = require('path');
 const app = express();
 
 // Servindo arquivos estáticos corretamente
-app.use('/azzo', express.static(path.join(__dirname, 'public_html')));
+const publicPath = path.join(__dirname, 'public_html');
+app.use('/azzo', express.static(publicPath));
 
 // Corrige o caminho do index.html
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public_html/index.html'));
+app.get('/azzo/*', (req, res) => {
+  res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 const PORT = process.env.PORT || 4000;
