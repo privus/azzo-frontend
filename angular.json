@@ -20,7 +20,7 @@
       "build": {
         "builder": "@angular-devkit/build-angular:browser",
         "options": {
-          "outputPath": "dist/demo1",
+          "outputPath": "dist",
           "allowedCommonJsDependencies": [
             "object-path",
             "apexcharts",
@@ -64,9 +64,7 @@
                 "with": "src/environments/environment.prod.ts"
               }
             ],
-            "outputHashing": "all",
-            "baseHref": "/azzo/",
-            "deployUrl": "/azzo/"
+            "outputHashing": "all"
           },
           "development": {
             "buildOptimizer": false,
