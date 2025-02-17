@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FinancialService } from '../../../core/services/';
-import { UpdateInstallment } from '../modal';
+import { NewCredit, UpdateInstallment } from '../modal';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,15 @@ export class CreditService {
     return this.finacialService.getFinancialCreditsByDateRange(start, end);
   }
 
-  UpdateInstallment(UpdateInstallment: UpdateInstallment) {
+  updateInstallment(UpdateInstallment: UpdateInstallment) {
     return this.finacialService.updateInstallment(UpdateInstallment);
+  }
+
+  getAllCategories() {
+    return this.finacialService.getAllCategoriesCredits();
+  }
+
+  createCredit(newCredit: NewCredit) {
+    return this.finacialService.createCredit(newCredit);
   }
 }

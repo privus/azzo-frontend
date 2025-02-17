@@ -5,6 +5,7 @@ import { Credit, UpdateInstallment } from '../modal';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-credit-modal',
@@ -15,6 +16,7 @@ export class CreditModalComponent implements OnInit {
   @Input() parcelaModel: Credit;
   @Output() onModalClose: EventEmitter<void> = new EventEmitter(); // Evento de saída para notificar o fechamento
   userEmail: string = '';
+  creditForm: FormGroup; // Add the correct type for your form
   obs: string = '';
   isPaymentDateDisabled: boolean = false;
 
@@ -26,9 +28,58 @@ export class CreditModalComponent implements OnInit {
     private creditService: CreditService,
     private localStorage: LocalStorageService,
     private cdr: ChangeDetectorRef,
+    private fb: FormBuilder,
   ) {}
 
+  private initializeForm(): void {
+    this.creditForm = this.fb.group({
+      parcela_id: [{ value: '', disabled: true }],
+      nome: [{ value: '', disabled: true }],
+      nome_empresa: [{ value: '', disabled: true }],
+      numero: [{ value: '', disabled: true }],
+      valor: [{ value: '', disabled: true }],
+      juros: [{ value: '', disabled: true }],
+      data_criacao: [{ value: '', disabled: true }],
+      data_vencimento: [{ value: '', disabled: true }],
+      status_pagamento: [{ value: '', disabled: true }],
+      data_pagamento: [{ value: new Date().toISOString().substring(0, 10) }, [Validators.required]],
+      data_competencia: [{ value: '', disabled: true }],
+      categoria: [{ value: '', disabled: true }],
+      codigo: [{ value: '', disabled: true }],
+      obs: [{ value: '', disabled: true }],
+      forma_pagamento: [{ value: '', disabled: true }],
+      descricao: [{ value: '', disabled: true }],
+      conta: [{ value: '', disabled: true }],
+      atualizado_por: [{ value: '', disabled: true }],
+    });
+  }
+
+  private patchFormWithCredit(credit: Credit): void {
+    this.creditForm.patchValue({
+      parcela_id: credit.parcela_id,
+      nome: credit.nome,
+      nome_empresa: credit.cliente ? credit.cliente.nome_empresa : '',
+      numero: credit.numero,
+      valor: credit.valor,
+      juros: credit.juros,
+      data_criacao: credit.data_criacao,
+      data_vencimento: credit.data_vencimento,
+      status_pagamento: credit.status_pagamento.status_pagamento_id,
+      data_pagamento: credit.data_pagamento,
+      data_competencia: credit.data_competencia,
+      categoria: credit.categoria?.nome,
+      codigo: credit.venda ? credit.venda.codigo : '',
+      forma_pagamento: credit.venda ? credit.venda.forma_pagamento : '',
+      descricao: credit.descricao,
+      conta: credit.conta,
+      atualizado_por: credit.atualizado_por,
+    });
+  }
+
   ngOnInit(): void {
+    this.initializeForm();
+    this.patchFormWithCredit(this.parcelaModel);
+    console.log('Parcela:', this.parcelaModel);
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
     this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
     this.onStatusChange();
@@ -69,7 +120,7 @@ export class CreditModalComponent implements OnInit {
       obs: this.obs,
     };
 
-    this.creditService.UpdateInstallment(updateData).subscribe({
+    this.creditService.updateInstallment(updateData).subscribe({
       next: (resp) => {
         this.showAlert(
           {

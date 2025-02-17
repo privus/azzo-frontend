@@ -73,10 +73,10 @@
                 <tbody class="fw-semibold text-gray-600">
                     <tr *ngFor="let credit of paginatedCredits">
                         <td>{{ credit.parcela_id }}</td>
-                        <td>{{ credit.venda.cliente ? credit.venda.cliente.nome : 'Cliente Teste' }}</td>
+                        <td>{{ credit.venda ? credit.venda.cliente.nome : 'Cliente Teste' }}</td>
                         <td>{{ credit.data_criacao | date:'dd/MM/yyyy' }}</td>
                         <td>{{ credit.valor | currency:'BRL' }}</td>
-                        <td>{{ credit.venda.codigo }}</td>
+                        <td>{{ credit.venda ? credit.venda.codigo : '' }}</td>
                         <td>{{ credit.data_vencimento | date:'dd/MM/yyyy'}}</td>
                         <td>                            
                             <span class="badge td" [ngClass]="getStatusClass(credit.status_pagamento.status_pagamento_id)">

@@ -53,20 +53,21 @@ export class CreditsListingComponent implements OnInit {
     const term = this.searchTerm.trim().toLowerCase();
     if (term) {
       result = result.filter((credit) => {
-        const cliente = credit.venda.cliente;
-        return (
-          (cliente.nome_empresa && cliente.nome_empresa.toLowerCase().includes(term)) ||
-          (cliente.numero_doc && cliente.numero_doc.includes(term)) ||
-          credit.parcela_id.toString().includes(term)
-        );
+        const clienteNomeEmpresa = credit.venda?.cliente?.nome_empresa?.toLowerCase().includes(term);
+        const clienteNumeroDoc = credit.venda?.cliente?.numero_doc?.includes(term);
+        const nomeCredit = credit.nome?.toLowerCase().includes(term);
+        const parcelaId = credit.parcela_id.toString().includes(term);
+
+        return clienteNomeEmpresa || clienteNumeroDoc || nomeCredit || parcelaId;
       });
     }
 
-    // Apply additional filters, such as status or date range
+    // Aplicação de filtro de status, se houver
     if (this.selectedStatus) {
       result = result.filter((credit) => credit.status_pagamento.status_pagamento_id === +this.selectedStatus);
     }
 
+    // Filtro de data
     if (this.customDateRange.start && this.customDateRange.end) {
       const startDate = new Date(this.customDateRange.start);
       const endDate = new Date(this.customDateRange.end);
@@ -76,7 +77,7 @@ export class CreditsListingComponent implements OnInit {
       });
     }
 
-    // Update filteredCredits and recalculate pagination
+    // Atualiza os créditos filtrados
     this.filteredCredits = result;
     console.log('Filtered credits:', this.filteredCredits);
 

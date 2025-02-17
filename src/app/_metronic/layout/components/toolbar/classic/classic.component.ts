@@ -4,6 +4,7 @@ import { LayoutService } from '../../../core/layout.service';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DebtCreateModalComponent } from '../../../../../modules/financial/debt-create-modal/debt-create-modal.component';
+import { CreditCreateModalComponent } from '../../../../../modules/financial/credit-create-modal/credit-create-modal.component';
 
 @Component({
   selector: 'app-classic',
@@ -75,6 +76,14 @@ export class ClassicComponent implements OnInit, OnDestroy {
     });
   }
 
+  openCreditModal() {
+    this.modalReference = this.modalService.open(CreditCreateModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+    });
+  }
+
   getCurrentRouteSegment(): void {
     // Captura o primeiro segmento da rota
     const urlSegments = this.router.url.split('/');
@@ -107,6 +116,9 @@ export class ClassicComponent implements OnInit, OnDestroy {
     }
     if (this.currentRoute == 'apps') {
       this.router.navigate(['/users/new-account']);
+    }
+    if (fullPath.includes('financial/credits')) {
+      this.openCreditModal();
     }
   }
 

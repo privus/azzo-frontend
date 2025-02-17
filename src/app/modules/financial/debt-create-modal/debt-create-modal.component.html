@@ -11,14 +11,13 @@
       <!-- Descrição -->
     <div class="mb-13 text-center">
       <h1 class="mb-3">Criar Nova Despesa</h1>
-      <div class="text-muted fw-semibold fs-5">Preencha os campos para registrar o débito</div>
     </div>
 
     <form [formGroup]="debtForm" (ngSubmit)="submitForm()">
       <!-- Numero Parcelas -->
       <div class="d-flex flex-column mb-8">
           <label class="required fs-6 fw-semibold mb-2">Nome</label>
-          <input type="text" class="form-control form-control-solid" formControlName="nome" placeholder="Nome débito" />
+          <input type="text" class="form-control form-control-solid" formControlName="nome" placeholder="Nome do débito" />
       </div>
       <div class="d-flex flex-column mb-8">
           <label class="fs-6 fw-semibold mb-2">Descrição</label>
@@ -202,7 +201,7 @@
           </div>
           <!--end::Col-->
         </div>
-      <!-- Metodo de Pagamento -->
+      <!-- Conta Usada -->
       <div class="d-flex flex-column mb-8">
           <label class="required fw-semibold mb-2">Conta</label>
           <select
@@ -219,10 +218,6 @@
               <option value="Itau">Itau</option>
           </select>
       </div>
-      <div *ngIf="debtForm.errors?.validCatDep">
-        <p class="text-danger">Pelo menos um dos campos de categoria deve ser preenchido.</p>
-      </div>
-
       <!-- Botões de Ação -->
       <div class="text-center">
         <button type="button" class="btn btn-light me-3" (click)="activeModal.dismiss()">Cancelar</button>
