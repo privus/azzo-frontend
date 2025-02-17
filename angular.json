@@ -86,10 +86,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "demo1:build:production"
+              "buildTarget": "azzo:build:production"
             },
             "development": {
-              "buildTarget": "demo1:build:development"
+              "buildTarget": "azzo:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -97,7 +97,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "demo1:build"
+            "buildTarget": "azzo:build"
           }
         },
         "test": {
