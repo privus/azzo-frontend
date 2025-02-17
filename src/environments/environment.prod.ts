@@ -5,5 +5,3 @@ export const environment = {
   appName: 'Azzo',
   appVersion: '1.0.0',
 };
-
-//git clone
