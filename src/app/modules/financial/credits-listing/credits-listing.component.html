@@ -80,7 +80,7 @@
                         <td>{{ credit.data_vencimento | date:'dd/MM/yyyy'}}</td>
                         <td>                            
                             <span class="badge td" [ngClass]="getStatusClass(credit.status_pagamento.status_pagamento_id)">
-                            {{ credit.status_pagamento.nome ? credit.status_pagamento.nome : 'Pendente' }}
+                            {{ credit.status_pagamento ? credit.status_pagamento.nome : 'Pendente' }}
                             </span>  
                         </td>   
 

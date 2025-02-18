@@ -55,7 +55,7 @@ export class ProductDetailsComponent implements OnInit {
       preco_custo: [{ value: '', disabled: true }],
       average_weight: [{ value: '', disabled: true }],
       categoria_nome: [{ value: '', disabled: true }],
-      fornecedor_id: [{ value: '', disabled: true }],
+      marca: [{ value: '', disabled: true }],
       descricao_uni: [{ value: '', disabled: true }],
       fotoUrl: [{ value: '', disabled: true }],
     });
@@ -73,7 +73,7 @@ export class ProductDetailsComponent implements OnInit {
       preco_custo: product.preco_custo,
       peso_grs: product.peso_grs,
       categoria_nome: product.categoria?.nome || null,
-      fornecedor_id: product.fornecedor?.fornecedor_id || null,
+      marca: product.fornecedor?.nome,
       descricao_uni: product.descricao_uni,
       fotoUrl: product.fotoUrl,
     });

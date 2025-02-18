@@ -36,7 +36,8 @@
       >
         <thead>
           <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-            <th class="min-w-125px">Nome</th>
+            <th class="min-w-125px">Nome</th>            
+            <th class="min-w-125px">Marca</th>            
             <th class="min-w-125px">Categoria</th>
             <th class="min-w-125px">Preço</th>
             <th class="min-w-125px">Ncm</th>
@@ -70,6 +71,7 @@
                 </div>
               </div>
             </td>
+            <td>{{ product.fornecedor?.nome }}</td>
             <td>{{ product.categoria.nome }}</td>
             <td>{{ product.preco_venda | currency:'BRL' }}</td>
             <td>{{ product.ncm }}</td>
