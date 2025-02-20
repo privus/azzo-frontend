@@ -197,6 +197,21 @@ export class DebtsListingComponent implements OnInit {
     return 'Todas pagas';
   }
 
+  getStatusClass(statusId: number): string {
+    switch (statusId) {
+      case 1: // Pendente
+        return 'badge py-3 px-4 fs-7 badge-light-warning';
+      case 2: // Pago
+        return 'badge py-3 px-4 fs-7 badge-light-primary';
+      case 3: // Atrasado
+        return 'badge py-3 px-4 fs-7 badge-light-danger';
+      case 4: // Cancelado
+        return 'badge py-3 px-4 fs-7 badge-light-info';
+      default:
+        return 'badge py-3 px-4 fs-7 badge-light-secondary';
+    }
+  }
+
   editOrder(id: number): void {
     this.router.navigate(['financial/debts', id]);
   }

@@ -36,7 +36,7 @@
                     <input type="date" class="form-control form-control-solid w-150px ps-12 ms-3" [(ngModel)]="customDateRange.end" />
                 </div>
             </div>         
-            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRangeChange()">Apply</button>
+            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRangeChange()">Aplicar</button>
             <div class="d-flex align-items-center position-absolute my-1 ms-8 end-0  me-10">
               <select
                 class="form-select form-select-solid form-select-lg"
@@ -73,7 +73,7 @@
                 <tbody class="fw-semibold text-gray-600">
                     <tr *ngFor="let credit of paginatedCredits">
                         <td>{{ credit.parcela_id }}</td>
-                        <td>{{ credit.venda ? credit.venda.cliente.nome : 'Cliente Teste' }}</td>
+                        <td>{{ credit.venda ? credit.venda.cliente.nome : credit.nome }}</td>
                         <td>{{ credit.data_criacao | date:'dd/MM/yyyy' }}</td>
                         <td>{{ credit.valor | currency:'BRL' }}</td>
                         <td>{{ credit.venda ? credit.venda.codigo : '' }}</td>

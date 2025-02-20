@@ -34,5 +34,5 @@ export interface NewCredit {
   data_competencia: string;
   data_pagamento: string | null;
   conta: string;
-  criado_por: string;
+  atualizado_por: string;
 }

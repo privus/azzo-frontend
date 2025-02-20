@@ -58,6 +58,8 @@ export class ProductDetailsComponent implements OnInit {
       marca: [{ value: '', disabled: true }],
       descricao_uni: [{ value: '', disabled: true }],
       fotoUrl: [{ value: '', disabled: true }],
+      tiny_mg: [{ value: '' }],
+      tiny_sp: [{ value: '' }],
     });
   }
 
@@ -72,10 +74,15 @@ export class ProductDetailsComponent implements OnInit {
       ean: product.ean,
       preco_custo: product.preco_custo,
       peso_grs: product.peso_grs,
-      categoria_nome: product.categoria?.nome || null,
+      categoria_nome: product.categoria.nome,
       marca: product.fornecedor?.nome,
       descricao_uni: product.descricao_uni,
       fotoUrl: product.fotoUrl,
+      tiny_mg: product.tiny_mg,
+      tiny_sp: product.tiny_sp,
     });
+
+    if (product.tiny_mg) this.productForm.controls['tiny_mg'].disable();
+    if (product.tiny_sp) this.productForm.controls['tiny_sp'].disable();
   }
 }

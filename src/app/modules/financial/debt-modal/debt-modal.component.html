@@ -1,0 +1,126 @@
+<div class="card-body p-12">
+  <!-- Begin Form -->
+  <form [formGroup]="debtForm" (ngSubmit)="onSubmit()">
+
+      <!-- Begin Top Row -->
+      <div class="d-flex flex-column align-items-start flex-xxl-row">
+        <!-- Parcela ID -->
+        <div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 me-4">
+          <span class="fs-1x fw-bold text-gray-800">Parcela ID:</span>
+          <input type="text" formControlName="parcela_id" class="form-control form-control-flush fw-bold text-muted fs-3 w-100px" />
+        </div>
+
+        <!-- Número -->
+        <div class="d-flex flex-center flex-equal fw-row text-nowrap order-2 me-4">
+          <span class="fs-1x fw-bold text-gray-800">Número:</span>
+          <input type="text" class="form-control form-control-flush fw-bold text-muted fs-3 w-100px" formControlName="numero" />
+        </div>
+
+        <!-- Valor -->
+        <div class="d-flex flex-center flex-equal fw-row text-nowrap order-3 me-4">
+          <span class="fs-1x fw-bold text-gray-800">Valor:</span>
+          <input type="text" class="form-control form-control-flush fw-bold text-muted fs-3 w-100px" formControlName="valor" />
+        </div>
+      </div>
+      <!-- End Top Row -->
+
+      <!-- Separator -->
+      <div class="separator separator-dashed my-10"></div>
+
+      <!-- Begin Wrapper -->
+      <div class="mb-0">
+        <!-- Begin Row -->
+        <div class="row gx-10 mb-5">
+          <!-- Left Column: Data de Pagamento and Juros -->
+          <div class="col-lg-6">
+            <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Data de Pagamento</label>
+            <div class="position-relative d-flex align-items-center mb-5">
+              <input
+                type="date"
+                class="form-control"
+                formControlName="data_pagamento"
+                name="data_pagamento"
+                required
+              />
+              <i class="ki-duotone ki-calendar fs-4 position-absolute ms-4 end-0"></i>
+            </div>
+
+            <!-- Juros -->
+            <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Juros</label>
+            <input type="text" class="form-control form-control-solid" formControlName="juros" name="juros" placeholder="Ex: 25.55" />
+          </div>
+
+          <!-- Right Column: Status Pagamento and Data Competência -->
+          <div class="col-lg-6">
+            <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Status de Pagamento</label>
+            <select 
+              class="form-control" 
+              formControlName="status_pagamento" 
+              name="status_pagamento" 
+              required
+              >
+              <option [value]="1">Pendente</option>
+              <option [value]="2">Pago</option>
+              <option [value]="3">Em Atraso</option>
+              <option [value]="4">Cancelado</option>
+            </select>
+
+            <!-- Data de Competência -->
+            <div class="mt-5">
+              <label class="form-label fs-6 fw-bold text-gray-700">Data Competência</label>
+              <input type="text" class="form-control form-control-solid" [value]="parcelaModel.data_criacao | date:'dd/MM/yyyy'" readonly />
+            </div>
+          </div>
+        </div>
+        <!-- End Row -->
+
+        <!-- Begin Row: Data de Vencimento -->
+        <div class="row gx-10 mb-5">
+          <div class="col-lg-6">
+            <label class="form-label fs-6 fw-bold text-gray-700">Data de Vencimento</label>
+            <input type="text" class="form-control form-control-solid" [value]="parcelaModel.data_vencimento | date:'dd/MM/yyyy'" readonly />
+          </div>
+          <div *ngIf="+parcelaModel.status_pagamento.status_pagamento_id === 4" class="mt-5">
+            <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Justificativa do Cancelamento</label>
+            <textarea
+              class="form-control form-control-solid"
+              formControlName="obs"
+              name="justificativa_cancelamento"
+              placeholder="Descreva o motivo do cancelamento"
+              required
+            ></textarea>
+          </div>
+          
+          <div class="col-lg-6">
+            <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Conta</label>
+            <select
+              class="form-select form-select-solid form-select-lg"
+              formControlName="conta"
+            >
+              <option value="Bradesco">Bradesco</option>
+              <option value="Gold">Gold</option>
+              <option value="Sicredi">Sicredi</option>
+              <option value="Sicoob Serrania">Sicoob Serrania</option>
+              <option value="Broker Green">Broker Green</option>
+              <option value="Broker Viceroy">Broker Viceroy</option>
+              <option value="Sicoob Alfenas">Sicoob Alfenas</option>
+              <option value="Itau">Itau</option>
+          </select>
+          </div>
+        </div>
+
+        <!-- Submit and Cancel Buttons -->
+        <div class="text-center pt-15">
+          <button type="button" class="btn btn-light me-3" (click)="closeModal()">Cancelar</button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!debtForm.dirty || isJustificationRequired()"
+          >
+            Salvar
+          </button>
+        </div>
+      </div>
+  </form>
+</div>
+<swal #noticeSwal [swalOptions]="swalOptions"></swal>

@@ -85,7 +85,7 @@ export class CreditCreateModalComponent implements OnInit {
         data_vencimento: newCredit.data_vencimento,
         conta: newCredit.conta,
         valor: Number(newCredit.valor),
-        criado_por: this.userEmail,
+        atualizado_por: this.userEmail,
       };
       console.log('Formatted debt:', formattedCredit);
       this.creditService.createCredit(formattedCredit).subscribe({

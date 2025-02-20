@@ -18,13 +18,9 @@
                 [(ngModel)]="dataRange" 
                 (ngModelChange)="showCustomDatePicker = dataRange === 'custom'"
                 >   
-                    <option value="">Data Vencimento</option>
-                    <option value="today">Hoje</option>
-                    <option value="tomorrow">Amanhã</option>
-                    <option value="next7">Próximos 7 Dias</option>
-                    <option value="next15">Próximos 15 Dias</option>
-                    <option value="next30">Próximos 30 Dias</option>
-                    <option value="nextMonth">Próximos Mês</option>
+                    <option value="">Período</option>
+                    <option value="last7">Últimos 7 Dias</option>
+                    <option value="last30">Últimos 30 Dias</option>
                     <option value="thisMonth">Este Mês</option>
                     <option value="lastMonth">Mês Passado</option>
                     <option value="custom">Entre Datas</option>
@@ -36,7 +32,7 @@
                     <input type="date" class="form-control form-control-solid w-150px ps-12 ms-3" [(ngModel)]="customDateRange.end" />
                 </div>
             </div>         
-            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9">Apply</button>
+            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9">Aplicar</button>
             <div class="d-flex align-items-center position-relative my-1 ms-8">
                 <select
                     class="form-select form-select-solid form-select-lg"
@@ -107,7 +103,12 @@
                         <td>{{ debt.valor_total | currency:'BRL' }}</td>                        
                         <td>{{ debt.valor_parcela | currency:'BRL' }}</td>
                         <td>{{ getNextDueDate(debt) }}</td>
-                        <td>{{ debt.status_pagamento.nome }}</td>
+                        <td>                            
+                            <span class="badge td" [ngClass]="getStatusClass(debt.status_pagamento.status_pagamento_id)">
+                            {{ debt.status_pagamento ? debt.status_pagamento.nome : 'Pendente' }}
+                            </span>  
+                        </td>   
+
                         <td>{{ debt.categoria.nome }}</td>
                         <td>{{ debt.departamento.nome }}</td>
 

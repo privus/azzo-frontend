@@ -12,6 +12,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { DebtDetailsComponent } from './debt-details/debt-details.component';
 import { DebtCreateModalComponent } from './debt-create-modal/debt-create-modal.component';
 import { CreditCreateModalComponent } from './credit-create-modal/credit-create-modal.component';
+import { DebtModalComponent } from './debt-modal/debt-modal.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { CreditCreateModalComponent } from './credit-create-modal/credit-create-
     DebtDetailsComponent,
     DebtCreateModalComponent,
     CreditCreateModalComponent,
+    DebtModalComponent,
   ],
   imports: [
     SharedModule,

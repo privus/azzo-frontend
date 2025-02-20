@@ -14,11 +14,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class CreditModalComponent implements OnInit {
   @Input() parcelaModel: Credit;
-  @Output() onModalClose: EventEmitter<void> = new EventEmitter(); // Evento de saída para notificar o fechamento
+  @Output() onModalClose: EventEmitter<void> = new EventEmitter();
   userEmail: string = '';
-  creditForm: FormGroup; // Add the correct type for your form
+  creditForm: FormGroup;
   obs: string = '';
-  isPaymentDateDisabled: boolean = false;
 
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
@@ -38,11 +37,11 @@ export class CreditModalComponent implements OnInit {
       nome_empresa: [{ value: '', disabled: true }],
       numero: [{ value: '', disabled: true }],
       valor: [{ value: '', disabled: true }],
-      juros: [{ value: '', disabled: true }],
+      juros: [''],
       data_criacao: [{ value: '', disabled: true }],
       data_vencimento: [{ value: '', disabled: true }],
-      status_pagamento: [{ value: '', disabled: true }],
-      data_pagamento: [{ value: new Date().toISOString().substring(0, 10) }, [Validators.required]],
+      status_pagamento: [''],
+      data_pagamento: [''],
       data_competencia: [{ value: '', disabled: true }],
       categoria: [{ value: '', disabled: true }],
       codigo: [{ value: '', disabled: true }],
@@ -58,7 +57,7 @@ export class CreditModalComponent implements OnInit {
     this.creditForm.patchValue({
       parcela_id: credit.parcela_id,
       nome: credit.nome,
-      nome_empresa: credit.cliente ? credit.cliente.nome_empresa : '',
+      nome_empresa: credit.venda ? credit.venda.cliente.nome_empresa : '',
       numero: credit.numero,
       valor: credit.valor,
       juros: credit.juros,
@@ -74,6 +73,8 @@ export class CreditModalComponent implements OnInit {
       conta: credit.conta,
       atualizado_por: credit.atualizado_por,
     });
+
+    this.updateFormControls();
   }
 
   ngOnInit(): void {
@@ -82,7 +83,6 @@ export class CreditModalComponent implements OnInit {
     console.log('Parcela:', this.parcelaModel);
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
     this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
-    this.onStatusChange();
   }
 
   closeModal(): void {
@@ -100,7 +100,8 @@ export class CreditModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // Verifica se a justificativa é obrigatória
+    console.log('Data Pagamento:', this.creditForm.get('data_pagamento')?.value);
+
     if (+this.parcelaModel.status_pagamento.status_pagamento_id === 4 && (!this.obs || this.obs.trim() === '')) {
       this.showAlert({
         icon: 'warning',
@@ -108,16 +109,21 @@ export class CreditModalComponent implements OnInit {
         text: 'Por favor, insira uma justificativa para o cancelamento.',
         confirmButtonText: 'Ok',
       });
-      return; // Impede o envio do formulário
+      return;
+    }
+
+    let dataPagamentoValue = this.creditForm.get('data_pagamento')?.value;
+    if (!dataPagamentoValue || isNaN(Date.parse(dataPagamentoValue))) {
+      dataPagamentoValue = null;
     }
 
     const updateData: UpdateInstallment = {
-      parcela_id: this.parcelaModel.parcela_id,
-      status_pagamento_id: +this.parcelaModel.status_pagamento.status_pagamento_id,
-      data_pagamento: this.parcelaModel.data_pagamento ?? '',
-      juros: this.parcelaModel.juros ? Number(this.parcelaModel.juros) : 0,
+      parcela_id: this.f.parcela_id.value,
+      status_pagamento_id: +this.f.status_pagamento.value,
+      data_pagamento: dataPagamentoValue,
+      juros: this.f.juros ? Number(this.f.juros.value) : 0,
       atualizado_por: this.userEmail,
-      obs: this.obs,
+      obs: this.f.obs.value,
     };
 
     this.creditService.updateInstallment(updateData).subscribe({
@@ -131,7 +137,7 @@ export class CreditModalComponent implements OnInit {
           },
           () => {
             this.activeModal.close('success');
-            window.location.reload(); // Recarrega a página inteira
+            window.location.reload();
           },
         );
       },
@@ -147,12 +153,27 @@ export class CreditModalComponent implements OnInit {
     });
   }
 
-  onStatusChange(): void {
-    if (+this.parcelaModel.status_pagamento.status_pagamento_id === 3) {
-      this.isPaymentDateDisabled = true;
-      this.parcelaModel.data_pagamento = null; // Define como null se "Em Atraso"
-    } else {
-      this.isPaymentDateDisabled = false;
+  get f() {
+    return this.creditForm.controls;
+  }
+
+  updateFormControls(): void {
+    const statusId = +this.creditForm.get('status_pagamento')?.value;
+    const statusIdModel = this.parcelaModel.status_pagamento.status_pagamento_id;
+
+    if (statusIdModel === 2 || statusIdModel === 4) {
+      this.creditForm.get('status_pagamento')?.disable();
+      this.creditForm.get('data_pagamento')?.disable();
+      this.creditForm.get('juros')?.disable();
+    }
+
+    if (statusId === 3 || statusId === 4) {
+      this.creditForm.get('data_pagamento')?.disable();
+      this.creditForm.get('data_pagamento')?.setValue('');
+    }
+
+    if (statusIdModel === 4) {
+      this.creditForm.get('obs')?.disable();
     }
   }
 

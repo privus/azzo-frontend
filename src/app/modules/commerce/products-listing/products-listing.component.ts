@@ -36,7 +36,10 @@ export class ProductsListingComponent implements OnInit {
     } else {
       const term = this.searchTerm.toLowerCase();
       this.filteredProducts = this.products.filter(
-        (product) => product.nome.toLowerCase().includes(term) || product.categoria.nome.toLowerCase().includes(term),
+        (product) =>
+          product.nome.toLowerCase().includes(term) ||
+          product.categoria.nome.toLowerCase().includes(term) ||
+          product.codigo.toLowerCase().includes(term),
       );
     }
     this.currentPage = 1;

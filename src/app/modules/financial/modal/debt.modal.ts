@@ -28,10 +28,13 @@ export interface ParcelaDebito {
   numero: number;
   valor: string;
   juros: string;
+  conta: string;
   data_criacao: string;
+  data_competencia: string;
   data_vencimento: string;
   data_pagamento: string | null;
   status_pagamento: StatusPagamento;
+  atualizado_por: string | null;
 }
 
 export interface Departamento {

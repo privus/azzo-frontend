@@ -15,6 +15,8 @@ export interface Produto {
   data_criacao?: string;
   data_atualizacao?: string;
   descricao_uni: string;
+  tiny_mg?: number;
+  tiny_sp?: number;
 }
 
 export interface CategoriaProduto {

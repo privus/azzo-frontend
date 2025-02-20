@@ -1,11 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { Debt } from '../modal';
+import { Debt, ParcelaDebito } from '../modal';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DebtService } from '../services/debt.service';
+import { DebtModalComponent } from '../debt-modal/debt-modal.component';
 
 @Component({
   selector: 'app-debt-details',
@@ -121,5 +122,16 @@ export class DebtDetailsComponent implements OnInit {
       default:
         return 'badge bg-secondary'; // Desconhecido
     }
+  }
+
+  openCreditModal(parcela: ParcelaDebito) {
+    this.modalReference = this.modalService.open(DebtModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+    });
+    console.log('credito:', parcela);
+    const modalComponentInstance = this.modalReference.componentInstance as DebtModalComponent;
+    modalComponentInstance.parcelaModel = { ...parcela }; // Create a copy to avoid directly modifying the original
   }
 }

@@ -45,7 +45,6 @@
                 type="date"
                 class="form-control"
                 formControlName="data_pagamento"
-                [disabled]="isPaymentDateDisabled"
                 name="data_pagamento"
                 required
               />
@@ -54,7 +53,7 @@
 
             <!-- Juros -->
             <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Juros</label>
-            <input type="text" class="form-control form-control-solid" formControlName="juros" name="juros" placeholder="Ex: 25.55" />
+            <input type="number" class="form-control form-control-solid" formControlName="juros" name="juros" placeholder="Ex: 25.55" />
           </div>
 
           <!-- Right Column: Status Pagamento and Data Competência -->
@@ -62,9 +61,9 @@
             <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Status de Pagamento</label>
             <select 
               class="form-control" 
-              formControlName="status_pagamento_id" 
-              name="status_pagamento_id" 
-              (change)="onStatusChange()"
+              formControlName="status_pagamento" 
+              name="status_pagamento" 
+              (change)="updateFormControls()"
               required
               >
               <option [value]="1">Pendente</option>
@@ -88,7 +87,7 @@
             <label class="form-label fs-6 fw-bold text-gray-700">Data de Vencimento</label>
             <input type="text" class="form-control form-control-solid" [value]="parcelaModel.data_vencimento | date:'dd/MM/yyyy'" readonly />
           </div>
-          <div *ngIf="+parcelaModel.status_pagamento.status_pagamento_id === 4" class="mt-5">
+          <div *ngIf="+creditForm.get('status_pagamento')?.value === 4" class="mt-5">
             <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Justificativa do Cancelamento</label>
             <textarea
               class="form-control form-control-solid"
@@ -111,6 +110,10 @@
             <input type="text" class="form-control form-control-solid" formControlName="forma_pagamento"/>
           </div>
         </div>
+        <div *ngIf="parcelaModel.atualizado_por" class="col-lg-6">
+          <span class="fw-bold text-gray-800">Atualizado por:</span>
+          <input type="text" class="form-control form-control-flush" formControlName="atualizado_por" />
+        </div>
 
         <!-- Submit and Cancel Buttons -->
         <div class="text-center pt-15">
@@ -118,7 +121,7 @@
           <button
             type="submit"
             class="btn btn-primary"
-            [disabled]="!creditForm.dirty || (!parcelaModel.data_pagamento && +parcelaModel.status_pagamento.status_pagamento_id != 3) || isJustificationRequired()"
+            [disabled]="!creditForm.dirty || isJustificationRequired()"
           >
             Salvar
           </button>
@@ -154,7 +157,7 @@
       <div class="mb-0">
         <!-- Begin Row -->
         <div class="row gx-10 mb-5">
-          <!-- Left Column: Data de Pagamento and Juros -->
+
           <div class="col-lg-6">
             <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Data de Pagamento</label>
             <div class="position-relative d-flex align-items-center mb-5">
@@ -169,14 +172,14 @@
             </div>
           </div>
 
-          <!-- Right Column: Status Pagamento and Data Competência -->
+
           <div class="col-lg-6">
             <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Status de Pagamento</label>
             <select 
               class="form-control" 
               formControlName="status_pagamento"
-              name="status_pagamento_id" 
-              (change)="onStatusChange()"
+              name="status_pagamento" 
+              (change)="updateFormControls()"
               required
             >
               <option [value]="1">Pendente</option>
@@ -187,7 +190,7 @@
           </div>
         </div>
         <div class="row gx-10 mb-5">
-          <!-- Left Column: Data de Pagamento and Juros -->
+
           <div class="col-lg-6">
             <div class="mt-5">
               <label class="form-label fs-6 fw-bold text-gray-700">Data Competência</label>
@@ -197,13 +200,12 @@
             </div>
           </div>
 
-          <!-- Right Column: Status Pagamento and Data Competência -->
           <div class="col-lg-6">
             <div class="mt-5">
               <label class="form-label fs-6 fw-bold text-gray-700">Data de Vencimento</label>
               <input type="text" class="form-control form-control-solid" [value]="parcelaModel.data_vencimento | date:'dd/MM/yyyy'" readonly />
             </div>
-            <div *ngIf="+parcelaModel.status_pagamento.status_pagamento_id === 4" class="mt-5">
+            <div *ngIf="+creditForm.get('status_pagamento')?.value === 4" class="mt-5">
               <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Justificativa do Cancelamento</label>
               <textarea
                 class="form-control form-control-solid"
@@ -260,7 +262,7 @@
           <button
             type="submit"
             class="btn btn-primary"
-            [disabled]="!creditForm.dirty || (!parcelaModel.data_pagamento && +parcelaModel.status_pagamento.status_pagamento_id != 3) || isJustificationRequired()"
+            [disabled]="!creditForm.dirty || isJustificationRequired()"
           >
             Salvar
           </button>
