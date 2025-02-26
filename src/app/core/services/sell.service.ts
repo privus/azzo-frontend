@@ -28,4 +28,8 @@ export class SellService {
   updateSellStatus(updateStatus: UpdateSellStatus) {
     return this.http.patch<{ message: string }>(`${this.baseUrl}sells/status`, updateStatus);
   }
+
+  exportTiny(id: number) {
+    return this.http.get<{ message: string }>(`${this.baseUrl}sells/export/${id}`);
+  }
 }

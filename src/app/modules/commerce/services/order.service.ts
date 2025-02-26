@@ -27,4 +27,8 @@ export class OrderService {
   updateSellStatus(UpdateSellStatusDto: UpdateSellStatus) {
     return this.sellService.updateSellStatus(UpdateSellStatusDto);
   }
+
+  exportTiny(id: number) {
+    return this.sellService.exportTiny(id);
+  }
 }

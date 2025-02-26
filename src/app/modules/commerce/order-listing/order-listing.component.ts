@@ -362,4 +362,27 @@ export class OrderListingComponent implements OnInit {
 
     return total;
   }
+
+  exportTiny(id: number): void {
+    this.orderService.exportTiny(id).subscribe({
+      next: (resp) => {
+        console.log('Exportação Tiny:', resp);
+        this.showAlert({
+          icon: 'success',
+          title: 'Exportação concluída com sucesso!',
+          text: resp.message,
+          confirmButtonText: 'Ok',
+        });
+      },
+      error: (err) => {
+        this.showAlert({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Não foi possível exportar para o Tiny.',
+          confirmButtonText: 'Ok',
+        });
+        console.error('Erro ao exportar para Tiny:', err);
+      },
+    });
+  }
 }

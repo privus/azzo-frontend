@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRangeChange(); applyCustomDateRange()">Apply</button>
+            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRangeChange(); applyCustomDateRange()">Aplicar</button>
             <button
             class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9"
             data-bs-toggle="tooltip"
@@ -111,12 +111,20 @@
                         <td>{{ order.vendedor ? order.vendedor.nome : 'Vendedor Teste' }}</td>
                         <td class="text-end">
                             <button
-                             class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-                             (click)="editOrder(order.venda_id)"       
+                                class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                                (click)="editOrder(order.venda_id)"       
                             >
                                 <i class="ki-duotone ki-pencil fs-3">
                                     <span class="path1"></span><span class="path2"></span>
                                 </i>
+                            </button>
+                            <button 
+                                type="button" 
+                                class="btn btn-icon btn-sm h-auto btn-color-gray-500 btn-active-color-primary justify-content-end"
+                                (click)="exportTiny(order.venda_id)"
+                            >
+                                
+                                <i class="ki-duotone ki-exit-right-corner fs-2"><span class="path1"></span><span class="path2"></span></i>                
                             </button>
                         </td>
                     </tr>
