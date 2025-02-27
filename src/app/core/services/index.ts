@@ -1,5 +1,5 @@
 export * from './local-storage.service';
-export * from './item.service';
+export * from './products.service';
 export * from './financial.service';
 export * from './login.service';
 export * from './user.service';

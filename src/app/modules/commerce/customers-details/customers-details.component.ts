@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Cliente } from '../models/costumer.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CustomerService } from '../services/customer.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-customers-details',
@@ -19,6 +20,7 @@ export class CustomersDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private customerService: CustomerService,
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -74,5 +76,9 @@ export class CustomersDetailsComponent implements OnInit {
       complemento: customer.complemento,
       categoria: customer.categoria,
     });
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }

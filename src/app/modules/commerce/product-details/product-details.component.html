@@ -68,12 +68,12 @@
 
                         <div class="w-100">
                             <label class="form-label">Tiny Mg</label>
-                            <input type="number" name="unidade" class="form-control mb-2" placeholder="Tiny Mg" formControlName="tiny_mg" disable />
+                            <input type="number" name="unidade" class="form-control mb-2" placeholder="Tiny Mg" formControlName="tiny_mg" />
                         </div>
 
                         <div class="w-100">
                             <label class="form-label">Tiny Sp</label>
-                            <input type="number" name="unidade" class="form-control mb-2" placeholder="Tiny Sp" formControlName="tiny_sp" disable />
+                            <input type="number" name="unidade" class="form-control mb-2" placeholder="Tiny Sp" formControlName="tiny_sp" />
                         </div>
                     </div>
                 </div>
@@ -164,16 +164,27 @@
                 </div>
 
                 <div class="d-flex justify-content-end">
-                    <a href="/commerce/products" id="kt_ecommerce_add_product_cancel" class="btn btn-light me-5" disabled>
-                        Cancel
-                    </a>
+                    <button
+                        type="button"
+                        id="kt_ecommerce_add_customer_cancel"
+                        class="btn btn-light me-5"
+                        (click)="goBack()"
+                    >
+                        Cancelar
+                    </button>
 
-                    <button type="submit" id="kt_ecommerce_add_product_submit" class="btn btn-primary" disabled>
+                    <button 
+                        type="submit" 
+                        id="kt_ecommerce_add_product_submit" 
+                        class="btn btn-primary" 
+                        (click)="updateTinyCodes()"
+                        [disabled]="!isTinyValid()"
+                    >
                         <span class="indicator-label">
-                            Save Changes
+                            Salvar
                         </span>
                         <span class="indicator-progress">
-                            Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            Aguarde... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                         </span>
                     </button>
                 </div>
@@ -183,3 +194,4 @@
         <!--end::Form-->
     </div>
 </div>
+<swal #noticeSwal [swalOptions]="swalOptions"></swal>

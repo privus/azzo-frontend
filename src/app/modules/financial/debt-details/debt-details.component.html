@@ -345,14 +345,14 @@
           </div>
   
           <div class="d-flex justify-content-end">
-            <a
-              href="/financial/debt"
+            <button
+              type="button"
               id="kt_ecommerce_add_customer_cancel"
               class="btn btn-light me-5"
-              disabled
+              (click)="goBack()"
             >
-              Cancel
-            </a>
+              Cancelar
+            </button>
             <button
               type="submit"
               id="kt_ecommerce_add_customer_submit"
@@ -360,9 +360,9 @@
 
               [disabled]="!debtForm.dirty"
             >
-              <span class="indicator-label">Save Changes</span>
+              <span class="indicator-label">Salvar</span>
               <span class="indicator-progress"
-                >Please wait...
+                >Aguarde...
                 <span
                   class="spinner-border spinner-border-sm align-middle ms-2"
                 ></span>
