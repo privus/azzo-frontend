@@ -1,3 +1,5 @@
+import { Vendedor } from './';
+
 export interface Cliente {
   cliente_id: number;
   codigo: number;
@@ -19,7 +21,8 @@ export interface Cliente {
   cidade: Cidade;
   cidade_string: string;
   categoria: CategoriaCliente;
-  status: number;
+  status_cliente: StatusCliente;
+  regiao: Regiao;
 }
 
 export interface Cidade {
@@ -37,4 +40,16 @@ export interface Estado {
   estado_id: number;
   nome: string;
   sigla: string;
+}
+
+export interface StatusCliente {
+  status_cliente_id: number;
+  nome: string;
+}
+
+export interface Regiao {
+  regiao_id: number;
+  codigo: number;
+  nome: string;
+  vendedores: Vendedor[];
 }

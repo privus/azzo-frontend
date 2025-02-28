@@ -13,10 +13,10 @@
             </div>
             <div class="d-flex align-items-center position-relative my-1 ms-8">
                 <select 
-                class="form-select form-select-solid form-select-lg"  
-                id="filterDate" 
-                [(ngModel)]="dataRange" 
-                (ngModelChange)="showCustomDatePicker = this.dataRange === 'custom'"
+                    class="form-select form-select-solid form-select-lg"  
+                    id="filterDate" 
+                    [(ngModel)]="dataRange" 
+                    (ngModelChange)="showCustomDatePicker = this.dataRange === 'custom'"
                 >   
                     <option value="">Data Venda</option>
                     <option value="today">Hoje</option>

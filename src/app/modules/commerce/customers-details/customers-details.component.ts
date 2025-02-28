@@ -68,7 +68,7 @@ export class CustomersDetailsComponent implements OnInit {
       estado: customer.cidade.estado.nome,
       cep: customer.cep,
       doc_number: customer.numero_doc,
-      status: customer.status,
+      status: customer.status_cliente.nome,
       ie: customer.ie,
       doc_type: customer.tipo_doc,
       bairro: customer.bairro,
