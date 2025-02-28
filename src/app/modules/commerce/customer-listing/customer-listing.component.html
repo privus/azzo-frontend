@@ -11,6 +11,31 @@
                     (input)="onSearch()"
                 />
             </div>
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select class="form-select form-select-solid" [(ngModel)]="selectedRegion" (change)="applyFilter()">
+                    <option value="">Todas as Regiões</option>
+                    <option value="1">Região Piumhi</option>
+                    <option value="2">Região Extrema</option>
+                    <option value="3">Região Zona da Mata</option>
+                    <option value="4">Região Passos</option>
+                    <option value="5">Região Pouso Alegre</option>
+                    <option value="6">Região Poços de Caldas</option>
+                    <option value="7">Região Alfenas</option>
+                    <option value="8">Região São Lourenço</option>
+                    <option value="9">Região Geral</option>
+                </select>
+            </div>
+            
+    
+            <!-- Filtro por Status -->
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select class="form-select form-select-solid" [(ngModel)]="selectedStatus" (change)="applyFilter()">
+                    <option value="">Todos os Status</option>
+                    <option value="101">Ativo</option>
+                    <option value="102">Frio</option>
+                    <option value="103">Inativo</option>
+                </select>
+            </div>
         </div>
         <div class="card-toolbar">
             <div class="d-flex justify-content-end">
@@ -31,6 +56,7 @@
                         <th class="min-w-125px">Número Registro</th>
                         <th class="min-w-125px">Cidade</th>
                         <th class="min-w-125px">Ativo</th>
+                        <th class="min-w-125px">Vendedor</th>
                         <th class="text-end min-w-100px">Ações</th>
                     </tr>
                 </thead>
@@ -40,10 +66,16 @@
                         <td>{{ customer.numero_doc || customer.ie }}</td>
                         <td>{{ customer.cidade.nome }}</td>
                         <td>
-                            <span class="badge" [ngClass]="customer.ativo ? 'badge-light-success' : 'badge-light-danger'">
-                                {{ customer.ativo ? 'Sim' : 'Não' }}
+                            <span class="badge"           [ngClass]="{
+                                'badge-light-success': customer.status_cliente.status_cliente_id === 101,
+                                'badge-light-warning': customer.status_cliente.status_cliente_id === 102,
+                                'badge-light-danger': customer.status_cliente.status_cliente_id === 103
+                              }">
+                                {{ customer.status_cliente.nome }}
                             </span>
                         </td>
+                        <td>{{ customer.regiao ? customer.regiao.vendedores[0].nome : '' }}</td>
+
                         <td class="text-end">
                             <button
                                 class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
@@ -51,15 +83,6 @@
                             >
                                 <i class="ki-duotone ki-pencil fs-3">
                                     <span class="path1"></span><span class="path2"></span>
-                                </i>
-                            </button>
-                            <button
-                                class="btn btn-icon btn-active-light-primary w-30px h-30px"
-                            >
-                                <i class="ki-duotone ki-trash fs-3">
-                                    <span class="path1"></span><span class="path2"></span>
-                                    <span class="path3"></span><span class="path4"></span>
-                                    <span class="path5"></span>
                                 </i>
                             </button>
                         </td>

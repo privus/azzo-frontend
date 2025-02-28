@@ -8,6 +8,7 @@ import { SweetAlertOptions } from 'sweetalert2';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CreditModalComponent } from '../../financial/credit-modal/credit-modal.component';
 import { Credit } from '../../financial/modal';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-order-details',
@@ -28,6 +29,7 @@ export class OrderDetailsComponent implements OnInit {
     private orderService: OrderService,
     private cdr: ChangeDetectorRef,
     private modalService: NgbModal,
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -129,5 +131,9 @@ export class OrderDetailsComponent implements OnInit {
     console.log('credito:', credito);
     const modalComponentInstance = this.modalReference.componentInstance as CreditModalComponent;
     modalComponentInstance.parcelaModel = { ...credito }; // Create a copy to avoid directly modifying the original
+  }
+
+  goBack(): void {
+    this.location.back(); // Volta para a página anterior
   }
 }

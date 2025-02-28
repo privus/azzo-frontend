@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Cliente } from '../models/costumer.model';
+import { Cliente, Regiao, StatusCliente } from '../models';
 import { PaginationService } from '../../../core/services/';
 
 @Component({
@@ -9,7 +9,7 @@ import { PaginationService } from '../../../core/services/';
   styleUrls: ['./customer-listing.component.scss'],
 })
 export class CustomerListingComponent implements OnInit {
-  costumers: Cliente[] = [];
+  customers: Cliente[] = [];
   filteredCustomers: Cliente[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 50;
@@ -18,6 +18,10 @@ export class CustomerListingComponent implements OnInit {
   searchTerm: string = '';
   startItem: number = 0;
   endItem: number = 0;
+  selectedRegion: string = '';
+  selectedStatus: string = '';
+  statusClientes: StatusCliente[] = [];
+  regioes: Regiao[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -26,20 +30,38 @@ export class CustomerListingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.costumers = this.route.snapshot.data['customers'];
-    console.log('CLIENTE ===> ', this.costumers);
+    this.customers = this.route.snapshot.data['customers'];
+    this.statusClientes = this.route.snapshot.data['statusClientes'];
+    console.log('CLIENTE ===> ', this.customers);
     this.applyFilter();
   }
 
   applyFilter(): void {
-    if (this.searchTerm.trim() === '') {
-      this.filteredCustomers = [...this.costumers];
-    } else {
-      const term = this.searchTerm.toLowerCase();
-      this.filteredCustomers = this.costumers.filter(
-        (costumer) => costumer.nome_empresa.toLowerCase().includes(term) || (costumer.numero_doc && costumer.numero_doc.includes(term)),
+    let result = [...this.customers];
+
+    // 1) Filtrar pelo termo de pesquisa (Nome ou Documento)
+    const term = this.searchTerm.trim().toLowerCase();
+    if (term) {
+      result = result.filter(
+        (customer) =>
+          customer.nome_empresa?.toLowerCase().includes(term) ||
+          customer.nome?.toLowerCase().includes(term) ||
+          (customer.numero_doc && customer.numero_doc.includes(term)),
       );
     }
+
+    // 2) Filtrar por Região (se selecionado)
+    if (this.selectedRegion) {
+      result = result.filter((customer) => customer.regiao?.codigo === +this.selectedRegion);
+    }
+
+    // 3) Filtrar por Status (se selecionado)
+    if (this.selectedStatus) {
+      result = result.filter((customer) => customer.status_cliente?.status_cliente_id === +this.selectedStatus);
+    }
+
+    // 4) Atualizar a lista de clientes filtrados
+    this.filteredCustomers = result;
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();

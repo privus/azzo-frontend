@@ -146,16 +146,21 @@
                 </div>
 
                 <div class="d-flex justify-content-end">
-                    <a href="/commerce/customers" id="kt_ecommerce_add_customer_cancel" class="btn btn-light me-5" disabled>
-                        Cancel
-                    </a>
+                    <button
+                        type="button"
+                        id="kt_ecommerce_add_customer_cancel"
+                        class="btn btn-light me-5"
+                        (click)="goBack()"
+                    >
+                        Cancelar
+                    </button>
 
                     <button type="submit" id="kt_ecommerce_add_customer_submit" class="btn btn-primary" disabled>
                         <span class="indicator-label">
-                            Save Changes
+                            Salvar
                         </span>
                         <span class="indicator-progress">
-                            Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            Aguarde... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                         </span>
                     </button>
                 </div>

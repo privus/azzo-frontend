@@ -13,10 +13,10 @@
             </div>
             <div class="d-flex align-items-center position-relative my-1 ms-8">
                 <select 
-                class="form-select form-select-solid form-select-lg"  
-                id="filterDate" 
-                [(ngModel)]="dataRange" 
-                (ngModelChange)="showCustomDatePicker = this.dataRange === 'custom'"
+                    class="form-select form-select-solid form-select-lg"  
+                    id="filterDate" 
+                    [(ngModel)]="dataRange" 
+                    (ngModelChange)="showCustomDatePicker = this.dataRange === 'custom'"
                 >   
                     <option value="">Data Venda</option>
                     <option value="today">Hoje</option>
@@ -121,7 +121,7 @@
                             <button 
                                 type="button" 
                                 class="btn btn-icon btn-sm h-auto btn-color-gray-500 btn-active-color-primary justify-content-end"
-                                (click)="exportTiny(order.venda_id)"
+                                (click)="exportTiny(order.venda_id, order.cliente.cidade.estado.sigla, order.exportado)"
                             >
                                 
                                 <i class="ki-duotone ki-exit-right-corner fs-2"><span class="path1"></span><span class="path2"></span></i>                

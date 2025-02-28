@@ -6,6 +6,7 @@ import { OrderService } from '../services/order.service';
 import { SweetAlertOptions } from 'sweetalert2';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { BehaviorSubject } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-order-listing',
@@ -363,26 +364,46 @@ export class OrderListingComponent implements OnInit {
     return total;
   }
 
-  exportTiny(id: number): void {
-    this.orderService.exportTiny(id).subscribe({
-      next: (resp) => {
-        console.log('Exportação Tiny:', resp);
-        this.showAlert({
-          icon: 'success',
-          title: 'Exportação concluída com sucesso!',
-          text: resp.message,
-          confirmButtonText: 'Ok',
+
+  exportTiny(id: number, uf: string, exportado: number): void {
+    let message = `Deseja exportar para o Tiny ${uf}?`;
+  
+    // Se já foi exportado, exibe um aviso antes
+    if (exportado === 1) {
+      message = `Este pedido já foi exportado para o Tiny ${uf}. Deseja exportá-lo novamente?`;
+    }
+  
+    Swal.fire({
+      title: 'Confirmação',
+      text: message,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, Exportar!',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Se o usuário confirmar, faz a exportação
+        this.orderService.exportTiny(id).subscribe({
+          next: (resp) => {
+            console.log('Exportação Tiny:', resp);
+            Swal.fire({
+              icon: 'success',
+              title: `Exportação concluída com sucesso! Tiny ${uf}`,
+              text: resp.message,
+              confirmButtonText: 'Ok',
+            });
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: `Erro na exportação! Tiny ${uf}`,
+              text: 'Não foi possível exportar o pedido.'+ err,
+              confirmButtonText: 'Ok',
+            });
+            console.error('Erro ao exportar para Tiny:', err);
+          },
         });
-      },
-      error: (err) => {
-        this.showAlert({
-          icon: 'error',
-          title: 'Erro!',
-          text: 'Não foi possível exportar para o Tiny.',
-          confirmButtonText: 'Ok',
-        });
-        console.error('Erro ao exportar para Tiny:', err);
-      },
+      }
     });
-  }
+  }  
 }

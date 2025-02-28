@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   ClientService,
   FinancialService,
-  ItemService,
+  ProductsService,
   LocalStorageService,
   LoginService,
   PaginationService,
@@ -24,7 +24,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
       multi: true,
     },
     LocalStorageService,
-    ItemService,
+    ProductsService,
     LoginService,
     PaginationService,
     RoleService,

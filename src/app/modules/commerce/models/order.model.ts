@@ -22,6 +22,7 @@ export interface Order {
   status_venda: StatusVenda;
   parcela_credito: Credit[];
   tipo_pedido: TipoPedido;
+  exportado: number;
 }
 
 export interface Vendedor {

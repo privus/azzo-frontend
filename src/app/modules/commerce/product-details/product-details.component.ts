@@ -1,9 +1,12 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CATEGORIAS } from 'src/app/shared/constants/user-constant';
 import { Produto } from '../models/product.model';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../services/product.service';
+import { Location } from '@angular/common';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import { SweetAlertOptions } from 'sweetalert2';
 
 @Component({
   selector: 'app-product-details',
@@ -17,11 +20,15 @@ export class ProductDetailsComponent implements OnInit {
   isLoading = true; // Adicione esta variável
   product: Produto;
 
+  @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
+  swalOptions: SweetAlertOptions = {};
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private productService: ProductService,
     private cdr: ChangeDetectorRef,
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -84,5 +91,49 @@ export class ProductDetailsComponent implements OnInit {
 
     if (product.tiny_mg) this.productForm.controls['tiny_mg'].disable();
     if (product.tiny_sp) this.productForm.controls['tiny_sp'].disable();
+  }
+
+  goBack(): void {
+    this.location.back();
+  }
+
+  updateTinyCodes(): void {
+    if (this.productForm.controls['tiny_mg'].dirty || this.productForm.controls['tiny_sp'].dirty) {
+      const updatedFields = {
+        tiny_mg: this.productForm.controls['tiny_mg'].value,
+        tiny_sp: this.productForm.controls['tiny_sp'].value,
+      };
+  
+      this.productService.updateTinyCodes(this.productId, updatedFields).subscribe({
+        next: (): void => {
+          this.showAlert({
+            icon: 'success',
+            title: 'Sucesso!',
+            text: 'Códigos Tiny atualizados com sucesso!',
+            confirmButtonText: 'Ok',
+          });
+        },
+        error: (err: any): void => {
+          console.error('Erro ao atualizar códigos Tiny:', err);
+        },
+      });
+    }
+  } 
+
+  isTinyValid(): boolean {
+    const tinyMg = this.productForm.controls['tiny_mg'].value?.toString() || '';
+    const tinySp = this.productForm.controls['tiny_sp'].value?.toString() || '';
+  
+    return tinyMg.length === 9 && tinySp.length === 9;
+  }
+
+  showAlert(swalOptions: SweetAlertOptions, callback?: () => void) {
+    this.swalOptions = swalOptions;
+    this.cdr.detectChanges();
+    this.noticeSwal.fire().then(() => {
+      if (callback) {
+        callback();
+      }
+    });
   }
 }
