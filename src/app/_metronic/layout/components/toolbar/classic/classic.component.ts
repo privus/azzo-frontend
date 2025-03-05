@@ -115,7 +115,7 @@ export class ClassicComponent implements OnInit, OnDestroy {
       this.openDebtModal();
     }
     if (this.currentRoute == 'apps') {
-      this.router.navigate(['/users/new-account']);
+      this.router.navigate(['/apps/users/new-account']);
     }
     if (fullPath.includes('financial/credits')) {
       this.openCreditModal();
