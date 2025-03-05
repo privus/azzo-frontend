@@ -62,7 +62,7 @@ export class CustomersDetailsComponent implements OnInit {
       nome: customer.nome,
       nome_empresa: customer.nome_empresa || customer.nome,
       email: customer.email,
-      telefone: customer.celular || customer.telefone_comercial,
+      telefone: customer.telefone_comercial + ' / ' + customer.celular,
       endereco: customer.endereco,
       cidade: customer.cidade.nome,
       estado: customer.cidade.estado.nome,
