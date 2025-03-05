@@ -64,7 +64,7 @@
                     <tr *ngFor="let customer of paginatedCustomer">
                         <td>{{ customer.nome_empresa || customer.nome }}</td>
                         <td>{{ customer.numero_doc || customer.ie }}</td>
-                        <td>{{ customer.cidade.nome }}</td>
+                        <td>{{ customer.cidade_string }}</td>
                         <td>
                             <span class="badge"           [ngClass]="{
                                 'badge-light-success': customer.status_cliente.status_cliente_id === 101,
@@ -74,7 +74,7 @@
                                 {{ customer.status_cliente.nome }}
                             </span>
                         </td>
-                        <td>{{ customer.regiao?.vendedores?.[0]?.nome || '' }}</td>
+                        <td>{{ customer.regiao?.vendedores?.[0]?.nome || 'Sem Vendedor' }}</td>
 
                         <td class="text-end">
                             <button
