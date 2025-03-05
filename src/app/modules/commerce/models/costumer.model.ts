@@ -22,7 +22,7 @@ export interface Cliente {
   cidade_string: string;
   categoria: CategoriaCliente;
   status_cliente: StatusCliente;
-  regiao: Regiao;
+  regiao?: Regiao;
 }
 
 export interface Cidade {
