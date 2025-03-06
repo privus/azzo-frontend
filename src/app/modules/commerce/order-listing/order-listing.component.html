@@ -95,7 +95,7 @@
                     <tr *ngFor="let order of paginatedOrders">
                         <td>{{ order.codigo }}</td>
                         <td>{{ order.cliente ?  order.cliente.nome_empresa : 'Cliente Teste'  }}</td>
-                        <td><div class="text-muted fs-7">{{ order.data_criacao | date:'dd/MM/yyyy HH:MM' }}</div></td>
+                        <td><div class="text-muted fs-7">{{ order.data_criacao | date:'dd/MM/yyyy' }}</div></td>
                         <td>{{ order.valor_pedido | currency:'BRL' }}</td>
                         <td>                            
                             <span class="badge td" [ngClass]="getStatusPagClass(order.status_pagamento.status_pagamento_id)">
