@@ -182,21 +182,6 @@ export class DebtsListingComponent implements OnInit {
     this.updateDisplayedItems();
   }
 
-  getNextDueDate(debt: Debt): string {
-    if (!debt.parcela_debito || debt.parcela_debito.length === 0) {
-      return 'Sem parcelas';
-    }
-
-    const nextParcel = debt.parcela_debito.find((parcela) => !parcela.data_pagamento);
-
-    if (nextParcel) {
-      const date = new Date(nextParcel.data_vencimento);
-      return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
-    }
-
-    return 'Todas pagas';
-  }
-
   getStatusClass(statusId: number): string {
     switch (statusId) {
       case 1: // Pendente

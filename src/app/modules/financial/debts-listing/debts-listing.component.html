@@ -88,7 +88,7 @@
                         <th class="min-w-125px">Data Competência</th>
                         <th class="min-w-125px">Valor Total</th>
                         <th class="min-w-125px">Valor Parcela</th>
-                        <th class="min-w-125px">Próx. Vencimento</th>
+                        <th class="min-w-125px">Conta</th>
                         <th class="min-w-125px">Status Pagamento</th>
                         <th class="min-w-125p">Categoria</th>
                         <th class="min-w-125p">Departamento</th>
@@ -102,7 +102,7 @@
                         <td>{{ debt.data_competencia | date:'dd/MM/yyyy'}}</td>
                         <td>{{ debt.valor_total | currency:'BRL' }}</td>                        
                         <td>{{ debt.valor_parcela | currency:'BRL' }}</td>
-                        <td>{{ getNextDueDate(debt) }}</td>
+                        <td>{{ debt.conta }}</td>
                         <td>                            
                             <span class="badge td" [ngClass]="getStatusClass(debt.status_pagamento.status_pagamento_id)">
                             {{ debt.status_pagamento ? debt.status_pagamento.nome : 'Pendente' }}
