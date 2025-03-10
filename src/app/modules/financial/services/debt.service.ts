@@ -1,3 +1,5 @@
+import { UpdateDebtStatus } from './../modal/debt.modal';
+import { UpdateInstallment } from './../modal/update-installment.model';
 import { Injectable } from '@angular/core';
 import { FinancialService } from '../../../core/services/';
 import { NewDebt } from '../modal';
@@ -26,5 +28,13 @@ export class DebtService {
 
   createDebt(debt: NewDebt) {
     return this.financialService.createDebt(debt);
+  }
+
+  updateInstallment(updateInstallment: UpdateInstallment) {
+    return this.financialService.updateInstallmentDebt(updateInstallment);
+  }
+
+  updateStatusDebt(updateDebtStatus: UpdateDebtStatus) {
+    return this.financialService.updateStatusDebt(updateDebtStatus);
   }
 }

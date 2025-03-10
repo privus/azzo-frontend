@@ -7,6 +7,7 @@ import { SweetAlertOptions } from 'sweetalert2';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { BehaviorSubject } from 'rxjs';
 import Swal from 'sweetalert2';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-order-listing',
@@ -38,6 +39,7 @@ export class OrderListingComponent implements OnInit {
     private router: Router,
     private readonly orderService: OrderService,
     private cdr: ChangeDetectorRef,
+    private http: HttpClient,
   ) {}
 
   ngOnInit(): void {
@@ -364,15 +366,14 @@ export class OrderListingComponent implements OnInit {
     return total;
   }
 
-
   exportTiny(id: number, uf: string, exportado: number): void {
     let message = `Deseja exportar para o Tiny ${uf}?`;
-  
+
     // Se já foi exportado, exibe um aviso antes
     if (exportado === 1) {
       message = `Este pedido já foi exportado para o Tiny ${uf}. Deseja exportá-lo novamente?`;
     }
-  
+
     Swal.fire({
       title: 'Confirmação',
       text: message,
@@ -397,7 +398,7 @@ export class OrderListingComponent implements OnInit {
             Swal.fire({
               icon: 'error',
               title: `Erro na exportação! Tiny ${uf}`,
-              text: 'Não foi possível exportar o pedido.'+ err,
+              text: 'Não foi possível exportar o pedido.' + err,
               confirmButtonText: 'Ok',
             });
             console.error('Erro ao exportar para Tiny:', err);
@@ -405,5 +406,49 @@ export class OrderListingComponent implements OnInit {
         });
       }
     });
-  }  
+  }
+
+  generateLabel(orderId: number) {
+    Swal.fire({
+      title: 'Gerar Etiquetas',
+      html:
+        '<input id="totalVolumes" class="swal2-input" placeholder="Total de Volumes">' +
+        '<input id="responsible" class="swal2-input" placeholder="Responsável">',
+      showCancelButton: true,
+      confirmButtonText: 'Gerar',
+      cancelButtonText: 'Cancelar',
+      preConfirm: () => {
+        const totalVolumes = (document.getElementById('totalVolumes') as HTMLInputElement).value;
+        const responsible = (document.getElementById('responsible') as HTMLInputElement).value;
+
+        if (!totalVolumes || !responsible) {
+          Swal.showValidationMessage('Todos os campos são obrigatórios.');
+          return null;
+        }
+
+        return { totalVolumes: +totalVolumes, responsible };
+      },
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        const { totalVolumes, responsible } = result.value;
+        this.http.post(`/sells/${orderId}/labels`, { totalVolumes, responsible }, { responseType: 'text' }).subscribe({
+          next: (html) => {
+            const printWindow = window.open('', '_blank');
+            printWindow?.document.write(html);
+            printWindow?.document.close();
+            printWindow?.print();
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro!',
+              text: 'Não foi possível gerar a etiqueta.',
+              confirmButtonText: 'Ok',
+            });
+            console.error('Erro ao gerar etiqueta:', err);
+          },
+        });
+      }
+    });
+  }
 }

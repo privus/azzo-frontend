@@ -116,6 +116,7 @@
             type="submit"
             class="btn btn-primary"
             [disabled]="!debtForm.dirty || isJustificationRequired()"
+            (click)="onSubmit()"
           >
             Salvar
           </button>

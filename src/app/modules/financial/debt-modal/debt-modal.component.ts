@@ -99,40 +99,45 @@ export class DebtModalComponent implements OnInit {
       return; // Impede o envio do formulário
     }
 
+    let dataPagamentoValue = this.debtForm.get('data_pagamento')?.value;
+    if (!dataPagamentoValue || isNaN(Date.parse(dataPagamentoValue))) {
+      dataPagamentoValue = null;
+    }
+
     const updateData: UpdateInstallment = {
-      parcela_id: this.parcelaModel.parcela_id,
-      status_pagamento_id: +this.parcelaModel.status_pagamento.status_pagamento_id,
-      data_pagamento: this.parcelaModel.data_pagamento ?? '',
-      juros: this.parcelaModel.juros ? Number(this.parcelaModel.juros) : 0,
+      parcela_id: this.f.parcela_id.value,
+      status_pagamento_id: +this.f.status_pagamento.value,
+      data_pagamento: dataPagamentoValue,
+      juros: this.f.juros ? Number(this.f.juros.value) : 0,
       atualizado_por: this.userEmail,
-      obs: this.obs,
+      obs: this.f.obs.value,
     };
 
-    // this.debtService.updateInstallment(updateData).subscribe({
-    //   next: (resp) => {
-    //     this.showAlert(
-    //       {
-    //         icon: 'success',
-    //         title: 'Parcela atualizada com sucesso!',
-    //         text: resp.message,
-    //         confirmButtonText: 'Ok',
-    //       },
-    //       () => {
-    //         this.activeModal.close('success');
-    //         window.location.reload(); // Recarrega a página inteira
-    //       },
-    //     );
-    //   },
-    //   error: (err) => {
-    //     this.showAlert({
-    //       icon: 'error',
-    //       title: 'Erro!',
-    //       text: 'Não foi possível atualizar o pedido.',
-    //       confirmButtonText: 'Ok',
-    //     });
-    //     console.error(err);
-    //   },
-    // });
+    this.debtService.updateInstallment(updateData).subscribe({
+      next: (resp) => {
+        this.showAlert(
+          {
+            icon: 'success',
+            title: 'Parcela atualizada com sucesso!',
+            text: resp.message,
+            confirmButtonText: 'Ok',
+          },
+          () => {
+            this.activeModal.close('success');
+            window.location.reload(); // Recarrega a página inteira
+          },
+        );
+      },
+      error: (err) => {
+        this.showAlert({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Não foi possível atualizar a parcela.',
+          confirmButtonText: 'Ok',
+        });
+        console.error(err);
+      },
+    });
   }
 
   get f() {

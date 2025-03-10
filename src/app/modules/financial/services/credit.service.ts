@@ -17,7 +17,7 @@ export class CreditService {
   }
 
   updateInstallment(UpdateInstallment: UpdateInstallment) {
-    return this.finacialService.updateInstallment(UpdateInstallment);
+    return this.finacialService.updateInstallmentCredit(UpdateInstallment);
   }
 
   getAllCategories() {

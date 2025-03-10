@@ -124,6 +124,39 @@ export class DebtDetailsComponent implements OnInit {
     }
   }
 
+  showAlert(swalOptions: SweetAlertOptions) {
+    this.swalOptions = swalOptions;
+    this.cdr.detectChanges();
+    this.noticeSwal.fire();
+  }
+
+  updateStatus(): void {
+    const statusControl = this.debtForm.get('status_pagamento');
+    const status = statusControl ? statusControl.value : null;
+    console.log('Updating status:', status);
+    this.debtService.updateStatusDebt({ debito_id: this.debtId, status_pagamento_id: Number(status) }).subscribe({
+      next: (resp) => {
+        this.showAlert({
+          icon: 'success',
+          title: 'Pedido atualizado com sucesso!',
+          text: resp.message,
+          confirmButtonText: 'Ok',
+        });
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.showAlert({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Não foi possível atualizar o pedido.',
+          confirmButtonText: 'Ok',
+        });
+        this.cdr.detectChanges();
+        console.error(err);
+      },
+    });
+  }
+
   openCreditModal(parcela: ParcelaDebito) {
     this.modalReference = this.modalService.open(DebtModalComponent, {
       backdrop: 'static',

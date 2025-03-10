@@ -66,3 +66,8 @@ export interface NewDebt {
   grupo: number;
   criado_por: string;
 }
+
+export interface UpdateDebtStatus {
+  debito_id: number;
+  status_pagamento_id: number;
+}

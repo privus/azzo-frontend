@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { UpdateInstallment, Debt, Departamento, Credit, Categoria, NewDebt, NewCredit } from '../../modules/financial/modal';
+import { UpdateInstallment, Debt, Departamento, Credit, Categoria, NewDebt, NewCredit, UpdateDebtStatus } from '../../modules/financial/modal';
 
 @Injectable()
 export class FinancialService {
@@ -29,8 +29,12 @@ export class FinancialService {
     return this.http.get<Categoria[]>(`${this.baseUrl}debts/categories`);
   }
 
-  updateInstallment(UpdateInstallment: UpdateInstallment) {
+  updateInstallmentCredit(UpdateInstallment: UpdateInstallment) {
     return this.http.patch<{ message: string }>(`${this.baseUrl}credits/installment`, UpdateInstallment);
+  }
+
+  updateInstallmentDebt(UpdateInstallment: UpdateInstallment) {
+    return this.http.patch<{ message: string }>(`${this.baseUrl}debts/installment`, UpdateInstallment);
   }
 
   getDebtById(id: number) {
@@ -47,5 +51,9 @@ export class FinancialService {
 
   createCredit(newCredit: NewCredit) {
     return this.http.post<Credit>(`${this.baseUrl}credits`, newCredit);
+  }
+
+  updateStatusDebt(updateDebtStatus: UpdateDebtStatus) {
+    return this.http.patch<{ message: string }>(`${this.baseUrl}debts/status`, updateDebtStatus);
   }
 }
