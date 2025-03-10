@@ -8,6 +8,7 @@ import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { BehaviorSubject } from 'rxjs';
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-order-listing',
@@ -32,6 +33,7 @@ export class OrderListingComponent implements OnInit {
   swalOptions: SweetAlertOptions = {};
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   sortDirection: 'asc' | 'desc' = 'asc';
+  private baseUrl = environment.apiUrl;
 
   constructor(
     private route: ActivatedRoute,
@@ -431,7 +433,7 @@ export class OrderListingComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed && result.value) {
         const { totalVolumes, responsible } = result.value;
-        this.http.post(`/sells/${orderId}/labels`, { totalVolumes, responsible }, { responseType: 'text' }).subscribe({
+        this.http.post(`${this.baseUrl}sells/${orderId}/label`, { totalVolumes, responsible }, { responseType: 'text' }).subscribe({
           next: (html) => {
             const printWindow = window.open('', '_blank');
             printWindow?.document.write(html);
