@@ -37,9 +37,9 @@ export class CreditModalComponent implements OnInit {
       nome_empresa: [{ value: '', disabled: true }],
       numero: [{ value: '', disabled: true }],
       valor: [{ value: '', disabled: true }],
-      juros: [''],
+      valor_total: [''],
       data_criacao: [{ value: '', disabled: true }],
-      data_vencimento: [{ value: '', disabled: true }],
+      data_vencimento: [''],
       status_pagamento: [''],
       data_pagamento: [''],
       data_competencia: [{ value: '', disabled: true }],
@@ -112,7 +112,7 @@ export class CreditModalComponent implements OnInit {
       return;
     }
 
-    let dataPagamentoValue = this.creditForm.get('data_pagamento')?.value;
+    let dataPagamentoValue = this.f.data_pagamento.value;
     if (!dataPagamentoValue || isNaN(Date.parse(dataPagamentoValue))) {
       dataPagamentoValue = null;
     }
@@ -121,11 +121,11 @@ export class CreditModalComponent implements OnInit {
       parcela_id: this.f.parcela_id.value,
       status_pagamento_id: +this.f.status_pagamento.value,
       data_pagamento: dataPagamentoValue,
-      juros: this.f.juros ? Number(this.f.juros.value) : 0,
+      valor_total: +this.f.valor_total.value,
+      data_vencimento: this.f.data_vencimento.value, // Ensure this is saved
       atualizado_por: this.userEmail,
       obs: this.f.obs.value,
     };
-
     this.creditService.updateInstallment(updateData).subscribe({
       next: (resp) => {
         this.showAlert(
@@ -178,6 +178,15 @@ export class CreditModalComponent implements OnInit {
   }
 
   isJustificationRequired(): boolean {
-    return +this.parcelaModel.status_pagamento.status_pagamento_id === 4 && (!this.obs || this.obs.trim() === '');
+    return +this.f.status_pagamento === 4 && (!this.obs || this.obs.trim() === '');
+  }
+
+  onDateChange(): void {
+    const dataVencimentoControl = this.f.data_vencimento;
+
+    if (dataVencimentoControl) {
+      dataVencimentoControl.markAsDirty(); // Força a marcação como modificado
+      dataVencimentoControl.updateValueAndValidity(); // Atualiza a validação do campo
+    }
   }
 }

@@ -108,7 +108,7 @@ export class DebtModalComponent implements OnInit {
       parcela_id: this.f.parcela_id.value,
       status_pagamento_id: +this.f.status_pagamento.value,
       data_pagamento: dataPagamentoValue,
-      juros: this.f.juros ? Number(this.f.juros.value) : 0,
+      valor_total: this.f.juros ? Number(this.f.juros.value) : 0,
       atualizado_por: this.userEmail,
       obs: this.f.obs.value,
     };
