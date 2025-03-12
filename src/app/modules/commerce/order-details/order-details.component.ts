@@ -109,18 +109,25 @@ export class OrderDetailsComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('❌ Erro ao atualizar pedido:', err);
+        console.error('❌ Erro ao exportar pedido:', err);
 
-        // Captura a mensagem detalhada do erro retornado pelo backend
+        // Verifica se há uma resposta do backend com a mensagem de erro
         let errorMessage = 'Erro desconhecido ao exportar pedido';
 
-        if (err.error?.message) {
-          errorMessage = err.error.message;
+        if (err.error) {
+          if (typeof err.error === 'string') {
+            // Se o erro for um texto simples
+            errorMessage = err.error;
+          } else if (err.error.message) {
+            // Se o erro for um objeto JSON com 'message'
+            errorMessage = err.error.message;
+          }
         }
 
+        // Exibe o erro no frontend corretamente
         this.showAlert({
           icon: 'error',
-          title: 'Erro ao Exportar Pedido!',
+          title: 'Erro na Exportação!',
           text: errorMessage,
           confirmButtonText: 'Corrigir',
         });
