@@ -47,16 +47,16 @@ export class OrderListingComponent implements OnInit {
   ngOnInit(): void {
     this.orders = this.route.snapshot.data['orders'];
     console.log('PEDIDOS ===> ', this.orders);
-    this.sortByDate('asc'); // Ordenação padrão em ordem ascendente
+    this.sortByCode('asc'); // Ordenação padrão em ordem ascendente
     this.applyFilter();
   }
 
-  sortByDate(direction: 'asc' | 'desc' = 'asc'): void {
+  sortByCode(direction: 'asc' | 'desc' = 'asc'): void {
     this.filteredOrders.sort((a, b) => {
-      const dateA = new Date(a.data_criacao).getTime();
-      const dateB = new Date(b.data_criacao).getTime();
+      const codeA = Number(a.codigo);
+      const codeB = Number(b.codigo);
 
-      return direction === 'desc' ? dateA - dateB : dateB - dateA;
+      return direction === 'desc' ? codeB - codeA : codeA - codeB;
     });
     this.sortDirection = direction;
   }
