@@ -116,15 +116,18 @@ export class OrderDetailsComponent implements OnInit {
 
         if (err.error) {
           if (typeof err.error === 'string') {
-            // Se o erro for um texto simples
+            // Se o erro for um texto simples (string)
             errorMessage = err.error;
           } else if (err.error.message) {
-            // Se o erro for um objeto JSON com 'message'
+            // Se o erro for um JSON e contiver 'message'
             errorMessage = err.error.message;
+          } else if (err.error.error && typeof err.error.error === 'string') {
+            // Caso o erro esteja aninhado dentro de um campo "error"
+            errorMessage = err.error.error;
           }
         }
 
-        // Exibe o erro no frontend corretamente
+        // Exibir mensagem corretamente no frontend
         this.showAlert({
           icon: 'error',
           title: 'Erro na Exportação!',
