@@ -111,7 +111,7 @@ export class OrderDetailsComponent implements OnInit {
         this.showAlert({
           icon: 'error',
           title: 'Erro!',
-          text: err.error.message,
+          text: err.error?.message || 'Não foi possível atualizar o pedido.',
           confirmButtonText: 'Ok',
         });
         this.cdr.detectChanges();
