@@ -111,22 +111,11 @@ export class OrderDetailsComponent implements OnInit {
       error: (error) => {
         console.error('❌ Erro ao exportar pedido:', error);
 
-        // Corrige para pegar a mensagem correta do backend
-        let errorMessage = 'Erro desconhecido ao exportar pedido';
-
-        if (error.error) {
-          if (error.error.message) {
-            errorMessage = error.error.message;
-          } else if (typeof error.error === 'string') {
-            errorMessage = error.error;
-          }
-        }
-
         // Exibir mensagem correta no frontend
         this.showAlert({
           icon: 'error',
           title: 'Erro na Exportação!',
-          text: errorMessage,
+          text: error.error.message,
           confirmButtonText: 'Corrigir',
         });
 
