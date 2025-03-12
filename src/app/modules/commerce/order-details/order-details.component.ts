@@ -97,7 +97,6 @@ export class OrderDetailsComponent implements OnInit {
     const statusControl = this.orderForm.get('status');
     const status = statusControl ? statusControl.value : null;
     console.log('Updating status:', status);
-
     this.orderService.updateSellStatus({ venda_id: this.orderId, status_venda_id: Number(status) }).subscribe({
       next: (resp) => {
         this.showAlert({
@@ -108,35 +107,15 @@ export class OrderDetailsComponent implements OnInit {
         });
         this.cdr.detectChanges();
       },
-      error: (error) => {
-        console.error('❌ Erro ao exportar pedido:', error);
-        console.log('Error:', error);
-
-        // Verifica se há uma resposta do backend com a mensagem de erro
-        let errorMessage = 'Erro desconhecido ao exportar pedido';
-
-        if (error.error) {
-          if (error.error.message) {
-            errorMessage = error.error.message;
-          } else if (typeof error.error === 'string') {
-            errorMessage = error.error;
-          }
-        }
-
-        // Verifica se o erro contém o texto padrão e substitui pela mensagem do backend
-        if (error.message.includes('Http failure response')) {
-          errorMessage = errorMessage || 'Erro desconhecido ao exportar pedido';
-        }
-
-        // Exibir mensagem corretamente no frontend
+      error: (err) => {
         this.showAlert({
           icon: 'error',
-          title: 'Erro na Exportação!',
-          text: errorMessage,
-          confirmButtonText: 'Corrigir',
+          title: 'Erro!',
+          text: 'Não foi possível atualizar o pedido.',
+          confirmButtonText: 'Ok',
         });
-
         this.cdr.detectChanges();
+        console.error(err);
       },
     });
   }

@@ -400,7 +400,7 @@ export class OrderListingComponent implements OnInit {
             Swal.fire({
               icon: 'error',
               title: `Erro na exportação! Tiny ${uf}`,
-              text: 'Não foi possível exportar o pedido.' + err.message,
+              text: 'Não foi possível exportar o pedido.' + err.error.message,
               confirmButtonText: 'Ok',
             });
             console.error('Erro ao exportar para Tiny:', err);
