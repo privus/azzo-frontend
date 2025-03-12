@@ -110,6 +110,7 @@ export class OrderDetailsComponent implements OnInit {
       },
       error: (error) => {
         console.error('❌ Erro ao exportar pedido:', error);
+        console.log('Error:', error);
 
         // Verifica se há uma resposta do backend com a mensagem de erro
         let errorMessage = 'Erro desconhecido ao exportar pedido';
