@@ -47,7 +47,7 @@ export class OrderListingComponent implements OnInit {
   ngOnInit(): void {
     this.orders = this.route.snapshot.data['orders'];
     console.log('PEDIDOS ===> ', this.orders);
-    this.sortByCode('asc'); // Ordenação padrão em ordem ascendente
+    this.sortByCode('desc'); // Ordenação padrão em ordem ascendente
     this.applyFilter();
   }
 
