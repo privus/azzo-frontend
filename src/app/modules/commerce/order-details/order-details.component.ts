@@ -97,6 +97,7 @@ export class OrderDetailsComponent implements OnInit {
     const statusControl = this.orderForm.get('status');
     const status = statusControl ? statusControl.value : null;
     console.log('Updating status:', status);
+
     this.orderService.updateSellStatus({ venda_id: this.orderId, status_venda_id: Number(status) }).subscribe({
       next: (resp) => {
         this.showAlert({
@@ -110,8 +111,12 @@ export class OrderDetailsComponent implements OnInit {
       error: (err) => {
         console.error('❌ Erro ao atualizar pedido:', err);
 
-        // Captura a mensagem do backend com os produtos inválidos
-        const errorMessage = err.error?.message || 'Erro desconhecido';
+        // Captura a mensagem detalhada do erro retornado pelo backend
+        let errorMessage = 'Erro desconhecido ao exportar pedido';
+
+        if (err.error?.message) {
+          errorMessage = err.error.message;
+        }
 
         this.showAlert({
           icon: 'error',
