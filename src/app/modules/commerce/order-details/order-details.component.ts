@@ -111,19 +111,23 @@ export class OrderDetailsComponent implements OnInit {
       error: (err) => {
         console.error('❌ Erro ao exportar pedido:', err);
 
-        // Verifica se há uma resposta do backend com a mensagem de erro
+        // Garante que capturamos a mensagem correta do backend
         let errorMessage = 'Erro desconhecido ao exportar pedido';
 
         if (err.error) {
-          if (typeof err.error === 'string') {
-            // Se o erro for um texto simples (string)
-            errorMessage = err.error;
-          } else if (err.error.message) {
-            // Se o erro for um JSON e contiver 'message'
-            errorMessage = err.error.message;
-          } else if (err.error.error && typeof err.error.error === 'string') {
-            // Caso o erro esteja aninhado dentro de um campo "error"
-            errorMessage = err.error.error;
+          try {
+            if (typeof err.error === 'string') {
+              errorMessage = err.error;
+            } else if (err.error.message) {
+              errorMessage = err.error.message;
+            } else if (err.error.error && typeof err.error.error === 'string') {
+              errorMessage = err.error.error;
+            } else if (typeof err.error === 'object') {
+              // Se err.error for um JSON válido, tenta extrair detalhes
+              errorMessage = JSON.stringify(err.error, null, 2);
+            }
+          } catch (e) {
+            console.error('Erro ao processar a mensagem de erro:', e);
           }
         }
 
