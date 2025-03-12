@@ -124,7 +124,7 @@ export class OrderListingComponent implements OnInit {
     // 4) Atualiza filteredOrders e a paginação
     this.filteredOrders = result;
     // Ordene os pedidos filtrados por data
-    this.sortByDate(this.sortDirection);
+    this.sortByCode(this.sortDirection);
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
