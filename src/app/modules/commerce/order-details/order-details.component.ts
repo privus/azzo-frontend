@@ -108,14 +108,19 @@ export class OrderDetailsComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
+        console.error('❌ Erro ao atualizar pedido:', err);
+
+        // Captura a mensagem do backend com os produtos inválidos
+        const errorMessage = err.error?.message || 'Erro desconhecido';
+
         this.showAlert({
           icon: 'error',
-          title: 'Erro!',
-          text: err.error?.message || 'Não foi possível atualizar o pedido.',
-          confirmButtonText: 'Ok',
+          title: 'Erro ao Exportar Pedido!',
+          text: errorMessage,
+          confirmButtonText: 'Corrigir',
         });
+
         this.cdr.detectChanges();
-        console.error(err);
       },
     });
   }
