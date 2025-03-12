@@ -108,14 +108,14 @@ export class OrderDetailsComponent implements OnInit {
         });
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('❌ Erro ao exportar pedido:', err);
+      error: (resp) => {
+        console.error('❌ Erro ao exportar pedido:', resp);
 
         // Exibir mensagem corretamente no frontend
         this.showAlert({
           icon: 'error',
           title: 'Erro na Exportação!',
-          text: err.message,
+          text: resp.message,
           confirmButtonText: 'Corrigir',
         });
 
