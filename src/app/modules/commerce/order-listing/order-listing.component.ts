@@ -343,7 +343,7 @@ export class OrderListingComponent implements OnInit {
 
   get totalBruto(): number {
     return this.filteredOrders.reduce((acc, order) => {
-      const valor = parseFloat(order.valor_pedido || '0');
+      const valor = parseFloat(order.valor_final || '0');
       return acc + valor;
     }, 0);
   }
