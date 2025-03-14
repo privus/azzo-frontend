@@ -433,12 +433,20 @@ export class OrderListingComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed && result.value) {
         const { totalVolumes, responsible } = result.value;
-        this.http.post(`${this.baseUrl}sells/${orderId}/label`, { totalVolumes, responsible }, { responseType: 'text' }).subscribe({
-          next: (html) => {
-            const printWindow = window.open('', '_blank');
-            printWindow?.document.write(html);
-            printWindow?.document.close();
-            printWindow?.print();
+
+        // Requisição para gerar o PDF
+        this.http.post(`${this.baseUrl}sells/${orderId}/label`, { totalVolumes, responsible }, { responseType: 'blob' }).subscribe({
+          next: (pdfBlob) => {
+            // Criando um link de download para o PDF
+            const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Etiqueta_${orderId}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
           },
           error: (err) => {
             Swal.fire({
