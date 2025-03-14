@@ -64,6 +64,7 @@ export class OrderDetailsComponent implements OnInit {
     this.orderForm = this.fb.group({
       codigo: [{ value: '', disabled: true }],
       nome_empresa: [{ value: '', disabled: true }],
+      nome_fantasia: [{ value: '', disabled: true }],
       email: [{ value: '', disabled: true }],
       telefone: [{ value: '', disabled: true }],
       data: [{ value: '', disabled: true }],
@@ -82,7 +83,8 @@ export class OrderDetailsComponent implements OnInit {
     this.orderForm.patchValue({
       codigo: order.codigo,
       data_criacao: order.data_criacao,
-      nome_empresa: order.cliente.nome_empresa || order.cliente.nome,
+      nome_empresa: order.cliente.nome_empresa,
+      nome_fantasia: order.cliente.nome,
       email: order.cliente.email,
       telefone: order.cliente.celular || order.cliente.telefone_comercial,
       status: order.status_venda.status_venda_id,
