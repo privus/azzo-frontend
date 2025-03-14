@@ -82,7 +82,7 @@ export class OrderDetailsComponent implements OnInit {
     this.orderForm.patchValue({
       codigo: order.codigo,
       data_criacao: order.data_criacao,
-      nome_empresa: order.cliente.nome_empresa || 'teste',
+      nome_empresa: order.cliente.nome_empresa || order.cliente.nome,
       email: order.cliente.email,
       telefone: order.cliente.celular || order.cliente.telefone_comercial,
       status: order.status_venda.status_venda_id,
