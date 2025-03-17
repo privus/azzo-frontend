@@ -410,21 +410,27 @@ export class OrderListingComponent implements OnInit {
     });
   }
 
-  generateLabel(orderId: number) {
+  generateLabel(orderId: number, orderCode: number): void {
     Swal.fire({
       title: 'Gerar Etiquetas',
-      html:
-        '<input id="totalVolumes" class="swal2-input" placeholder="Total de Volumes">' +
-        '<input id="responsible" class="swal2-input" placeholder="Responsável">',
+      html: `
+        <input id="totalVolumes" class="swal2-input" type="number" placeholder="Total de Volumes">
+        <input id="responsible" class="swal2-input" type="text" placeholder="Responsável">
+      `,
       showCancelButton: true,
       confirmButtonText: 'Gerar',
       cancelButtonText: 'Cancelar',
       preConfirm: () => {
         const totalVolumes = (document.getElementById('totalVolumes') as HTMLInputElement).value;
-        const responsible = (document.getElementById('responsible') as HTMLInputElement).value;
+        const responsible = (document.getElementById('responsible') as HTMLInputElement).value.trim();
 
         if (!totalVolumes || !responsible) {
           Swal.showValidationMessage('Todos os campos são obrigatórios.');
+          return null;
+        }
+
+        if (isNaN(Number(totalVolumes)) || Number(totalVolumes) <= 0) {
+          Swal.showValidationMessage('O número de volumes deve ser maior que zero.');
           return null;
         }
 
@@ -434,19 +440,42 @@ export class OrderListingComponent implements OnInit {
       if (result.isConfirmed && result.value) {
         const { totalVolumes, responsible } = result.value;
 
-        // Requisição para gerar o PDF
+        // Exibir um "carregando" enquanto o PDF é gerado
+        Swal.fire({
+          title: 'Gerando PDF...',
+          text: 'Aguarde enquanto o PDF está sendo criado.',
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading(),
+        });
+
         this.http.post(`${this.baseUrl}sells/${orderId}/label`, { totalVolumes, responsible }, { responseType: 'blob' }).subscribe({
           next: (pdfBlob) => {
-            // Criando um link de download para o PDF
+            if (!pdfBlob || pdfBlob.size === 0) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Erro!',
+                text: 'PDF gerado está vazio.',
+                confirmButtonText: 'Ok',
+              });
+              return;
+            }
+
             const blob = new Blob([pdfBlob], { type: 'application/pdf' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Etiqueta_${orderId}.pdf`;
+            a.download = `Etiqueta_${orderCode}.pdf`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
+
+            Swal.fire({
+              icon: 'success',
+              title: 'PDF Gerado!',
+              text: 'O arquivo foi baixado com sucesso.',
+              confirmButtonText: 'Ok',
+            });
           },
           error: (err) => {
             Swal.fire({
