@@ -32,6 +32,7 @@
                 <select class="form-select form-select-solid" [(ngModel)]="selectedStatus" (change)="applyFilter()">
                     <option value="">Todos os Status</option>
                     <option value="101">Ativo</option>
+                    <option value="104">Atenção</option>
                     <option value="102">Frio</option>
                     <option value="103">Inativo</option>
                 </select>
@@ -56,7 +57,8 @@
                         <th class="min-w-125px">Número Registro</th>
                         <th class="min-w-125px">Cidade</th>
                         <th class="min-w-125px">Telefone</th>
-                        <th class="min-w-125px">Ativo</th>
+                        <th class="min-w-125px">Status</th>
+                        <th class="min-w-125px">Última Compra</th>
                         <th class="min-w-125px">Vendedor</th>
                         <th class="text-end min-w-100px">Ações</th>
                     </tr>
@@ -76,6 +78,7 @@
                                 {{ customer.status_cliente.nome }}
                             </span>
                         </td>
+                        <td>{{ customer.ultima_compra | date:'dd/MM/yyyy' }}</td>
                         <td>{{ customer.regiao?.vendedores?.[0]?.nome || 'Sem Vendedor' }}</td>
 
                         <td class="text-end">

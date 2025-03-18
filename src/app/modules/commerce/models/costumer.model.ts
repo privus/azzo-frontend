@@ -23,6 +23,7 @@ export interface Cliente {
   categoria: CategoriaCliente;
   status_cliente: StatusCliente;
   regiao?: Regiao;
+  ultima_compra?: string;
 }
 
 export interface Cidade {

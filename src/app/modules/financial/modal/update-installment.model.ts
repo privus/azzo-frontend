@@ -6,4 +6,5 @@ export class UpdateInstallment {
   atualizado_por: string;
   obs: string;
   data_vencimento?: string;
+  venda_id?: number;
 }

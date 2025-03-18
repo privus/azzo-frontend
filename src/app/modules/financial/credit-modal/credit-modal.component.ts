@@ -71,7 +71,6 @@ export class CreditModalComponent implements OnInit {
       forma_pagamento: credit.venda ? credit.venda.forma_pagamento : '',
       descricao: credit.descricao,
       conta: credit.conta,
-      atualizado_por: credit.atualizado_por,
     });
 
     this.updateFormControls();
@@ -125,6 +124,7 @@ export class CreditModalComponent implements OnInit {
       data_vencimento: this.f.data_vencimento.value, // Ensure this is saved
       atualizado_por: this.userEmail,
       obs: this.f.obs.value,
+      venda_id: this.parcelaModel.venda ? +this.parcelaModel.venda.venda_id : undefined,
     };
     this.creditService.updateInstallment(updateData).subscribe({
       next: (resp) => {
