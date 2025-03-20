@@ -24,6 +24,8 @@ export interface Cliente {
   status_cliente: StatusCliente;
   regiao?: Regiao;
   ultima_compra?: string;
+  prox_status?: number;
+  valor_ultima_compra?: number;
 }
 
 export interface Cidade {

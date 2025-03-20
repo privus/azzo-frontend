@@ -58,6 +58,7 @@
                         <th class="min-w-125px">Cidade</th>
                         <th class="min-w-125px">Telefone</th>
                         <th class="min-w-125px">Status</th>
+                        <th class="min-w-125px">Próx. Status</th>
                         <th class="min-w-125px">Última Compra</th>
                         <th class="min-w-125px">Vendedor</th>
                         <th class="text-end min-w-100px">Ações</th>
@@ -78,7 +79,11 @@
                                 {{ customer.status_cliente.nome }}
                             </span>
                         </td>
-                        <td>{{ customer.ultima_compra | date:'dd/MM/yyyy' }}</td>
+                        <td>{{ customer.prox_status ? (customer.prox_status + ' dias') : '' }}</td>
+                        <td [title]="'Valor: ' + (customer.valor_ultima_compra ? ('R$ ' + customer.valor_ultima_compra) : 'Sem registro')">
+                            {{ customer.ultima_compra | date:'dd/MM/yyyy' }}
+                        </td>
+                        
                         <td>{{ customer.regiao?.vendedores?.[0]?.nome || 'Sem Vendedor' }}</td>
 
                         <td class="text-end">
