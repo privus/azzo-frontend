@@ -31,4 +31,8 @@ export class OrderService {
   exportTiny(id: number) {
     return this.sellService.exportTiny(id);
   }
+
+  getSellerRanking() {
+    return this.sellService.getSellerRanking();
+  }
 }

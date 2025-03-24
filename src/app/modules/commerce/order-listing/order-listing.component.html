@@ -72,6 +72,20 @@
             </div>
     </div>
 
+    <button
+        type="button"
+        class="btn btn-icon btn-warning d-flex align-items-center position-relative my-1 ms-9"
+        (click)="openSellerRankingModal()"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Ranking de Vendedores"
+    >
+        <i class="ki-duotone ki-star fs-2">
+        <span class="path1"></span>
+        <span class="path2"></span>
+        </i>
+    </button>
+
     <div *ngIf="paginatedOrders; else loading" class="card-body pt-0">
         <div class="table-responsive">
             <table

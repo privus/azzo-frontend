@@ -55,3 +55,20 @@ export interface TipoPedido {
   tipo_pedido_id: number;
   nome: string;
 }
+
+export interface Ranking {
+  today: Array<{
+    id: number;
+    nome: string;
+    total: number;
+    numero_vendas: number;
+    codigos_vendas: number[];
+  }>;
+  yesterday: Array<{
+    id: number;
+    nome: string;
+    total: number;
+    numero_vendas: number;
+    codigos_vendas: number[];
+  }>;
+}

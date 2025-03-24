@@ -1,0 +1,12 @@
+// Estilos específicos do componente de ranking de vendedores 
+
+.btn-warning {
+  &:hover {
+    background-color: #ffc700;
+    border-color: #ffc700;
+  }
+  
+  i {
+    color: #ffffff;
+  }
+} 

@@ -23,6 +23,10 @@ export class CustomerListingComponent implements OnInit {
   statusClientes: StatusCliente[] = [];
   regioes: Regiao[] = [];
 
+  // Estado para ordenação
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
   constructor(
     private route: ActivatedRoute,
     private paginationService: PaginationService,
@@ -60,11 +64,35 @@ export class CustomerListingComponent implements OnInit {
       result = result.filter((customer) => customer.status_cliente?.status_cliente_id === +this.selectedStatus);
     }
 
-    // 4) Atualizar a lista de clientes filtrados
+    // 4) Atualizar a lista de clientes filtrados e aplicar ordenação
     this.filteredCustomers = result;
+    this.applySorting();
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
+  }
+
+  sortByColumn(column: string): void {
+    if (this.sortColumn === column) {
+      // Alterna entre ascendente e descendente
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc'; // Padrão: ordenação ascendente ao clicar pela primeira vez
+    }
+
+    this.applySorting();
+  }
+
+  applySorting(): void {
+    this.filteredCustomers.sort((a, b) => {
+      const valueA = (a as any)[this.sortColumn] || 0;
+      const valueB = (b as any)[this.sortColumn] || 0;
+
+      if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+      if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
   }
 
   onSearch(): void {

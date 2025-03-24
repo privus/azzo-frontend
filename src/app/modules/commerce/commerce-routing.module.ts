@@ -9,6 +9,7 @@ import { CustomersDetailsComponent } from './customers-details/customers-details
 import { OrderListingComponent } from './order-listing/order-listing.component';
 import { OrderResolver } from './order.resolver';
 import { OrderDetailsComponent } from './order-details/order-details.component';
+import { RankingResolver } from './ranking.resolver';
 
 const routes: Routes = [
   {
@@ -38,6 +39,7 @@ const routes: Routes = [
     component: OrderListingComponent,
     resolve: {
       orders: OrderResolver,
+      ranking: RankingResolver,
     },
   },
   {

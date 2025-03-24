@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { Order } from '../models/order.model';
+import { Order, Ranking } from '../models/order.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationService } from '../../../core/services';
 import { OrderService } from '../services/order.service';
@@ -9,6 +9,8 @@ import { BehaviorSubject } from 'rxjs';
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SellerRankingModalComponent } from '../seller-ranking-modal/seller-ranking-modal.component';
 
 @Component({
   selector: 'app-order-listing',
@@ -34,6 +36,8 @@ export class OrderListingComponent implements OnInit {
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   sortDirection: 'asc' | 'desc' = 'asc';
   private baseUrl = environment.apiUrl;
+  @ViewChild('rankingModal') rankingModal!: SellerRankingModalComponent;
+  ranking: Ranking[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -42,10 +46,12 @@ export class OrderListingComponent implements OnInit {
     private readonly orderService: OrderService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit(): void {
     this.orders = this.route.snapshot.data['orders'];
+    this.ranking = this.route.snapshot.data['ranking'];
     console.log('PEDIDOS ===> ', this.orders);
     this.sortByCode('desc'); // Ordenação padrão em ordem ascendente
     this.applyFilter();
@@ -489,5 +495,16 @@ export class OrderListingComponent implements OnInit {
         });
       }
     });
+  }
+
+  openSellerRankingModal(): void {
+    const modalRef = this.modalService.open(SellerRankingModalComponent, {
+      size: 'lg',
+      centered: true,
+      backdrop: 'static',
+      keyboard: false,
+    });
+
+    modalRef.componentInstance.ranking = this.ranking; // <-- Aqui envia os dados
   }
 }

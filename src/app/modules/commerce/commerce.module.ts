@@ -11,6 +11,8 @@ import { CustomerListingComponent } from './customer-listing/customer-listing.co
 import { CustomersDetailsComponent } from './customers-details/customers-details.component';
 import { OrderListingComponent } from './order-listing/order-listing.component';
 import { OrderDetailsComponent } from './order-details/order-details.component';
+import { SellerRankingModalComponent } from './seller-ranking-modal/seller-ranking-modal.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,17 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
     CustomersDetailsComponent,
     OrderListingComponent,
     OrderDetailsComponent,
+    SellerRankingModalComponent,
   ],
-  imports: [SharedModule, RouterModule, CommonModule, FormsModule, ReactiveFormsModule, CommerceRoutingModule, SweetAlert2Module.forChild()],
+  imports: [
+    SharedModule,
+    RouterModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    CommerceRoutingModule,
+    SweetAlert2Module.forChild(),
+    NgbModule,
+  ],
 })
 export class CommerceModule {}

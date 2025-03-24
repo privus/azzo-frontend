@@ -1,0 +1,74 @@
+<div class="card-body p-10">
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <h3 class="modal-title">Ranking de Vendedores</h3>
+    <button type="button" class="btn btn-sm btn-icon btn-light" (click)="activeModal.dismiss()" aria-label="Close">
+      <i class="ki-duotone ki-cross fs-1"></i>
+    </button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="d-flex justify-content-center my-10">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
+
+  <!-- Ranking Tables -->
+  <ng-container *ngIf="!isLoading && ranking">
+    <ng-container *ngFor="let group of groupKeys">
+      <div *ngIf="ranking" class="mb-10">
+        <h4 class="fw-bold text-uppercase text-center bg-warning text-dark py-2 rounded">
+          {{ group === 'today' ? 'Hoje' : 'Ontem' }}
+        </h4> 
+        <div class="table-responsive">
+          <table class="table table-row-bordered table-striped">
+            <thead>
+              <tr class="fw-bold fs-6 text-gray-800">
+                <th>Posição</th>
+                <th>Vendedor</th>
+                <th>Nº Vendas</th>
+                <th>Valor Total</th>
+                <th>Ticket Médio</th>
+                <th>Códigos das Vendas</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let seller of ranking[group]; let i = index">
+                <td>
+                  <span [ngClass]="{
+                    'badge badge-light-success': i === 0,
+                    'badge badge-light-primary': i === 1,
+                    'badge badge-light-info': i === 2
+                  }">
+                    <ng-container *ngIf="i === 0">👑 </ng-container>{{ i + 1 }}º
+                  </span>
+                </td>
+                <td>{{ seller.nome }}</td>
+                <td>{{ seller.numero_vendas }}</td>
+                <td>{{ seller.total | currency:'BRL' }}</td>
+                <td>{{ (seller.total / seller.numero_vendas) | currency:'BRL' }}</td>
+                <td>{{ seller.codigos_vendas.join(', ') }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ng-container>
+
+    <div *ngIf="!ranking.today?.length && !ranking.yesterday?.length" class="alert alert-info text-center">
+      Nenhum dado de ranking disponível no momento.
+    </div>
+  </ng-container>
+
+  <!-- Footer Buttons -->
+  <div class="text-center pt-10">
+    <button type="button" class="btn btn-light me-3" (click)="activeModal.dismiss()">Fechar</button>
+    <button type="button" class="btn btn-primary" (click)="loadRanking()">
+      <i class="ki-duotone ki-arrows-circle fs-2">
+        <span class="path1"></span>
+        <span class="path2"></span>
+      </i>
+      Atualizar
+    </button>
+  </div>
+</div>

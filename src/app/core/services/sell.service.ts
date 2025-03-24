@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Order, UpdateSellStatus } from '../../modules/commerce/models';
+import { Order, Ranking, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class SellService {
@@ -31,5 +32,9 @@ export class SellService {
 
   exportTiny(id: number) {
     return this.http.get<{ message: string }>(`${this.baseUrl}sells/export/${id}`);
+  }
+
+  getSellerRanking(): Observable<Ranking> {
+    return this.http.get<Ranking>(`${this.baseUrl}sells/ranking`);
   }
 }
