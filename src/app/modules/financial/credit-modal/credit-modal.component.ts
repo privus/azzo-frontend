@@ -73,6 +73,7 @@ export class CreditModalComponent implements OnInit {
       conta: credit.conta,
       cod_venda: credit.venda ? credit.venda.codigo : '',
       cnpj: credit.venda ? credit.venda.cliente.numero_doc : '',
+      atualizado_por: credit.atualizado_por,
     });
 
     this.updateFormControls();

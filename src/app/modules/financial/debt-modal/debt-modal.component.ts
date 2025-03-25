@@ -22,6 +22,7 @@ export class DebtModalComponent implements OnInit {
 
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
+  today: string = '';
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -36,9 +37,9 @@ export class DebtModalComponent implements OnInit {
       parcela_id: [{ value: '', disabled: true }],
       numero: [{ value: '', disabled: true }],
       valor: [{ value: '', disabled: true }],
-      juros: [{ value: '', disabled: true }],
+      valor_total: [{ value: '' }],
       data_criacao: [{ value: '', disabled: true }],
-      data_vencimento: [{ value: '', disabled: true }],
+      data_vencimento: [{ value: '' }],
       status_pagamento: [{ value: '' }],
       data_pagamento: [{ value: new Date().toISOString().substring(0, 10) }, [Validators.required]],
       data_competencia: [{ value: '', disabled: true }],
@@ -61,12 +62,19 @@ export class DebtModalComponent implements OnInit {
       data_competencia: debt.data_competencia,
       conta: debt.conta,
       atualizado_por: debt.atualizado_por,
+      valor_total: debt.status_pagamento.status_pagamento_id === 2 ? debt.valor : null,
     });
   }
 
   ngOnInit(): void {
+    this.today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
     this.initializeForm();
     this.patchFormWithDebt(this.parcelaModel);
+
+    if (+this.parcelaModel.status_pagamento.status_pagamento_id === 2) {
+      this.debtForm.disable();
+    }
+
     this.disableDateStatus();
     console.log('Parcela:', this.parcelaModel);
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
@@ -108,9 +116,10 @@ export class DebtModalComponent implements OnInit {
       parcela_id: this.f.parcela_id.value,
       status_pagamento_id: +this.f.status_pagamento.value,
       data_pagamento: dataPagamentoValue,
-      valor_total: this.f.juros ? Number(this.f.juros.value) : 0,
+      valor_total: +this.f.valor_total.value,
       atualizado_por: this.userEmail,
       obs: this.f.obs.value,
+      data_vencimento: this.f.data_vencimento.value,
     };
 
     this.debtService.updateInstallment(updateData).subscribe({
@@ -153,5 +162,17 @@ export class DebtModalComponent implements OnInit {
 
   isJustificationRequired(): boolean {
     return +this.parcelaModel.status_pagamento.status_pagamento_id === 4 && (!this.obs || this.obs.trim() === '');
+  }
+
+  isFormValidForPaidStatus(): boolean {
+    if (+this.f.status_pagamento.value !== 2) return true; // Ignora se não for Pago
+
+    // Lista de campos obrigatórios quando status é "Pago"
+    const requiredFields = ['valor_total', 'data_pagamento', 'data_vencimento', 'conta'];
+
+    return requiredFields.every((field) => {
+      const ctrl = this.f[field];
+      return ctrl && ctrl.value !== null && ctrl.value !== '';
+    });
   }
 }

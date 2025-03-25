@@ -85,7 +85,7 @@
                     <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0" >
                         <th class="min-w-50px">ID</th>
                         <th class="min-w-125px">Nome</th>
-                        <th class="min-w-125px">Data Competência</th>
+                        <th class="min-w-125px">Próx. Vencimento</th>
                         <th class="min-w-125px">Valor Total</th>
                         <th class="min-w-125px">Valor Parcela</th>
                         <th class="min-w-125px">Conta</th>
@@ -99,7 +99,7 @@
                     <tr *ngFor="let debt of paginatedDebts">
                         <td>{{ debt.debito_id }}</td>
                         <td>{{ debt.nome }}</td>
-                        <td>{{ debt.data_competencia | date:'dd/MM/yyyy'}}</td>
+                        <td>{{ nextDueDate(debt) | date:'dd/MM/yyyy' }}</td>
                         <td>{{ debt.valor_total | currency:'BRL' }}</td>                        
                         <td>{{ debt.valor_parcela | currency:'BRL' }}</td>
                         <td>{{ debt.conta }}</td>
