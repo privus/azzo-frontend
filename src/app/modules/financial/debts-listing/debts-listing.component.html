@@ -83,12 +83,41 @@
             >
                 <thead>
                     <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0" >
-                        <th class="min-w-50px">ID</th>
-                        <th class="min-w-125px">Nome</th>
-                        <th class="min-w-125px">Próx. Vencimento</th>
-                        <th class="min-w-125px">Valor Total</th>
-                        <th class="min-w-125px">Valor Parcela</th>
-                        <th class="min-w-125px">Conta</th>
+                        <th (click)="sortBy('debito_id')" class="min-w-50px cursor-pointer">
+                            ID
+                            <i *ngIf="sortField === 'debito_id'" class="ms-1" [ngClass]="{
+                              'ki ki-up-arrow': sortDirection === 'asc',
+                              'ki ki-down-arrow': sortDirection === 'desc'
+                            }"></i>
+                        </th>
+                        <th (click)="sortBy('nome')" class="min-w-125px cursor-pointer">
+                            Nome
+                            <i *ngIf="sortField === 'nome'" class="ms-1" [ngClass]="{
+                              'ki ki-up-arrow': sortDirection === 'asc',
+                              'ki ki-down-arrow': sortDirection === 'desc'
+                            }"></i>
+                        </th>
+                        <th (click)="sortBy('proxVencimento')" class="min-w-125px cursor-pointer">
+                            Próx. Vencimento
+                            <i *ngIf="sortField === 'proxVencimento'" class="ms-1" [ngClass]="{
+                              'ki ki-up-arrow': sortDirection === 'asc',
+                              'ki ki-down-arrow': sortDirection === 'desc'
+                            }"></i>
+                        </th>
+                        <th (click)="sortBy('valor_total')" class="min-w-125px cursor-pointer">
+                            Valor Total
+                            <i *ngIf="sortField === 'valor_total'" class="ms-1" [ngClass]="{
+                              'ki ki-up-arrow': sortDirection === 'asc',
+                              'ki ki-down-arrow': sortDirection === 'desc'
+                            }"></i>
+                        </th>
+                        <th (click)="sortBy('conta')" class="min-w-125px cursor-pointer">
+                            Conta
+                            <i *ngIf="sortField === 'conta'" class="ms-1" [ngClass]="{
+                              'ki ki-up-arrow': sortDirection === 'asc',
+                              'ki ki-down-arrow': sortDirection === 'desc'
+                            }"></i>
+                        </th>
                         <th class="min-w-125px">Status Pagamento</th>
                         <th class="min-w-125p">Categoria</th>
                         <th class="min-w-125p">Departamento</th>
@@ -101,7 +130,6 @@
                         <td>{{ debt.nome }}</td>
                         <td>{{ nextDueDate(debt) | date:'dd/MM/yyyy' }}</td>
                         <td>{{ debt.valor_total | currency:'BRL' }}</td>                        
-                        <td>{{ debt.valor_parcela | currency:'BRL' }}</td>
                         <td>{{ debt.conta }}</td>
                         <td>                            
                             <span class="badge td" [ngClass]="getStatusClass(debt.status_pagamento.status_pagamento_id)">

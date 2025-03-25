@@ -27,6 +27,8 @@ export class DebtsListingComponent implements OnInit {
   selectedCategory: string = '';
   departments: Departamento[];
   categories: Categoria[];
+  sortField: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(
     private route: ActivatedRoute,
@@ -98,11 +100,53 @@ export class DebtsListingComponent implements OnInit {
       });
     }
 
+    const getField = (d: Debt): any => {
+      switch (this.sortField) {
+        case 'debito_id':
+          return d.debito_id;
+        case 'nome':
+          return d.nome;
+        case 'valor_total':
+          return +d.valor_total || 0;
+        case 'conta':
+          return d.conta;
+        case 'proxVencimento':
+          return new Date(this.nextDueDate(d));
+        default:
+          return '';
+      }
+    };
+
+    result.sort((a, b) => {
+      const valA = getField(a);
+      const valB = getField(b);
+
+      if (valA instanceof Date && valB instanceof Date) {
+        return this.sortDirection === 'asc' ? valA.getTime() - valB.getTime() : valB.getTime() - valA.getTime();
+      }
+
+      if (typeof valA === 'string') {
+        return this.sortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+      }
+
+      return this.sortDirection === 'asc' ? valA - valB : valB - valA;
+    });
+
     // 6. Update filtered debts and pagination
     this.filteredDebts = result;
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
+  }
+
+  sortBy(field: string): void {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+    this.applyFilter();
   }
 
   updateDisplayedPages(): void {
