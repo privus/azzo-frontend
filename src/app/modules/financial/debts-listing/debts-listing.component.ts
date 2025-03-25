@@ -210,6 +210,6 @@ export class DebtsListingComponent implements OnInit {
       .filter((p) => p.status_pagamento?.status_pagamento_id === 1 && new Date(p.data_vencimento) >= today)
       .sort((a, b) => new Date(a.data_vencimento).getTime() - new Date(b.data_vencimento).getTime())[0];
 
-    return next?.data_vencimento || '';
+    return next?.data_vencimento || 'Pago';
   }
 }
