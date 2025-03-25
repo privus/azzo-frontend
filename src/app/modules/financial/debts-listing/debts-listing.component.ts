@@ -202,7 +202,7 @@ export class DebtsListingComponent implements OnInit {
   }
 
   nextDueDate(debt: Debt): string {
-    if (!debt?.parcela_debito?.length) return '';
+    if (!debt?.parcela_debito?.length) return 'Pago';
 
     const today = new Date();
 
@@ -210,6 +210,6 @@ export class DebtsListingComponent implements OnInit {
       .filter((p) => p.status_pagamento?.status_pagamento_id === 1 && new Date(p.data_vencimento) >= today)
       .sort((a, b) => new Date(a.data_vencimento).getTime() - new Date(b.data_vencimento).getTime())[0];
 
-    return next?.data_vencimento || 'Pago';
+    return next && next.data_vencimento ? next.data_vencimento : 'Pago';
   }
 }
