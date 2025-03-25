@@ -121,7 +121,7 @@ export class CreditModalComponent implements OnInit {
       status_pagamento_id: +this.f.status_pagamento.value,
       data_pagamento: dataPagamentoValue,
       valor_total: +this.f.valor_total.value,
-      data_vencimento: this.f.data_vencimento.value, // Ensure this is saved
+      data_vencimento: this.f.data_vencimento.value,
       atualizado_por: this.userEmail,
       obs: this.f.obs.value,
       venda_id: this.parcelaModel.venda ? +this.parcelaModel.venda.venda_id : undefined,
@@ -168,7 +168,6 @@ export class CreditModalComponent implements OnInit {
     }
 
     if (statusId === 3 || statusId === 4) {
-      this.creditForm.get('data_pagamento')?.disable();
       this.creditForm.get('data_pagamento')?.setValue('');
     }
 
