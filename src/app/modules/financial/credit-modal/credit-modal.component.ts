@@ -44,13 +44,13 @@ export class CreditModalComponent implements OnInit {
       data_pagamento: [''],
       data_competencia: [{ value: '', disabled: true }],
       categoria: [{ value: '', disabled: true }],
-      codigo: [{ value: '', disabled: true }],
       obs: [{ value: '', disabled: true }],
       forma_pagamento: [{ value: '', disabled: true }],
       descricao: [{ value: '', disabled: true }],
       conta: [{ value: '', disabled: true }],
       atualizado_por: [{ value: '', disabled: true }],
       cod_venda: [{ value: '', disabled: true }],
+      cnpj: [{ value: '', disabled: true }],
     });
   }
 
@@ -68,11 +68,11 @@ export class CreditModalComponent implements OnInit {
       data_pagamento: credit.data_pagamento,
       data_competencia: credit.data_competencia,
       categoria: credit.categoria?.nome,
-      codigo: credit.venda ? credit.venda.codigo : '',
       forma_pagamento: credit.venda ? credit.venda.forma_pagamento : '',
       descricao: credit.descricao,
       conta: credit.conta,
       cod_venda: credit.venda ? credit.venda.codigo : '',
+      cnpj: credit.venda ? credit.venda.cliente.numero_doc : '',
     });
 
     this.updateFormControls();
@@ -189,5 +189,9 @@ export class CreditModalComponent implements OnInit {
       dataVencimentoControl.markAsDirty(); // Força a marcação como modificado
       dataVencimentoControl.updateValueAndValidity(); // Atualiza a validação do campo
     }
+  }
+
+  get documentoLabel(): string {
+    return this.parcelaModel?.venda?.cliente?.tipo_doc === 'cnpj' ? 'Cnpj' : 'Cpf';
   }
 }

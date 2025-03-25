@@ -6,7 +6,7 @@
       <div class="d-flex flex-column align-items-start flex-xxl-row">
         <!-- Parcela ID -->
         <div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 me-4">
-          <span class="fs-1x fw-bold text-gray-800">Código Venda:</span>
+          <span class="fs-1x fw-bold text-gray-800">Código Pedido</span>
           <input type="text" formControlName="cod_venda" class="form-control form-control-flush fw-bold text-muted fs-3 w-100px" />
         </div>
 
@@ -14,12 +14,6 @@
         <div class="d-flex flex-center flex-equal fw-row text-nowrap order-2 me-4">
           <span class="fs-1x fw-bold text-gray-800">Número:</span>
           <input type="text" class="form-control form-control-flush fw-bold text-muted fs-3 w-100px" formControlName="numero" />
-        </div>
-
-        <!-- Cód Pedido -->
-        <div class="d-flex flex-center flex-equal fw-row text-nowrap order-3 me-4">
-          <span class="fs-1x fw-bold text-gray-800">Cód Pedido:</span>
-          <input type="text" class="form-control form-control-flush fw-bold text-muted fs-3 w-100px" formControlName="codigo" />
         </div>
 
         <!-- Valor -->
@@ -83,7 +77,8 @@
 
         <!-- Begin Row: Data de Vencimento -->
         <div class="row gx-10 mb-5">
-          <div class="mt-5">
+        <div class="row gx-10 mb-5">
+          <div class="col-lg-6">
             <label class="form-label fs-6 fw-bold text-gray-700">Data de Vencimento</label>
             <input 
               type="date" 
@@ -93,6 +88,11 @@
               required 
             />
           </div>
+          <div class="col-lg-6">
+            <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Forma de Pagamento</label>
+            <input type="text" class="form-control form-control-solid" formControlName="forma_pagamento"/>
+          </div>
+        </div>
           
           <div *ngIf="+creditForm.get('status_pagamento')?.value === 4" class="mt-5">
             <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Justificativa do Cancelamento</label>
@@ -113,8 +113,8 @@
             <input type="text" class="form-control form-control-solid" formControlName="nome_empresa" />
           </div>
           <div class="col-lg-6">
-            <label class="form-label fs-6 fw-bold text-gray-700 mb-3">Forma de Pagamento</label>
-            <input type="text" class="form-control form-control-solid" formControlName="forma_pagamento"/>
+            <label class="form-label fs-6 fw-bold text-gray-700 mb-3">{{ documentoLabel }}</label>
+            <input type="text" class="form-control form-control-solid" formControlName="cnpj"/>
           </div>
         </div>
         <div *ngIf="parcelaModel.atualizado_por" class="col-lg-6">

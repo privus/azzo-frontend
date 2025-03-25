@@ -60,13 +60,13 @@
             >
                 <thead>
                     <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0" >
-                        <th class="min-w-50px">Cód Venda</th>
+                        <th class="min-w-50px">Cód Pedido</th>
                         <th class="min-w-125px">Cliente</th>
                         <th class="min-w-125px">Data Criação</th>
                         <th class="min-w-125px">Valor</th>
-                        <th class="min-w-125px">Cód Pedido</th>
                         <th class="min-w-125px">Data Vencimento</th>
                         <th class="min-w-125px">Status Pagamento</th>
+                        <th class="min-w-125px">Status Pedido</th>
                         <th class="text-end min-w-100px">Ações</th>
                     </tr>
                 </thead>
@@ -76,14 +76,17 @@
                         <td>{{ credit.venda ? credit.venda.cliente.nome : credit.nome }}</td>
                         <td>{{ credit.data_criacao | date:'dd/MM/yyyy' }}</td>
                         <td>{{ credit.valor | currency:'BRL' }}</td>
-                        <td>{{ credit.venda ? credit.venda.codigo : '' }}</td>
                         <td>{{ credit.data_vencimento | date:'dd/MM/yyyy'}}</td>
                         <td>                            
                             <span class="badge td" [ngClass]="getStatusClass(credit.status_pagamento.status_pagamento_id)">
                             {{ credit.status_pagamento ? credit.status_pagamento.nome : 'Pendente' }}
                             </span>  
-                        </td>   
-
+                        </td>
+                        <td>
+                            <span class="badge td">
+                            {{ credit.venda ? credit.venda.status_venda.nome : 'N/A' }}
+                            </span>
+                        </td>
                         <td class="text-end">
                             <button
                              class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
