@@ -111,7 +111,9 @@ export class DebtsListingComponent implements OnInit {
         case 'conta':
           return d.conta;
         case 'proxVencimento':
-          return new Date(this.nextDueDate(d));
+          const vencimento = this.nextDueDate(d);
+          return vencimento ? new Date(vencimento) : new Date(9999, 11, 31);
+
         default:
           return '';
       }
@@ -245,8 +247,8 @@ export class DebtsListingComponent implements OnInit {
     this.router.navigate(['financial/debts', id]);
   }
 
-  nextDueDate(debt: Debt): string {
-    if (!debt?.parcela_debito?.length) return '';
+  nextDueDate(debt: Debt): string | null {
+    if (!debt?.parcela_debito?.length) return null;
 
     const today = new Date();
 
@@ -254,6 +256,6 @@ export class DebtsListingComponent implements OnInit {
       .filter((p) => p.status_pagamento?.status_pagamento_id === 1 && new Date(p.data_vencimento) >= today)
       .sort((a, b) => new Date(a.data_vencimento).getTime() - new Date(b.data_vencimento).getTime())[0];
 
-    return next?.data_vencimento || '';
+    return next?.data_vencimento ?? null;
   }
 }
