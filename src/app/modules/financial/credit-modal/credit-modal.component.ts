@@ -50,6 +50,7 @@ export class CreditModalComponent implements OnInit {
       descricao: [{ value: '', disabled: true }],
       conta: [{ value: '', disabled: true }],
       atualizado_por: [{ value: '', disabled: true }],
+      cod_venda: [{ value: '', disabled: true }],
     });
   }
 
@@ -71,6 +72,7 @@ export class CreditModalComponent implements OnInit {
       forma_pagamento: credit.venda ? credit.venda.forma_pagamento : '',
       descricao: credit.descricao,
       conta: credit.conta,
+      cod_venda: credit.venda ? credit.venda.codigo : '',
     });
 
     this.updateFormControls();

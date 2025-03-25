@@ -60,7 +60,7 @@
             >
                 <thead>
                     <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0" >
-                        <th class="min-w-50px">ID</th>
+                        <th class="min-w-50px">Cód Venda</th>
                         <th class="min-w-125px">Cliente</th>
                         <th class="min-w-125px">Data Criação</th>
                         <th class="min-w-125px">Valor</th>
@@ -72,7 +72,7 @@
                 </thead>
                 <tbody class="fw-semibold text-gray-600">
                     <tr *ngFor="let credit of paginatedCredits">
-                        <td>{{ credit.parcela_id }}</td>
+                        <td>{{ credit.venda ? credit.venda.codigo : 'N/A' }}</td>
                         <td>{{ credit.venda ? credit.venda.cliente.nome : credit.nome }}</td>
                         <td>{{ credit.data_criacao | date:'dd/MM/yyyy' }}</td>
                         <td>{{ credit.valor | currency:'BRL' }}</td>
