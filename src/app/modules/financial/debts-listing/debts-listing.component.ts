@@ -258,4 +258,8 @@ export class DebtsListingComponent implements OnInit {
 
     return next?.data_vencimento ?? null;
   }
+
+  get totalDebts(): number {
+    return this.filteredDebts.reduce((acc, debt) => acc + +debt.valor_total, 0);
+  }
 }
