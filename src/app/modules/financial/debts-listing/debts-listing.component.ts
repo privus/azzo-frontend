@@ -40,6 +40,8 @@ export class DebtsListingComponent implements OnInit {
 
   ngOnInit(): void {
     this.debts = this.route.snapshot.data['debts'];
+    this.sortField = 'debito_id';
+    this.sortDirection = 'desc';
     this.loadDepartments();
     this.loadCategories();
     this.applyFilter();
@@ -261,5 +263,109 @@ export class DebtsListingComponent implements OnInit {
 
   get totalDebts(): number {
     return this.filteredDebts.reduce((acc, debt) => acc + +debt.valor_total, 0);
+  }
+
+  onDateRangeChange(): void {
+    const selectedRange = this.dataRange;
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
+    let startDate = new Date(now);
+    let endDate = new Date(now);
+
+    if (selectedRange === 'custom') {
+      this.showCustomDatePicker = true;
+
+      const start = this.customDateRange.start;
+      const end = this.customDateRange.end;
+
+      if (!start) return; // Se não tem início, não faz nada
+
+      const fromDate = this.formatDate(new Date(start));
+
+      if (end) {
+        const toDate = this.formatDate(new Date(end));
+        this.debtService.getDebtsBetweenDates(fromDate, toDate).subscribe({
+          next: (debts) => {
+            this.debts = debts;
+            this.applyFilter();
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Erro ao filtrar intervalo personalizado:', err),
+        });
+      } else {
+        this.debtService.getDebtsFromDate(fromDate).subscribe({
+          next: (debts) => {
+            this.debts = debts;
+            this.applyFilter();
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Erro ao filtrar data inicial personalizada:', err),
+        });
+      }
+
+      return;
+    }
+
+    this.showCustomDatePicker = false;
+
+    switch (selectedRange) {
+      case 'today':
+        break;
+
+      case 'yesterday':
+        startDate.setDate(now.getDate() - 1);
+        break;
+
+      case 'last7':
+        startDate.setDate(now.getDate() - 7);
+        break;
+
+      case 'last30':
+        startDate.setDate(now.getDate() - 30);
+        break;
+
+      case 'thisMonth':
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        break;
+
+      case 'lastMonth':
+        startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        endDate = new Date(now.getFullYear(), now.getMonth(), 0); // último dia mês anterior
+
+        const from = this.formatDate(startDate);
+        const to = this.formatDate(endDate);
+
+        this.debtService.getDebtsBetweenDates(from, to).subscribe({
+          next: (debts) => {
+            this.debts = debts;
+            this.applyFilter();
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Erro ao filtrar mês passado:', err),
+        });
+        return;
+
+      default:
+        startDate = new Date(0);
+        break;
+    }
+
+    const fromDate = this.formatDate(startDate);
+    this.debtService.getDebtsFromDate(fromDate).subscribe({
+      next: (debts) => {
+        this.debts = debts;
+        this.applyFilter();
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Erro ao filtrar por data:', err),
+    });
+  }
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

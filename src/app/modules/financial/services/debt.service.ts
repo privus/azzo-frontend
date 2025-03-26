@@ -11,7 +11,16 @@ export class DebtService {
   constructor(private readonly financialService: FinancialService) {}
 
   getAllDebts() {
-    return this.financialService.getFinancialDebts();
+    return this.financialService.getAllDebts();
+  }
+
+  getDebtsBetweenDates(startDate: string, endDate?: string) {
+    const end = endDate ? `&toDate=${endDate}` : '';
+    return this.financialService.getDebtsBetweenDates(startDate, end);
+  }
+
+  getDebtsFromDate(fromDate: string) {
+    return this.financialService.getDebtsFromDate(fromDate);
   }
 
   getAllDepartaments() {

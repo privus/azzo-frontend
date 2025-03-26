@@ -13,12 +13,21 @@ export class FinancialService {
     return this.http.get<Credit[]>(`${this.baseUrl}credits`);
   }
 
-  getFinancialCreditsByDateRange(fromDate: string, toDate: string) {
+  getFinancialCreditsByDateRange(fromDate: string, toDate?: string) {
     return this.http.get<Credit[]>(`${this.baseUrl}credits/date?fromDate=${fromDate}&toDate=${toDate}`);
   }
 
-  getFinancialDebts() {
+  getDebtsBetweenDates(startDate: string, endDate?: string) {
+    console.log(`${this.baseUrl}debts/date?fromDate=${startDate}${endDate}`);
+    return this.http.get<Debt[]>(`${this.baseUrl}debts/between?fromDate=${startDate}${endDate}`);
+  }
+
+  getAllDebts() {
     return this.http.get<Debt[]>(`${this.baseUrl}debts`);
+  }
+
+  getDebtsFromDate(fromDate: string) {
+    return this.http.get<Debt[]>(`${this.baseUrl}debts?fromDate=${fromDate}`);
   }
 
   getAllDeparments() {

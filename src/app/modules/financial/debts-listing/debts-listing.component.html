@@ -32,7 +32,12 @@
                     <input type="date" class="form-control form-control-solid w-150px ps-12 ms-3" [(ngModel)]="customDateRange.end" />
                 </div>
             </div>         
-            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9">Aplicar</button>
+            <button 
+                class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9"
+                (click)="onDateRangeChange()"
+            >
+                Aplicar
+            </button>
             <div class="d-flex align-items-center position-relative my-1 ms-8">
                 <select
                     class="form-select form-select-solid form-select-lg"
@@ -66,7 +71,7 @@
                     class="form-select form-select-solid form-select-lg"
                     [(ngModel)]="selectedStatus"
                     (change)="applyFilter()"
-                >
+            >
                     <option value="">Status</option>
                     <option value="1">Pendente</option>
                     <option value="2">Pago</option>
