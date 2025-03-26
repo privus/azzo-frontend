@@ -18,7 +18,7 @@ export class FinancialService {
   }
 
   getDebtsBetweenDates(startDate: string, endDate?: string) {
-    console.log(`${this.baseUrl}debts/date?fromDate=${startDate}${endDate}`);
+    console.log(`${this.baseUrl}debts/between?fromDate=${startDate}${endDate}`);
     return this.http.get<Debt[]>(`${this.baseUrl}debts/between?fromDate=${startDate}${endDate}`);
   }
 

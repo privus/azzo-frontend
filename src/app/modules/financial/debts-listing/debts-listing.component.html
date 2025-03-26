@@ -127,6 +127,7 @@
                         <th class="min-w-125px">Status Pagamento</th>
                         <th class="min-w-125p">Categoria</th>
                         <th class="min-w-125p">Departamento</th>
+                        <th class="min-w-125p">Data Competência</th>
                         <th class="text-end min-w-100px">Ações</th>
                     </tr>
                 </thead>
@@ -144,6 +145,7 @@
                         </td>   
                         <td>{{ debt.categoria.nome }}</td>
                         <td>{{ debt.departamento.nome }}</td>
+                        <td>{{ debt.data_competencia | date:'dd/MM/yyyy' }}</td>
                         <td class="text-end">
                             <button
                              class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"

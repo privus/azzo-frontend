@@ -73,7 +73,10 @@ export class DebtsListingComponent implements OnInit {
     const term = this.searchTerm.trim().toLowerCase();
     if (term) {
       result = result.filter(
-        (debt) => debt.descricao.toLowerCase().includes(term) || debt.nome.toLowerCase().includes(term) || debt.empresa?.toLowerCase().includes(term),
+        (debt) =>
+          (debt.descricao || '').toLowerCase().includes(term) ||
+          (debt.nome || '').toLowerCase().includes(term) ||
+          (debt.empresa || '').toLowerCase().includes(term),
       );
     }
 
@@ -97,8 +100,8 @@ export class DebtsListingComponent implements OnInit {
       const startDate = new Date(this.customDateRange.start);
       const endDate = new Date(this.customDateRange.end);
       result = result.filter((debt) => {
-        const creationDate = new Date(debt.data_criacao);
-        return creationDate >= startDate && creationDate <= endDate;
+        const competenciaDate = new Date(debt.data_competencia);
+        return competenciaDate >= startDate && competenciaDate <= endDate;
       });
     }
 
@@ -280,21 +283,27 @@ export class DebtsListingComponent implements OnInit {
       const end = this.customDateRange.end;
 
       if (!start) return; // Se não tem início, não faz nada
-
-      const fromDate = this.formatDate(new Date(start));
+      const from = new Date(start);
+      from.setDate(from.getDate() + 1);
+      const fromDate = this.formatDate(from);
 
       if (end) {
-        const toDate = this.formatDate(new Date(end));
+        const to = new Date(end);
+        to.setDate(to.getDate() + 2);
+        const toDate = this.formatDate(to);
+
         this.debtService.getDebtsBetweenDates(fromDate, toDate).subscribe({
           next: (debts) => {
+            console.log('📦 DADOS RECEBIDOS DA API:', debts);
             this.debts = debts;
             this.applyFilter();
             this.cdr.detectChanges();
           },
           error: (err) => console.error('Erro ao filtrar intervalo personalizado:', err),
         });
+        return;
       } else {
-        this.debtService.getDebtsFromDate(fromDate).subscribe({
+        this.debtService.getDebtsBetweenDates(fromDate).subscribe({
           next: (debts) => {
             this.debts = debts;
             this.applyFilter();
@@ -322,16 +331,29 @@ export class DebtsListingComponent implements OnInit {
         break;
 
       case 'last30':
-        startDate.setDate(now.getDate() - 30);
+        startDate.setDate(now.getDate() - 28);
         break;
 
       case 'thisMonth':
         startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-        break;
+        const f = this.formatDate(startDate);
+        endDate.setDate(endDate.getDate() + 1);
+        const t = this.formatDate(endDate);
+
+        this.debtService.getDebtsBetweenDates(f, t).subscribe({
+          next: (debts) => {
+            this.debts = debts;
+            this.applyFilter();
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Erro ao filtrar mês atual:', err),
+        });
+        return;
 
       case 'lastMonth':
         startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
         endDate = new Date(now.getFullYear(), now.getMonth(), 0); // último dia mês anterior
+        endDate.setDate(endDate.getDate() + 1);
 
         const from = this.formatDate(startDate);
         const to = this.formatDate(endDate);
@@ -350,7 +372,6 @@ export class DebtsListingComponent implements OnInit {
         startDate = new Date(0);
         break;
     }
-
     const fromDate = this.formatDate(startDate);
     this.debtService.getDebtsFromDate(fromDate).subscribe({
       next: (debts) => {
