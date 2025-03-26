@@ -65,6 +65,7 @@
               <select
                     class="form-select form-select-solid form-select-lg"
                     [(ngModel)]="selectedStatus"
+                    (change)="applyFilter()"
                 >
                     <option value="">Status</option>
                     <option value="1">Pendente</option>
