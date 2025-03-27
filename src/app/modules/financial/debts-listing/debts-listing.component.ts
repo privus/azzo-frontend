@@ -118,6 +118,8 @@ export class DebtsListingComponent implements OnInit {
         case 'proxVencimento':
           const vencimento = this.nextDueDate(d);
           return vencimento ? new Date(vencimento) : new Date(9999, 11, 31);
+        case 'datCompetencia':
+          return d.data_competencia ? new Date(d.data_competencia) : new Date(9999, 11, 31);
 
         default:
           return '';
