@@ -473,19 +473,25 @@ export class OrderListingComponent implements OnInit {
             }
 
             const blob = new Blob([pdfBlob], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Etiqueta_${orderCode}.pdf`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
+            const blobUrl = URL.createObjectURL(blob);
+            const printWindow = window.open('', '_blank');
+
+            if (printWindow) {
+              printWindow.document.write(`
+                <html>
+                  <head><title>Etiqueta ${orderCode}</title></head>
+                  <body style="margin:0">
+                    <iframe src="${blobUrl}" style="border:none;width:100vw;height:100vh;" onload="this.contentWindow.print()"></iframe>
+                  </body>
+                </html>
+              `);
+              printWindow.document.close();
+            }
 
             Swal.fire({
               icon: 'success',
               title: 'PDF Gerado!',
-              text: 'O arquivo foi baixado com sucesso.',
+              text: '',
               confirmButtonText: 'Ok',
             });
           },
