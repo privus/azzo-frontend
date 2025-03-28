@@ -23,6 +23,7 @@ export interface Order {
   parcela_credito: Credit[];
   tipo_pedido: TipoPedido;
   exportado: number;
+  selected?: boolean;
 }
 
 export interface Vendedor {

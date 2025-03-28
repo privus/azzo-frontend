@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Order, Ranking } from '../models/order.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PaginationService } from '../../../core/services';
+import { LocalStorageService, PaginationService } from '../../../core/services';
 import { OrderService } from '../services/order.service';
 import { SweetAlertOptions } from 'sweetalert2';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
@@ -38,6 +38,9 @@ export class OrderListingComponent implements OnInit {
   private baseUrl = environment.apiUrl;
   @ViewChild('rankingModal') rankingModal!: SellerRankingModalComponent;
   ranking: Ranking[] = [];
+  selectAll: boolean = false;
+  selectedOrders: Order[] = [];
+  userEmail: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -47,6 +50,7 @@ export class OrderListingComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private modalService: NgbModal,
+    private localStorage: LocalStorageService,
   ) {}
 
   ngOnInit(): void {
@@ -55,6 +59,8 @@ export class OrderListingComponent implements OnInit {
     console.log('PEDIDOS ===> ', this.orders);
     this.sortByCode('desc'); // Ordenação padrão em ordem ascendente
     this.applyFilter();
+    const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
+    this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
   }
 
   sortByCode(direction: 'asc' | 'desc' = 'asc'): void {
@@ -420,9 +426,9 @@ export class OrderListingComponent implements OnInit {
     Swal.fire({
       title: 'Gerar Etiquetas',
       html: `
-        <input id="totalVolumes" class="swal2-input" type="number" placeholder="Total de Volumes">
-        <input id="responsible" class="swal2-input" type="text" placeholder="Responsável">
-      `,
+          <input id="totalVolumes" class="swal2-input" type="number" placeholder="Total de Volumes">
+          <input id="responsible" class="swal2-input" type="text" placeholder="Responsável">
+        `,
       showCancelButton: true,
       confirmButtonText: 'Gerar',
       cancelButtonText: 'Cancelar',
@@ -506,5 +512,79 @@ export class OrderListingComponent implements OnInit {
     });
 
     modalRef.componentInstance.ranking = this.ranking; // <-- Aqui envia os dados
+  }
+
+  toggleSelectAll(): void {
+    for (const order of this.paginatedOrders) {
+      order.selected = this.selectAll;
+    }
+    this.updateSelection();
+  }
+
+  updateSelection(): void {
+    this.selectedOrders = this.orders.filter((order) => order.selected);
+    this.selectAll = this.paginatedOrders.every((order) => order.selected);
+  }
+
+  printSelectedOrders(): void {
+    if (this.selectedOrders.length === 0) return;
+
+    Swal.fire({
+      title: 'Imprimir Pedidos Selecionados',
+      html: `
+          <p>Você selecionou <strong>${this.selectedOrders.length}</strong> pedido(s).</p>
+        `,
+      showCancelButton: true,
+      confirmButtonText: 'Sim, Gerar PDFs!',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const responsible = this.userEmail;
+
+        Swal.fire({
+          title: 'Gerando PDFs...',
+          text: 'Aguarde enquanto os arquivos estão sendo criados.',
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading(),
+        });
+
+        const printWindows = this.selectedOrders.map(() => window.open('', '_blank'));
+
+        const requests = this.selectedOrders.map((order, index) =>
+          this.http
+            .post(`${this.baseUrl}sells/${order.venda_id}/print`, { responsible }, { responseType: 'blob' })
+            .toPromise()
+            .then((pdfBlob) => {
+              if (!pdfBlob || pdfBlob.size === 0) {
+                console.warn(`PDF vazio para o pedido ${order.venda_id}`);
+                return;
+              }
+
+              const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+              const blobUrl = URL.createObjectURL(blob);
+              const win = printWindows[index];
+
+              if (win) {
+                win.document.write(`
+                    <html>
+                      <head><title>Pedido ${order.codigo}</title></head>
+                      <body style="margin:0">
+                        <iframe src="${blobUrl}" style="border:none;width:100vw;height:100vh;" onload="this.contentWindow.print()"></iframe>
+                      </body>
+                    </html>
+                  `);
+                win.document.close();
+              }
+            })
+            .catch((err) => {
+              console.error(`Erro ao abrir PDF para pedido ${order.codigo}:`, err);
+            }),
+        );
+
+        Promise.all(requests).finally(() => {
+          Swal.close(); // 👈 FECHA o loading quando tudo termina
+        });
+      }
+    });
   }
 }
