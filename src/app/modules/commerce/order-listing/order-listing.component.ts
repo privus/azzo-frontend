@@ -40,7 +40,7 @@ export class OrderListingComponent implements OnInit {
   ranking: Ranking[] = [];
   selectAll: boolean = false;
   selectedOrders: Order[] = [];
-  userEmail: string = '';
+  user: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -60,7 +60,7 @@ export class OrderListingComponent implements OnInit {
     this.sortByCode('desc'); // Ordenação padrão em ordem ascendente
     this.applyFilter();
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
-    this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
+    this.user = storageInfo ? JSON.parse(storageInfo).nome : '';
   }
 
   sortByCode(direction: 'asc' | 'desc' = 'asc'): void {
@@ -423,18 +423,17 @@ export class OrderListingComponent implements OnInit {
   }
 
   generateLabel(orderId: number, orderCode: number): void {
+    const responsible = this.user;
     Swal.fire({
       title: 'Gerar Etiquetas',
       html: `
           <input id="totalVolumes" class="swal2-input" type="number" placeholder="Total de Volumes">
-          <input id="responsible" class="swal2-input" type="text" placeholder="Responsável">
         `,
       showCancelButton: true,
       confirmButtonText: 'Gerar',
       cancelButtonText: 'Cancelar',
       preConfirm: () => {
         const totalVolumes = (document.getElementById('totalVolumes') as HTMLInputElement).value;
-        const responsible = (document.getElementById('responsible') as HTMLInputElement).value.trim();
 
         if (!totalVolumes || !responsible) {
           Swal.showValidationMessage('Todos os campos são obrigatórios.');
@@ -490,7 +489,7 @@ export class OrderListingComponent implements OnInit {
 
             Swal.fire({
               icon: 'success',
-              title: 'PDF Gerado!',
+              title: 'Etiqueta Gerada!',
               text: '',
               confirmButtonText: 'Ok',
             });
@@ -541,11 +540,11 @@ export class OrderListingComponent implements OnInit {
           <p>Você selecionou <strong>${this.selectedOrders.length}</strong> pedido(s).</p>
         `,
       showCancelButton: true,
-      confirmButtonText: 'Sim, Gerar PDFs!',
+      confirmButtonText: 'Sim!',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        const responsible = this.userEmail;
+        const responsible = this.user;
 
         Swal.fire({
           title: 'Gerando PDFs...',
@@ -590,6 +589,83 @@ export class OrderListingComponent implements OnInit {
         Promise.all(requests).finally(() => {
           Swal.close(); // 👈 FECHA o loading quando tudo termina
         });
+      }
+    });
+  }
+
+  generateLabelsForSelected(): void {
+    if (this.selectedOrders.length === 0) return;
+
+    Swal.fire({
+      title: 'Imprimir Etiquetas',
+      html: `
+        <p>Você selecionou <strong>${this.selectedOrders.length}</strong> pedido(s).</p>
+        <input id="totalVolumes" class="swal2-input" type="number" placeholder="Total de Volumes">
+      `,
+      showCancelButton: true,
+      confirmButtonText: 'Sim!',
+      cancelButtonText: 'Cancelar',
+      preConfirm: () => {
+        const totalVolumes = (document.getElementById('totalVolumes') as HTMLInputElement).value;
+
+        if (!totalVolumes) {
+          Swal.showValidationMessage('Por favor, informe o total de volumes.');
+          return null;
+        }
+
+        if (isNaN(Number(totalVolumes)) || Number(totalVolumes) <= 0) {
+          Swal.showValidationMessage('O número de volumes deve ser maior que zero.');
+          return null;
+        }
+
+        return { totalVolumes: +totalVolumes };
+      },
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        const { totalVolumes } = result.value;
+        const responsible = this.user;
+
+        Swal.fire({
+          title: 'Gerando Etiquetas...',
+          text: 'Aguarde enquanto os arquivos estão sendo criados.',
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading(),
+        });
+
+        const windows = this.selectedOrders.map(() => window.open('', '_blank'));
+
+        const requests = this.selectedOrders.map((order, index) =>
+          this.http
+            .post(`${this.baseUrl}sells/${order.venda_id}/label`, { totalVolumes, responsible }, { responseType: 'blob' })
+            .toPromise()
+            .then((pdfBlob) => {
+              if (!pdfBlob || pdfBlob.size === 0) {
+                console.warn(`Etiqueta vazia para o pedido ${order.venda_id}`);
+                return;
+              }
+
+              const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+              const blobUrl = URL.createObjectURL(blob);
+              const win = windows[index];
+
+              if (win) {
+                win.document.write(`
+                  <html>
+                    <head><title>Etiqueta ${order.codigo}</title></head>
+                    <body style="margin:0">
+                      <iframe src="${blobUrl}" style="border:none;width:100vw;height:100vh;" onload="this.contentWindow.print()"></iframe>
+                    </body>
+                  </html>
+                `);
+                win.document.close();
+              }
+            })
+            .catch((err) => {
+              console.error(`Erro ao gerar etiqueta para pedido ${order.codigo}:`, err);
+            }),
+        );
+
+        Promise.all(requests).finally(() => Swal.close());
       }
     });
   }
