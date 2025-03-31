@@ -26,6 +26,8 @@ export class CreditsListingComponent implements OnInit {
   customDateRange: { start: string; end: string } = { start: '', end: '' };
   selectedStatus: string = '';
   private modalReference: NgbModalRef;
+  sortField: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(
     private route: ActivatedRoute,
@@ -76,6 +78,40 @@ export class CreditsListingComponent implements OnInit {
         return creationDate >= startDate && creationDate <= endDate;
       });
     }
+
+    const getField = (c: Credit): any => {
+      switch (this.sortField) {
+        case 'codigo':
+          return c.venda?.codigo ?? 0;
+        case 'nome':
+          return c.nome ?? '';
+        case 'valor':
+          return +c.valor || 0;
+        case 'conta':
+          return c.conta ?? '';
+        case 'dataVencimento':
+          return c.data_vencimento ?? '';
+        case 'dataCriacao':
+          return c.data_criacao ?? '';
+        default:
+          return '';
+      }
+    };
+
+    result.sort((a, b) => {
+      const valA = getField(a);
+      const valB = getField(b);
+
+      if (valA instanceof Date && valB instanceof Date) {
+        return this.sortDirection === 'asc' ? valA.getTime() - valB.getTime() : valB.getTime() - valA.getTime();
+      }
+
+      if (typeof valA === 'string') {
+        return this.sortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+      }
+
+      return this.sortDirection === 'asc' ? valA - valB : valB - valA;
+    });
 
     // Atualiza os créditos filtrados
     this.filteredCredits = result;
@@ -296,5 +332,15 @@ export class CreditsListingComponent implements OnInit {
     this.router.navigateByUrl('', { skipLocationChange: true }).then(() => {
       this.router.navigate([this.route.snapshot.routeConfig?.path]);
     });
+  }
+
+  sortBy(field: string): void {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+    this.applyFilter();
   }
 }

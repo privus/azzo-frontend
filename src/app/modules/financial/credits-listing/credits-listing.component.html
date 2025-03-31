@@ -60,11 +60,35 @@
             >
                 <thead>
                     <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0" >
-                        <th class="min-w-50px">Cód Pedido</th>
+                        <th (click)="sortBy('codigo')" class="cursor-pointer">
+                            Cód Pedido
+                            <i *ngIf="sortField === 'codigo'" class="ms-1" [ngClass]="{
+                              'ki ki-up-arrow': sortDirection === 'asc',
+                              'ki ki-down-arrow': sortDirection === 'desc'
+                            }"></i>
+                          </th>
                         <th class="min-w-125px">Cliente</th>
-                        <th class="min-w-125px">Data Criação</th>
-                        <th class="min-w-125px">Valor</th>
-                        <th class="min-w-125px">Data Vencimento</th>
+                        <th (click)="sortBy('dataCriacao')" class="cursor-pointer">
+                            Data Criação
+                            <i *ngIf="sortField === 'dataCriacao'" class="ms-1" [ngClass]="{
+                              'ki ki-up-arrow': sortDirection === 'asc',
+                              'ki ki-down-arrow': sortDirection === 'desc'
+                            }"></i>
+                        </th>
+                        <th (click)="sortBy('valor')" class="cursor-pointer">
+                            Valor
+                            <i *ngIf="sortField === 'valor'" class="ms-1" [ngClass]="{
+                              'ki ki-up-arrow': sortDirection === 'asc',
+                              'ki ki-down-arrow': sortDirection === 'desc'
+                            }"></i>
+                          </th>
+                        <th (click)="sortBy('dataVencimento')" class="cursor-pointer">
+                            Data Vencimento
+                            <i *ngIf="sortField === 'dataVencimento'" class="ms-1" [ngClass]="{
+                              'ki ki-up-arrow': sortDirection === 'asc',
+                              'ki ki-down-arrow': sortDirection === 'desc'
+                            }"></i>
+                        </th>
                         <th class="min-w-125px">Status Pagamento</th>
                         <th class="min-w-125px">Status Pedido</th>
                         <th class="text-end min-w-100px">Ações</th>
