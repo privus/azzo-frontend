@@ -305,7 +305,6 @@ export class OrderListingComponent implements OnInit {
           error: (err) => console.error('Erro ao filtrar data inicial personalizada:', err),
         });
       }
-
       return;
     }
 
@@ -329,7 +328,6 @@ export class OrderListingComponent implements OnInit {
           error: (err) => console.error('Erro ao filtrar intervalo personalizado:', err),
         });
         return;
-        break;
 
       case 'last7':
         startDate.setDate(now.getDate() - 7);

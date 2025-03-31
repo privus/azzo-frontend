@@ -51,6 +51,7 @@ export class CreditModalComponent implements OnInit {
       atualizado_por: [{ value: '', disabled: true }],
       cod_venda: [{ value: '', disabled: true }],
       cnpj: [{ value: '', disabled: true }],
+      metodo_pagamento: [{ value: '', disabled: true }],
     });
   }
 
@@ -74,6 +75,7 @@ export class CreditModalComponent implements OnInit {
       cod_venda: credit.venda ? credit.venda.codigo : '',
       cnpj: credit.venda ? credit.venda.cliente.numero_doc : '',
       atualizado_por: credit.atualizado_por,
+      metodo_pagamento: credit.venda ? credit.venda.metodo_pagamento : '',
     });
 
     this.updateFormControls();
