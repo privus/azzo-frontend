@@ -317,6 +317,18 @@ export class OrderListingComponent implements OnInit {
 
       case 'yesterday':
         startDate.setDate(now.getDate() - 1);
+        const y = this.formatDate(startDate);
+
+        this.orderService.getOrdersBetweenDates(y).subscribe({
+          next: (orders) => {
+            console.log('📦 DADOS RECEBIDOS DA API COM INTERVALO:', orders);
+            this.orders = orders;
+            this.applyFilter();
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Erro ao filtrar intervalo personalizado:', err),
+        });
+        return;
         break;
 
       case 'last7':
