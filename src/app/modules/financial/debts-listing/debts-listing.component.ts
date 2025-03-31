@@ -333,7 +333,7 @@ export class DebtsListingComponent implements OnInit {
         break;
 
       case 'last30':
-        startDate.setDate(now.getDate() - 28);
+        startDate.setDate(now.getDate() - 30);
         break;
 
       case 'thisMonth':
@@ -354,8 +354,6 @@ export class DebtsListingComponent implements OnInit {
 
       case 'lastMonth':
         startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-        endDate = new Date(now.getFullYear(), now.getMonth(), 0); // último dia mês anterior
-        endDate.setDate(endDate.getDate() + 1);
 
         const from = this.formatDate(startDate);
         const to = this.formatDate(endDate);

@@ -12,6 +12,11 @@ export class OrderService {
     return this.sellService.getAllOrders();
   }
 
+  getOrdersBetweenDates(startDate: string, endDate?: string) {
+    const end = endDate ? `&toDate=${endDate}` : '';
+    return this.sellService.getOrdersByDateRange(startDate, end);
+  }
+
   getOrderById(id: number) {
     return this.sellService.getOrderById(id);
   }

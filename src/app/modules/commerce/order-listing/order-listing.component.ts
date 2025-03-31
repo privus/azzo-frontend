@@ -182,14 +182,6 @@ export class OrderListingComponent implements OnInit {
     }
   }
 
-  onDateChange(event: any): void {
-    const selectedDate = new Date(event.target.value);
-    this.filteredOrders = this.orders.filter((item) => {
-      const itemDate = new Date(item.data_criacao);
-      return itemDate.toDateString() === selectedDate.toDateString();
-    });
-  }
-
   calculatePagination(): void {
     this.totalPages = Math.ceil(this.filteredOrders.length / this.itemsPerPage);
     if (this.currentPage > this.totalPages) {
@@ -267,41 +259,67 @@ export class OrderListingComponent implements OnInit {
     this.updateDisplayedItems();
   }
 
-  applyCustomDateRange(): void {
-    const { start } = this.customDateRange;
-    const fromDate = this.formatDate(new Date(start));
-
-    this.orderService.getOrdersByDate(fromDate).subscribe({
-      next: (orders) => {
-        this.orders = orders;
-        this.applyFilter();
-      },
-      error: (err) => console.error('Erro ao filtrar por data (custom):', err),
-    });
-
-    this.showCustomDatePicker = false;
-  }
-
   onDateRangeChange(): void {
     const selectedRange = this.dataRange;
+    console.log('Custom Start:', this.customDateRange.start);
+    console.log('Custom End:', this.customDateRange.end);
+
     const now = new Date();
-    // Zeramos horas para pegar "início do dia" se necessário
-    now.setHours(0, 0, 0, 0);
 
     let startDate = new Date(now);
+    let endDate = new Date(now);
+
+    if (selectedRange === 'custom') {
+      this.showCustomDatePicker = true;
+
+      const start = this.customDateRange.start;
+      const end = this.customDateRange.end;
+
+      if (!start) return; // Se não tem início, não faz nada
+      const from = new Date(start);
+      from.setDate(from.getDate() + 1);
+      const fromDate = this.formatDate(from);
+
+      if (end) {
+        const to = new Date(end);
+        to.setDate(to.getDate() + 2);
+        const toDate = this.formatDate(to);
+
+        this.orderService.getOrdersBetweenDates(fromDate, toDate).subscribe({
+          next: (orders) => {
+            console.log('📦 DADOS RECEBIDOS DA API COM INTERVALO:', orders);
+            this.orders = orders;
+            this.applyFilter();
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Erro ao filtrar intervalo personalizado:', err),
+        });
+        return;
+      } else {
+        this.orderService.getOrdersBetweenDates(fromDate).subscribe({
+          next: (orders) => {
+            this.orders = orders;
+            this.applyFilter();
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Erro ao filtrar data inicial personalizada:', err),
+        });
+      }
+
+      return;
+    }
+
+    this.showCustomDatePicker = false;
 
     switch (selectedRange) {
       case 'today':
-        // startDate fica como hoje às 00:00
         break;
 
       case 'yesterday':
-        // Ontem às 00:00
         startDate.setDate(now.getDate() - 1);
         break;
 
       case 'last7':
-        // Últimos 7 dias
         startDate.setDate(now.getDate() - 7);
         break;
 
@@ -310,20 +328,64 @@ export class OrderListingComponent implements OnInit {
         break;
 
       case 'thisMonth':
-        // Primeiro dia do mês atual
         startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-        break;
+        const f = this.formatDate(startDate);
+        endDate.setDate(endDate.getDate() + 1);
+        const t = this.formatDate(endDate);
+
+        this.orderService.getOrdersBetweenDates(f, t).subscribe({
+          next: (orders) => {
+            this.orders = orders;
+            this.applyFilter();
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Erro ao filtrar mês atual:', err),
+        });
+        return;
 
       case 'lastMonth':
-        // Primeiro dia do mês anterior
         startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-        break;
+        endDate = new Date(now.getFullYear(), now.getMonth(), 0); // Last day of previous month
 
-      case 'custom':
-        this.showCustomDatePicker = true;
-        return; // Mostra os inputs de data e sai
+        const lastMonthFrom = this.formatDate(startDate);
+        const lastMonthTo = this.formatDate(endDate);
+
+        console.log('📅 Mês passado:', lastMonthFrom, '→', lastMonthTo);
+
+        this.orderService.getOrdersBetweenDates(lastMonthFrom, lastMonthTo).subscribe({
+          next: (orders) => {
+            this.orders = orders;
+            this.applyFilter();
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Erro ao filtrar mês passado:', err),
+        });
+        return;
+
+      case 'lastWeek':
+        const dayOfWeek = now.getDay(); // 0 = Sunday, 6 = Saturday
+
+        startDate.setDate(now.getDate() - dayOfWeek - 7); // Sunday last week
+        startDate.setHours(0, 0, 0, 0);
+
+        endDate.setDate(now.getDate() - dayOfWeek - 1); // Saturday last week
+        endDate.setHours(23, 59, 59, 999);
+
+        const lastWeekFrom = this.formatDate(startDate);
+        const lastWeekTo = this.formatDate(endDate);
+
+        this.orderService.getOrdersBetweenDates(lastWeekFrom, lastWeekTo).subscribe({
+          next: (orders) => {
+            this.orders = orders;
+            console.log('Pedidos filtrados:', orders);
+            this.applyFilter();
+            this.cdr.detectChanges();
+          },
+          error: (err) => console.error('Erro ao filtrar semana passada:', err),
+        });
+        return;
+
       default:
-        // Se não escolheu nada, pega tudo desde 1970
         startDate = new Date(0);
         break;
     }

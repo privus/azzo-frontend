@@ -16,7 +16,7 @@
                     class="form-select form-select-solid form-select-lg"  
                     id="filterDate" 
                     [(ngModel)]="dataRange" 
-                    (ngModelChange)="showCustomDatePicker = this.dataRange === 'custom'"
+                    (ngModelChange)="showCustomDatePicker = dataRange === 'custom'"
                 >   
                     <option value="">Data Venda</option>
                     <option value="today">Hoje</option>
@@ -25,6 +25,7 @@
                     <option value="last30">Últimos 30 Dias</option>
                     <option value="thisMonth">Este Mês</option>
                     <option value="lastMonth">Mês Passado</option>
+                    <option value="lastWeek">Semana Passada</option>
                     <option value="custom">Entre Datas</option>
                 </select>
                 <div *ngIf="showCustomDatePicker" class="d-flex align-items-center position-relative my-1 ms-8">
@@ -35,7 +36,7 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRangeChange(); applyCustomDateRange()">Aplicar</button>
+            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRangeChange()">Aplicar</button>
             <button
                 class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9"
                 data-bs-toggle="tooltip"

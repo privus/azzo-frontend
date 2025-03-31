@@ -14,6 +14,10 @@ export class SellService {
     return this.http.get<Order[]>(`${this.baseUrl}sells`);
   }
 
+  getOrdersByDateRange(fromDate: string, toDate?: string) {
+    return this.http.get<Order[]>(`${this.baseUrl}sells/between?fromDate=${fromDate}${toDate}`);
+  }
+
   getOrderById(id: number) {
     return this.http.get<Order>(`${this.baseUrl}sells/${id}`);
   }
