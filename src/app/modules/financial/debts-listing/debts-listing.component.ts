@@ -260,8 +260,12 @@ export class DebtsListingComponent implements OnInit {
     const today = new Date();
 
     const next = debt.parcela_debito
-      .filter((p) => p.status_pagamento?.status_pagamento_id === 1 && new Date(p.data_vencimento) >= today)
+      .filter((p) => p.status_pagamento?.status_pagamento_id === 1)
       .sort((a, b) => new Date(a.data_vencimento).getTime() - new Date(b.data_vencimento).getTime())[0];
+
+    if (next && new Date(next.data_vencimento) === today) {
+      return next.data_vencimento; // Retorna o vencimento se for hoje
+    }
 
     return next?.data_vencimento ?? null;
   }
