@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { DebtService } from './services/debt.service';
-import { Debt } from './modal/debt.modal';
+import { Debt } from './models';
 import { Observable } from 'rxjs';
 
 @Injectable({

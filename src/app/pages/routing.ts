@@ -30,6 +30,10 @@ const Routing: Routes = [
     loadChildren: () => import('../modules/financial/financial.module').then((m) => m.FinancialModule),
   },
   {
+    path: 'sellers',
+    loadChildren: () => import('../modules/sellers/sellers.module').then((m) => m.SellersModule),
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full',

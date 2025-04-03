@@ -1,4 +1,4 @@
-import { Credit } from '../../financial/modal';
+import { Credit } from '../../financial/models';
 import { Cliente, Produto } from './';
 
 export interface Order {

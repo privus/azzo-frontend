@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreditService } from '../services/credit.service';
-import { Credit, UpdateInstallment } from '../modal';
+import { Credit, UpdateInstallment } from '../models';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';

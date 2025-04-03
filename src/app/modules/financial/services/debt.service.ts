@@ -1,8 +1,6 @@
-import { UpdateDebtStatus } from './../modal/debt.modal';
-import { UpdateInstallment } from './../modal/update-installment.model';
 import { Injectable } from '@angular/core';
 import { FinancialService } from '../../../core/services/';
-import { NewDebt } from '../modal';
+import { NewDebt, UpdateDebtStatus, UpdateInstallment } from '../models';
 
 @Injectable({
   providedIn: 'root',

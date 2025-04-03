@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FinancialService } from '../../../core/services/';
-import { NewCredit, UpdateInstallment } from '../modal';
+import { NewCredit, UpdateInstallment } from '../models';
 
 @Injectable({
   providedIn: 'root',

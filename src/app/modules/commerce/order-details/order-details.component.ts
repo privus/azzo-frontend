@@ -7,7 +7,7 @@ import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CreditModalComponent } from '../../financial/credit-modal/credit-modal.component';
-import { Credit } from '../../financial/modal';
+import { Credit } from '../../financial/models';
 import { Location } from '@angular/common';
 
 @Component({

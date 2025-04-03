@@ -1,0 +1,41 @@
+<div *ngFor="let vendedor of vendedores; let i = index" class="card card-flush h-md-50 mb-5 mb-xl-10">
+    <div class="card-header pt-5">
+        <div class="card-title d-flex flex-column">
+          <!--begin::Info--> 
+          <div class="d-flex align-items-center">
+            <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
+            <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
+              {{ vendedor.totalFaturado | number: '1.0-2' }}
+            </span>
+            <span class="badge badge-light-success fs-base ms-2">
+              <i class="ki-duotone ki-arrow-up fs-5 text-success ms-n1"></i> 
+              Faturado
+            </span>            
+          </div>
+      
+          <span class="text-gray-500 pt-1 fw-semibold fs-6">{{ vendedor.nome }}</span>
+          <span class="text-gray-500 pt-1 fw-semibold fs-6">
+            Pedidos: {{ vendedor.totalPedidos }}
+          </span>
+        </div>
+      </div>     
+  
+    <div class="card-body pt-2 pb-4 d-flex flex-wrap align-items-center">
+      <!--begin::Chart-->
+      <div class="d-flex flex-center me-5 pt-2">
+        <div style="width: 200px; height: 200px;">
+          <canvas [id]="'chart-' + i" width="200" height="200"></canvas>
+        </div>
+      </div>
+      <!--end::Chart-->
+  
+      <!--begin::Labels-->
+      <div class="d-flex flex-column content-justify-center flex-row-fluid">
+        <div *ngFor="let marca of vendedor.marcasList; let j = index" class="d-flex fw-semibold align-items-center my-2">
+          <div class="bullet w-8px h-3px rounded-2 me-3" [style.backgroundColor]="marca.cor"></div>
+          <div class="text-gray-500 flex-grow-1 me-4">{{ marca.nome }}</div>
+          <div class="fw-bolder text-gray-700 text-xxl-end">R$ {{ marca.valor | number: '1.2-2' }}</div>
+        </div>
+      </div>
+    </div>
+</div>  

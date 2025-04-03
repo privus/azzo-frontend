@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DebtService } from '../services/debt.service';
-import { Categoria, Departamento, NewDebt } from '../modal';
+import { Categoria, Departamento, NewDebt } from '../models';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
