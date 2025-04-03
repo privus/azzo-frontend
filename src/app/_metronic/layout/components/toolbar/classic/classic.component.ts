@@ -123,6 +123,6 @@ export class ClassicComponent implements OnInit, OnDestroy {
   }
 
   isDisabled(): boolean {
-    return this.currentRoute === 'commerce';
+    return this.currentRoute === 'commerce' || this.currentRoute === 'sellers';
   }
 }
