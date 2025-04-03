@@ -19,6 +19,7 @@ export interface BrandSales {
 export interface VendedorDisplay {
   nome: string;
   totalFaturado: number;
+  totalPedidos: number;
   marcasList: {
     nome: string;
     valor: number;

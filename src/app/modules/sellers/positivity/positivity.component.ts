@@ -20,6 +20,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.brandSales = this.route.snapshot.data['brandSales'];
+    console.log('Brand Sales:', this.brandSales);
 
     if (this.brandSales) {
       this.vendedores = Object.entries(this.brandSales).map(([nome, vendedor], index) => {
@@ -32,6 +33,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
         return {
           nome,
           totalFaturado: vendedor.totalFaturado,
+          totalPedidos: vendedor.totalPedidos,
           marcasList,
         };
       });
