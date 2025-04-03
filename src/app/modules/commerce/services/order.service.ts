@@ -1,6 +1,6 @@
 import { UpdateSellStatus } from './../models/';
 import { Injectable } from '@angular/core';
-import { SellService } from '../../../core/services/';
+import { SellService } from '../../../core/services';
 
 @Injectable({
   providedIn: 'root',

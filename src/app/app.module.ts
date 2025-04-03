@@ -14,6 +14,7 @@ import { AccountModule } from './modules/account/account.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { CommerceModule } from './modules/commerce/commerce.module';
 import { FinancialModule } from './modules/financial/financial.module';
+import { SellersModule } from './modules/sellers/sellers.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +32,7 @@ import { FinancialModule } from './modules/financial/financial.module';
     AccountModule,
     CommerceModule,
     FinancialModule,
+    SellersModule,
   ],
   bootstrap: [AppComponent],
   providers: [provideAnimationsAsync()],

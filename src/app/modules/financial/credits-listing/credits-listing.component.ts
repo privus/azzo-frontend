@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Credit } from './../modal/';
+import { Credit } from './../models';
 import { PaginationService } from '../../../core/services';
 import { CreditService } from '../services/credit.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';

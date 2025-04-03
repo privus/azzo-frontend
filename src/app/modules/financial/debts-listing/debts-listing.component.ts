@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Categoria, Debt, Departamento } from '../modal/debt.modal';
+import { Categoria, Debt, Departamento } from '../models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationService } from '../../../core/services';
 import { DebtService } from '../services/debt.service';

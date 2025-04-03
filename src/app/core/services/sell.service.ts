@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Order, Ranking, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
+import { BrandSales } from 'src/app/modules/sellers/models/brand-sales.model';
 
 @Injectable()
 export class SellService {
@@ -40,5 +41,9 @@ export class SellService {
 
   getSellerRanking(): Observable<Ranking> {
     return this.http.get<Ranking>(`${this.baseUrl}sells/ranking`);
+  }
+
+  getSellsByBrand(): Observable<BrandSales> {
+    return this.http.get<BrandSales>(`${this.baseUrl}sells/brand`);
   }
 }

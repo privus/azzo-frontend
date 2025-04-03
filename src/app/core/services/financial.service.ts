@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { UpdateInstallment, Debt, Departamento, Credit, Categoria, NewDebt, NewCredit, UpdateDebtStatus } from '../../modules/financial/modal';
+import { UpdateInstallment, Debt, Departamento, Credit, Categoria, NewDebt, NewCredit, UpdateDebtStatus } from '../../modules/financial/models';
 
 @Injectable()
 export class FinancialService {
