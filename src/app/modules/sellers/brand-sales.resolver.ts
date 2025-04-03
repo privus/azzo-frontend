@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { PositivityService } from './services/positivity.service';
+import { SellersService } from './services/sellers.service';
 import { BrandSales } from './models/brand-sales.model';
 import { Observable } from 'rxjs';
 
@@ -8,9 +8,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class BrandSalesResolver implements Resolve<BrandSales | null> {
-  constructor(private positivityService: PositivityService) {}
+  constructor(private sellersService: SellersService) {}
 
   resolve(): Observable<BrandSales | null> {
-    return this.positivityService.getSellsByBrand();
+    return this.sellersService.getSellsByBrand();
   }
 }

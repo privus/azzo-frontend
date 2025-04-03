@@ -1,12 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Commissions } from '../models';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-commission',
-  standalone: true,
-  imports: [],
   templateUrl: './commission.component.html',
-  styleUrl: './commission.component.scss'
+  styleUrls: ['./commission.component.scss'],
 })
-export class CommissionComponent {
+export class CommissionsComponent implements OnInit {
+  comission: Commissions[] = [];
+  constructor(private route: ActivatedRoute) {}
 
+  ngOnInit(): void {
+    this.comission = this.route.snapshot.data['commissions'];
+    console.log('Commissions:', this.comission);
+  }
 }

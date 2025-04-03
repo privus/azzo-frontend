@@ -13,7 +13,11 @@
             </span>            
           </div>
       
-          <span class="text-gray-500 pt-1 fw-semibold fs-6">{{ vendedor.nome }}</span>
+          <h5 class="text-gray-500 pt-1 fw-semibold fs-6">
+            {{ vendedor.nome }}
+            <i *ngIf="vendedor.nome === topSellerName" class="ms-1 fs-3">👑</i>
+          </h5>
+         
           <span class="text-gray-500 pt-1 fw-semibold fs-6">
             Pedidos: {{ vendedor.totalPedidos }}
           </span>

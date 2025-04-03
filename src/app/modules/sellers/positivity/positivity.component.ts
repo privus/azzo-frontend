@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
-import { BrandSales, VendedorDisplay } from '../models/brand-sales.model';
+import { BrandSales, VendedorDisplay } from '../models';
 
 Chart.register(...registerables);
 
@@ -15,6 +15,7 @@ const CORES = ['#50CD89', '#009EF7', '#FFC700', '#F1416C', '#7239EA', '#3E97FF',
 export class PositivityComponent implements OnInit, AfterViewInit {
   brandSales: BrandSales | null = null;
   vendedores: VendedorDisplay[] = [];
+  topSellerName: string = '';
 
   constructor(private route: ActivatedRoute) {}
 
@@ -23,7 +24,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     console.log('Brand Sales:', this.brandSales);
 
     if (this.brandSales) {
-      this.vendedores = Object.entries(this.brandSales).map(([nome, vendedor], index) => {
+      this.vendedores = Object.entries(this.brandSales).map(([nome, vendedor]) => {
         const marcasList = Object.entries(vendedor.marcas).map(([marca, data], i) => ({
           nome: marca,
           valor: data.valor,
@@ -38,6 +39,8 @@ export class PositivityComponent implements OnInit, AfterViewInit {
         };
       });
     }
+
+    this.topSellerName = this.vendedores.reduce((max, current) => (current.totalFaturado > max.totalFaturado ? current : max)).nome;
   }
 
   ngAfterViewInit(): void {

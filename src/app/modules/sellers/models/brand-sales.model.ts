@@ -15,7 +15,6 @@ export interface BrandSales {
   [nome: string]: Vendedor;
 }
 
-// Interface para exibição no componente
 export interface VendedorDisplay {
   nome: string;
   totalFaturado: number;
