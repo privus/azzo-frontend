@@ -98,5 +98,75 @@ export class PositivityComponent implements OnInit, AfterViewInit {
         },
       });
     });
+    this.createStackedBarChart('stacked-bar-chart', this.vendedores);
+  }
+
+  createStackedBarChart(canvasId: string, vendedores: VendedorDisplay[]) {
+    const marcasUnicas = Array.from(new Set(vendedores.flatMap((v: VendedorDisplay) => v.marcasList.map((m: { nome: string }) => m.nome))));
+
+    const marcaCorMap: Record<string, string> = {};
+    marcasUnicas.forEach((marca, i) => {
+      marcaCorMap[marca] = CORES[i % CORES.length];
+    });
+
+    // Cria os datasets com os dados de cada marca
+    const rawDatasets = marcasUnicas.map((marca: string) => {
+      const data = vendedores.map((v) => {
+        const marcaData = v.marcasList.find((m) => m.nome === marca);
+        return marcaData ? marcaData.valor : 0;
+      });
+
+      const total = data.reduce((sum, val) => sum + val, 0);
+
+      return {
+        label: marca,
+        backgroundColor: marcaCorMap[marca],
+        data,
+        totalFaturamento: total,
+      };
+    });
+
+    // Ordena da menor para a maior
+    const datasets = rawDatasets
+      .sort((a, b) => b.totalFaturamento - a.totalFaturamento)
+      .map(({ label, backgroundColor, data }) => ({
+        label,
+        backgroundColor,
+        data,
+      }));
+
+    new Chart(document.getElementById(canvasId) as HTMLCanvasElement, {
+      type: 'bar',
+      data: {
+        labels: vendedores.map((v) => v.nome),
+        datasets: datasets,
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) {
+                const marca = ctx.dataset.label || '';
+                const value = typeof ctx.raw === 'number' ? ctx.raw : 0;
+                return `${marca}: R$ ${value.toFixed(2)}`;
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            stacked: true,
+            ticks: {
+              callback: (val) => `R$ ${val}`,
+            },
+          },
+        },
+      },
+    });
   }
 }
