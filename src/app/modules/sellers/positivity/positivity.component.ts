@@ -14,7 +14,7 @@ const CORES = [
   '#FF5733', // vermelho queimado
   '#FFC700', // amarelo
   '#5E6278', // cinza escuro
-  '#FFA800', // laranja
+  '#FF69B4', // pink
   '#2ECC71', // verde claro
   '#1ABC9C', // verde água
 ];
