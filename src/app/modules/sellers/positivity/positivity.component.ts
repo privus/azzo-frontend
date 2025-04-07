@@ -11,10 +11,10 @@ const CORES = [
   '#7239EA', // roxo
   '#F1416C', // vermelho
   '#A1A5B7', // cinza
-  '#FFC700', // amarelo
+  '#FF5733', // vermelho queimado
   '#FFA800', // laranja
   '#5E6278', // cinza escuro
-  '#FF5733', // vermelho queimado
+  '#FFC700', // amarelo
   '#2ECC71', // verde claro
   '#1ABC9C', // verde água
 ];
