@@ -6,7 +6,7 @@ import { BrandSales, VendedorDisplay } from '../models';
 Chart.register(...registerables);
 
 const CORES = [
-  '#7239EA', // roxo
+  '#1B5E20', // verde escuro
   '#50CD89', // verde
   '#009EF7', // azul
   '#FFC700', // amarelo
