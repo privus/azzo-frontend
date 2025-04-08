@@ -701,31 +701,55 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!ctx) return;
 
-    const vendedores = Object.keys(data);
-    const marcasSet = new Set<string>();
+    const vendedores = Object.keys(data).sort((a, b) => (data[b]?.clientesPositivados || 0) - (data[a]?.clientesPositivados || 0));
 
-    // Coleta todas as marcas existentes
+    const marcasSet = new Set<string>();
     vendedores.forEach((vendedor) => {
       Object.keys(data[vendedor]?.marcas || {}).forEach((marca) => marcasSet.add(marca));
     });
 
     const marcas = Array.from(marcasSet);
+    const maxTotalPositivados = Math.max(...vendedores.map((v) => data[v]?.clientesPositivados || 0));
 
-    // Cria datasets por marca (empilhado por marca)
-    const datasets = marcas.map((marca) => {
-      return {
-        label: marca,
-        data: vendedores.map((vendedor) => {
-          const info = data[vendedor];
-          const contrib = info?.marcas?.[marca]?.contribuicaoPercentual || 0;
-          return (info?.clientesPositivados || 0) * (contrib / 100);
-        }),
-        // Para tooltip
-        contribPercent: vendedores.map((vendedor) => {
-          return data[vendedor]?.marcas?.[marca]?.contribuicaoPercentual || 0;
-        }),
-        backgroundColor: this.marcaCorMap[marca] || '#999999',
+    // Cria matriz transposta com marca por vendedor
+    const pilhasPorVendedor: Record<string, { marca: string; valor: number; cor: string; contrib: number }[]> = {};
+
+    vendedores.forEach((vendedor) => {
+      pilhasPorVendedor[vendedor] = marcas
+        .map((marca) => ({
+          marca,
+          valor: data[vendedor]?.marcas?.[marca]?.clientesPositivados || 0,
+          contrib: data[vendedor]?.marcas?.[marca]?.contribuicaoPercentual || 0,
+          cor: this.marcaCorMap[marca] || '#999999',
+        }))
+        .filter((m) => m.valor > 0)
+        .sort((a, b) => b.valor - a.valor);
+    });
+
+    // Cria datasets ordenando as marcas individualmente por vendedor
+    const datasets: any[] = [];
+
+    marcas.forEach((_, stackIndex) => {
+      const dataset = {
+        label: '',
+        data: [] as number[],
+        contribPercent: [] as number[],
+        backgroundColor: '' as string,
       };
+
+      vendedores.forEach((vendedor, vi) => {
+        const pilha = pilhasPorVendedor[vendedor][stackIndex];
+        dataset.data.push(pilha?.valor || 0);
+        dataset.contribPercent.push(pilha?.contrib || 0);
+        if (!dataset.label && pilha) {
+          dataset.label = pilha.marca;
+          dataset.backgroundColor = pilha.cor;
+        }
+      });
+
+      if (dataset.data.some((v) => v > 0)) {
+        datasets.push(dataset);
+      }
     });
 
     new Chart(ctx, {
@@ -742,8 +766,9 @@ export class PositivityComponent implements OnInit, AfterViewInit {
             callbacks: {
               label: (ctx) => {
                 const marca = ctx.dataset.label || '';
-                const percent = (ctx.dataset as any).contribPercent?.[ctx.dataIndex] || 0;
-                return `${marca}: ${percent.toFixed(2)}% `;
+                const valor = ctx.raw as number;
+                const contrib = (ctx.dataset as any).contribPercent?.[ctx.dataIndex] || 0;
+                return `${marca}: ${valor} clientes (${contrib.toFixed(2)}%)`;
               },
             },
           },
@@ -752,9 +777,10 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           x: { stacked: true },
           y: {
             stacked: true,
+            suggestedMax: maxTotalPositivados + 5,
             title: {
               display: true,
-              text: 'Total Clientes Positivados',
+              text: 'Clientes Positivados por Marca',
             },
             ticks: {
               stepSize: 10,
@@ -762,6 +788,31 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           },
         },
       },
+      plugins: [
+        {
+          id: 'totalLabelPlugin',
+          afterDatasetsDraw(chart: Chart) {
+            const ctx = chart.ctx;
+            const labels = chart.data.labels as string[];
+            if (!labels) return;
+
+            const meta = chart.getDatasetMeta(0);
+            labels.forEach((label, index) => {
+              const total = data[label]?.clientesPositivados || 0;
+              const bar = meta.data?.[index];
+              if (!bar) return;
+
+              const yPos = bar.y;
+              ctx.save();
+              ctx.font = 'bold 12px sans-serif';
+              ctx.fillStyle = '#000';
+              ctx.textAlign = 'center';
+              ctx.fillText(`${total}`, bar.x, yPos - 6);
+              ctx.restore();
+            });
+          },
+        },
+      ],
     });
   }
 
