@@ -25,3 +25,4 @@ export interface VendedorDisplay {
     cor: string;
   }[];
 }
+

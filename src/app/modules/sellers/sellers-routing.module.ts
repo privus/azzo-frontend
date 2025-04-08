@@ -4,6 +4,7 @@ import { PositivityComponent } from './positivity/positivity.component';
 import { CommissionsComponent } from './commission/commission.component';
 import { BrandSalesResolver } from './brand-sales.resolver';
 import { CommissionsResolver } from './commissions.resolver';
+import { PositivityResolver } from './positivity.resolver';
 
 const routes: Routes = [
   {
@@ -11,6 +12,7 @@ const routes: Routes = [
     component: PositivityComponent,
     resolve: {
       brandSales: BrandSalesResolver,
+      positivity: PositivityResolver,
     },
   },
   {

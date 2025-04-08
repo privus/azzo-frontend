@@ -14,4 +14,8 @@ export class SellersService {
   getCommissions() {
     return this.sellService.getCommissions();
   }
+
+  getPositivity() {
+    return this.sellService.getPositivity();
+  }
 }

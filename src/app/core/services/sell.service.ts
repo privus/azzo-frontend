@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Order, Ranking, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { BrandSales, Commissions } from '../../modules/sellers/models';
+import { BrandSales, Commissions, PositivityByBrandResponse } from '../../modules/sellers/models';
 
 @Injectable()
 export class SellService {
@@ -47,7 +47,11 @@ export class SellService {
     return this.http.get<BrandSales>(`${this.baseUrl}sells/brand`);
   }
 
-  getCommissions(): Observable<any> {
+  getCommissions(): Observable<Commissions[]> {
     return this.http.get<Commissions[]>(`${this.baseUrl}sells/commissions`);
+  }
+
+  getPositivity(): Observable<PositivityByBrandResponse> {
+    return this.http.get<PositivityByBrandResponse>(`${this.baseUrl}sells/brandPositivity`);
   }
 }
