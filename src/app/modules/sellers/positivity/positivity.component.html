@@ -10,32 +10,29 @@
 </div>
 
 <!-- Gráfico Azzo separado -->
-<div class="d-flex flex-wrap gap-5 mb-10">
+<div class="d-flex flex-nowrap gap-5 mb-10 align-items-stretch overflow-auto">
   <!-- Faturamento Consolidado (Azzo) -->
-  <div class="card card-flush flex-grow-1" style="min-width: 300px;">
+  <div class="card card-flush flex-shrink-0" style="min-width: 450px; max-width: 50%;">
     <div class="card-header pt-5">
       <h3 class="card-title text-gray-900 fw-bold">Faturamento Consolidado (Azzo)</h3>
     </div>
-    <div class="card-body">
-      <div style="width: 100%;">
-        <canvas id="chart-azzo" style="width: 100%; height: 280px;"></canvas>
-      </div>
+    <div class="card-body d-flex align-items-center justify-content-center">
+      <canvas id="chart-azzo" style="width: 100%; height: 330px;"></canvas>
     </div>
   </div>
 
   <!-- Positivação Geral da Azzo -->
-  <div class="card card-flush mb-10">
+  <div class="card card-flush flex-shrink-0" style="min-width: 450px; max-width: 50%;">
     <div class="card-header pt-5 d-flex justify-content-between align-items-center">
       <h3 class="card-title text-gray-900 fw-bold">Positivação (Azzo)</h3>
       <select class="form-select w-auto" [(ngModel)]="graficoPositivacaoAzzo" (change)="positivityAzzoChange()">
         <option value="geral">Positivação Geral (Azzo)</option>
         <option value="contribuicao">Clientes Positivados por Marca</option>
       </select>
-      
     </div>
-    <div class="card-body">
-      <canvas *ngIf="graficoPositivacaoAzzo === 'geral'" id="chart-positivacao-azzo" style="min-height: 300px;"></canvas>
-      <canvas *ngIf="graficoPositivacaoAzzo === 'contribuicao'" id="chart-clientes-azzo-contrib" style="min-height: 300px;"></canvas>
+    <div class="card-body d-flex align-items-center justify-content-center">
+      <canvas *ngIf="graficoPositivacaoAzzo === 'geral'" id="chart-positivacao-azzo" style="min-height: 330px;"></canvas>
+      <canvas *ngIf="graficoPositivacaoAzzo === 'contribuicao'" id="chart-clientes-azzo-contrib" style="min-height: 330px;"></canvas>
     </div>
   </div>
 </div>

@@ -260,26 +260,13 @@ export class PositivityComponent implements OnInit, AfterViewInit {
                   label: function (ctx) {
                     const marca = ctx.dataset.label || '';
                     const valor = typeof ctx.raw === 'number' ? ctx.raw : 0;
-
-                    const total = ctx.chart.data.datasets.reduce((sum, ds) => {
-                      const val = ds.data?.[ctx.dataIndex];
-                      const num = typeof val === 'number' ? val : 0;
-                      return sum + num;
-                    }, 0);
-
                     const valorFormatado = new Intl.NumberFormat('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
                       minimumFractionDigits: 2,
                     }).format(valor);
 
-                    const totalFormatado = new Intl.NumberFormat('pt-BR', {
-                      style: 'currency',
-                      currency: 'BRL',
-                      minimumFractionDigits: 2,
-                    }).format(total);
-
-                    return `${marca}: ${valorFormatado} (Total: ${totalFormatado})`;
+                    return `${marca}: ${valorFormatado}`;
                   },
                 },
               },
@@ -305,7 +292,6 @@ export class PositivityComponent implements OnInit, AfterViewInit {
               afterDatasetsDraw(chart: Chart) {
                 const ctx = chart.ctx;
                 const meta = chart.getDatasetMeta(0);
-                const label = azzoData.nome;
                 const bar = meta.data?.[0];
                 if (!bar) return;
 
@@ -368,6 +354,9 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       options: {
         responsive: true,
         plugins: {
+          legend: {
+            position: 'top',
+          },
           tooltip: {
             callbacks: {
               label: function (ctx) {
@@ -378,9 +367,6 @@ export class PositivityComponent implements OnInit, AfterViewInit {
                 return `${ctx.dataset.label}: ${valor} clientes (${percent}%)`;
               },
             },
-          },
-          legend: {
-            position: 'top',
           },
         },
         scales: {
@@ -395,6 +381,37 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           },
         },
       },
+      plugins: [
+        {
+          id: 'totalLabelPlugin',
+          afterDatasetsDraw(chart: Chart) {
+            const ctx = chart.ctx;
+            const labels = chart.data.labels as string[];
+            if (!labels) return;
+
+            const meta = chart.getDatasetMeta(0); // Positivados
+
+            labels.forEach((label, index) => {
+              const vendedor = data[label];
+              if (!vendedor) return;
+
+              const valor = vendedor.totalClientes;
+              const bar = meta.data?.[index];
+              if (!bar) return;
+
+              const yPos = bar.y;
+              const texto = `${valor} clientes`;
+
+              ctx.save();
+              ctx.font = 'bold 12px sans-serif';
+              ctx.fillStyle = '#000';
+              ctx.textAlign = 'center';
+              ctx.fillText(texto, bar.x, yPos - 6);
+              ctx.restore();
+            });
+          },
+        },
+      ],
     });
   }
 
@@ -623,17 +640,35 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           },
         },
         scales: {
-          x: {
-            stacked: true,
-          },
+          x: { stacked: true },
           y: {
             stacked: true,
-            ticks: {
-              precision: 0,
-            },
+            ticks: { precision: 0 },
           },
         },
       },
+      plugins: [
+        {
+          id: 'totalLabelPlugin',
+          afterDatasetsDraw(chart: Chart) {
+            const ctx = chart.ctx;
+            const meta = chart.getDatasetMeta(0);
+            const bar = meta.data?.[0];
+            if (!bar) return;
+
+            const yPos = bar.y;
+            const totalClientes = data['Azzo'].totalClientes;
+            const formattedTotal = `${totalClientes} clientes`;
+
+            ctx.save();
+            ctx.font = 'bold 12px sans-serif';
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'center';
+            ctx.fillText(formattedTotal, bar.x, yPos - 6);
+            ctx.restore();
+          },
+        },
+      ],
     });
   }
 
