@@ -71,30 +71,48 @@
   </div>
 
   <!-- Positivação Geral da Azzo -->
-  <div class="card card-flush flex-grow-1" style="min-width: 300px;">
-    <div class="card-header pt-5">
-      <h3 class="card-title text-gray-900 fw-bold">Positivação Geral (Azzo)</h3>
+  <div class="card card-flush mb-10">
+    <div class="card-header pt-5 d-flex justify-content-between align-items-center">
+      <h3 class="card-title text-gray-900 fw-bold">Positivação (Azzo)</h3>
+      <select class="form-select w-auto" [(ngModel)]="graficoPositivacaoAzzo" (change)="positivityAzzoChange()">
+        <option value="geral">Positivação Geral (Azzo)</option>
+        <option value="contribuicao">Clientes Positivados por Marca</option>
+      </select>
+      
     </div>
     <div class="card-body">
-      <div style="width: 100%;">
-        <canvas id="chart-positivacao-azzo" style="width: 100%; height: 300px;"></canvas>
-      </div>
+      <canvas *ngIf="graficoPositivacaoAzzo === 'geral'" id="chart-positivacao-azzo" style="min-height: 300px;"></canvas>
+      <canvas *ngIf="graficoPositivacaoAzzo === 'contribuicao'" id="chart-clientes-azzo-contrib" style="min-height: 300px;"></canvas>
     </div>
   </div>
 </div>
 
 <!-- Positivação Geral -->
-<div class="card-header pt-5 d-flex justify-content-between align-items-center">
-  <h3 class="card-title text-gray-900 fw-bold">Positivação</h3>
-  <select class="form-select w-auto" [(ngModel)]="graficoPositivacao" (change)="positivityChange()">
-    <option value="geral">Geral por Vendedor</option>
-    <option value="porMarca">Por Marca Vendedor</option>
-    <option value="contribuicao">Contribuição na Positivação</option>
-  </select>    
+<div class="card card-flush mb-10">
+  <div class="card-header pt-5 d-flex justify-content-between align-items-center">
+    <h3 class="card-title text-gray-900 fw-bold">Positivação</h3>
+    <select class="form-select w-auto" [(ngModel)]="graficoPositivacao" (change)="positivityChange()">
+      <option value="geral">Geral por Vendedor</option>
+      <option value="porMarca">Por Marca Vendedor</option>
+      <option value="contribuicao">Contribuição na Positivação</option>
+    </select>    
+  </div>
+  <div class="card-body">
+    <canvas *ngIf="graficoPositivacao === 'geral'" id="bar-chart-geral" style="min-height: 300px;"></canvas>
+    <canvas *ngIf="graficoPositivacao === 'porMarca'" id="bar-chart-marcas" style="min-height: 300px;"></canvas>
+    <canvas *ngIf="graficoPositivacao === 'contribuicao'" id="bar-chart-contribuicao" style="min-height: 300px;"></canvas>
+  </div>
 </div>
-<div class="card-body">
-  <canvas *ngIf="graficoPositivacao === 'geral'" id="bar-chart-geral" style="min-height: 300px;"></canvas>
-  <canvas *ngIf="graficoPositivacao === 'porMarca'" id="bar-chart-marcas" style="min-height: 300px;"></canvas>
-  <canvas *ngIf="graficoPositivacao === 'contribuicao'" id="bar-chart-contribuicao" style="min-height: 300px;"></canvas>
+<!-- Clientes positivados por marca (número absoluto) -->
+<!-- Clientes Positivados com contribuição em altura -->
+<div class="card card-flush mb-10">
+  <div class="card-header pt-5">
+    <h3 class="card-title text-gray-900 fw-bold">Clientes Positivados por Marca (Altura = Contribuição)</h3>
+  </div>
+  <div class="card-body">
+    <div style="width: 100%; overflow-x: auto;">
+      <canvas id="bar-chart-clientes-absolutos" style="min-width: 700px; height: 300px;"></canvas>
+    </div>
+  </div>
 </div>
 

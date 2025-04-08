@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
-import { BrandSales, PositivityByBrandResponse, VendedorDisplay } from '../models';
+import { BrandSales, PositivityByBrandResponse, VendedorDisplay, VendedorPositivacao } from '../models';
 
 Chart.register(...registerables);
 
@@ -27,6 +27,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   marcaCorMap: Record<string, string> = {}; // <- Mapa global de cores por marca
   corIndex = 0;
   graficoPositivacao: 'geral' | 'porMarca' | 'contribuicao' = 'geral';
+  graficoPositivacaoAzzo: 'geral' | 'contribuicao' = 'geral';
 
   constructor(private route: ActivatedRoute) {}
 
@@ -115,6 +116,8 @@ export class PositivityComponent implements OnInit, AfterViewInit {
 
       this.contribuicaoPorMarca('bar-chart-contribuicao', positivitySemAzzo);
       this.positivacaoAzzo('chart-positivacao-azzo', this.positivity);
+      this.clientesAbsolutoPorMarcaAzzo('chart-clientes-azzo-contrib', _);
+      this.clientesAbsolutoPorMarca('bar-chart-clientes-absolutos', positivitySemAzzo);
     }
   }
 
@@ -199,6 +202,43 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           },
         },
       },
+      plugins: [
+        {
+          id: 'totalLabelPlugin',
+          afterDatasetsDraw(chart: Chart) {
+            const ctx = chart.ctx;
+            const meta = chart.getDatasetMeta(0);
+            const datasets = chart.data.datasets;
+
+            (chart.data.labels || []).forEach((_, index: number) => {
+              let total = 0;
+
+              datasets.forEach((dataset: any) => {
+                const val = dataset.data?.[index];
+                if (typeof val === 'number') total += val;
+              });
+
+              const bar = meta.data?.[index];
+              if (!bar) return;
+
+              const yPos = bar.y;
+
+              const formattedTotal = new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                maximumFractionDigits: 0,
+              }).format(total);
+
+              ctx.save();
+              ctx.font = 'bold 12px sans-serif';
+              ctx.fillStyle = '#000';
+              ctx.textAlign = 'center';
+              ctx.fillText(formattedTotal, bar.x, yPos - 6);
+              ctx.restore();
+            });
+          },
+        },
+      ],
     });
 
     // === Gráfico separado da Azzo ===
@@ -221,13 +261,27 @@ export class PositivityComponent implements OnInit, AfterViewInit {
                 callbacks: {
                   label: function (ctx) {
                     const marca = ctx.dataset.label || '';
-                    const value = typeof ctx.raw === 'number' ? ctx.raw : 0;
-                    const formattedValue = new Intl.NumberFormat('pt-BR', {
+                    const valor = typeof ctx.raw === 'number' ? ctx.raw : 0;
+
+                    const total = ctx.chart.data.datasets.reduce((sum, ds) => {
+                      const val = ds.data?.[ctx.dataIndex];
+                      const num = typeof val === 'number' ? val : 0;
+                      return sum + num;
+                    }, 0);
+
+                    const valorFormatado = new Intl.NumberFormat('pt-BR', {
                       style: 'currency',
                       currency: 'BRL',
                       minimumFractionDigits: 2,
-                    }).format(value);
-                    return `${marca}: ${formattedValue}`;
+                    }).format(valor);
+
+                    const totalFormatado = new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                      minimumFractionDigits: 2,
+                    }).format(total);
+
+                    return `${marca}: ${valorFormatado} (Total: ${totalFormatado})`;
                   },
                 },
               },
@@ -247,8 +301,45 @@ export class PositivityComponent implements OnInit, AfterViewInit {
               },
             },
           },
+          plugins: [
+            {
+              id: 'totalLabelPlugin',
+              afterDatasetsDraw(chart: Chart) {
+                const ctx = chart.ctx;
+                const meta = chart.getDatasetMeta(0);
+                const datasets = chart.data.datasets;
+
+                (chart.data.labels || []).forEach((_, index: number) => {
+                  let total = 0;
+
+                  datasets.forEach((dataset: any) => {
+                    const val = dataset.data?.[index];
+                    if (typeof val === 'number') total += val;
+                  });
+
+                  const bar = meta.data?.[index];
+                  if (!bar) return;
+
+                  const yPos = bar.y;
+
+                  const formattedTotal = new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                    maximumFractionDigits: 0,
+                  }).format(total);
+
+                  ctx.save();
+                  ctx.font = 'bold 12px sans-serif';
+                  ctx.fillStyle = '#000';
+                  ctx.textAlign = 'center';
+                  ctx.fillText(formattedTotal, bar.x, yPos - 6);
+                  ctx.restore();
+                });
+              },
+            },
+          ],
         });
-      }, 100); // aguarda render da view
+      }, 100);
     }
   }
 
@@ -357,9 +448,13 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           },
           tooltip: {
             callbacks: {
-              label: function (ctx) {
-                const val = ctx.raw as number;
-                return `${ctx.dataset.label}: ${val.toFixed(2)}%`;
+              label: (ctx) => {
+                const rawVendedor = ctx.chart.data.labels?.[ctx.dataIndex];
+                const vendedor = typeof rawVendedor === 'string' ? rawVendedor : '';
+                const marca = ctx.dataset.label || '';
+                const positivados = data[vendedor as keyof PositivityByBrandResponse]?.marcas?.[marca]?.clientesPositivados || 0;
+                const percent = ctx.raw as number;
+                return `${marca}: ${positivados} clientes (${percent.toFixed(2)}%)`;
               },
             },
           },
@@ -473,9 +568,12 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           },
           tooltip: {
             callbacks: {
-              label: function (ctx) {
-                const val = ctx.raw as number;
-                return `${ctx.dataset.label}: ${val.toFixed(2)}%`;
+              label: (ctx) => {
+                const vendedor = ctx.chart.data.labels?.[ctx.dataIndex] as string;
+                const marca = ctx.dataset.label || '';
+                const positivados = data[vendedor]?.marcas?.[marca]?.clientesPositivados || 0;
+                const percent = ctx.raw as number;
+                return `${marca}: ${positivados} clientes (${percent.toFixed(2)}%)`;
               },
             },
           },
@@ -561,6 +659,143 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       setTimeout(() => this.positivacaoPorMarca('bar-chart-marcas', positivitySemAzzo));
     } else if (this.graficoPositivacao === 'contribuicao') {
       setTimeout(() => this.contribuicaoPorMarca('bar-chart-contribuicao', positivitySemAzzo));
+    } else if (this.graficoPositivacao === 'clientesContribuicao') {
+      setTimeout(() => {
+        this.clientesAbsolutoPorMarca('bar-chart-clientes-absolutos', positivitySemAzzo);
+        this.clientesAbsolutoPorMarcaAzzo('chart-positivacao-azzo', _);
+      });
     }
+  }
+
+  positivityAzzoChange() {
+    if (this.graficoPositivacaoAzzo === 'geral') {
+      setTimeout(() => this.positivacaoAzzo('chart-positivacao-azzo', this.positivity || {}));
+    } else if (this.graficoPositivacaoAzzo === 'contribuicao') {
+      setTimeout(() => this.clientesAbsolutoPorMarcaAzzo('chart-clientes-azzo-contrib', this.positivity?.Azzo));
+    }
+  }
+
+  clientesAbsolutoPorMarca(canvasId: string, data: PositivityByBrandResponse) {
+    const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
+    if (!ctx) return;
+
+    const vendedores = Object.keys(data);
+    const marcasSet = new Set<string>();
+
+    // Coleta todas as marcas existentes
+    vendedores.forEach((vendedor) => {
+      Object.keys(data[vendedor]?.marcas || {}).forEach((marca) => marcasSet.add(marca));
+    });
+
+    const marcas = Array.from(marcasSet);
+
+    // Cria datasets por marca (empilhado por marca)
+    const datasets = marcas.map((marca) => {
+      return {
+        label: marca,
+        data: vendedores.map((vendedor) => {
+          const info = data[vendedor];
+          const contrib = info?.marcas?.[marca]?.contribuicaoPercentual || 0;
+          return (info?.clientesPositivados || 0) * (contrib / 100);
+        }),
+        // Para tooltip
+        contribPercent: vendedores.map((vendedor) => {
+          return data[vendedor]?.marcas?.[marca]?.contribuicaoPercentual || 0;
+        }),
+        backgroundColor: this.marcaCorMap[marca] || '#999999',
+      };
+    });
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: vendedores,
+        datasets,
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const marca = ctx.dataset.label || '';
+                const percent = (ctx.dataset as any).contribPercent?.[ctx.dataIndex] || 0;
+                return `${marca}: ${percent.toFixed(2)}% `;
+              },
+            },
+          },
+        },
+        scales: {
+          x: { stacked: true },
+          y: {
+            stacked: true,
+            title: {
+              display: true,
+              text: 'Total Clientes Positivados',
+            },
+            ticks: {
+              stepSize: 10,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  clientesAbsolutoPorMarcaAzzo(canvasId: string, data: VendedorPositivacao | undefined) {
+    const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
+    if (!ctx || !data) return;
+
+    const marcas = Object.keys(data.marcas);
+
+    const dataset = marcas.map((marca) => {
+      const contrib = data.marcas[marca]?.contribuicaoPercentual || 0;
+      return {
+        label: marca,
+        data: [(data.clientesPositivados || 0) * (contrib / 100)],
+        backgroundColor: this.marcaCorMap[marca] || '#999999',
+        contribPercent: contrib,
+      };
+    });
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Azzo'],
+        datasets: dataset,
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const marca = ctx.dataset.label || '';
+                const valor = ctx.raw as number;
+                const percent = (ctx.dataset as any).contribPercent || 0;
+                const total = data.clientesPositivados || 0;
+
+                return `${marca}: ${valor.toFixed(0)} clientes (${percent.toFixed(2)}% de ${total})`;
+              },
+            },
+          },
+        },
+        scales: {
+          x: { stacked: true },
+          y: {
+            stacked: true,
+            title: {
+              display: true,
+              text: 'Clientes Positivados (Azzo)',
+            },
+            ticks: {
+              stepSize: 10,
+            },
+          },
+        },
+      },
+    });
   }
 }
