@@ -35,6 +35,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     this.brandSales = this.route.snapshot.data['brandSales'];
     this.positivity = this.route.snapshot.data['positivity'];
     console.log('Positivity ======================>', this.positivity);
+    console.log('Brand Sales ======================>', this.brandSales);
 
     if (this.brandSales) {
       const allMarcas = new Set<string>();
@@ -125,10 +126,9 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     const vendedoresSemAzzo = vendedores.filter((v) => v.nome !== 'Azzo');
     const azzoData = vendedores.find((v) => v.nome === 'Azzo');
 
-    // Ordena os vendedores por totalFaturado (maior -> menor)
     const vendedoresOrdenados = vendedoresSemAzzo.sort((a, b) => b.totalFaturado - a.totalFaturado);
 
-    const marcasUnicas = Array.from(new Set(vendedores.flatMap((v: VendedorDisplay) => v.marcasList.map((m: { nome: string }) => m.nome))));
+    const marcasUnicas = Array.from(new Set(vendedores.flatMap((v) => v.marcasList.map((m) => m.nome))));
 
     const marcaCorMap: Record<string, string> = {};
     marcasUnicas.forEach((marca, i) => {
@@ -136,7 +136,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     });
 
     const montarDatasets = (listaVendedores: VendedorDisplay[]) => {
-      const rawDatasets = marcasUnicas.map((marca: string) => {
+      const rawDatasets = marcasUnicas.map((marca) => {
         const data = listaVendedores.map((v) => {
           const marcaData = v.marcasList.find((m) => m.nome === marca);
           return marcaData ? marcaData.valor : 0;
@@ -207,22 +207,20 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           id: 'totalLabelPlugin',
           afterDatasetsDraw(chart: Chart) {
             const ctx = chart.ctx;
+            const labels = chart.data.labels as string[];
+            if (!labels) return;
+
             const meta = chart.getDatasetMeta(0);
-            const datasets = chart.data.datasets;
 
-            (chart.data.labels || []).forEach((_, index: number) => {
-              let total = 0;
+            labels.forEach((label, index) => {
+              const vendedor = vendedoresOrdenados.find((v) => v.nome === label);
+              if (!vendedor) return;
 
-              datasets.forEach((dataset: any) => {
-                const val = dataset.data?.[index];
-                if (typeof val === 'number') total += val;
-              });
-
+              const total = vendedor.totalFaturado;
               const bar = meta.data?.[index];
               if (!bar) return;
 
               const yPos = bar.y;
-
               const formattedTotal = new Intl.NumberFormat('pt-BR', {
                 style: 'currency',
                 currency: 'BRL',
@@ -307,34 +305,23 @@ export class PositivityComponent implements OnInit, AfterViewInit {
               afterDatasetsDraw(chart: Chart) {
                 const ctx = chart.ctx;
                 const meta = chart.getDatasetMeta(0);
-                const datasets = chart.data.datasets;
+                const label = azzoData.nome;
+                const bar = meta.data?.[0];
+                if (!bar) return;
 
-                (chart.data.labels || []).forEach((_, index: number) => {
-                  let total = 0;
+                const yPos = bar.y;
+                const formattedTotal = new Intl.NumberFormat('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                  maximumFractionDigits: 0,
+                }).format(azzoData.totalFaturado);
 
-                  datasets.forEach((dataset: any) => {
-                    const val = dataset.data?.[index];
-                    if (typeof val === 'number') total += val;
-                  });
-
-                  const bar = meta.data?.[index];
-                  if (!bar) return;
-
-                  const yPos = bar.y;
-
-                  const formattedTotal = new Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                    maximumFractionDigits: 0,
-                  }).format(total);
-
-                  ctx.save();
-                  ctx.font = 'bold 12px sans-serif';
-                  ctx.fillStyle = '#000';
-                  ctx.textAlign = 'center';
-                  ctx.fillText(formattedTotal, bar.x, yPos - 6);
-                  ctx.restore();
-                });
+                ctx.save();
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillStyle = '#000';
+                ctx.textAlign = 'center';
+                ctx.fillText(formattedTotal, bar.x, yPos - 6);
+                ctx.restore();
               },
             },
           ],
