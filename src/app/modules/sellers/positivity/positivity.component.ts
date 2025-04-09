@@ -13,6 +13,24 @@ const CORES = [
   '#5E6278', // cinza escuro
   '#FF69B4', // pink
 ];
+Chart.register({
+  id: 'centerTextPlugin',
+  beforeDraw(chart, args, options) {
+    const {
+      ctx,
+      chartArea: { top, left, width, height },
+    } = chart;
+    const text = options?.text || '';
+
+    ctx.save();
+    ctx.font = `${options?.fontSize || 16}px sans-serif`;
+    ctx.fillStyle = options?.fontColor || '#000';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, left + width / 2, top + height / 2);
+    ctx.restore();
+  },
+});
 
 @Component({
   selector: 'app-positivity',
@@ -35,6 +53,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.brandSales = this.route.snapshot.data['brandSales'];
     this.positivity = this.route.snapshot.data['positivity'];
+    console.log('posivitivy ==========>', this.positivity);
 
     if (this.brandSales) {
       const allMarcas = new Set<string>();
@@ -124,6 +143,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
 
           if (ctxPos && this.positivity?.[vendedor.nome]) {
             const posData = this.positivity[vendedor.nome];
+
             new Chart(ctxPos, {
               type: 'doughnut',
               data: {
@@ -138,8 +158,29 @@ export class PositivityComponent implements OnInit, AfterViewInit {
               options: {
                 responsive: true,
                 cutout: '70%',
-                plugins: { legend: { display: false } },
+                plugins: {
+                  legend: { display: false },
+                },
               },
+              plugins: [
+                {
+                  id: 'centerTextPlugin',
+                  beforeDraw(chart) {
+                    const {
+                      ctx,
+                      chartArea: { top, left, width, height },
+                    } = chart;
+                    const text = `Clientes: ${posData.totalClientes}`;
+                    ctx.save();
+                    ctx.font = 'bold 16px sans-serif';
+                    ctx.fillStyle = '#000';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(text, left + width / 2, top + height / 2);
+                    ctx.restore();
+                  },
+                },
+              ],
             });
           }
         });
