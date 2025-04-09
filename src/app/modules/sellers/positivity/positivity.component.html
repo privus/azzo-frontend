@@ -61,7 +61,7 @@
 
   <div class="card card-flush mb-10">
     <div class="card-header pt-5">
-      <h3 class="card-title text-gray-900 fw-bold">Clientes Positivados por Marca (Altura = Contribuição)</h3>
+      <h3 class="card-title text-gray-900 fw-bold">Clientes Positivados / Contribuição</h3>
     </div>
     <div class="card-body">
       <div style="width: 100%; overflow-x: auto;">
@@ -92,8 +92,14 @@
         <span class="text-gray-500 pt-1 fw-semibold fs-6">Pedidos: {{ vendedor.totalPedidos }}</span>
       </div>
     
-      <div class="text-end mt-4 me-17">
-        <h6 class="fw-bold text-gray-800 text-uppercase mb-0">Positivação</h6>
+      <div *ngIf="" class="text-end mt-4 me-17">
+        <h6
+        *ngIf="positivity?.[vendedor.nome]"
+        class="fw-bold text-gray-800 text-uppercase mb-0"
+      >
+        Positivação
+      </h6>
+      
       </div>      
     </div>    
     <div class="card-body pt-2 pb-4 d-flex flex-wrap align-items-center justify-content-between gap-5">
@@ -127,8 +133,7 @@
       <div class="d-flex flex-column align-items-center" style="width: 200px; height: 200px;">
         <canvas [id]="'positivacao-' + i" style="width: 100%; height: 100%;"></canvas>
       </div>
-    </div>
-    
+    </div>   
     
   </div>
 </ng-container>
