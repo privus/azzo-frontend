@@ -937,4 +937,17 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       },
     });
   }
+
+  getTituloPositivacao(): string {
+    switch (this.graficoPositivacao) {
+      case 'geral':
+        return 'Positivação Geral por Vendedor';
+      case 'porMarca':
+        return 'Positivação Marca / Carteira';
+      case 'contribuicao':
+        return 'Contribuição por Marca na Positivação';
+      default:
+        return 'Positivação Geral por Vendedor';
+    }
+  }
 }
