@@ -210,7 +210,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
             const labels = chart.data.labels as string[];
             if (!labels) return;
 
-            const meta = chart.getDatasetMeta(0);
+            const meta = chart.getDatasetMeta(5);
 
             labels.forEach((label, index) => {
               const vendedor = vendedoresOrdenados.find((v) => v.nome === label);
@@ -291,7 +291,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
               id: 'totalLabelPlugin',
               afterDatasetsDraw(chart: Chart) {
                 const ctx = chart.ctx;
-                const meta = chart.getDatasetMeta(0);
+                const meta = chart.getDatasetMeta(5);
                 const bar = meta.data?.[0];
                 if (!bar) return;
 
@@ -320,18 +320,15 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!ctx) return;
 
-    const labels = Object.keys(data);
+    // Ordenar labels com base nos clientes positivados (decrescente)
+    const labels = Object.keys(data).sort((a, b) => {
+      return (data[b]?.clientesPositivados || 0) - (data[a]?.clientesPositivados || 0);
+    });
 
-    const positivados: number[] = [];
-    const naoPositivados: number[] = [];
-    const totalClientes: number[] = [];
-
-    labels.forEach((vendedor) => {
+    const positivados = labels.map((vendedor) => data[vendedor]?.clientesPositivados || 0);
+    const naoPositivados = labels.map((vendedor) => {
       const info = data[vendedor];
-      positivados.push(info.clientesPositivados);
-      const naoPositivado = info.totalClientes - info.clientesPositivados;
-      naoPositivados.push(naoPositivado);
-      totalClientes.push(info.totalClientes);
+      return info ? info.totalClientes - info.clientesPositivados : 0;
     });
 
     new Chart(ctx, {
@@ -386,27 +383,26 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           id: 'totalLabelPlugin',
           afterDatasetsDraw(chart: Chart) {
             const ctx = chart.ctx;
-            const labels = chart.data.labels as string[];
-            if (!labels) return;
+            const chartLabels = chart.data.labels as string[];
+            if (!chartLabels) return;
 
-            const meta = chart.getDatasetMeta(0); // Positivados
+            const meta2 = chart.getDatasetMeta(1); // Segunda pilha: Não Positivados
 
-            labels.forEach((label, index) => {
+            chartLabels.forEach((label, index) => {
+              const bar = meta2.data?.[index];
               const vendedor = data[label];
-              if (!vendedor) return;
+              if (!bar || !vendedor) return;
 
-              const valor = vendedor.totalClientes;
-              const bar = meta.data?.[index];
-              if (!bar) return;
+              const x = bar.x;
+              const y = bar.y;
 
-              const yPos = bar.y;
-              const texto = `${valor} clientes`;
+              const texto = `${vendedor.totalClientes} clientes`;
 
               ctx.save();
               ctx.font = 'bold 12px sans-serif';
               ctx.fillStyle = '#000';
               ctx.textAlign = 'center';
-              ctx.fillText(texto, bar.x, yPos - 6);
+              ctx.fillText(texto, x, y - 6);
               ctx.restore();
             });
           },
@@ -419,17 +415,19 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!ctx) return;
 
-    const vendedores = Object.keys(data);
-    const marcasSet = new Set<string>();
+    // Ordenar vendedores pelo total de clientes positivados
+    const vendedores = Object.keys(data).sort((a, b) => {
+      return (data[b]?.clientesPositivados || 0) - (data[a]?.clientesPositivados || 0);
+    });
 
-    // Coletar todas as marcas
+    // Coletar todas as marcas existentes
+    const marcasSet = new Set<string>();
     vendedores.forEach((vendedor) => {
       Object.keys(data[vendedor].marcas).forEach((marca) => marcasSet.add(marca));
     });
-
     const marcas = Array.from(marcasSet);
 
-    // Criar datasets onde cada dataset é uma marca
+    // Criar datasets com vendedores já ordenados
     const datasets = marcas.map((marca) => {
       return {
         label: marca,
@@ -437,7 +435,6 @@ export class PositivityComponent implements OnInit, AfterViewInit {
         backgroundColor: this.marcaCorMap[marca] || '#999999',
       };
     });
-
     new Chart(ctx, {
       type: 'bar',
       data: {
@@ -652,7 +649,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           id: 'totalLabelPlugin',
           afterDatasetsDraw(chart: Chart) {
             const ctx = chart.ctx;
-            const meta = chart.getDatasetMeta(0);
+            const meta = chart.getDatasetMeta(1);
             const bar = meta.data?.[0];
             if (!bar) return;
 
@@ -737,7 +734,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
         backgroundColor: '' as string,
       };
 
-      vendedores.forEach((vendedor, vi) => {
+      vendedores.forEach((vendedor) => {
         const pilha = pilhasPorVendedor[vendedor][stackIndex];
         dataset.data.push(pilha?.valor || 0);
         dataset.contribPercent.push(pilha?.contrib || 0);
@@ -796,7 +793,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
             const labels = chart.data.labels as string[];
             if (!labels) return;
 
-            const meta = chart.getDatasetMeta(0);
+            const meta = chart.getDatasetMeta(5);
             labels.forEach((label, index) => {
               const total = data[label]?.clientesPositivados || 0;
               const bar = meta.data?.[index];
