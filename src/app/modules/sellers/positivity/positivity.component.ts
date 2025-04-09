@@ -28,14 +28,13 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   corIndex = 0;
   graficoPositivacao: 'geral' | 'porMarca' | 'contribuicao' = 'geral';
   graficoPositivacaoAzzo: 'geral' | 'contribuicao' = 'geral';
+  viewMode: 'doughnut' | 'barra' = 'barra';
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.brandSales = this.route.snapshot.data['brandSales'];
     this.positivity = this.route.snapshot.data['positivity'];
-    console.log('Positivity ======================>', this.positivity);
-    console.log('Brand Sales ======================>', this.brandSales);
 
     if (this.brandSales) {
       const allMarcas = new Set<string>();
@@ -74,41 +73,15 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.renderAllCharts();
+    this.renderChartsBarOnly();
   }
 
-  renderAllCharts() {
-    this.vendedores.forEach((vendedor, i) => {
-      const ctx = document.getElementById('chart-' + i) as HTMLCanvasElement;
-      if (!ctx) return;
-
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: vendedor.marcasList.map((m) => m.nome),
-          datasets: [
-            {
-              data: vendedor.marcasList.map((m) => m.valor),
-              backgroundColor: vendedor.marcasList.map((m) => m.cor),
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          cutout: '70%',
-          plugins: {
-            legend: { display: false },
-          },
-        },
-      });
-    });
-
+  renderChartsBarOnly() {
     this.createStackedBarChart('stacked-bar-chart', this.vendedores);
 
     if (this.positivity) {
       const { Azzo: _, ...positivitySemAzzo } = this.positivity;
 
-      // Renderiza o gráfico inicialmente com o que estiver selecionado
       if (this.graficoPositivacao === 'geral') {
         setTimeout(() => this.positivacaoGeral('bar-chart-geral', positivitySemAzzo));
       } else {
@@ -119,6 +92,61 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       this.positivacaoAzzo('chart-positivacao-azzo', this.positivity);
       this.clientesAbsolutoPorMarcaAzzo('chart-clientes-azzo-contrib', _);
       this.clientesAbsolutoPorMarca('bar-chart-clientes-absolutos', positivitySemAzzo);
+    }
+  }
+
+  onViewModeChange() {
+    if (this.viewMode === 'doughnut') {
+      setTimeout(() => {
+        this.vendedores.forEach((vendedor, i) => {
+          const ctx = document.getElementById('chart-' + i) as HTMLCanvasElement;
+          const ctxPos = document.getElementById('positivacao-' + i) as HTMLCanvasElement;
+
+          if (ctx) {
+            new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                labels: vendedor.marcasList.map((m) => m.nome),
+                datasets: [
+                  {
+                    data: vendedor.marcasList.map((m) => m.valor),
+                    backgroundColor: vendedor.marcasList.map((m) => m.cor),
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                cutout: '70%',
+                plugins: { legend: { display: false } },
+              },
+            });
+          }
+
+          if (ctxPos && this.positivity?.[vendedor.nome]) {
+            const posData = this.positivity[vendedor.nome];
+            new Chart(ctxPos, {
+              type: 'doughnut',
+              data: {
+                labels: ['Positivado', 'Não Positivado'],
+                datasets: [
+                  {
+                    data: [posData.clientesPositivados, posData.totalClientes - posData.clientesPositivados],
+                    backgroundColor: ['#50CD89', '#F1416C'],
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                cutout: '70%',
+                plugins: { legend: { display: false } },
+              },
+            });
+          }
+        });
+      }, 0);
+    } else if (this.viewMode === 'barra') {
+      // 🔥 Re-renderiza gráficos de barra ao voltar
+      setTimeout(() => this.renderChartsBarOnly(), 0);
     }
   }
 
