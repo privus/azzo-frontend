@@ -170,7 +170,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
                       ctx,
                       chartArea: { top, left, width, height },
                     } = chart;
-                    const text = `Clientes: ${posData.totalClientes}`;
+                    const text = `Carteira: ${posData.totalClientes}`;
                     ctx.save();
                     ctx.font = 'bold 16px sans-serif';
                     ctx.fillStyle = '#000';
