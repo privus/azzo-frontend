@@ -629,7 +629,7 @@ export class OrderListingComponent implements OnInit {
           if (!win) return;
 
           const iframesHtml = pdfBlobs
-            .filter((blob) => blob && blob.size > 0)
+            .filter((blob): blob is Blob => !!blob && blob.size > 0)
             .map((blob, index) => {
               const blobUrl = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
               return `<iframe src="${blobUrl}" style="width:100%;height:100vh;border:none;" id="pdf_${index}"></iframe>`;
