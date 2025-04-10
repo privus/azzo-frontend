@@ -261,9 +261,6 @@ export class OrderListingComponent implements OnInit {
 
   onDateRangeChange(): void {
     const selectedRange = this.dataRange;
-    console.log('Custom Start:', this.customDateRange.start);
-    console.log('Custom End:', this.customDateRange.end);
-
     const now = new Date();
 
     let startDate = new Date(now);
@@ -287,7 +284,6 @@ export class OrderListingComponent implements OnInit {
 
         this.orderService.getOrdersBetweenDates(fromDate, toDate).subscribe({
           next: (orders) => {
-            console.log('📦 DADOS RECEBIDOS DA API COM INTERVALO:', orders);
             this.orders = orders;
             this.applyFilter();
             this.cdr.detectChanges();
@@ -320,7 +316,6 @@ export class OrderListingComponent implements OnInit {
 
         this.orderService.getOrdersBetweenDates(y).subscribe({
           next: (orders) => {
-            console.log('📦 DADOS RECEBIDOS DA API COM INTERVALO:', orders);
             this.orders = orders;
             this.applyFilter();
             this.cdr.detectChanges();
@@ -360,8 +355,6 @@ export class OrderListingComponent implements OnInit {
         const lastMonthFrom = this.formatDate(startDate);
         const lastMonthTo = this.formatDate(endDate);
 
-        console.log('📅 Mês passado:', lastMonthFrom, '→', lastMonthTo);
-
         this.orderService.getOrdersBetweenDates(lastMonthFrom, lastMonthTo).subscribe({
           next: (orders) => {
             this.orders = orders;
@@ -387,7 +380,6 @@ export class OrderListingComponent implements OnInit {
         this.orderService.getOrdersBetweenDates(lastWeekFrom, lastWeekTo).subscribe({
           next: (orders) => {
             this.orders = orders;
-            console.log('Pedidos filtrados:', orders);
             this.applyFilter();
             this.cdr.detectChanges();
           },
@@ -402,14 +394,12 @@ export class OrderListingComponent implements OnInit {
 
     // Converte a data para string no formato YYYY-MM-DD
     const fromDate = this.formatDate(startDate);
-    console.log('Filtrando por data:', fromDate);
 
     // Faz a requisição ao backend
     this.orderService.getOrdersByDate(fromDate).subscribe({
       next: (orders) => {
         // Sobrescreve o array principal
         this.orders = orders;
-        console.log('Pedidos filtrados:', orders);
         this.applyFilter();
         this.cdr.detectChanges();
       },
@@ -472,7 +462,6 @@ export class OrderListingComponent implements OnInit {
         // Se o usuário confirmar, faz a exportação
         this.orderService.exportTiny(id).subscribe({
           next: (resp) => {
-            console.log('Exportação Tiny:', resp);
             Swal.fire({
               icon: 'success',
               title: `Exportação concluída com sucesso! Tiny ${uf}`,
@@ -542,6 +531,14 @@ export class OrderListingComponent implements OnInit {
               });
               return;
             }
+            this.orderService.addVolumeSell(orderId, totalVolumes).subscribe({
+              next: (resp) => {
+                console.log('Volume atualizado:', resp);
+              },
+              error: (err) => {
+                console.error('Erro ao atualizar volume:', err);
+              },
+            });
 
             const blob = new Blob([pdfBlob], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
@@ -665,80 +662,79 @@ export class OrderListingComponent implements OnInit {
     });
   }
 
-  generateLabelsForSelected(): void {
-    if (this.selectedOrders.length === 0) return;
+  // generateLabelsForSelected(): void {
+  //   if (this.selectedOrders.length === 0) return;
 
-    Swal.fire({
-      title: 'Imprimir Etiquetas',
-      html: `
-        <p>Você selecionou <strong>${this.selectedOrders.length}</strong> pedido(s).</p>
-        <input id="totalVolumes" class="swal2-input" type="number" placeholder="Total de Volumes">
-      `,
-      showCancelButton: true,
-      confirmButtonText: 'Sim!',
-      cancelButtonText: 'Cancelar',
-      preConfirm: () => {
-        const totalVolumes = (document.getElementById('totalVolumes') as HTMLInputElement).value;
+  //   Swal.fire({
+  //     title: 'Imprimir Etiquetas',
+  //     html: `
+  //       <p>Você selecionou <strong>${this.selectedOrders.length}</strong> pedido(s).</p>
+  //       <input id="totalVolumes" class="swal2-input" type="number" placeholder="Total de Volumes">
+  //     `,
+  //     showCancelButton: true,
+  //     confirmButtonText: 'Sim!',
+  //     cancelButtonText: 'Cancelar',
+  //     preConfirm: () => {
+  //       const totalVolumes = (document.getElementById('totalVolumes') as HTMLInputElement).value;
 
-        if (!totalVolumes) {
-          Swal.showValidationMessage('Por favor, informe o total de volumes.');
-          return null;
-        }
+  //       if (!totalVolumes) {
+  //         Swal.showValidationMessage('Por favor, informe o total de volumes.');
+  //         return null;
+  //       }
+  //       if (isNaN(Number(totalVolumes)) || Number(totalVolumes) <= 0) {
+  //         Swal.showValidationMessage('O número de volumes deve ser maior que zero.');
+  //         return null;
+  //       }
 
-        if (isNaN(Number(totalVolumes)) || Number(totalVolumes) <= 0) {
-          Swal.showValidationMessage('O número de volumes deve ser maior que zero.');
-          return null;
-        }
+  //       return { totalVolumes: +totalVolumes };
+  //     },
+  //   }).then((result) => {
+  //     if (result.isConfirmed && result.value) {
+  //       const { totalVolumes } = result.value;
+  //       const responsible = this.user;
 
-        return { totalVolumes: +totalVolumes };
-      },
-    }).then((result) => {
-      if (result.isConfirmed && result.value) {
-        const { totalVolumes } = result.value;
-        const responsible = this.user;
+  //       Swal.fire({
+  //         title: 'Gerando Etiquetas...',
+  //         text: 'Aguarde enquanto os arquivos estão sendo criados.',
+  //         allowOutsideClick: false,
+  //         didOpen: () => Swal.showLoading(),
+  //       });
 
-        Swal.fire({
-          title: 'Gerando Etiquetas...',
-          text: 'Aguarde enquanto os arquivos estão sendo criados.',
-          allowOutsideClick: false,
-          didOpen: () => Swal.showLoading(),
-        });
+  //       const windows = this.selectedOrders.map(() => window.open('', '_blank'));
 
-        const windows = this.selectedOrders.map(() => window.open('', '_blank'));
+  //       const requests = this.selectedOrders.map((order, index) =>
+  //         this.http
+  //           .post(`${this.baseUrl}sells/${order.venda_id}/label`, { totalVolumes, responsible }, { responseType: 'blob' })
+  //           .toPromise()
+  //           .then((pdfBlob) => {
+  //             if (!pdfBlob || pdfBlob.size === 0) {
+  //               console.warn(`Etiqueta vazia para o pedido ${order.venda_id}`);
+  //               return;
+  //             }
 
-        const requests = this.selectedOrders.map((order, index) =>
-          this.http
-            .post(`${this.baseUrl}sells/${order.venda_id}/label`, { totalVolumes, responsible }, { responseType: 'blob' })
-            .toPromise()
-            .then((pdfBlob) => {
-              if (!pdfBlob || pdfBlob.size === 0) {
-                console.warn(`Etiqueta vazia para o pedido ${order.venda_id}`);
-                return;
-              }
+  //             const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+  //             const blobUrl = URL.createObjectURL(blob);
+  //             const win = windows[index];
 
-              const blob = new Blob([pdfBlob], { type: 'application/pdf' });
-              const blobUrl = URL.createObjectURL(blob);
-              const win = windows[index];
+  //             if (win) {
+  //               win.document.write(`
+  //                 <html>
+  //                   <head><title>Etiqueta ${order.codigo}</title></head>
+  //                   <body style="margin:0">
+  //                     <iframe src="${blobUrl}" style="border:none;width:100vw;height:100vh;" onload="this.contentWindow.print()"></iframe>
+  //                   </body>
+  //                 </html>
+  //               `);
+  //               win.document.close();
+  //             }
+  //           })
+  //           .catch((err) => {
+  //             console.error(`Erro ao gerar etiqueta para pedido ${order.codigo}:`, err);
+  //           }),
+  //       );
 
-              if (win) {
-                win.document.write(`
-                  <html>
-                    <head><title>Etiqueta ${order.codigo}</title></head>
-                    <body style="margin:0">
-                      <iframe src="${blobUrl}" style="border:none;width:100vw;height:100vh;" onload="this.contentWindow.print()"></iframe>
-                    </body>
-                  </html>
-                `);
-                win.document.close();
-              }
-            })
-            .catch((err) => {
-              console.error(`Erro ao gerar etiqueta para pedido ${order.codigo}:`, err);
-            }),
-        );
-
-        Promise.all(requests).finally(() => Swal.close());
-      }
-    });
-  }
+  //       Promise.all(requests).finally(() => Swal.close());
+  //     }
+  //   });
+  // }
 }

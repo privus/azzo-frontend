@@ -54,4 +54,8 @@ export class SellService {
   getPositivity(): Observable<PositivityByBrandResponse> {
     return this.http.get<PositivityByBrandResponse>(`${this.baseUrl}sells/brandPositivity`);
   }
+
+  addVolumeSell(id: number, volume: number) {
+    return this.http.get<{ message: string }>(`${this.baseUrl}sells/vol/${id}?volume=${volume}`);
+  }
 }

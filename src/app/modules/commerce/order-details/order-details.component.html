@@ -286,6 +286,19 @@
                       </div>
                       <div class="card-body pt-0">
                         <div>
+                          <label class="form-label">Cidade</label>
+                          <input
+                            type="text"
+                            name="cidade"
+                            class="form-control"
+                            placeholder="Cidade"
+                            formControlName="cidade"
+                            disable
+                          />
+                        </div>
+                      </div>
+                      <div class="card-body pt-0">
+                        <div>
                           <label class="form-label">Email</label>
                           <input
                             type="text"
@@ -360,6 +373,8 @@
                                 ${{ item.valor_total }}
                               </td>
                             </tr>
+                            <div class="d-flex align-items-center">
+                            </div>
                             <tr>
                               <td colspan="5" class="text-end">Flex Gerado</td>
                               <td class="text-end">${{ order.flex_gerado }}</td>
@@ -381,7 +396,7 @@
                               <td class="text-end fw-bold">
                                 ${{ order.valor_final }}
                               </td>
-                            </tr>
+                            </tr>                           
                           </tbody>
                         </table>
                         <!--end::Table-->

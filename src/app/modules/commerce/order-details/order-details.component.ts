@@ -76,6 +76,7 @@ export class OrderDetailsComponent implements OnInit {
       data_criacao: [{ value: '', disabled: true }],
       cnpj: [{ value: '', disabled: true }],
       metodo: [{ value: '', disabled: true }],
+      cidade: [{ value: '', disabled: true }],
     });
   }
 
@@ -92,6 +93,7 @@ export class OrderDetailsComponent implements OnInit {
       vendedor: order.vendedor.nome,
       cnpj: order.cliente.numero_doc,
       metodo: order.metodo_pagamento,
+      cidade: order.cliente.cidade_string,
     });
   }
 

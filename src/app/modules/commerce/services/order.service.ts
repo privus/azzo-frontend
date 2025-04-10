@@ -17,6 +17,10 @@ export class OrderService {
     return this.sellService.getOrdersByDateRange(startDate, end);
   }
 
+  addVolumeSell(id: number, volume: number) {
+    return this.sellService.addVolumeSell(id, volume);
+  }
+
   getOrderById(id: number) {
     return this.sellService.getOrderById(id);
   }
