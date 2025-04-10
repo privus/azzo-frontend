@@ -605,60 +605,61 @@ export class OrderListingComponent implements OnInit {
 
     Swal.fire({
       title: 'Imprimir Pedidos Selecionados',
-      html: `
-          <p>Você selecionou <strong>${this.selectedOrders.length}</strong> pedido(s).</p>
-        `,
+      html: `<p>Você selecionou <strong>${this.selectedOrders.length}</strong> pedido(s).</p>`,
       showCancelButton: true,
       confirmButtonText: 'Sim!',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
-      if (result.isConfirmed) {
-        const responsible = this.user;
+      if (!result.isConfirmed) return;
 
-        Swal.fire({
-          title: 'Gerando PDFs...',
-          text: 'Aguarde enquanto os arquivos estão sendo criados.',
-          allowOutsideClick: false,
-          didOpen: () => Swal.showLoading(),
-        });
+      const responsible = this.user;
 
-        const printWindows = this.selectedOrders.map(() => window.open('', '_blank'));
+      Swal.fire({
+        title: 'Gerando PDFs...',
+        text: 'Aguarde enquanto os arquivos estão sendo criados.',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
 
-        const requests = this.selectedOrders.map((order, index) =>
-          this.http
-            .post(`${this.baseUrl}sells/${order.venda_id}/print`, { responsible }, { responseType: 'blob' })
-            .toPromise()
-            .then((pdfBlob) => {
-              if (!pdfBlob || pdfBlob.size === 0) {
-                console.warn(`PDF vazio para o pedido ${order.venda_id}`);
-                return;
-              }
-
-              const blob = new Blob([pdfBlob], { type: 'application/pdf' });
-              const blobUrl = URL.createObjectURL(blob);
-              const win = printWindows[index];
-
-              if (win) {
-                win.document.write(`
-                    <html>
-                      <head><title>Pedido ${order.codigo}</title></head>
-                      <body style="margin:0">
-                        <iframe src="${blobUrl}" style="border:none;width:100vw;height:100vh;" onload="this.contentWindow.print()"></iframe>
-                      </body>
-                    </html>
-                  `);
-                win.document.close();
-              }
-            })
-            .catch((err) => {
-              console.error(`Erro ao abrir PDF para pedido ${order.codigo}:`, err);
-            }),
-        );
-
-        Promise.all(requests).finally(() => {
-          Swal.close(); // 👈 FECHA o loading quando tudo termina
-        });
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        Swal.fire('Erro', 'Não foi possível abrir a nova aba.', 'error');
+        return;
       }
+
+      const requests = this.selectedOrders.map((order) =>
+        this.http
+          .post(`${this.baseUrl}sells/${order.venda_id}/print`, { responsible }, { responseType: 'blob' })
+          .toPromise()
+          .then((pdfBlob) => {
+            if (!pdfBlob || pdfBlob.size === 0) {
+              console.warn(`PDF vazio para o pedido ${order.venda_id}`);
+              return '';
+            }
+
+            const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+
+            return `<iframe src="${blobUrl}" style="width:100%;height:100vh;border:none;" onload="this.contentWindow.print()"></iframe>`;
+          })
+          .catch((err) => {
+            console.error(`Erro ao gerar PDF para pedido ${order.venda_id}:`, err);
+            return '';
+          }),
+      );
+
+      Promise.all(requests).then((iframes) => {
+        printWindow.document.write(`
+          <html>
+            <head><title>Impressão de Pedidos</title></head>
+            <body style="margin:0;padding:0;display:flex;flex-direction:column;">
+              ${iframes.join('<div style="page-break-after: always;"></div>')}
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+        Swal.close();
+      });
     });
   }
 

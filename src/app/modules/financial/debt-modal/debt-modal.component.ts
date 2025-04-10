@@ -110,6 +110,11 @@ export class DebtModalComponent implements OnInit {
     let dataPagamentoValue = this.debtForm.get('data_pagamento')?.value;
     if (!dataPagamentoValue || isNaN(Date.parse(dataPagamentoValue))) {
       dataPagamentoValue = null;
+    } else {
+      // Adiciona um dia à data de pagamento
+      const dataPagamento = new Date(dataPagamentoValue);
+      dataPagamento.setDate(dataPagamento.getDate() + 1);
+      dataPagamentoValue = dataPagamento.toISOString().split('T')[0]; // Formata para 'YYYY-MM-DD'
     }
 
     const updateData: UpdateInstallment = {
