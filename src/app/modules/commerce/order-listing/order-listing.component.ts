@@ -610,83 +610,47 @@ export class OrderListingComponent implements OnInit {
       confirmButtonText: 'Sim!',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
-      if (!result.isConfirmed) return;
+      if (result.isConfirmed) {
+        const responsible = this.user;
 
-      const responsible = this.user;
+        Swal.fire({
+          title: 'Gerando PDFs...',
+          text: 'Aguarde enquanto os arquivos estão sendo criados.',
+          allowOutsideClick: false,
+          didOpen: () => Swal.showLoading(),
+        });
 
-      Swal.fire({
-        title: 'Gerando PDFs...',
-        text: 'Aguarde enquanto os arquivos estão sendo criados.',
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading(),
-      });
+        const requests = this.selectedOrders.map((order) =>
+          this.http.post(`${this.baseUrl}sells/${order.venda_id}/print`, { responsible }, { responseType: 'blob' }).toPromise(),
+        );
 
-      const printWindow = window.open('', '_blank');
-      if (!printWindow) {
-        Swal.fire('Erro', 'Não foi possível abrir a nova aba.', 'error');
-        return;
+        Promise.all(requests).then((pdfBlobs) => {
+          const win = window.open('', '_blank');
+          if (!win) return;
+
+          const iframesHtml = pdfBlobs
+            .filter((blob) => blob && blob.size > 0)
+            .map((blob, index) => {
+              const blobUrl = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+              return `<iframe src="${blobUrl}" style="width:100%;height:100vh;border:none;" id="pdf_${index}"></iframe>`;
+            })
+            .join('');
+
+          win.document.write(`
+            <html>
+              <head><title>Pedidos Selecionados</title></head>
+              <body style="margin:0;padding:0;">
+                ${iframesHtml}
+                <script>
+                  window.onload = () => setTimeout(() => window.print(), 1000);
+                </script>
+              </body>
+            </html>
+          `);
+          win.document.close();
+          Swal.close();
+        });
       }
-
-      const requests = this.selectedOrders.map((order) =>
-        this.http
-          .post(`${this.baseUrl}sells/${order.venda_id}/print`, { responsible }, { responseType: 'blob' })
-          .toPromise()
-          .then((pdfBlob) => {
-            if (!pdfBlob || pdfBlob.size === 0) {
-              console.warn(`PDF vazio para o pedido ${order.venda_id}`);
-              return '';
-            }
-
-            const blob = new Blob([pdfBlob], { type: 'application/pdf' });
-            const blobUrl = URL.createObjectURL(blob);
-
-            return `<iframe src="${blobUrl}" style="width:100%;height:100vh;border:none;"></iframe>`;
-          })
-          .catch((err) => {
-            console.error(`Erro ao gerar PDF para pedido ${order.venda_id}:`, err);
-            return '';
-          }),
-      );
-
-      Promise.all(requests).then((iframes) => {
-        const content = `
-          <html>
-            <head>
-              <title>Impressão de Pedidos</title>
-              <style>
-                body {
-                  margin: 0;
-                  padding: 0;
-                  display: flex;
-                  flex-direction: column;
-                }
-                iframe {
-                  page-break-after: always;
-                }
-                @media print {
-                  body {
-                    margin: 0;
-                  }
-                }
-              </style>
-            </head>
-            <body>
-              ${iframes.join('\n')}
-              <script>
-                window.onload = function() {
-                  setTimeout(() => {
-                    window.print();
-                  }, 1000);
-                }
-              </script>
-            </body>
-          </html>
-        `;
-
-        printWindow.document.write(content);
-        printWindow.document.close();
-        Swal.close();
-      });
     });
   }
 
