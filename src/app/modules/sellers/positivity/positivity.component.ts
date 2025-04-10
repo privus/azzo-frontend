@@ -397,7 +397,8 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     const positivados = labels.map((vendedor) => data[vendedor]?.clientesPositivados || 0);
     const naoPositivados = labels.map((vendedor) => {
       const info = data[vendedor];
-      return info ? info.totalClientes - info.clientesPositivados : 0;
+      if (!info || info.totalClientes === 1) return 0;
+      return info.totalClientes - info.clientesPositivados;
     });
 
     new Chart(ctx, {
@@ -429,8 +430,9 @@ export class PositivityComponent implements OnInit, AfterViewInit {
                 const index = ctx.dataIndex;
                 const total = positivados[index] + naoPositivados[index];
                 const valor = ctx.raw as number;
-                const percent = ((valor / total) * 100).toFixed(2);
-                return `${ctx.dataset.label}: ${valor} clientes (${percent}%)`;
+                const percent = total > 1 ? ((valor / total) * 100).toFixed(2) : '';
+                const suffix = percent ? ` (${percent}%)` : '';
+                return `${ctx.dataset.label}: ${valor} clientes${suffix}`;
               },
             },
           },
@@ -464,8 +466,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
 
               const x = bar.x;
               const y = bar.y;
-
-              const texto = `${vendedor.totalClientes} clientes`;
+              const texto = vendedor.totalClientes != 1 ? `${vendedor.totalClientes} clientes` : 'S/ Carteira';
 
               ctx.save();
               ctx.font = 'bold 12px sans-serif';
@@ -485,9 +486,11 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     if (!ctx) return;
 
     // Ordenar vendedores pelo total de clientes positivados
-    const vendedores = Object.keys(data).sort((a, b) => {
-      return (data[b]?.clientesPositivados || 0) - (data[a]?.clientesPositivados || 0);
-    });
+    const vendedores = Object.keys(data)
+      .filter((v) => data[v]?.totalClientes > 1)
+      .sort((a, b) => {
+        return (data[b]?.clientesPositivados || 0) - (data[a]?.clientesPositivados || 0);
+      });
 
     // Coletar todas as marcas existentes
     const marcasSet = new Set<string>();
