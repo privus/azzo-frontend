@@ -640,7 +640,7 @@ export class OrderListingComponent implements OnInit {
             const blob = new Blob([pdfBlob], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
 
-            return `<iframe src="${blobUrl}" style="width:100%;height:100vh;border:none;" onload="this.contentWindow.print()"></iframe>`;
+            return `<iframe src="${blobUrl}" style="width:100%;height:100vh;border:none;"></iframe>`;
           })
           .catch((err) => {
             console.error(`Erro ao gerar PDF para pedido ${order.venda_id}:`, err);
@@ -649,14 +649,41 @@ export class OrderListingComponent implements OnInit {
       );
 
       Promise.all(requests).then((iframes) => {
-        printWindow.document.write(`
+        const content = `
           <html>
-            <head><title>Impressão de Pedidos</title></head>
-            <body style="margin:0;padding:0;display:flex;flex-direction:column;">
-              ${iframes.join('<div style="page-break-after: always;"></div>')}
+            <head>
+              <title>Impressão de Pedidos</title>
+              <style>
+                body {
+                  margin: 0;
+                  padding: 0;
+                  display: flex;
+                  flex-direction: column;
+                }
+                iframe {
+                  page-break-after: always;
+                }
+                @media print {
+                  body {
+                    margin: 0;
+                  }
+                }
+              </style>
+            </head>
+            <body>
+              ${iframes.join('\n')}
+              <script>
+                window.onload = function() {
+                  setTimeout(() => {
+                    window.print();
+                  }, 1000);
+                }
+              </script>
             </body>
           </html>
-        `);
+        `;
+
+        printWindow.document.write(content);
         printWindow.document.close();
         Swal.close();
       });
