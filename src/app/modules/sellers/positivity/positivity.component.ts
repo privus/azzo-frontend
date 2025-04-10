@@ -170,7 +170,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
                       ctx,
                       chartArea: { top, left, width, height },
                     } = chart;
-                    const text = `Carteira: ${posData.totalClientes}`;
+                    const text = posData.totalClientes > 1 ? `${posData.totalClientes} clientes` : 'S/ Carteira';
                     ctx.save();
                     ctx.font = 'bold 16px sans-serif';
                     ctx.fillStyle = '#000';
@@ -466,7 +466,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
 
               const x = bar.x;
               const y = bar.y;
-              const texto = vendedor.totalClientes != 1 ? `${vendedor.totalClientes} clientes` : 'S/ Carteira';
+              const texto = vendedor.totalClientes > 1 ? `${vendedor.totalClientes} clientes` : 'S/ Carteira';
 
               ctx.save();
               ctx.font = 'bold 12px sans-serif';
