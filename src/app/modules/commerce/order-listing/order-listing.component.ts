@@ -624,32 +624,41 @@ export class OrderListingComponent implements OnInit {
           this.http.post(`${this.baseUrl}sells/${order.venda_id}/print`, { responsible }, { responseType: 'blob' }).toPromise(),
         );
 
-        Promise.all(requests).then((pdfBlobs) => {
-          const win = window.open('', '_blank');
-          if (!win) return;
+        Promise.all(requests)
+          .then((pdfs) => {
+            // Filtrar os blobs válidos
+            const blobs = pdfs.filter((blob): blob is Blob => !!blob);
 
-          const iframesHtml = pdfBlobs
-            .filter((blob): blob is Blob => !!blob && blob.size > 0)
-            .map((blob, index) => {
-              const blobUrl = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
-              return `<iframe src="${blobUrl}" style="width:100%;height:100vh;border:none;" id="pdf_${index}"></iframe>`;
-            })
-            .join('');
+            if (blobs.length === 0) {
+              Swal.fire('Erro', 'Nenhum PDF válido retornado.', 'error');
+              return;
+            }
 
-          win.document.write(`
-            <html>
-              <head><title>Pedidos Selecionados</title></head>
-              <body style="margin:0;padding:0;">
-                ${iframesHtml}
-                <script>
-                  window.onload = () => setTimeout(() => window.print(), 1000);
-                </script>
-              </body>
-            </html>
-          `);
-          win.document.close();
-          Swal.close();
-        });
+            // Concatenar os Blobs em um único Blob
+            const mergedBlob = new Blob(blobs, { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(mergedBlob);
+
+            // Abrir uma única aba com todos os PDFs
+            const win = window.open('', '_blank');
+            if (win) {
+              win.document.write(`
+                <html>
+                  <head><title>Pedidos Selecionados</title></head>
+                  <body style="margin:0">
+                    <iframe src="${blobUrl}" style="border:none;width:100vw;height:100vh;" onload="this.contentWindow.print()"></iframe>
+                  </body>
+                </html>
+              `);
+              win.document.close();
+            }
+          })
+          .catch((err) => {
+            console.error('Erro ao gerar PDFs:', err);
+            Swal.fire('Erro', 'Falha ao gerar PDFs.', 'error');
+          })
+          .finally(() => {
+            Swal.close();
+          });
       }
     });
   }
