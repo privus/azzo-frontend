@@ -24,6 +24,7 @@ export interface Order {
   tipo_pedido: TipoPedido;
   exportado: number;
   selected?: boolean;
+  volume: number;
 }
 
 export interface Vendedor {

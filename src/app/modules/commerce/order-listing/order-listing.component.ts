@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SellerRankingModalComponent } from '../seller-ranking-modal/seller-ranking-modal.component';
+import { PDFDocument } from 'pdf-lib';
 
 @Component({
   selector: 'app-order-listing',
@@ -605,63 +606,72 @@ export class OrderListingComponent implements OnInit {
 
     Swal.fire({
       title: 'Imprimir Pedidos Selecionados',
-      html: `
-          <p>Você selecionou <strong>${this.selectedOrders.length}</strong> pedido(s).</p>
-        `,
+      html: `<p>Você selecionou <strong>${this.selectedOrders.length}</strong> pedido(s).</p>`,
       showCancelButton: true,
       confirmButtonText: 'Sim!',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
-      if (result.isConfirmed) {
-        const responsible = this.user;
+      if (!result.isConfirmed) return;
 
-        Swal.fire({
-          title: 'Gerando PDFs...',
-          text: 'Aguarde enquanto os arquivos estão sendo criados.',
-          allowOutsideClick: false,
-          didOpen: () => Swal.showLoading(),
-        });
+      const responsible = this.user;
 
-        const printWindows = this.selectedOrders.map(() => window.open('', '_blank'));
+      Swal.fire({
+        title: 'Unindo PDFs...',
+        text: 'Aguarde enquanto os arquivos estão sendo processados.',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
 
-        const requests = this.selectedOrders.map((order, index) =>
-          this.http
-            .post(`${this.baseUrl}sells/${order.venda_id}/print`, { responsible }, { responseType: 'blob' })
-            .toPromise()
-            .then((pdfBlob) => {
-              if (!pdfBlob || pdfBlob.size === 0) {
-                console.warn(`PDF vazio para o pedido ${order.venda_id}`);
-                return;
-              }
+      const requests = this.selectedOrders.map((order) =>
+        this.http
+          .post(`${this.baseUrl}sells/${order.venda_id}/print`, { responsible }, { responseType: 'blob' })
+          .toPromise()
+          .then((blob) => (blob && blob.size > 0 ? blob : undefined))
+          .catch((err) => {
+            console.error(`Erro ao gerar PDF para pedido ${order.venda_id}:`, err);
+            return undefined;
+          }),
+      );
 
-              const blob = new Blob([pdfBlob], { type: 'application/pdf' });
-              const blobUrl = URL.createObjectURL(blob);
-              const win = printWindows[index];
+      Promise.all(requests).then(async (results: (Blob | undefined)[]) => {
+        const validBlobs = results.filter((b): b is Blob => !!b);
+        if (validBlobs.length === 0) {
+          Swal.close();
+          Swal.fire('Erro', 'Nenhum PDF foi gerado com sucesso.', 'error');
+          return;
+        }
 
-              if (win) {
-                win.document.write(`
-                    <html>
-                      <head><title>Pedido ${order.codigo}</title></head>
-                      <body style="margin:0">
-                        <iframe src="${blobUrl}" style="border:none;width:100vw;height:100vh;" onload="this.contentWindow.print()"></iframe>
-                      </body>
-                    </html>
-                  `);
-                win.document.close();
-              }
-            })
-            .catch((err) => {
-              console.error(`Erro ao abrir PDF para pedido ${order.codigo}:`, err);
-            }),
-        );
+        // Cria novo documento PDF
+        const mergedPdf = await PDFDocument.create();
 
-        Promise.all(requests).finally(() => {
-          Swal.close(); // 👈 FECHA o loading quando tudo termina
-        });
-      }
+        for (const blob of validBlobs) {
+          const arrayBuffer = await blob.arrayBuffer();
+          const pdfToMerge = await PDFDocument.load(arrayBuffer);
+          const copiedPages = await mergedPdf.copyPages(pdfToMerge, pdfToMerge.getPageIndices());
+          copiedPages.forEach((page) => mergedPdf.addPage(page));
+        }
+
+        const mergedPdfBytes = await mergedPdf.save();
+        const mergedBlob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+        const mergedUrl = URL.createObjectURL(mergedBlob);
+
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+          printWindow.document.write(`
+            <html>
+              <head><title>Pedidos</title></head>
+              <body style="margin:0">
+                <iframe src="${mergedUrl}" style="width:100vw; height:100vh; border:none;" onload="this.contentWindow.print()"></iframe>
+              </body>
+            </html>
+          `);
+          printWindow.document.close();
+        }
+
+        Swal.close();
+      });
     });
   }
-
   // generateLabelsForSelected(): void {
   //   if (this.selectedOrders.length === 0) return;
 
