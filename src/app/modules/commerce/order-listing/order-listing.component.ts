@@ -616,7 +616,7 @@ export class OrderListingComponent implements OnInit {
       const responsible = this.user;
 
       Swal.fire({
-        title: 'Unindo PDFs...',
+        title: 'Gerando...',
         text: 'Aguarde enquanto os arquivos estão sendo processados.',
         allowOutsideClick: false,
         didOpen: () => Swal.showLoading(),
