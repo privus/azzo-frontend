@@ -13,7 +13,7 @@ import { Location } from '@angular/common';
 })
 export class CustomersDetailsComponent implements OnInit {
   customerForm: FormGroup;
-  customer: Cliente;
+  customer: Cliente | null = null;
   customerId: number;
 
   constructor(
