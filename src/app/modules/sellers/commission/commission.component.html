@@ -4,9 +4,9 @@
     <select 
       class="form-select w-auto"  
       id="filterDate"
-      [(ngModel)]="dataRange" 
-      (ngModelChange)="showCustomDatePicker = dataRange === 'custom'"
-    >   
+      [(ngModel)]="dataRange"
+      (change)="onDateRange()"
+    >  
       <option value="">Selecione o Período:</option>
       <option value="yesterday">Ontem</option>
       <option value="last7">Últimos 7 Dias</option>

@@ -32,6 +32,8 @@ export class CommissionsComponent implements OnInit {
   }
 
   onDateRange(): void {
+    this.showCustomDatePicker = this.dataRange === 'custom';
+
     const selectedRange = this.dataRange;
 
     let startDate = new Date();
