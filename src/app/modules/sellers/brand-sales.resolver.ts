@@ -12,7 +12,7 @@ export class BrandSalesResolver implements Resolve<BrandSales | null> {
 
   resolve(): Observable<BrandSales | null> {
     const fifteenDaysAgo = new Date();
-    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 7);
     const now = new Date();
     const formattedNow = now.toISOString().split('T')[0];
     const formatted = fifteenDaysAgo.toISOString().split('T')[0];
