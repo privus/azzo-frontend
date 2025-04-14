@@ -5,7 +5,7 @@ export interface Cliente {
   codigo: number;
   nome: string;
   nome_empresa: string;
-  tipo_doc?: string;
+  tipo_doc: string;
   numero_doc: string;
   ie?: string;
   email: string;
