@@ -104,9 +104,7 @@ export class CommissionsComponent implements OnInit {
       case 'lastWeek':
         const dayOfWeek = startDate.getDay();
         startDate.setDate(startDate.getDate() - dayOfWeek - 7);
-        startDate.setHours(0, 0, 0, 0);
-        endDate.setDate(startDate.getDate() - dayOfWeek - 1);
-        endDate.setHours(23, 59, 59, 999);
+        endDate.setDate(startDate.getDate() + 6);
         const lastWeekFrom = this.formatDate(startDate);
         const lastWeekTo = this.formatDate(endDate);
         this.updateCommission(lastWeekFrom, lastWeekTo);
