@@ -962,7 +962,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
 
       case 'lastMonth':
         startDate = new Date(startDate.getFullYear(), startDate.getMonth() - 1);
-        endDate = new Date(startDate.getFullYear(), startDate.getMonth(), 0);
+        endDate = new Date(endDate.getFullYear(), endDate.getMonth(), 0);
         endDate.setDate(endDate.getDate() + 1);
         const lastMonthFrom = this.formatDate(startDate);
         const lastMonthTo = this.formatDate(endDate);
