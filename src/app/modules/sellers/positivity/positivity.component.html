@@ -10,10 +10,9 @@
         [(ngModel)]="dataRange" 
         (ngModelChange)="showCustomDatePicker = dataRange === 'custom'"
       >   
-        <option value="">Data Venda</option>
-        <option value="today">Hoje</option>
+        <option value="">Selecione o Período:</option>
         <option value="yesterday">Ontem</option>
-        <option value="last7">Últimos 7 Dias</option>
+        <option value="last7" selected>Últimos 7 Dias</option>
         <option value="last15">Últimos 15 Dias</option>
         <option value="last30">Últimos 30 Dias</option>
         <option value="thisMonth">Este Mês</option>

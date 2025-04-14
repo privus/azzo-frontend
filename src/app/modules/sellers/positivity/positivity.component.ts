@@ -51,7 +51,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   viewMode: 'doughnut' | 'barra' = 'barra';
   customDateRange: { start: string; end: string } = { start: '', end: '' };
   showCustomDatePicker: boolean = false;
-  dataRange: string = '';
+  dataRange: string = 'last7';
   private chartInstances: Record<string, Chart> = {};
 
   constructor(
@@ -437,6 +437,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
             label: 'Clientes Não Positivados',
             data: naoPositivados,
             backgroundColor: '#F1416C',
+            hidden: true,
           },
         ],
       },
@@ -980,7 +981,6 @@ export class PositivityComponent implements OnInit, AfterViewInit {
         this.updatePositivityBrandSales(lastWeekFrom, lastWeekTo);
         return;
 
-      case 'today':
       default:
         // Do nothing special, just set startDate to today
         break;
