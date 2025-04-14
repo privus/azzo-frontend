@@ -1,30 +1,66 @@
 <div class="card-body">
-    <!-- Título do Relatório -->
-    <h4 class="text-gray-800 fw-bold mb-5">Valores referentes a março</h4>
-  
-    <div class="table-responsive">
-      <table class="table align-middle table-row-dashed fs-6 gy-3 dataTable" style="width: 100%;">
-        <thead>
-          <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-            <th class="min-w-150px">Vendedor</th>
-            <th class="text-end pe-3 min-w-100px">Faturado</th>
-            <th class="text-end pe-3 min-w-100px">Pedidos</th>
-            <th class="text-end pe-3 min-w-100px">Comissão</th>
-            <th class="text-end pe-3 min-w-100px">Ticket Médio</th>
-            <th class="text-end pe-3 min-w-100px">Comissão Média</th>
-          </tr>
-        </thead>
-        <tbody class="fw-bold text-gray-600">
-          <tr *ngFor="let item of comission">
-            <td>{{ item.vendedor }}</td>
-            <td class="text-end">R$ {{ item.faturado | number: '1.2-2' }}</td>
-            <td class="text-end">{{ item.pedidos }}</td>
-            <td class="text-end">R$ {{ item.comissao | number: '1.2-2' }}</td>
-            <td class="text-end">R$ {{ item.ticketMedio | number: '1.2-2' }}</td>
-            <td class="text-end">R$ {{ item.comissaoMedia | number: '1.2-2' }}</td>
-          </tr>
-        </tbody>
-      </table>
+  <!-- Título do Relatório -->
+  <h4 class="text-gray-800 fw-bold mb-5">Valores referentes a março</h4>
+
+  <!-- Filtro de Datas -->
+  <div class="d-flex align-items-center gap-3 flex-wrap mb-5">
+    <select 
+      class="form-select w-auto"  
+      id="filterDate"
+      [(ngModel)]="dataRange" 
+      (ngModelChange)="showCustomDatePicker = dataRange === 'custom'"
+    >   
+      <option value="">Selecione o Período:</option>
+      <option value="yesterday">Ontem</option>
+      <option value="last7">Últimos 7 Dias</option>
+      <option value="last15">Últimos 15 Dias</option>
+      <option value="last30">Últimos 30 Dias</option>
+      <option value="thisMonth">Este Mês</option>
+      <option value="lastMonth">Mês Passado</option>
+      <option value="lastWeek">Semana Passada</option>
+      <option value="custom">Entre Datas</option>
+    </select>
+
+    <div *ngIf="showCustomDatePicker" class="d-flex align-items-center position-relative my-1 ms-8">
+      <label class="form-label">De:</label>
+      <input type="date" class="form-control form-control-solid w-150px ps-12" [(ngModel)]="customDateRange.start" />
+      <label class="form-label ms-3">Para:</label>
+      <input type="date" class="form-control form-control-solid w-150px ps-12 ms-3" [(ngModel)]="customDateRange.end" />
     </div>
+
+    <button 
+      class="btn btn-primary d-flex align-items-center position-relative my-1"
+      (click)="onDateRange()"
+    >
+      Aplicar
+    </button>
   </div>
+
+  <!-- Tabela -->
+  <div class="table-responsive">
+    <table class="table align-middle table-row-dashed fs-6 gy-3 dataTable" style="width: 100%;">
+      <thead>
+        <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+          <th class="min-w-150px">Vendedor</th>
+          <th class="text-end pe-3 min-w-100px">Faturado</th>
+          <th class="text-end pe-3 min-w-100px">Pedidos</th>
+          <th class="text-end pe-3 min-w-100px">Comissão</th>
+          <th class="text-end pe-3 min-w-100px">Ticket Médio</th>
+          <th class="text-end pe-3 min-w-100px">Comissão Média</th>
+        </tr>
+      </thead>
+      <tbody class="fw-bold text-gray-600">
+        <tr *ngFor="let item of comission">
+          <td>{{ item.vendedor }}</td>
+          <td class="text-end">R$ {{ item.faturado | number: '1.2-2' }}</td>
+          <td class="text-end">{{ item.pedidos }}</td>
+          <td class="text-end">R$ {{ item.comissao | number: '1.2-2' }}</td>
+          <td class="text-end">R$ {{ item.ticketMedio | number: '1.2-2' }}</td>
+          <td class="text-end">R$ {{ item.comissaoMedia | number: '1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
   

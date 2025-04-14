@@ -47,8 +47,8 @@ export class SellService {
     return this.http.get<BrandSales>(`${this.baseUrl}sells/brand?fromDate=${fromDate}${toDate}`);
   }
 
-  getCommissions(): Observable<Commissions[]> {
-    return this.http.get<Commissions[]>(`${this.baseUrl}sells/commissions`);
+  getCommissions(fromDate: string, toDate?: string): Observable<Commissions[]> {
+    return this.http.get<Commissions[]>(`${this.baseUrl}sells/commissions?fromDate=${fromDate}${toDate}`);
   }
 
   getPositivity(fromDate: string, toDate?: string): Observable<PositivityByBrandResponse> {

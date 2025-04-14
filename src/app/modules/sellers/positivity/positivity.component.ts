@@ -647,7 +647,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
         labels: ['Azzo'],
         datasets: [
           { label: 'Clientes Positivados', data: [positivados], backgroundColor: '#50CD89' },
-          { label: 'Clientes Não Positivados', data: [total - positivados], backgroundColor: '#F1416C' },
+          { label: 'Clientes Não Positivados', data: [total - positivados], backgroundColor: '#F1416C', hidden: true },
         ],
       },
       options: {
@@ -674,19 +674,29 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           id: 'totalLabelPlugin',
           afterDatasetsDraw(chart: Chart) {
             const ctx = chart.ctx;
-            const meta = chart.getDatasetMeta(1);
-            const bar = meta.data?.[0];
-            if (!bar) return;
+            const metaPositivados = chart.getDatasetMeta(0); // Dataset 0 = positivados
+            const metaNaoPositivados = chart.getDatasetMeta(1); // Dataset 1 = não positivados
 
-            const yPos = bar.y;
-            const formattedTotal = `${total} clientes`;
+            const barPos = metaPositivados.data?.[0];
+            const barNao = metaNaoPositivados.data?.[0];
 
-            ctx.save();
-            ctx.font = 'bold 12px sans-serif';
-            ctx.fillStyle = '#000';
-            ctx.textAlign = 'center';
-            ctx.fillText(formattedTotal, bar.x, yPos - 6);
-            ctx.restore();
+            if (barPos) {
+              ctx.save();
+              ctx.font = 'bold 12px sans-serif';
+              ctx.fillStyle = '#000';
+              ctx.textAlign = 'center';
+              ctx.fillText(`${positivados}`, barPos.x, barPos.y - 6);
+              ctx.restore();
+            }
+
+            if (barNao) {
+              ctx.save();
+              ctx.font = 'bold 12px sans-serif';
+              ctx.fillStyle = '#000';
+              ctx.textAlign = 'center';
+              ctx.fillText(`${total} clientes`, barNao.x, barNao.y - 6);
+              ctx.restore();
+            }
           },
         },
       ],
@@ -893,7 +903,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       case 'geral':
         return 'Positivação Geral por Vendedor';
       case 'porMarca':
-        return 'Positivação Marca / Carteira';
+        return 'Positivação Marca / 100% Carteira';
       case 'contribuicao':
         return 'Contribuição por Marca na Positivação';
       default:

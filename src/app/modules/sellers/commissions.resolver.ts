@@ -10,6 +10,14 @@ export class CommissionsResolver implements Resolve<Commissions[] | null> {
   constructor(private sellersService: SellersService) {}
 
   resolve(): Observable<Commissions[] | null> {
-    return this.sellersService.getCommissions();
+    let thisMonth = new Date();
+
+    const f = new Date(thisMonth.getFullYear(), thisMonth.getMonth() - 1);
+    const to = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 0);
+    to.setDate(to.getDate() + 1);
+
+    const formattedF = f.toISOString().split('T')[0];
+    const formattedTo = to.toISOString().split('T')[0];
+    return this.sellersService.getCommissions(formattedF, formattedTo);
   }
 }
