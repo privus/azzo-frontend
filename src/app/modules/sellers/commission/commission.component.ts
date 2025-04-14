@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Commissions } from '../models';
 import { ActivatedRoute } from '@angular/router';
 import { SellersService } from '../services/sellers.service';
@@ -18,6 +18,7 @@ export class CommissionsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private sellersService: SellersService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -87,6 +88,7 @@ export class CommissionsComponent implements OnInit {
         endDate.setDate(endDate.getDate() + 1);
         const t = this.formatDate(endDate);
         this.updateCommission(f, t);
+        this.cdr.detectChanges();
         return;
 
       case 'lastMonth':
@@ -96,6 +98,7 @@ export class CommissionsComponent implements OnInit {
         const lastMonthFrom = this.formatDate(startDate);
         const lastMonthTo = this.formatDate(endDate);
         this.updateCommission(lastMonthFrom, lastMonthTo);
+        this.cdr.detectChanges();
         return;
 
       case 'lastWeek':
@@ -107,6 +110,7 @@ export class CommissionsComponent implements OnInit {
         const lastWeekFrom = this.formatDate(startDate);
         const lastWeekTo = this.formatDate(endDate);
         this.updateCommission(lastWeekFrom, lastWeekTo);
+        this.cdr.detectChanges();
         return;
 
       default:
