@@ -1002,8 +1002,8 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   }
 
   private updatePositivityBrandSales(from: string, to?: string) {
-    const positivity$ = this.sellersService.getPositivity(from, to);
-    const brandSales$ = this.sellersService.getSellsByBrand(from, to);
+    const positivity$ = to ? this.sellersService.getPositivity(from, to) : this.sellersService.getPositivity(from);
+    const brandSales$ = to ? this.sellersService.getSellsByBrand(from, to) : this.sellersService.getSellsByBrand(from);
 
     forkJoin([positivity$, brandSales$]).subscribe({
       next: ([positivity, brandSales]) => {

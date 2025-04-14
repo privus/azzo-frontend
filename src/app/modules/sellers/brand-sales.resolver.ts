@@ -16,6 +16,7 @@ export class BrandSalesResolver implements Resolve<BrandSales | null> {
     const now = new Date();
     const formattedNow = now.toISOString().split('T')[0];
     const formatted = fifteenDaysAgo.toISOString().split('T')[0];
+
     return this.sellersService.getSellsByBrand(formatted, formattedNow);
   }
 }
