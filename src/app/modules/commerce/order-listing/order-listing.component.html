@@ -29,14 +29,14 @@
                     <option value="custom">Entre Datas</option>
                 </select>
                 <div *ngIf="showCustomDatePicker" class="d-flex align-items-center position-relative my-1 ms-8">
-                    <label class="form-label">From:</label>
+                    <label class="form-label">De:</label>
                     <input type="date" class="form-control form-control-solid w-150px ps-12" [(ngModel)]="customDateRange.start" />
-                    <label class="form-label ms-3">To:</label>
+                    <label class="form-label ms-3">Para:</label>
                     <input type="date" class="form-control form-control-solid w-150px ps-12 ms-3" [(ngModel)]="customDateRange.end" />
                 </div>
             </div>
 
-            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRangeChange()">Aplicar</button>
+            <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRange()">Aplicar</button>
             <button
                 class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9"
                 data-bs-toggle="tooltip"

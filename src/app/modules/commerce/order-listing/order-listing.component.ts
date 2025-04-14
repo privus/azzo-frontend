@@ -91,7 +91,7 @@ export class OrderListingComponent implements OnInit {
           confirmButtonText: 'Ok',
         });
         this.isLoading$.next(false);
-        this.onDateRangeChange();
+        this.onDateRange();
         this.cdr.detectChanges();
       },
       complete: () => {
@@ -260,7 +260,7 @@ export class OrderListingComponent implements OnInit {
     this.updateDisplayedItems();
   }
 
-  onDateRangeChange(): void {
+  onDateRange(): void {
     const selectedRange = this.dataRange;
     const now = new Date();
 

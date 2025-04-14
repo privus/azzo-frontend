@@ -7,15 +7,17 @@ import { SellService } from '../../../core/services';
 export class SellersService {
   constructor(private readonly sellService: SellService) {}
 
-  getSellsByBrand() {
-    return this.sellService.getSellsByBrand();
+  getSellsByBrand(fromDate: string, toDate?: string) {
+    const to = toDate ? `&toDate=${toDate}` : '';
+    return this.sellService.getSellsByBrand(fromDate, to);
   }
 
   getCommissions() {
     return this.sellService.getCommissions();
   }
 
-  getPositivity() {
-    return this.sellService.getPositivity();
+  getPositivity(fromDate: string, toDate?: string) {
+    const to = toDate ? `&toDate=${toDate}` : '';
+    return this.sellService.getPositivity(fromDate, to);
   }
 }

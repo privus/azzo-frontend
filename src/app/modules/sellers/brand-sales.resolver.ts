@@ -11,6 +11,11 @@ export class BrandSalesResolver implements Resolve<BrandSales | null> {
   constructor(private sellersService: SellersService) {}
 
   resolve(): Observable<BrandSales | null> {
-    return this.sellersService.getSellsByBrand();
+    const fifteenDaysAgo = new Date();
+    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+    const now = new Date();
+    const formattedNow = now.toISOString().split('T')[0];
+    const formatted = fifteenDaysAgo.toISOString().split('T')[0];
+    return this.sellersService.getSellsByBrand(formatted, formattedNow);
   }
 }

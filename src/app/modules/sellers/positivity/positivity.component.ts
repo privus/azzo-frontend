@@ -1,7 +1,9 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Chart, registerables } from 'chart.js';
 import { BrandSales, PositivityByBrandResponse, VendedorDisplay, VendedorPositivacao } from '../models';
+import { SellersService } from '../services/sellers.service';
+import { forkJoin } from 'rxjs';
 
 Chart.register(...registerables);
 
@@ -47,8 +49,16 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   graficoPositivacao: 'geral' | 'porMarca' | 'contribuicao' = 'geral';
   graficoPositivacaoAzzo: 'geral' | 'contribuicao' = 'geral';
   viewMode: 'doughnut' | 'barra' = 'barra';
+  customDateRange: { start: string; end: string } = { start: '', end: '' };
+  showCustomDatePicker: boolean = false;
+  dataRange: string = '';
+  private chartInstances: Record<string, Chart> = {};
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private sellersService: SellersService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.brandSales = this.route.snapshot.data['brandSales'];
@@ -115,14 +125,18 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   }
 
   onViewModeChange() {
+    this.destroyCharts();
+
     if (this.viewMode === 'doughnut') {
       setTimeout(() => {
         this.vendedores.forEach((vendedor, i) => {
-          const ctx = document.getElementById('chart-' + i) as HTMLCanvasElement;
-          const ctxPos = document.getElementById('positivacao-' + i) as HTMLCanvasElement;
+          const canvasId = 'chart-' + i;
+          const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
+          const ctxPosId = 'positivacao-' + i;
+          const ctxPos = document.getElementById(ctxPosId) as HTMLCanvasElement;
 
           if (ctx) {
-            new Chart(ctx, {
+            const chart = new Chart(ctx, {
               type: 'doughnut',
               data: {
                 labels: vendedor.marcasList.map((m) => m.nome),
@@ -139,12 +153,13 @@ export class PositivityComponent implements OnInit, AfterViewInit {
                 plugins: { legend: { display: false } },
               },
             });
+            this.chartInstances[canvasId] = chart;
           }
 
           if (ctxPos && this.positivity?.[vendedor.nome]) {
             const posData = this.positivity[vendedor.nome];
 
-            new Chart(ctxPos, {
+            const chart1 = new Chart(ctxPos, {
               type: 'doughnut',
               data: {
                 labels: ['Positivado', 'Não Positivado'],
@@ -182,6 +197,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
                 },
               ],
             });
+            this.chartInstances[canvasId] = chart1;
           }
         });
       }, 0);
@@ -231,7 +247,12 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     };
 
     // === Gráfico principal (sem Azzo) ===
-    new Chart(document.getElementById(canvasId) as HTMLCanvasElement, {
+    const canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+    if (!canvas) return;
+
+    this.chartInstances[canvasId]?.destroy?.(); // 🔥 destroy previous instance
+
+    this.chartInstances[canvasId] = new Chart(canvas, {
       type: 'bar',
       data: {
         labels: vendedoresOrdenados.map((v) => v.nome),
@@ -311,10 +332,13 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     // === Gráfico separado da Azzo ===
     if (azzoData) {
       setTimeout(() => {
-        const azzoCanvas = document.getElementById('chart-azzo') as HTMLCanvasElement;
+        const azzoCanvasId = 'chart-azzo';
+        const azzoCanvas = document.getElementById(azzoCanvasId) as HTMLCanvasElement;
         if (!azzoCanvas) return;
 
-        new Chart(azzoCanvas, {
+        this.chartInstances[azzoCanvasId]?.destroy?.(); // 🔥 destroy previous Azzo chart
+
+        this.chartInstances[azzoCanvasId] = new Chart(azzoCanvas, {
           type: 'bar',
           data: {
             labels: [azzoData.nome],
@@ -388,11 +412,9 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   positivacaoGeral(canvasId: string, data: PositivityByBrandResponse) {
     const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!ctx) return;
+    this.chartInstances[canvasId]?.destroy?.();
 
-    // Ordenar labels com base nos clientes positivados (decrescente)
-    const labels = Object.keys(data).sort((a, b) => {
-      return (data[b]?.clientesPositivados || 0) - (data[a]?.clientesPositivados || 0);
-    });
+    const labels = Object.keys(data).sort((a, b) => (data[b]?.clientesPositivados || 0) - (data[a]?.clientesPositivados || 0));
 
     const positivados = labels.map((vendedor) => data[vendedor]?.clientesPositivados || 0);
     const naoPositivados = labels.map((vendedor) => {
@@ -401,7 +423,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       return info.totalClientes - info.clientesPositivados;
     });
 
-    new Chart(ctx, {
+    this.chartInstances[canvasId] = new Chart(ctx, {
       type: 'bar',
       data: {
         labels,
@@ -421,9 +443,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       options: {
         responsive: true,
         plugins: {
-          legend: {
-            position: 'top',
-          },
+          legend: { position: 'top' },
           tooltip: {
             callbacks: {
               label: function (ctx) {
@@ -438,15 +458,8 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           },
         },
         scales: {
-          x: {
-            stacked: true,
-          },
-          y: {
-            stacked: true,
-            ticks: {
-              precision: 0,
-            },
-          },
+          x: { stacked: true },
+          y: { stacked: true, ticks: { precision: 0 } },
         },
       },
       plugins: [
@@ -457,17 +470,14 @@ export class PositivityComponent implements OnInit, AfterViewInit {
             const chartLabels = chart.data.labels as string[];
             if (!chartLabels) return;
 
-            const meta2 = chart.getDatasetMeta(1); // Segunda pilha: Não Positivados
-
+            const meta2 = chart.getDatasetMeta(1);
             chartLabels.forEach((label, index) => {
               const bar = meta2.data?.[index];
               const vendedor = data[label];
               if (!bar || !vendedor) return;
-
               const x = bar.x;
               const y = bar.y;
               const texto = vendedor.totalClientes > 1 ? `${vendedor.totalClientes} clientes` : 'S/ Carteira';
-
               ctx.save();
               ctx.font = 'bold 12px sans-serif';
               ctx.fillStyle = '#000';
@@ -484,48 +494,39 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   positivacaoPorMarca(canvasId: string, data: PositivityByBrandResponse) {
     const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!ctx) return;
+    this.chartInstances[canvasId]?.destroy?.();
 
-    // Ordenar vendedores pelo total de clientes positivados
     const vendedores = Object.keys(data)
       .filter((v) => data[v]?.totalClientes > 1)
-      .sort((a, b) => {
-        return (data[b]?.clientesPositivados || 0) - (data[a]?.clientesPositivados || 0);
-      });
+      .sort((a, b) => (data[b]?.clientesPositivados || 0) - (data[a]?.clientesPositivados || 0));
 
-    // Coletar todas as marcas existentes
     const marcasSet = new Set<string>();
-    vendedores.forEach((vendedor) => {
-      Object.keys(data[vendedor].marcas).forEach((marca) => marcasSet.add(marca));
-    });
+    vendedores.forEach((vendedor) => Object.keys(data[vendedor].marcas).forEach((marca) => marcasSet.add(marca)));
     const marcas = Array.from(marcasSet);
 
-    // Criar datasets com vendedores já ordenados
-    const datasets = marcas.map((marca) => {
-      return {
-        label: marca,
-        data: vendedores.map((vendedor) => data[vendedor].marcas[marca]?.positivacaoMarca || 0),
-        backgroundColor: this.marcaCorMap[marca] || '#999999',
-      };
-    });
-    new Chart(ctx, {
+    const datasets = marcas.map((marca) => ({
+      label: marca,
+      data: vendedores.map((vendedor) => data[vendedor].marcas[marca]?.positivacaoMarca || 0),
+      backgroundColor: this.marcaCorMap[marca] || '#999999',
+    }));
+
+    this.chartInstances[canvasId] = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: vendedores, // Cada barra será um vendedor
+        labels: vendedores,
         datasets,
       },
       options: {
         responsive: true,
         plugins: {
-          legend: {
-            position: 'top',
-          },
+          legend: { position: 'top' },
           tooltip: {
             callbacks: {
               label: (ctx) => {
                 const rawVendedor = ctx.chart.data.labels?.[ctx.dataIndex];
                 const vendedor = typeof rawVendedor === 'string' ? rawVendedor : '';
                 const marca = ctx.dataset.label || '';
-                const positivados = data[vendedor as keyof PositivityByBrandResponse]?.marcas?.[marca]?.clientesPositivados || 0;
+                const positivados = data[vendedor]?.marcas?.[marca]?.clientesPositivados || 0;
                 const percent = ctx.raw as number;
                 return `${marca}: ${positivados} clientes (${percent.toFixed(2)}%)`;
               },
@@ -533,16 +534,8 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           },
         },
         scales: {
-          x: {
-            stacked: true,
-          },
-          y: {
-            stacked: true,
-            suggestedMax: 100,
-            ticks: {
-              callback: (val) => `${val}%`,
-            },
-          },
+          x: { stacked: true },
+          y: { stacked: true, suggestedMax: 100, ticks: { callback: (val) => `${val}%` } },
         },
       },
     });
@@ -551,14 +544,10 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   contribuicaoPorMarca(canvasId: string, data: PositivityByBrandResponse) {
     const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!ctx) return;
+    this.chartInstances[canvasId]?.destroy?.();
 
     const vendedores = Object.keys(data);
-
-    // Para cada vendedor, criar uma lista de marcas com contribuição
-    const dadosPorVendedor: {
-      [vendedor: string]: { marca: string; valor: number; cor: string }[];
-    } = {};
-
+    const dadosPorVendedor: Record<string, { marca: string; valor: number; cor: string }[]> = {};
     const todasMarcas = new Set<string>();
 
     vendedores.forEach((vendedor) => {
@@ -566,20 +555,14 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       const marcaList = Object.entries(marcasObj)
         .map(([marca, info]) => {
           todasMarcas.add(marca);
-          return {
-            marca,
-            valor: info.contribuicaoPercentual,
-            cor: this.marcaCorMap[marca] || '#999999',
-          };
+          return { marca, valor: info.contribuicaoPercentual, cor: this.marcaCorMap[marca] || '#999999' };
         })
-        .sort((a, b) => b.valor - a.valor); // Ordena por contribuição
+        .sort((a, b) => b.valor - a.valor);
 
       dadosPorVendedor[vendedor] = marcaList;
     });
 
     const marcasOrdenadas = Array.from(todasMarcas);
-
-    // Agora criamos os datasets manualmente
     const datasets: any[] = [];
 
     marcasOrdenadas.forEach((marca) => {
@@ -599,17 +582,10 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       });
     });
 
-    // Reordena os datasets dentro de cada barra (vendedor)
-    // Precisamos transpor os dados para aplicar ordenação por valor por vendedor
     const datasetsOrdenados: any[] = [];
-
     vendedores.forEach((vendedor, index) => {
       const marcaValores = datasets
-        .map((ds) => ({
-          label: ds.label,
-          valor: ds.data[index],
-          backgroundColor: ds.backgroundColor,
-        }))
+        .map((ds) => ({ label: ds.label, valor: ds.data[index], backgroundColor: ds.backgroundColor }))
         .filter((m) => m.valor > 0)
         .sort((a, b) => b.valor - a.valor);
 
@@ -621,13 +597,11 @@ export class PositivityComponent implements OnInit, AfterViewInit {
             backgroundColor: this.marcaCorMap[marcaData.label] || '#999999',
           };
         }
-
         datasetsOrdenados[i].data[index] = marcaData.valor;
       });
     });
 
-    // Renderiza o gráfico
-    new Chart(ctx, {
+    this.chartInstances[canvasId] = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: vendedores,
@@ -636,9 +610,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       options: {
         responsive: true,
         plugins: {
-          legend: {
-            position: 'top',
-          },
+          legend: { position: 'top' },
           tooltip: {
             callbacks: {
               label: (ctx) => {
@@ -652,16 +624,8 @@ export class PositivityComponent implements OnInit, AfterViewInit {
           },
         },
         scales: {
-          x: {
-            stacked: true,
-          },
-          y: {
-            stacked: true,
-            suggestedMax: 100,
-            ticks: {
-              callback: (val) => `${val}%`,
-            },
-          },
+          x: { stacked: true },
+          y: { stacked: true, suggestedMax: 100, ticks: { callback: (val) => `${val}%` } },
         },
       },
     });
@@ -670,34 +634,25 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   positivacaoAzzo(canvasId: string, data: PositivityByBrandResponse) {
     const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!ctx || !data['Azzo']) return;
+    this.chartInstances[canvasId]?.destroy?.();
 
     const info = data['Azzo'];
     const positivados = info.clientesPositivados;
     const total = info.totalClientes;
 
-    new Chart(ctx, {
+    this.chartInstances[canvasId] = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: ['Azzo'],
         datasets: [
-          {
-            label: 'Clientes Positivados',
-            data: [positivados],
-            backgroundColor: '#50CD89',
-          },
-          {
-            label: 'Clientes Não Positivados',
-            data: [total - positivados],
-            backgroundColor: '#F1416C',
-          },
+          { label: 'Clientes Positivados', data: [positivados], backgroundColor: '#50CD89' },
+          { label: 'Clientes Não Positivados', data: [total - positivados], backgroundColor: '#F1416C' },
         ],
       },
       options: {
         responsive: true,
         plugins: {
-          legend: {
-            position: 'top',
-          },
+          legend: { position: 'top' },
           tooltip: {
             callbacks: {
               label: (ctx) => {
@@ -710,10 +665,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
         },
         scales: {
           x: { stacked: true },
-          y: {
-            stacked: true,
-            ticks: { precision: 0 },
-          },
+          y: { stacked: true, ticks: { precision: 0 } },
         },
       },
       plugins: [
@@ -726,8 +678,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
             if (!bar) return;
 
             const yPos = bar.y;
-            const totalClientes = data['Azzo'].totalClientes;
-            const formattedTotal = `${totalClientes} clientes`;
+            const formattedTotal = `${total} clientes`;
 
             ctx.save();
             ctx.font = 'bold 12px sans-serif';
@@ -770,6 +721,9 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!ctx) return;
 
+    // 🔁 Destroy previous chart instance if exists
+    this.chartInstances[canvasId]?.destroy?.();
+
     const vendedores = Object.keys(data).sort((a, b) => (data[b]?.clientesPositivados || 0) - (data[a]?.clientesPositivados || 0));
 
     const marcasSet = new Set<string>();
@@ -780,7 +734,6 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     const marcas = Array.from(marcasSet);
     const maxTotalPositivados = Math.max(...vendedores.map((v) => data[v]?.clientesPositivados || 0));
 
-    // Cria matriz transposta com marca por vendedor
     const pilhasPorVendedor: Record<string, { marca: string; valor: number; cor: string; contrib: number }[]> = {};
 
     vendedores.forEach((vendedor) => {
@@ -795,9 +748,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
         .sort((a, b) => b.valor - a.valor);
     });
 
-    // Cria datasets ordenando as marcas individualmente por vendedor
     const datasets: any[] = [];
-
     marcas.forEach((_, stackIndex) => {
       const dataset = {
         label: '',
@@ -821,7 +772,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       }
     });
 
-    new Chart(ctx, {
+    this.chartInstances[canvasId] = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: vendedores,
@@ -851,9 +802,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
               display: true,
               text: 'Clientes Positivados por Marca',
             },
-            ticks: {
-              stepSize: 10,
-            },
+            ticks: { stepSize: 10 },
           },
         },
       },
@@ -864,13 +813,11 @@ export class PositivityComponent implements OnInit, AfterViewInit {
             const ctx = chart.ctx;
             const labels = chart.data.labels as string[];
             if (!labels) return;
-
             const meta = chart.getDatasetMeta(5);
             labels.forEach((label, index) => {
               const total = data[label]?.clientesPositivados || 0;
               const bar = meta.data?.[index];
               if (!bar) return;
-
               const yPos = bar.y;
               ctx.save();
               ctx.font = 'bold 12px sans-serif';
@@ -889,8 +836,10 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!ctx || !data) return;
 
-    const marcas = Object.keys(data.marcas);
+    // 🔁 Destroy previous chart instance if exists
+    this.chartInstances[canvasId]?.destroy?.();
 
+    const marcas = Object.keys(data.marcas);
     const dataset = marcas.map((marca) => {
       const contrib = data.marcas[marca]?.contribuicaoPercentual || 0;
       return {
@@ -901,7 +850,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       };
     });
 
-    new Chart(ctx, {
+    this.chartInstances[canvasId] = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: ['Azzo'],
@@ -918,7 +867,6 @@ export class PositivityComponent implements OnInit, AfterViewInit {
                 const valor = ctx.raw as number;
                 const percent = (ctx.dataset as any).contribPercent || 0;
                 const total = data.clientesPositivados || 0;
-
                 return `${marca}: ${valor.toFixed(0)} clientes (${percent.toFixed(2)}% de ${total})`;
               },
             },
@@ -932,9 +880,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
               display: true,
               text: 'Clientes Positivados (Azzo)',
             },
-            ticks: {
-              stepSize: 10,
-            },
+            ticks: { stepSize: 10 },
           },
         },
       },
@@ -952,5 +898,161 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       default:
         return 'Positivação Geral por Vendedor';
     }
+  }
+
+  onDateRange(): void {
+    const selectedRange = this.dataRange;
+
+    let startDate = new Date();
+    let endDate = new Date();
+
+    if (selectedRange === 'custom') {
+      this.showCustomDatePicker = true;
+
+      const start = this.customDateRange.start;
+      const end = this.customDateRange.end;
+
+      if (!start) return;
+
+      const from = new Date(start);
+      from.setDate(from.getDate());
+      const fromDate = this.formatDate(from);
+
+      if (end) {
+        const to = new Date(end);
+        to.setDate(to.getDate() + 1);
+        const toDate = this.formatDate(to);
+
+        this.updatePositivityBrandSales(fromDate, toDate);
+      } else {
+        this.updatePositivityBrandSales(fromDate);
+      }
+
+      return;
+    }
+
+    this.showCustomDatePicker = false;
+
+    switch (selectedRange) {
+      case 'yesterday':
+        startDate.setDate(startDate.getDate() - 1);
+        const y = this.formatDate(startDate);
+        this.updatePositivityBrandSales(y);
+        return;
+
+      case 'last7':
+        startDate.setDate(startDate.getDate() - 7);
+        break;
+
+      case 'last15':
+        startDate.setDate(startDate.getDate() - 15);
+        break;
+
+      case 'last30':
+        startDate.setDate(startDate.getDate() - 30);
+        break;
+
+      case 'thisMonth':
+        startDate = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+        const f = this.formatDate(startDate);
+        endDate.setDate(endDate.getDate() + 1);
+        const t = this.formatDate(endDate);
+        this.updatePositivityBrandSales(f, t);
+        return;
+
+      case 'lastMonth':
+        startDate = new Date(startDate.getFullYear(), startDate.getMonth() - 1);
+        endDate = new Date(startDate.getFullYear(), startDate.getMonth(), 0);
+        endDate.setDate(endDate.getDate() + 1);
+        const lastMonthFrom = this.formatDate(startDate);
+        const lastMonthTo = this.formatDate(endDate);
+        this.updatePositivityBrandSales(lastMonthFrom, lastMonthTo);
+        return;
+
+      case 'lastWeek':
+        const dayOfWeek = startDate.getDay();
+        startDate.setDate(startDate.getDate() - dayOfWeek - 7);
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setDate(startDate.getDate() - dayOfWeek - 1);
+        endDate.setHours(23, 59, 59, 999);
+        const lastWeekFrom = this.formatDate(startDate);
+        const lastWeekTo = this.formatDate(endDate);
+        this.updatePositivityBrandSales(lastWeekFrom, lastWeekTo);
+        return;
+
+      case 'today':
+      default:
+        // Do nothing special, just set startDate to today
+        break;
+    }
+
+    const fromDate = this.formatDate(startDate);
+    const toDate = this.formatDate(endDate);
+    this.updatePositivityBrandSales(fromDate, toDate);
+  }
+
+  // Utilitário para formatar data em yyyy-MM-dd
+  private formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+
+  private destroyCharts() {
+    Object.values(this.chartInstances).forEach((chart) => chart?.destroy?.());
+    this.chartInstances = {};
+  }
+
+  private updatePositivityBrandSales(from: string, to?: string) {
+    const positivity$ = this.sellersService.getPositivity(from, to);
+    const brandSales$ = this.sellersService.getSellsByBrand(from, to);
+
+    forkJoin([positivity$, brandSales$]).subscribe({
+      next: ([positivity, brandSales]) => {
+        this.positivity = positivity;
+        this.brandSales = brandSales;
+        this.vendedores = [];
+        this.topSellerName = '';
+        this.marcaCorMap = {};
+        this.corIndex = 0;
+
+        // 🔁 Regerar mapa de cores
+        const allMarcas = new Set<string>();
+        Object.values(this.brandSales).forEach((v) => Object.keys(v.marcas).forEach((m) => allMarcas.add(m)));
+        allMarcas.forEach((marca) => {
+          this.marcaCorMap[marca] = CORES[this.corIndex % CORES.length];
+          this.corIndex++;
+        });
+
+        // 🔁 Atualizar vendedores
+        this.vendedores = Object.entries(this.brandSales).map(([nome, vendedor]) => {
+          const marcasList = Object.entries(vendedor.marcas).map(([marca, data]) => ({
+            nome: marca,
+            valor: data.valor,
+            cor: this.marcaCorMap[marca] || '#999999',
+          }));
+          return {
+            nome,
+            totalFaturado: vendedor.totalFaturado,
+            totalPedidos: vendedor.totalPedidos,
+            marcasList,
+          };
+        });
+
+        // 🏆 Atualizar vendedor com maior faturamento (exceto Azzo)
+        this.topSellerName = this.vendedores
+          .filter((v) => v.nome !== 'Azzo')
+          .reduce((max, current) => (current.totalFaturado > max.totalFaturado ? current : max)).nome;
+
+        // 🔄 Redesenhar
+        this.cdr.detectChanges();
+        this.destroyCharts();
+
+        if (this.viewMode === 'barra') {
+          this.renderChartsBarOnly();
+        } else {
+          this.onViewModeChange();
+        }
+      },
+      error: (err) => console.error('Erro ao atualizar positividade e vendas:', err),
+    });
   }
 }

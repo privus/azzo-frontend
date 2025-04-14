@@ -43,16 +43,16 @@ export class SellService {
     return this.http.get<Ranking>(`${this.baseUrl}sells/ranking`);
   }
 
-  getSellsByBrand(): Observable<BrandSales> {
-    return this.http.get<BrandSales>(`${this.baseUrl}sells/brand`);
+  getSellsByBrand(fromDate: string, toDate?: string): Observable<BrandSales> {
+    return this.http.get<BrandSales>(`${this.baseUrl}sells/brand?fromDate=${fromDate}${toDate}`);
   }
 
   getCommissions(): Observable<Commissions[]> {
     return this.http.get<Commissions[]>(`${this.baseUrl}sells/commissions`);
   }
 
-  getPositivity(): Observable<PositivityByBrandResponse> {
-    return this.http.get<PositivityByBrandResponse>(`${this.baseUrl}sells/brandPositivity`);
+  getPositivity(fromDate: string, toDate?: string): Observable<PositivityByBrandResponse> {
+    return this.http.get<PositivityByBrandResponse>(`${this.baseUrl}sells/brandPositivity?fromDate=${fromDate}${toDate}`);
   }
 
   addVolumeSell(id: number, volume: number) {
