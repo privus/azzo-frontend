@@ -52,7 +52,7 @@ export class CustomersDetailsComponent implements OnInit {
       bairro: [{ value: '', disabled: true }],
       num_endereco: [{ value: '', disabled: true }],
       complemento: [{ value: '', disabled: true }],
-      categoria_cliente: [{ value: '', disabled: true }],
+      categoria: [{ value: '', disabled: true }],
       codigo: [{ value: '', disabled: true }],
     });
   }
