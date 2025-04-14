@@ -53,6 +53,7 @@ export class CustomersDetailsComponent implements OnInit {
       num_endereco: [{ value: '', disabled: true }],
       complemento: [{ value: '', disabled: true }],
       categoria: [{ value: '', disabled: true }],
+      codigo: [{ value: '', disabled: true }],
     });
   }
 
@@ -74,7 +75,8 @@ export class CustomersDetailsComponent implements OnInit {
       bairro: customer.bairro,
       num_endereco: customer.num_endereco,
       complemento: customer.complemento,
-      categoria: customer.categoria,
+      categoria: customer.categoria.nome,
+      codigo: customer.codigo,
     });
   }
 
