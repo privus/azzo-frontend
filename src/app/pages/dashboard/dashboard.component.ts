@@ -30,6 +30,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       nome,
       valor,
     }));
+    const entries = Object.entries(this.salesPerformance.faturamentoPorMarcaMesAtual);
+    this.marcas = entries.map(([nome, valor]) => ({ nome, valor }));
+
     this.percentualPermance = this.salesPerformance.variacaoPercentual - 100;
   }
 
