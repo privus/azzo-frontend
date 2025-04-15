@@ -9,8 +9,8 @@ Chart.register(...registerables);
 
 const CORES = [
   '#1B5E20', // verde escuro
-  '#50CD89', // verde
   '#009EF7', // azul
+  '#50CD89', // verde
   '#FF69B4', // pink
   '#5E6278', // cinza escuro
   '#FFC700', // amarelo
