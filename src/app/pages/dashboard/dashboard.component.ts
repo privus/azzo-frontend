@@ -30,15 +30,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       nome,
       valor,
     }));
-    const entries = Object.entries(this.salesPerformance.faturamentoPorMarcaMesAtual);
-
-    // Garante que a ordem das marcas siga a ordem das cores
-    this.marcas = entries.map(([nome, valor], index) => ({
-      nome,
-      valor,
-      cor: this.CORES[index % this.CORES.length],
-    }));
-
     this.percentualPermance = this.salesPerformance.variacaoPercentual - 100;
   }
 
