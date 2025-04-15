@@ -12,6 +12,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   salesPerformance: SalesComparisonReport;
   marcas: { nome: string; valor: number; cor: string }[] = [];
   percentualPermance: number = 0;
+  mesAtual: string = new Date().toLocaleString('default', { month: 'long' });
   readonly CORES = [
     '#1B5E20', // H2O
     '#50CD89', // Green

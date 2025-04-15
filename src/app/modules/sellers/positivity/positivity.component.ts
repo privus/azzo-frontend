@@ -11,9 +11,9 @@ const CORES = [
   '#1B5E20', // verde escuro
   '#50CD89', // verde
   '#009EF7', // azul
-  '#FFC700', // amarelo
-  '#5E6278', // cinza escuro
   '#FF69B4', // pink
+  '#5E6278', // cinza escuro
+  '#FFC700', // amarelo
 ];
 Chart.register({
   id: 'centerTextPlugin',
