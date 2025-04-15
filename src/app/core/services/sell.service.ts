@@ -4,6 +4,7 @@ import { Order, Ranking, UpdateSellStatus } from '../../modules/commerce/models'
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { BrandSales, Commissions, PositivityByBrandResponse } from '../../modules/sellers/models';
+import { SalesComparisonReport } from 'src/app/pages/models/performance.modal';
 
 @Injectable()
 export class SellService {
@@ -57,5 +58,11 @@ export class SellService {
 
   addVolumeSell(id: number, volume: number) {
     return this.http.get<{ message: string }>(`${this.baseUrl}sells/vol/${id}?volume=${volume}`);
+  }
+
+  performanceSales(fromDate1: string, toDate1: string, fromDate2: string, toDate2: string) {
+    return this.http.get<SalesComparisonReport>(
+      `${this.baseUrl}sells/salesPerformance?fromDate1=${fromDate1}&toDate1=${toDate1}&fromDate2=${fromDate2}&toDate2=${toDate2}`,
+    );
   }
 }

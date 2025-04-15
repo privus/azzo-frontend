@@ -44,4 +44,8 @@ export class OrderService {
   getSellerRanking() {
     return this.sellService.getSellerRanking();
   }
+
+  getPerformanceSales(fromDate1: string, toDate1: string, fromDate2: string, toDate2: string) {
+    return this.sellService.performanceSales(fromDate1, toDate1, fromDate2, toDate2);
+  }
 }
