@@ -10,26 +10,37 @@ import Chart from 'chart.js/auto';
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
   salesPerformance: SalesComparisonReport;
-  marcas: { nome: string; valor: number }[] = [];
+  marcas: { nome: string; valor: number; cor: string }[] = [];
   percentualPermance: number = 0;
   readonly CORES = [
-    '#1B5E20', // verde escuro
-    '#50CD89', // verde
-    '#009EF7', // azul
-    '#FFC700', // amarelo
-    '#5E6278', // cinza escuro
-    '#FF69B4', // pink
+    '#1B5E20', // H2O
+    '#50CD89', // Green
+    '#009EF7', // Viceroy
+    '#FFC700', // Purelli
+    '#5E6278', // Black Fix
+    '#FF69B4', // Vidal
   ];
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.salesPerformance = this.route.snapshot.data['salesPerformance'];
+    const faturamento = this.salesPerformance.faturamentoPorMarcaMesAtual;
 
-    this.marcas = Object.entries(this.salesPerformance.faturamentoPorMarcaMesAtual).map(([nome, valor]) => ({
-      nome,
-      valor,
-    }));
+    // Ordem fixa das marcas com suas cores definidas
+    const ordemMarcas = ['H2O', 'Green', 'Viceroy', 'Purelli', 'Black Fix', 'Vidal'];
+
+    // Atribui marca, valor e cor conforme ordem fixa
+    this.marcas = ordemMarcas
+      .filter((nome) => faturamento[nome] !== undefined)
+      .map((nome, index) => ({
+        nome,
+        valor: faturamento[nome],
+        cor: this.CORES[index],
+      }))
+      // 🔽 ordena visualização por valor crescente
+      .sort((a, b) => a.valor - b.valor);
+
     this.percentualPermance = this.salesPerformance.variacaoPercentual - 100;
   }
 
@@ -48,7 +59,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         datasets: [
           {
             data: this.marcas.map((m) => m.valor),
-            backgroundColor: this.marcas.map((_, i) => this.CORES[i % this.CORES.length]),
+            backgroundColor: this.marcas.map((m) => m.cor), // usa cor da marca
           },
         ],
       },
