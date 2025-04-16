@@ -42,8 +42,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }))
       // 🔽 ordena visualização por valor crescente
       .sort((a, b) => a.valor - b.valor);
-
-    this.percentualPermance = this.salesPerformance.variacaoPercentual - 100;
   }
 
   ngAfterViewInit(): void {
