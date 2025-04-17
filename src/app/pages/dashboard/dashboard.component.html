@@ -48,6 +48,10 @@
         <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
           {{ debtsPerformance.DepesasMesAtual | number: '1.2-2' }}
         </span>
+        <span class="badge fs-base" [ngClass]="getBadgeClass()">
+          <i class="ki-duotone fs-10 ms-n1" [ngClass]="getBadgeIcon()"><span class="path1"></span><span class="path2"></span></i>
+          {{ debtsPerformance.variacaoPercentual | number: '1.2-2' }}%
+        </span>
       </div>
       <span class="text-gray-500 pt-1 fw-semibold fs-6">Despesas {{ mesAtual | titlecase }}</span>
     </div>

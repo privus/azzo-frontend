@@ -28,8 +28,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.salesPerformance = this.route.snapshot.data['salesPerformance'];
-    this.debtsPerformance = this.route.snapshot.data['debtsPerformance']; // <- corrigido
-
+    this.debtsPerformance = this.route.snapshot.data['debtsPerformance'];
+    console.log('Debitos ==================', this.debtsPerformance);
     const faturamento = this.salesPerformance.faturamentoPorMarcaMesAtual;
     const ordemMarcas = ['H2O', 'Green', 'Viceroy', 'Purelli', 'Black Fix', 'Vidal'];
     this.marcas = ordemMarcas
@@ -112,7 +112,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       },
     });
   }
- 
 
   getBadgeClass(): string {
     switch (this.salesPerformance.direcao) {
