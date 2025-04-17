@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SalesComparisonReport, Direcao, DebtsComparisonReport } from '../models';
+import { SalesComparisonReport, DebtsComparisonReport } from '../models';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -57,6 +57,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.buildChartDebts(); // <- adicionado
     }, 0);
   }
+  
 
   buildChart(): void {
     const ctx = document.getElementById('chart-marcas') as HTMLCanvasElement;
@@ -112,8 +113,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getBadgeClass(direcao: Direcao): string {
-    switch (direcao) {
+  getBadgeClass(): string {
+    switch (this.salesPerformance.direcao) {
       case 'aumento':
         return 'badge-light-success';
       case 'queda':
@@ -123,8 +124,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getBadgeIcon(direcao: Direcao): string {
-    switch (direcao) {
+  getBadgeIcon(): string {
+    switch (this.salesPerformance.direcao) {
       case 'aumento':
         return 'ki-arrow-up text-success';
       case 'queda':
