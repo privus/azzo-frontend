@@ -21,4 +21,9 @@ export class SellersService {
     const to = toDate ? `&toDate=${toDate}` : '';
     return this.sellService.getPositivity(fromDate, to);
   }
+
+  getPositivityAzzo(fromDate: string, toDate?: string) {
+    const to = toDate ? `&toDate=${toDate}` : '';
+    return this.sellService.getPositivityAzzo(fromDate, to);
+  }
 }

@@ -41,7 +41,8 @@ Chart.register({
 })
 export class PositivityComponent implements OnInit, AfterViewInit {
   brandSales: BrandSales | null = null;
-  positivity: PositivityByBrandResponse | null = null;
+  positivity: PositivityByBrandResponse;
+  positivityAzzo: VendedorPositivacao;
   vendedores: VendedorDisplay[] = [];
   topSellerName: string = '';
   marcaCorMap: Record<string, string> = {}; // <- Mapa global de cores por marca
@@ -63,7 +64,8 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.brandSales = this.route.snapshot.data['brandSales'];
     this.positivity = this.route.snapshot.data['positivity'];
-    console.log('posivitivy ==========>', this.positivity);
+    this.positivityAzzo = this.route.snapshot.data['positivityAzzo'];
+    console.log('posivitivy ==========>', this.positivityAzzo);
 
     if (this.brandSales) {
       const allMarcas = new Set<string>();
@@ -109,7 +111,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     this.createStackedBarChart('stacked-bar-chart', this.vendedores);
 
     if (this.positivity) {
-      const { Azzo: _, ...positivitySemAzzo } = this.positivity;
+      const positivitySemAzzo = this.positivity;
 
       if (this.graficoPositivacao === 'geral') {
         setTimeout(() => this.positivacaoGeral('bar-chart-geral', positivitySemAzzo));
@@ -118,8 +120,12 @@ export class PositivityComponent implements OnInit, AfterViewInit {
       }
 
       this.contribuicaoPorMarca('bar-chart-contribuicao', positivitySemAzzo);
-      this.positivacaoAzzo('chart-positivacao-azzo', this.positivity);
-      this.clientesAbsolutoPorMarcaAzzo('chart-clientes-azzo-contrib', _);
+
+      // ✅ Usar Azzo como VendedorPositivacao
+      this.positivacaoAzzo('chart-positivacao-azzo', { Azzo: this.positivityAzzo });
+      this.clientesAbsolutoPorMarcaAzzo('chart-clientes-azzo-contrib', this.positivityAzzo);
+
+      // ✅ Aqui sim vai PositivityByBrandResponse
       this.clientesAbsolutoPorMarca('bar-chart-clientes-absolutos', positivitySemAzzo);
     }
   }
@@ -704,7 +710,7 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   }
 
   positivityChange() {
-    const { Azzo: _, ...positivitySemAzzo } = this.positivity || {};
+    const positivitySemAzzo = this.positivity;
 
     if (this.graficoPositivacao === 'geral') {
       setTimeout(() => this.positivacaoGeral('bar-chart-geral', positivitySemAzzo));
@@ -715,17 +721,26 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     } else if (this.graficoPositivacao === 'clientesContribuicao') {
       setTimeout(() => {
         this.clientesAbsolutoPorMarca('bar-chart-clientes-absolutos', positivitySemAzzo);
-        this.clientesAbsolutoPorMarcaAzzo('chart-positivacao-azzo', _);
+        this.clientesAbsolutoPorMarcaAzzo('chart-positivacao-azzo', this.positivityAzzo); // ✅
       });
     }
   }
 
   positivityAzzoChange() {
-    if (this.graficoPositivacaoAzzo === 'geral') {
-      setTimeout(() => this.positivacaoAzzo('chart-positivacao-azzo', this.positivity || {}));
-    } else if (this.graficoPositivacaoAzzo === 'contribuicao') {
-      setTimeout(() => this.clientesAbsolutoPorMarcaAzzo('chart-clientes-azzo-contrib', this.positivity?.Azzo));
-    }
+    const geralId = 'chart-positivacao-azzo';
+    const contribId = 'chart-clientes-azzo-contrib';
+
+    // 💣 Destrói ambos sempre
+    this.chartInstances[geralId]?.destroy?.();
+    this.chartInstances[contribId]?.destroy?.();
+
+    setTimeout(() => {
+      if (this.graficoPositivacaoAzzo === 'geral') {
+        this.positivacaoAzzo(geralId, { Azzo: this.positivityAzzo });
+      } else if (this.graficoPositivacaoAzzo === 'contribuicao') {
+        this.clientesAbsolutoPorMarcaAzzo(contribId, this.positivityAzzo);
+      }
+    });
   }
 
   clientesAbsolutoPorMarca(canvasId: string, data: PositivityByBrandResponse) {
@@ -847,51 +862,62 @@ export class PositivityComponent implements OnInit, AfterViewInit {
     const ctx = document.getElementById(canvasId) as HTMLCanvasElement;
     if (!ctx || !data) return;
 
-    // 🔁 Destroy previous chart instance if exists
     this.chartInstances[canvasId]?.destroy?.();
 
-    const marcas = Object.keys(data.marcas);
-    const dataset = marcas.map((marca) => {
-      const contrib = data.marcas[marca]?.contribuicaoPercentual || 0;
-      return {
-        label: marca,
-        data: [(data.clientesPositivados || 0) * (contrib / 100)],
-        backgroundColor: this.marcaCorMap[marca] || '#999999',
-        contribPercent: contrib,
-      };
-    });
+    const marcaData = Object.entries(data.marcas)
+      .map(([marca, info]) => ({
+        marca,
+        valor: info.clientesPositivados || 0,
+        cor: this.marcaCorMap[marca] || '#999999',
+      }))
+      .sort((a, b) => b.valor - a.valor);
+
+    const labels = marcaData.map((m) => m.marca);
+    const valores = marcaData.map((m) => m.valor);
+    const cores = marcaData.map((m) => m.cor);
 
     this.chartInstances[canvasId] = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Azzo'],
-        datasets: dataset,
+        labels,
+        datasets: [
+          {
+            label: 'Clientes Positivados',
+            data: valores,
+            backgroundColor: cores,
+          },
+        ],
       },
       options: {
         responsive: true,
         plugins: {
-          legend: { position: 'top' },
+          legend: { display: false },
           tooltip: {
             callbacks: {
               label: (ctx) => {
-                const marca = ctx.dataset.label || '';
                 const valor = ctx.raw as number;
-                const percent = (ctx.dataset as any).contribPercent || 0;
-                const total = data.clientesPositivados || 0;
-                return `${marca}: ${valor.toFixed(0)} clientes (${percent.toFixed(2)}% de ${total})`;
+                return `${ctx.label}: ${valor} clientes`;
               },
             },
           },
         },
         scales: {
-          x: { stacked: true },
-          y: {
-            stacked: true,
+          x: {
             title: {
               display: true,
-              text: 'Clientes Positivados (Azzo)',
+              text: 'Marca',
             },
-            ticks: { stepSize: 10 },
+          },
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Clientes Positivados',
+            },
+            ticks: {
+              stepSize: 5,
+              precision: 0,
+            },
           },
         },
       },
@@ -1012,10 +1038,12 @@ export class PositivityComponent implements OnInit, AfterViewInit {
   private updatePositivityBrandSales(from: string, to?: string) {
     const positivity$ = to ? this.sellersService.getPositivity(from, to) : this.sellersService.getPositivity(from);
     const brandSales$ = to ? this.sellersService.getSellsByBrand(from, to) : this.sellersService.getSellsByBrand(from);
+    const positivityAzzo$ = to ? this.sellersService.getPositivityAzzo(from, to) : this.sellersService.getPositivityAzzo(from);
 
-    forkJoin([positivity$, brandSales$]).subscribe({
-      next: ([positivity, brandSales]) => {
+    forkJoin([positivity$, brandSales$, positivityAzzo$]).subscribe({
+      next: ([positivity, brandSales, positivityAzzo]) => {
         this.positivity = positivity;
+        this.positivityAzzo = positivityAzzo;
         this.brandSales = brandSales;
         this.vendedores = [];
         this.topSellerName = '';

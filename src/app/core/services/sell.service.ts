@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Order, Ranking, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { BrandSales, Commissions, PositivityByBrandResponse } from '../../modules/sellers/models';
+import { BrandSales, Commissions, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
 import { SalesComparisonReport } from 'src/app/pages/models/performance.modal';
 
 @Injectable()
@@ -54,6 +54,10 @@ export class SellService {
 
   getPositivity(fromDate: string, toDate?: string): Observable<PositivityByBrandResponse> {
     return this.http.get<PositivityByBrandResponse>(`${this.baseUrl}sells/brandPositivity?fromDate=${fromDate}${toDate}`);
+  }
+
+  getPositivityAzzo(fromDate: string, toDate?: string): Observable<VendedorPositivacao> {
+    return this.http.get<VendedorPositivacao>(`${this.baseUrl}sells/brandPositivityAzzo?fromDate=${fromDate}${toDate}`);
   }
 
   addVolumeSell(id: number, volume: number) {

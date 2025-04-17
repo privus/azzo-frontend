@@ -13,6 +13,6 @@ export interface VendedorPositivacao {
 
 export interface MarcaPositivacao {
   clientesPositivados: number;
-  positivacaoMarca: number; // Ex: "16.48%"
-  contribuicaoPercentual: number; // Ex: "89.16%"
+  positivacaoMarca: number;
+  contribuicaoPercentual: number;
 }
