@@ -13,6 +13,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   debtsPerformance: DebtsComparisonReport;
   marcas: { nome: string; valor: number; cor: string }[] = [];
   departamentos: { nome: string; valor: number; cor: string }[] = [];
+  categorias: { nome: string; valor: number; cor: string }[] = [];
+  filtroDespesas: 'departamento' | 'categoria' = 'departamento';
+  private chartDebtsInstance: Chart | null = null;
+
   percentualPermance: number = 0;
   mesAtual: string = new Date().toLocaleString('default', { month: 'long' });
   readonly CORES = [
@@ -46,6 +50,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       .map((nome, index) => ({
         nome,
         valor: fatDeps[nome],
+        cor: this.CORES[index % this.CORES.length],
+      }))
+      .sort((a, b) => a.valor - b.valor);
+
+    const fatCats = this.debtsPerformance.despesasCategoria;
+    this.categorias = Object.keys(fatCats)
+      .map((nome, index) => ({
+        nome,
+        valor: fatCats[nome],
         cor: this.CORES[index % this.CORES.length],
       }))
       .sort((a, b) => a.valor - b.valor);
@@ -89,7 +102,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const ctx = document.getElementById('chart-departamentos') as HTMLCanvasElement;
     if (!ctx) return;
 
-    new Chart(ctx, {
+    // 🔥 Destroy previous chart instance if it exists
+    if (this.chartDebtsInstance) {
+      this.chartDebtsInstance.destroy();
+    }
+
+    this.chartDebtsInstance = new Chart(ctx, {
       type: 'doughnut',
       data: {
         labels: this.departamentos.map((d) => d.nome),
@@ -104,9 +122,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         responsive: true,
         cutout: '70%',
         plugins: {
-          legend: {
-            display: false,
-          },
+          legend: { display: false },
         },
       },
     });

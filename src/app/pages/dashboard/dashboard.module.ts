@@ -6,11 +6,13 @@ import { ModalsModule } from '../../_metronic/partials';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { SalesComparisonResolver } from './sales-comparison.resolver';
 import { DebtsComparisonResolver } from './debts-comparison.resolver';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule.forChild([
       {
         path: '',

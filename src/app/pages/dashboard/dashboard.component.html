@@ -45,23 +45,32 @@
 </div>
 <div class="card card-flush h-md-25 mb-5 mb-xl-10" style="width: 350px; float: left; margin-left: 20px;">
   <div class="card-header pt-5">
-    <div class="card-title d-flex flex-column">
-      <div class="d-flex align-items-center">
-        <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
-        <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
-          {{ debtsPerformance.DepesasMesAtual | number: '1.2-2' }}
-        </span>
-        <span class="badge fs-base" [ngClass]="getBadgeClass(debtsPerformance.direcao)">
-          <i class="ki-duotone fs-10 ms-n1" [ngClass]="getBadgeIcon(debtsPerformance.direcao)">
-            <span class="path1"></span><span class="path2"></span>
-          </i>
-          {{ debtsPerformance.variacaoPercentual | number: '1.2-2' }}%
-        </span>
-        
+    <div class="d-flex justify-content-between align-items-start w-100">
+      <div class="card-title d-flex flex-column">
+        <div class="d-flex align-items-center">
+          <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
+          <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
+            {{ debtsPerformance.DepesasMesAtual | number: '1.2-2' }}
+          </span>
+          <span class="badge fs-base" [ngClass]="getBadgeClass(debtsPerformance.direcao)">
+            <i class="ki-duotone fs-10 ms-n1" [ngClass]="getBadgeIcon(debtsPerformance.direcao)">
+              <span class="path1"></span><span class="path2"></span>
+            </i>
+            {{ debtsPerformance.variacaoPercentual | number: '1.2-2' }}%
+          </span>
+        </div>
+        <span class="text-gray-500 pt-1 fw-semibold fs-6">Despesas {{ mesAtual | titlecase }}</span>
       </div>
-      <span class="text-gray-500 pt-1 fw-semibold fs-6">Despesas {{ mesAtual | titlecase }}</span>
+  
+      <div class="pt-2 mt-9 ms-n17">
+        <select class="form-select form-select-sm form-select-solid w-125px" [(ngModel)]="filtroDespesas" (change)="buildChartDebts()">
+          <option value="departamento">Departamento</option>
+          <option value="categoria">Categoria</option>
+        </select>
+      </div> 
     </div>
   </div>
+  
 
   <div class="card-body pt-2 pb-4 d-flex flex-column align-items-center">
     <div class="d-flex flex-center pt-2 mb-4">
@@ -72,17 +81,17 @@
 
     <div class="d-flex flex-column w-100">
       <div
-        *ngFor="let depto of departamentos; let i = index"
+        *ngFor="let item of (filtroDespesas === 'departamento' ? departamentos : categorias); let i = index"
         class="d-flex fw-semibold align-items-center my-2 justify-content-between"
       >
         <div class="d-flex align-items-center">
-          <div class="bullet w-8px h-5px rounded-2 me-3" [style.backgroundColor]="depto.cor"></div>
-          <div class="text-gray-500">{{ depto.nome }}</div>
+          <div class="bullet w-8px h-5px rounded-2 me-3" [style.backgroundColor]="item.cor"></div>
+          <div class="text-gray-500">{{ item.nome }}</div>
         </div>
         <div class="fw-bolder text-gray-700 text-end">
-          R$ {{ depto.valor | number: '1.2-2' }}
+          R$ {{ item.valor | number: '1.2-2' }}
         </div>
-      </div>
+      </div>    
     </div>
   </div>
 </div>
