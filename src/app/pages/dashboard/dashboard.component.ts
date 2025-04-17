@@ -56,10 +56,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     const fatCats = this.debtsPerformance.despesasCategoria;
     this.categorias = Object.keys(fatCats)
-      .map((nome, index) => ({
+      .map((nome) => ({
         nome,
         valor: fatCats[nome],
-        cor: this.CORES[index % this.CORES.length],
+        cor: this.getRandomColor(),
       }))
       .sort((a, b) => a.valor - b.valor);
   }
@@ -69,6 +69,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.buildChart();
       this.buildChartDebts(); // <- adicionado
     }, 0);
+  }
+
+  private getRandomColor(): string {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   }
 
   buildChart(): void {
@@ -102,19 +111,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const ctx = document.getElementById('chart-departamentos') as HTMLCanvasElement;
     if (!ctx) return;
 
-    // 🔥 Destroy previous chart instance if it exists
     if (this.chartDebtsInstance) {
       this.chartDebtsInstance.destroy();
     }
 
+    const dataSet = this.filtroDespesas === 'categoria' ? this.categorias : this.departamentos;
+
     this.chartDebtsInstance = new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: this.departamentos.map((d) => d.nome),
+        labels: dataSet.map((item) => item.nome),
         datasets: [
           {
-            data: this.departamentos.map((d) => d.valor),
-            backgroundColor: this.departamentos.map((d) => d.cor),
+            data: dataSet.map((item) => item.valor),
+            backgroundColor: dataSet.map((item) => item.cor),
           },
         ],
       },
