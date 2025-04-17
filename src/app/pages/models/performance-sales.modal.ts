@@ -8,3 +8,5 @@ export interface SalesComparisonReport {
     [marca: string]: number;
   };
 }
+
+export type Direcao = 'aumento' | 'queda' | 'neutro';
