@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { UpdateInstallment, Debt, Departamento, Credit, Categoria, NewDebt, NewCredit, UpdateDebtStatus } from '../../modules/financial/models';
+import { DebtsComparisonReport } from '../../pages/models/performance-debts.model';
 
 @Injectable()
 export class FinancialService {
@@ -64,5 +65,11 @@ export class FinancialService {
 
   updateStatusDebt(updateDebtStatus: UpdateDebtStatus) {
     return this.http.patch<{ message: string }>(`${this.baseUrl}debts/status`, updateDebtStatus);
+  }
+
+  performanceDebts(fromDate1: string, toDate1: string, fromDate2: string, toDate2: string) {
+    return this.http.get<DebtsComparisonReport>(
+      `${this.baseUrl}debts/debtsReport?fromDate1=${fromDate1}&toDate1=${toDate1}&fromDate2=${fromDate2}&toDate2=${toDate2}`,
+    );
   }
 }

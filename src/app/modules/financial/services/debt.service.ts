@@ -44,4 +44,8 @@ export class DebtService {
   updateStatusDebt(updateDebtStatus: UpdateDebtStatus) {
     return this.financialService.updateStatusDebt(updateDebtStatus);
   }
+
+  getPerformanceDebts(fromDate1: string, toDate1: string, fromDate2: string, toDate2: string) {
+    return this.financialService.performanceDebts(fromDate1, toDate1, fromDate2, toDate2);
+  }
 }

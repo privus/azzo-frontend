@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SalesComparisonReport } from '../models/performance.modal';
+import { SalesComparisonReport, DebtsComparisonReport } from '../models';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -10,7 +10,9 @@ import Chart from 'chart.js/auto';
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
   salesPerformance: SalesComparisonReport;
+  debtsPerformance: DebtsComparisonReport;
   marcas: { nome: string; valor: number; cor: string }[] = [];
+  departamentos: { nome: string; valor: number; cor: string }[] = [];
   percentualPermance: number = 0;
   mesAtual: string = new Date().toLocaleString('default', { month: 'long' });
   readonly CORES = [
@@ -26,13 +28,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.salesPerformance = this.route.snapshot.data['salesPerformance'];
-    console.log('Performance Sales =====>', this.salesPerformance);
+    this.debtsPerformance = this.route.snapshot.data['debtsPerformance']; // <- corrigido
+
     const faturamento = this.salesPerformance.faturamentoPorMarcaMesAtual;
-
-    // Ordem fixa das marcas com suas cores definidas
     const ordemMarcas = ['H2O', 'Green', 'Viceroy', 'Purelli', 'Black Fix', 'Vidal'];
-
-    // Atribui marca, valor e cor conforme ordem fixa
     this.marcas = ordemMarcas
       .filter((nome) => faturamento[nome] !== undefined)
       .map((nome, index) => ({
@@ -40,13 +39,25 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         valor: faturamento[nome],
         cor: this.CORES[index],
       }))
-      // 🔽 ordena visualização por valor crescente
+      .sort((a, b) => a.valor - b.valor);
+
+    const fatDeps = this.debtsPerformance.despesasDepartamento;
+    this.departamentos = Object.keys(fatDeps)
+      .map((nome, index) => ({
+        nome,
+        valor: fatDeps[nome],
+        cor: this.CORES[index % this.CORES.length],
+      }))
       .sort((a, b) => a.valor - b.valor);
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.buildChart(), 0);
+    setTimeout(() => {
+      this.buildChart();
+      this.buildChartDebts(); // <- adicionado
+    }, 0);
   }
+  
 
   buildChart(): void {
     const ctx = document.getElementById('chart-marcas') as HTMLCanvasElement;
@@ -74,6 +85,34 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       },
     });
   }
+
+  buildChartDebts(): void {
+    const ctx = document.getElementById('chart-departamentos') as HTMLCanvasElement;
+    if (!ctx) return;
+
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: this.departamentos.map((d) => d.nome),
+        datasets: [
+          {
+            data: this.departamentos.map((d) => d.valor),
+            backgroundColor: this.departamentos.map((d) => d.cor),
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        cutout: '70%',
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+    });
+  }
+ 
 
   getBadgeClass(): string {
     switch (this.salesPerformance.direcao) {

@@ -4,7 +4,7 @@ import { Order, Ranking, UpdateSellStatus } from '../../modules/commerce/models'
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { BrandSales, Commissions, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
-import { SalesComparisonReport } from 'src/app/pages/models/performance.modal';
+import { SalesComparisonReport } from 'src/app/pages/models/performance-sales.modal';
 
 @Injectable()
 export class SellService {

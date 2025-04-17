@@ -4,7 +4,8 @@ import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { ModalsModule } from '../../_metronic/partials';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
-import { DashboardResolver } from './dashboard.resolver';
+import { SalesComparisonResolver } from './sales-comparison.resolver';
+import { DebtsComparisonResolver } from './debts-comparison.resolver';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -15,7 +16,8 @@ import { DashboardResolver } from './dashboard.resolver';
         path: '',
         component: DashboardComponent,
         resolve: {
-          salesPerformance: DashboardResolver,
+          salesPerformance: SalesComparisonResolver,
+          debtsPerformance: DebtsComparisonResolver,
         },
         canActivate: [AuthGuard],
       },

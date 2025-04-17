@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { OrderService } from '../../modules/commerce/services/order.service';
 import { Observable } from 'rxjs';
-import { SalesComparisonReport } from '../models/performance.modal';
+import { SalesComparisonReport } from '../models/performance-sales.modal';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DashboardResolver implements Resolve<SalesComparisonReport> {
+export class SalesComparisonResolver implements Resolve<SalesComparisonReport> {
   constructor(private orderService: OrderService) {}
 
   resolve(): Observable<SalesComparisonReport> {
