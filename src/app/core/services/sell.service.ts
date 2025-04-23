@@ -21,7 +21,7 @@ export class SellService {
   }
 
   getOrderById(id: number) {
-    return this.http.get<Order>(`${this.baseUrl}sells/${id}`);
+    return this.http.get<Order>(`${this.baseUrl}sells/code${id}`);
   }
 
   getOrdersByDate(fromDate: string) {
