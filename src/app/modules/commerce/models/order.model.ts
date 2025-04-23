@@ -25,6 +25,10 @@ export interface Order {
   exportado: number;
   selected?: boolean;
   volume: number;
+  nfe_emitida: number;
+  numero_nfe: number;
+  data_emissao_nfe: string;
+  chave_acesso: string;
 }
 
 export interface Vendedor {

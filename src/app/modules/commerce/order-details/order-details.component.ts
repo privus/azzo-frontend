@@ -77,6 +77,9 @@ export class OrderDetailsComponent implements OnInit {
       cnpj: [{ value: '', disabled: true }],
       metodo: [{ value: '', disabled: true }],
       cidade: [{ value: '', disabled: true }],
+      chave_nfe: [{ value: '', disabled: true }],
+      data_emissao_nfe: [{ value: '', disabled: true }],
+      numero_nfe: [{ value: '', disabled: true }],
     });
   }
 
@@ -94,6 +97,9 @@ export class OrderDetailsComponent implements OnInit {
       cnpj: order.cliente.numero_doc,
       metodo: order.metodo_pagamento,
       cidade: order.cliente.cidade_string,
+      chave_nfe: order.chave_acesso,
+      data_emissao_nfe: order.data_emissao_nfe,
+      numero_nfe: order.numero_nfe,
     });
   }
 

@@ -66,6 +66,17 @@
                   disable
                 />
               </div>
+              <div *ngIf="order.nfe_emitida" class="w-100">
+                <label class="form-label">Nf-e</label>
+                <input
+                  type="text"
+                  name="nf"
+                  class="form-control mb-2"
+                  placeholder="Número Nf-e"
+                  formControlName="numero_nfe"
+                  disable
+                />
+              </div>
               <div class="w-100 mt-5"> <!-- Adicionando margem superior para deslocar para baixo -->
                 <span 
                   class="fw-bold text-gray-800" 
@@ -270,7 +281,7 @@
                           <label class="form-label">CNPJ</label>
                           <input
                             type="text"
-                            name="email"
+                            name="cnpj"
                             class="form-control"
                             placeholder="CNPJ"
                             formControlName="cnpj"
@@ -317,6 +328,34 @@
                           />
                         </div>
                       </div>
+                      <div *ngIf="order.nfe_emitida" class="card-body pt-0">
+                        <div class="row">
+                          <!-- Chave de Acesso -->
+                          <div class="col-md-8">
+                            <label class="form-label">Chave Acesso Nf-e</label>
+                            <input
+                              type="text"
+                              name="chave_acesso_nfe"
+                              class="form-control"
+                              placeholder="Chave Acesso Nf-e"
+                              formControlName="chave_nfe"
+                            />
+                          </div>
+                      
+                          <!-- Data de Emissão -->
+                          <div class="col-md-4">
+                            <label class="form-label">Data Emissão</label>
+                            <input
+                              type="text"
+                              name="data_emissao"
+                              class="form-control"
+                              [value]="order.data_emissao_nfe | date: 'dd/MM/yyyy'"
+                              disabled
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      
                     </div>
                   </div>
                   <!--end::General options-->

@@ -158,12 +158,16 @@
                         <td class="text-end">
                             <button
                                 class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-                                (click)="editOrder(order.venda_id)"       
+                                (click)="editOrder(order.codigo)"       
                             >
                                 <i class="ki-duotone ki-pencil fs-3">
                                     <span class="path1"></span><span class="path2"></span>
                                 </i>
                             </button>
+                            <div *ngIf="order.nfe_emitida" class="text-center d-flex position-absolute align-items-center ms-12">
+                                <span class="badge badge-light-primary fs-8">Nf-e</span>
+                            </div>
+
                             <button 
                                 type="button" 
                                 class="btn btn-icon btn-sm h-auto btn-color-gray-500 btn-active-color-primary justify-content-end"
