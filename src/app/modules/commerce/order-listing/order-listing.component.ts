@@ -6,12 +6,12 @@ import { OrderService } from '../services/order.service';
 import { SweetAlertOptions } from 'sweetalert2';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { BehaviorSubject } from 'rxjs';
-import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SellerRankingModalComponent } from '../seller-ranking-modal/seller-ranking-modal.component';
 import { PDFDocument } from 'pdf-lib';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-order-listing',

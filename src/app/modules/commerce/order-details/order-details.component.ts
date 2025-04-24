@@ -9,6 +9,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CreditModalComponent } from '../../financial/credit-modal/credit-modal.component';
 import { Credit } from '../../financial/models';
 import { Location } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-order-details',
@@ -80,6 +81,7 @@ export class OrderDetailsComponent implements OnInit {
       chave_nfe: [{ value: '', disabled: true }],
       data_emissao_nfe: [{ value: '', disabled: true }],
       numero_nfe: [{ value: '', disabled: true }],
+      obs: [{ value: '', disabled: true }],
     });
   }
 
@@ -100,6 +102,7 @@ export class OrderDetailsComponent implements OnInit {
       chave_nfe: order.chave_acesso,
       data_emissao_nfe: order.data_emissao_nfe,
       numero_nfe: order.numero_nfe,
+      obs: order.observacao,
     });
   }
 
@@ -145,5 +148,46 @@ export class OrderDetailsComponent implements OnInit {
 
   goBack(): void {
     this.location.back(); // Volta para a página anterior
+  }
+
+  exportTiny(id: number, uf: string, exportado: number): void {
+    let message = `Deseja exportar para o Tiny ${uf}?`;
+
+    // Se já foi exportado, exibe um aviso antes
+    if (exportado === 1) {
+      message = `Este pedido já foi exportado para o Tiny ${uf}. Deseja exportá-lo novamente?`;
+    }
+
+    Swal.fire({
+      title: 'Confirmação',
+      text: message,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, Exportar!',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Se o usuário confirmar, faz a exportação
+        this.orderService.exportTiny(id).subscribe({
+          next: (resp) => {
+            Swal.fire({
+              icon: 'success',
+              title: `Exportação concluída com sucesso! Tiny ${uf}`,
+              text: resp.message,
+              confirmButtonText: 'Ok',
+            });
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: `Erro na exportação! Tiny ${uf}`,
+              text: 'Não foi possível exportar o pedido. ' + err.error.message,
+              confirmButtonText: 'Ok',
+            });
+            console.error('Erro ao exportar para Tiny:', err);
+          },
+        });
+      }
+    });
   }
 }
