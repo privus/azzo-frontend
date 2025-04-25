@@ -252,7 +252,6 @@
                       <div class="card-title">
                         <h2>Informações Cliente</h2>
                       </div>               
-                      <!-- Botão: Baixar arquivos -->
                       <div class="d-flex gap-3 justify-content-start align-items-center mt-4 mt-md-0">
                         <button 
                           type="button" 
@@ -263,7 +262,8 @@
                         <button 
                           type="button" 
                           class="btn btn-flex btn-sm h-auto btn-color-gray-500 btn-active-color-primary" 
-                          (click)="downloadFiles(order.venda_id)">
+                          (click)="downloadFiles(order.venda_id)"
+                          [disabled]="!order.anexo">
                           <i class="bi bi-download fs-2"></i>Baixar
                         </button>
                         <button 

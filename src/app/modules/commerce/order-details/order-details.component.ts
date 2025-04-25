@@ -263,6 +263,6 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   triggerFileInput(): void {
-    this.fileInput.nativeElement.click(); // ⛏️ Força abertura
+    this.fileInput.nativeElement.click();
   }
 }

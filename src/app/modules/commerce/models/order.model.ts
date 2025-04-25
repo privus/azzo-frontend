@@ -29,6 +29,7 @@ export interface Order {
   numero_nfe: number;
   data_emissao_nfe: string;
   chave_acesso: string;
+  anexo: number;
 }
 
 export interface Vendedor {
