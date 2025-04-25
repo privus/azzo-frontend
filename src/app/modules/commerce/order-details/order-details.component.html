@@ -251,15 +251,28 @@
                     <div class="card-header">
                       <div class="card-title">
                         <h2>Informações Cliente</h2>
-                      </div>
-                      <button 
-                        type="button" 
-                        class="btn btn-icon btn-sm h-auto btn-color-gray-500 btn-active-color-primary justify-content-end"
-                        (click)="exportTiny(order.venda_id, order.cliente.cidade.estado.sigla, order.exportado)"
-                      >
-                      
-                        <i class="ki-duotone ki-exit-right-corner fs-2"><span class="path1"></span><span class="path2"></span></i>                
-                      </button>
+                      </div>               
+                      <!-- Botão: Baixar arquivos -->
+                      <div class="d-flex gap-3 justify-content-start align-items-center mt-4 mt-md-0">
+                        <button 
+                          type="button" 
+                          class="btn btn-flex btn-sm h-auto btn-color-gray-500 btn-active-color-primary"
+                          (click)="triggerFileInput()">
+                          <i class="ki-duotone ki-folder-up fs-2"><span class="path1"></span><span class="path2"></span></i>Anexar Boleto/Nf-e
+                        </button>
+                        <button 
+                          type="button" 
+                          class="btn btn-flex btn-sm h-auto btn-color-gray-500 btn-active-color-primary" 
+                          (click)="downloadFiles(order.venda_id)">
+                          <i class="bi bi-download fs-2"></i>Baixar
+                        </button>
+                        <button 
+                          type="button" 
+                          class="btn btn-icon btn-sm h-auto btn-color-gray-500 btn-active-color-primary"
+                          (click)="exportTiny(order.venda_id, order.cliente.cidade.estado.sigla, order.exportado)">
+                          <i class="ki-duotone ki-exit-right-corner fs-2"><span class="path1"></span><span class="path2"></span></i>
+                        </button>  
+                      </div>                      
                     </div>
                     <div class="card-body pt-0">
                       <div class="card-body pt-0">
@@ -513,5 +526,14 @@
     </div>
   </ng-template>
   <swal #noticeSwal [swalOptions]="swalOptions"></swal>
+  <input 
+  type="file"
+  #fileInput
+  class="d-none"
+  accept="application/pdf"
+  multiple
+  (change)="onFileChange($event)"
+  />
+
 
   

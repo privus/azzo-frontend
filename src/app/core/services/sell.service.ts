@@ -69,4 +69,10 @@ export class SellService {
       `${this.baseUrl}sells/salesPerformance?fromDate1=${fromDate1}&toDate1=${toDate1}&fromDate2=${fromDate2}&toDate2=${toDate2}`,
     );
   }
+
+  uploadFiles(vendaId: number, files: File[]) {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('files', file));
+    return this.http.post<{ message: string }>(`${this.baseUrl}files/upload/${vendaId}`, formData);
+  }
 }

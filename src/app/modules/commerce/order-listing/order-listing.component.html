@@ -131,6 +131,7 @@
                         <th class="min-w-125px">Tipo Pedido</th>
                         <th class="min-w-125px">Status Venda</th>
                         <th class="min-w-125px">Vendedor</th>
+                        <th></th>
                         <th class="text-end min-w-100px">Ações</th>
                     </tr>
                 </thead>
@@ -155,6 +156,19 @@
                             </span>  
                         </td>                                             
                         <td>{{ order.vendedor ? order.vendedor.nome : 'Vendedor Teste' }}</td>
+                        <td>                                
+                            <div class="text-center d-flex position-relative align-items-center">
+                                <span *ngIf="order.volume" class="badge badge-light-primary fs-8">
+                                    <i class="bi bi-box-seam">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    </i>
+                                </span>                              
+                            </div>
+                            <div *ngIf="order.nfe_emitida" class="justify-content-end">
+                                <span class="badge badge-light-primary fs-8">Nf-e</span>
+                            </div>                            
+                        </td>
                         <td class="text-end">
                             <button
                                 class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
@@ -164,9 +178,6 @@
                                     <span class="path1"></span><span class="path2"></span>
                                 </i>
                             </button>
-                            <div *ngIf="order.nfe_emitida" class="text-center d-flex position-absolute align-items-center ms-12">
-                                <span class="badge badge-light-primary fs-8">Nf-e</span>
-                            </div>
 
                             <button 
                                 type="button" 

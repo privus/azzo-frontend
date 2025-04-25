@@ -9,6 +9,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CreditModalComponent } from '../../financial/credit-modal/credit-modal.component';
 import { Credit } from '../../financial/models';
 import { Location } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -23,6 +25,10 @@ export class OrderDetailsComponent implements OnInit {
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
   private modalReference: NgbModalRef;
+  selectedFiles: File[] = [];
+  uploadedFiles: File[] = [];
+  @ViewChild('fileInput') fileInput!: any;
+  private baseUrl = environment.apiUrl;
 
   constructor(
     private fb: FormBuilder,
@@ -31,6 +37,7 @@ export class OrderDetailsComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private modalService: NgbModal,
     private location: Location,
+    private http: HttpClient,
   ) {}
 
   ngOnInit(): void {
@@ -189,5 +196,73 @@ export class OrderDetailsComponent implements OnInit {
         });
       }
     });
+  }
+
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      this.selectedFiles = Array.from(input.files);
+      console.log('Arquivos selecionados:', this.selectedFiles);
+      this.upload(); // Ou chame upload() aqui direto se quiser enviar imediatamente
+    }
+  }
+
+  downloadFiles(orderId: number): void {
+    this.http.get<any[]>(`${this.baseUrl}files/venda/${orderId}`).subscribe({
+      next: (files) => {
+        if (!files || files.length === 0) {
+          console.warn('Nenhum arquivo encontrado.');
+          return;
+        }
+
+        files.forEach((file) => {
+          this.http
+            .get(`${this.baseUrl}${file.path}`, {
+              responseType: 'blob',
+            })
+            .subscribe((blob) => {
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = file.filename;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              window.URL.revokeObjectURL(url);
+            });
+        });
+      },
+      error: (err) => {
+        console.error('Erro ao buscar arquivos:', err);
+      },
+    });
+  }
+
+  upload() {
+    this.orderService.uploadFiles(this.orderId, this.selectedFiles).subscribe({
+      next: (resp) => {
+        this.showAlert({
+          icon: 'success',
+          title: 'Arquivos enviados com sucesso!',
+          text: resp.message,
+          confirmButtonText: 'Ok',
+        });
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.showAlert({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Não foi possível enviar os arquivos.',
+          confirmButtonText: 'Ok',
+        });
+        this.cdr.detectChanges();
+        console.error(err);
+      },
+    });
+  }
+
+  triggerFileInput(): void {
+    this.fileInput.nativeElement.click(); // ⛏️ Força abertura
   }
 }
