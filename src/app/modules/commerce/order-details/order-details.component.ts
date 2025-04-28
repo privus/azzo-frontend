@@ -265,4 +265,8 @@ export class OrderDetailsComponent implements OnInit {
   triggerFileInput(): void {
     this.fileInput.nativeElement.click();
   }
+
+  openNfeLink(url: string): void {
+    window.open(url, '_blank');
+  }
 }
