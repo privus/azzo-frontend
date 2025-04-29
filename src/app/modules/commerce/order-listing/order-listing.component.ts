@@ -773,10 +773,12 @@ export class OrderListingComponent implements OnInit {
       const now = new Date();
       const diffDays = Math.floor((now.getTime() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
 
-      if (diffDays > 5) {
-        return 'bg-light-danger'; // vermelho claro
-      } else if (diffDays > 3) {
-        return 'bg-light-warning'; // amarelo claro
+      if (order.tipo_pedido.tipo_pedido_id === 10438) {
+        if (diffDays > 5) {
+          return 'bg-light-danger'; // vermelho claro
+        } else if (diffDays > 3) {
+          return 'bg-light-warning'; // amarelo claro
+        }
       }
     }
     return '';
