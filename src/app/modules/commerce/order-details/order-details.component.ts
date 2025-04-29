@@ -87,7 +87,7 @@ export class OrderDetailsComponent implements OnInit {
       cidade: [{ value: '', disabled: true }],
       chave_nfe: [{ value: '', disabled: true }],
       data_emissao_nfe: [{ value: '', disabled: true }],
-      numero_nfe: [{ value: '', disabled: true }],
+      numero_nfe: [{ value: '' }],
       obs: [{ value: '', disabled: true }],
     });
   }
@@ -111,13 +111,16 @@ export class OrderDetailsComponent implements OnInit {
       numero_nfe: order.numero_nfe,
       obs: order.observacao,
     });
+
+    if (order.numero_nfe) this.orderForm.controls['numero_nfe'].disable();
   }
 
   updateStatus(): void {
     const statusControl = this.orderForm.get('status');
     const status = statusControl ? statusControl.value : null;
+    const nfe = this.orderForm.get('numero_nfe')?.value;
     console.log('Updating status:', status);
-    this.orderService.updateSellStatus({ venda_id: this.orderId, status_venda_id: Number(status) }).subscribe({
+    this.orderService.updateSellStatus({ venda_id: this.orderId, status_venda_id: Number(status), numero_nfe: Number(nfe) }).subscribe({
       next: (resp) => {
         this.showAlert({
           icon: 'success',
