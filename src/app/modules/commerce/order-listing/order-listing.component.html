@@ -53,7 +53,31 @@
                 <span class="path1"></span>
                 <span class="path2"></span>
             </i>
-            </button>       
+            </button>
+            <button
+                class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                data-bs-placement="top"
+                aria-label="Reload"
+                data-bs-original-title="Reload"
+                (click)="syncroInvoiceNf()"
+            >
+            <i
+                class="ki-outline ki-loading text-primary fs-2"
+                [ngClass]="{ 'rotate': isLoading1$ | async }"
+            >
+                <span class="path1"></span>
+                <!-- Marca d'água -->
+                <span
+                    class="position-absolute top-50 start-50 translate-middle badge bg-light text-dark"
+                    style="opacity: 0.8; font-size: 0.9rem; pointer-events: none;"
+                >
+                    Nf-e
+                </span>
+                <span class="path2"></span>
+            </i>
+            </button>                        
 
             <div class="d-flex align-items-center position-relative my-1 ms-8">
               <select

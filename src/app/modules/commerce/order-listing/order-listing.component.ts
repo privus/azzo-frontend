@@ -35,6 +35,7 @@ export class OrderListingComponent implements OnInit {
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  isLoading1$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   sortDirection: 'asc' | 'desc' = 'asc';
   private baseUrl = environment.apiUrl;
   @ViewChild('rankingModal') rankingModal!: SellerRankingModalComponent;
@@ -104,6 +105,7 @@ export class OrderListingComponent implements OnInit {
           text: 'Não foi possível sincronizar os pedidos.',
           confirmButtonText: 'Ok',
         });
+        this.isLoading$.next(false);
         this.cdr.detectChanges();
         console.error(err);
       },
@@ -747,4 +749,30 @@ export class OrderListingComponent implements OnInit {
   //     }
   //   });
   // }
+
+  syncroInvoiceNf() {
+    this.isLoading1$.next(true);
+    this.orderService.syncroInvoiceNf().subscribe({
+      next: (resp) => {
+        this.showAlert({
+          icon: 'success',
+          title: 'Sincronização realizada com sucesso!',
+          text: resp.message,
+          confirmButtonText: 'Ok',
+        });
+        this.isLoading1$.next(false);
+        this.onDateRange();
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.showAlert({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Não foi possível sincronizar a NF.',
+          confirmButtonText: 'Ok',
+        });
+        console.error(err);
+      },
+    });
+  }
 }

@@ -75,4 +75,8 @@ export class SellService {
     files.forEach((file) => formData.append('files', file));
     return this.http.post<{ message: string }>(`${this.baseUrl}files/upload/${vendaId}`, formData);
   }
+
+  syncroInvoiceNf() {
+    return this.http.get<{ message: string }>(`${this.baseUrl}sells/syncroInvoiceNfe`);
+  }
 }

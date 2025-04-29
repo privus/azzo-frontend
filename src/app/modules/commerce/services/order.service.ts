@@ -52,4 +52,8 @@ export class OrderService {
   uploadFiles(vendaId: number, files: File[]) {
     return this.sellService.uploadFiles(vendaId, files);
   }
+
+  syncroInvoiceNf() {
+    return this.sellService.syncroInvoiceNf();
+  }
 }
