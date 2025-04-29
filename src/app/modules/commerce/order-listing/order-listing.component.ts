@@ -43,6 +43,7 @@ export class OrderListingComponent implements OnInit {
   selectAll: boolean = false;
   selectedOrders: Order[] = [];
   user: string = '';
+  sortField: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -59,20 +60,10 @@ export class OrderListingComponent implements OnInit {
     this.orders = this.route.snapshot.data['orders'];
     this.ranking = this.route.snapshot.data['ranking'];
     console.log('PEDIDOS ===> ', this.orders);
-    this.sortByCode('desc'); // Ordenação padrão em ordem ascendente
+    this.sortBy('codigo');
     this.applyFilter();
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
     this.user = storageInfo ? JSON.parse(storageInfo).nome : '';
-  }
-
-  sortByCode(direction: 'asc' | 'desc' = 'asc'): void {
-    this.filteredOrders.sort((a, b) => {
-      const codeA = Number(a.codigo);
-      const codeB = Number(b.codigo);
-
-      return direction === 'desc' ? codeB - codeA : codeA - codeB;
-    });
-    this.sortDirection = direction;
   }
 
   showAlert(swalOptions: SweetAlertOptions) {
@@ -139,7 +130,7 @@ export class OrderListingComponent implements OnInit {
     // 4) Atualiza filteredOrders e a paginação
     this.filteredOrders = result;
     // Ordene os pedidos filtrados por data
-    this.sortByCode(this.sortDirection);
+    this.sortBy('codigo');
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
@@ -789,5 +780,39 @@ export class OrderListingComponent implements OnInit {
       }
     }
     return '';
+  }
+
+  sortBy(field: string): void {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+
+    this.filteredOrders.sort((a, b) => {
+      let valueA: any;
+      let valueB: any;
+
+      switch (field) {
+        case 'codigo':
+          valueA = Number(a.codigo);
+          valueB = Number(b.codigo);
+          break;
+        case 'datVenda':
+          valueA = new Date(a.data_criacao).getTime();
+          valueB = new Date(b.data_criacao).getTime();
+          break;
+        // Adicione mais campos aqui conforme necessário
+        default:
+          return 0;
+      }
+
+      return this.sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+    });
+
+    this.currentPage = 1;
+    this.updateDisplayedPages();
+    this.updateDisplayedItems();
   }
 }

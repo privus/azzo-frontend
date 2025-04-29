@@ -147,9 +147,21 @@
                         <th class="w-10px pe-2">
                             <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleSelectAll()" />
                         </th>
-                        <th class="min-w-50px">Cód.</th>
+                        <th (click)="sortBy('codigo')" class="min-w-50px cursor-pointer">
+                            Cód.
+                            <i *ngIf="sortField === 'codigo'" class="ms-1" [ngClass]="{
+                              'ki ki-up-arrow': sortDirection === 'asc',
+                              'ki ki-down-arrow': sortDirection === 'desc'
+                            }"></i>
+                        </th>                          
                         <th class="min-w-125px">Cliente</th>
-                        <th class="min-w-125px">Data Venda</th>
+                        <th (click)="sortBy('datVenda')" class="min-w-125px cursor-pointer">
+                            Data Venda
+                            <i *ngIf="sortField === 'datVenda'" class="ms-1" [ngClass]="{
+                              'ki ki-up-arrow': sortDirection === 'asc',
+                              'ki ki-down-arrow': sortDirection === 'desc'
+                            }"></i>
+                        </th>                          
                         <th class="min-w-125px">Valor Pedido</th>
                         <th class="min-w-125px">Status Pagamento</th>
                         <th class="min-w-125px">Tipo Pedido</th>
