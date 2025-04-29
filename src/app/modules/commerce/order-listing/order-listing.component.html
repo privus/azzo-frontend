@@ -160,7 +160,7 @@
                     </tr>
                 </thead>
                 <tbody class="fw-semibold text-gray-600">
-                    <tr *ngFor="let order of paginatedOrders">
+                    <tr *ngFor="let order of paginatedOrders" [ngClass]="getRowClass(order)">
                         <td>
                                 <input type="checkbox" [(ngModel)]="order.selected" (change)="updateSelection()" />
                         </td>
