@@ -56,11 +56,11 @@ export class CreditsListingComponent implements OnInit {
     if (term) {
       result = result.filter((credit) => {
         const clienteNomeEmpresa = credit.venda?.cliente?.nome_empresa?.toLowerCase().includes(term);
+        const clienteNomeFantasia = credit.venda?.cliente?.nome?.toLowerCase().includes(term);
         const clienteNumeroDoc = credit.venda?.cliente?.numero_doc?.includes(term);
-        const nomeCredit = credit.nome?.toLowerCase().includes(term);
-        const parcelaId = credit.parcela_id.toString().includes(term);
+        const codVenda = credit.venda?.codigo?.toString().includes(term);
 
-        return clienteNomeEmpresa || clienteNumeroDoc || nomeCredit || parcelaId;
+        return clienteNomeEmpresa || clienteNumeroDoc || codVenda || clienteNomeFantasia;
       });
     }
 
