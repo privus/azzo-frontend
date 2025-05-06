@@ -63,7 +63,7 @@ export interface NewDebt {
   departamento_nome: string;
   departamento_id: number;
   empresa_grupo: string;
-  grupo: number;
+  despesa_grupo: number;
   criado_por: string;
 }
 

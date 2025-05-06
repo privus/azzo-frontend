@@ -90,10 +90,11 @@ export class DebtCreateModalComponent implements OnInit {
     console.log('Form:', this.debtForm);
     if (this.debtForm.valid) {
       const newDebt = this.debtForm.value;
+      console.log('New debt:', newDebt);
       const formattedDebt: NewDebt = {
         nome: newDebt.nome,
         descricao: newDebt.descricao,
-        data_competencia: newDebt.data_competencia,
+        data_competencia: new Date(new Date(newDebt.data_competencia).getTime() + 24 * 60 * 60 * 1000).toISOString().substring(0, 10),
         categoria_id: Number(newDebt.categoria_id),
         categoria_nome: newDebt.categoria_nome || null,
         data_pagamento: newDebt.data_pagamento || null,
@@ -101,7 +102,7 @@ export class DebtCreateModalComponent implements OnInit {
         departamento_id: Number(newDebt.departamento_id),
         departamento_nome: newDebt.departamento_nome || null,
         empresa_grupo: newDebt.empresa,
-        grupo: Number(newDebt.grupo),
+        despesa_grupo: Number(newDebt.grupo),
         juros: Number(newDebt.juros),
         conta: newDebt.conta,
         numero_parcelas: Number(newDebt.numero_parcelas),
