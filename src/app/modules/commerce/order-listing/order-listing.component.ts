@@ -114,11 +114,7 @@ export class OrderListingComponent implements OnInit {
     if (term) {
       result = result.filter((order) => {
         const cliente = order.cliente;
-        return (
-          (cliente && cliente.nome_empresa.toLowerCase().includes(term)) ||
-          (cliente && cliente.numero_doc && cliente.numero_doc.includes(term)) ||
-          order.codigo.toString().includes(term)
-        );
+        return (cliente && cliente.nome_empresa.toLowerCase().includes(term)) || order.codigo.toString().includes(term);
       });
     }
 
@@ -130,6 +126,7 @@ export class OrderListingComponent implements OnInit {
     // 4) Atualiza filteredOrders e a paginação
     this.filteredOrders = result;
     // Ordene os pedidos filtrados por data
+    this.sortDirection = 'asc';
     this.sortBy('codigo');
     this.currentPage = 1;
     this.calculatePagination();
