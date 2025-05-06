@@ -27,6 +27,10 @@ export class SalesComparisonResolver implements Resolve<SalesComparisonReport> {
     const toDate1 = this.formatDate(endLastMonth);
     const fromDate2 = this.formatDate(startCurrentMonth);
     const toDate2 = this.formatDate(endCurrentPeriod);
+    console.log('fromDate1', fromDate1);
+    console.log('toDate1', toDate1);
+    console.log('fromDate2', fromDate2);
+    console.log('toDate2', toDate2);
 
     return this.orderService.getPerformanceSales(fromDate1, toDate1, fromDate2, toDate2);
   }

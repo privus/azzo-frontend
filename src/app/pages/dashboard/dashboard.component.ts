@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.salesPerformance = this.route.snapshot.data['salesPerformance'];
     this.debtsPerformance = this.route.snapshot.data['debtsPerformance'];
-    console.log('Debitos ==================', this.debtsPerformance);
+    console.log('Sales ==================', this.salesPerformance);
     const faturamento = this.salesPerformance.faturamentoPorMarcaMesAtual;
     const ordemMarcas = ['H2O', 'Green', 'Viceroy', 'Purelli', 'Black Fix', 'Vidal'];
     this.marcas = ordemMarcas
