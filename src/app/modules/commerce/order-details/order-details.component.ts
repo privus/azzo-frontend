@@ -22,6 +22,7 @@ export class OrderDetailsComponent implements OnInit {
   orderForm: FormGroup;
   order: Order;
   orderId: number;
+  code: number;
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
   private modalReference: NgbModalRef;
@@ -43,12 +44,13 @@ export class OrderDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
 
-    this.orderId = Number(this.route.snapshot.paramMap.get('id'));
+    this.code = Number(this.route.snapshot.paramMap.get('id'));
 
-    if (this.orderId) {
-      this.orderService.getOrderById(this.orderId).subscribe({
+    if (this.code) {
+      this.orderService.getOrderById(this.code).subscribe({
         next: (order) => {
           this.order = order;
+          this.orderId = order.venda_id;
           console.log('Order ===> ', this.order);
           this.cdr.detectChanges();
           this.patchFormWithOrder(order);
@@ -58,7 +60,7 @@ export class OrderDetailsComponent implements OnInit {
         },
       });
     } else {
-      console.error('Invalid order ID:', this.orderId);
+      console.error('Invalid order ID:', this.code);
     }
   }
 

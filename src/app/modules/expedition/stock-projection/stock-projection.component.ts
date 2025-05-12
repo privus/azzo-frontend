@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StockProjection } from '../models';
-import { ExpeditionService } from '../services/expedition.service';
 
 @Component({
   selector: 'app-stock-projection',

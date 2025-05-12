@@ -10,7 +10,7 @@ export class LogisticsService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getStockProjection(fromDate: string, toDate: string, statusVendaIds?: string): Observable<StockProjection[]> {
-    return this.http.get<StockProjection[]>(`${this.baseUrl}sells/projectStock?fromDate=${fromDate}&toDate=${toDate}${statusVendaIds}`);
+  getStockProjection(): Observable<StockProjection[]> {
+    return this.http.get<StockProjection[]>(`${this.baseUrl}sells/projectStock`);
   }
 }

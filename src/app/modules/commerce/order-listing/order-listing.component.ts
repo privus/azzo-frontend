@@ -44,6 +44,24 @@ export class OrderListingComponent implements OnInit {
   selectedOrders: Order[] = [];
   user: string = '';
   sortField: string = '';
+  selectedSeller: string = '';
+  selectedSegment: string = '';
+  categories = [
+    { id: '46631', label: 'Supermercado', icon: 'fa-store' },
+    { id: '46632', label: 'Conveniência/Restaurante', icon: 'fa-utensils' },
+    { id: '46633', label: 'Material de Limpeza', icon: 'fa-broom' },
+    { id: '46634', label: 'Barbearia', icon: 'fa-cut' },
+    { id: '46635', label: 'Geral', icon: 'fa-box' },
+    { id: '46636', label: 'Perfumaria', icon: 'fa-spray-can' },
+    { id: '46637', label: 'Brindes', icon: 'fa-gift' },
+    { id: '46638', label: 'Farmácia', icon: 'fa-pills' },
+    { id: '46639', label: 'Supermercado Cpf', icon: 'fa-user' },
+    { id: '46640', label: 'Distribuidora', icon: 'fa-truck' },
+    { id: '46641', label: 'Dentista', icon: 'fa-tooth' },
+    { id: '46642', label: 'Consumidor Final', icon: 'fa-house-user' },
+    { id: '46643', label: 'Diversos', icon: 'fa-ellipsis-h' },
+  ];
+  
 
   constructor(
     private route: ActivatedRoute,
@@ -121,6 +139,14 @@ export class OrderListingComponent implements OnInit {
     // 3) Filtrar por status (se selectedStatus não for vazio)
     if (this.selectedStatus) {
       result = result.filter((order) => order.status_venda.status_venda_id === +this.selectedStatus);
+    }
+
+    if (this.selectedSeller) {
+      result = result.filter((order) => order.vendedor.codigo === this.selectedSeller);
+    }
+
+    if (this.selectedSegment) {
+      result = result.filter((order) => order.cliente.categoria_id === +this.selectedSegment);
     }
 
     // 4) Atualiza filteredOrders e a paginação
@@ -810,5 +836,10 @@ export class OrderListingComponent implements OnInit {
     this.currentPage = 1;
     this.updateDisplayedPages();
     this.updateDisplayedItems();
+  }
+
+  selectCategory(id: string): void {
+    this.selectedSegment = id;
+    this.applyFilter();
   }
 }

@@ -86,15 +86,33 @@
                 (change)="applyFilter()"
               >
                 <option value="">Status</option>
-                <option value="11138">Aguardando Aprovação</option>
+                <option value="11138">Aguard. Aprov.</option>
                 <option value="11139">Pedido</option>
                 <option value="11468">Reprovado</option>
                 <option value="11491">Faturado</option>
-                <option value="11541">Pronto para Envio</option>
+                <option value="11541">Pronto p Envio</option>
                 <option value="11542">Enviado</option>
                 <option value="11543">Entregue</option>
               </select>
             </div>
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select
+                    class="form-select form-select-solid form-select-lg"
+                    [(ngModel)]="selectedSeller"
+                    (change)="applyFilter()"
+                >
+                    <option value="">Vendedor</option>
+                    <option value="1">Nivaldo Inocêncio</option>
+                    <option value="2">Marcio Luiz</option>
+                    <option value="3">Eduardo Araújo</option>
+                    <option value="6">Glaucio Bahia</option>
+                    <option value="9">Sindy Horrana</option>
+                    <option value="11">Vitor Barbosa</option>
+                    <option value="12">Eliel Andolfo</option>
+                    <option value="14">Giovani Reis</option>
+                    <option value="15">Marcio Mendes</option>
+                </select>
+            </div>                       
     </div>
     <button
         class="btn btn-icon btn-lg h-auto btn-color-gray-500 btn-active-color-primary justify-content-end"
