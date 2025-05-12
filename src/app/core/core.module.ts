@@ -11,6 +11,7 @@ import {
   SellService,
   SharedService,
   UserService,
+  LogisticsService,
 } from './services/';
 
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -33,6 +34,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     UserService,
     ClientService,
     FinancialService,
+    LogisticsService,
   ],
   imports: [CommonModule],
 })

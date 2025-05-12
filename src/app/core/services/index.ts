@@ -8,3 +8,4 @@ export * from './role.service';
 export * from './shared.service';
 export * from './sell.service';
 export * from './client.service';
+export * from './logistics.service';

@@ -1,0 +1,100 @@
+<div class="col-xl">
+    <div class="card card-flush">
+      <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+        <!--begin::Card title-->
+        <div class="card-title">
+          <!--begin::Search-->
+          <div class="d-flex align-items-center position-relative my-1">
+            <i class="ki-duotone ki-magnifier fs-2 position-absolute ms-4"><span class="path1"></span><span class="path2"></span></i>
+            <input
+              type="text"
+              class="form-control form-control-solid w-250px ps-12"
+              placeholder="Buscar Produto"
+              [(ngModel)]="searchTerm"
+              (input)="onSearch()"
+            />
+          </div>
+          <div class="d-flex align-items-center position-relative my-1 ms-8">
+            <div class="w-150px d-flex align-items-center position-relative my-1 ms-9">          
+            </div>
+             
+            <div
+              id="kt_ecommerce_report_views_export_menu"
+              class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-200px py-4"
+              data-kt-menu="true"
+            >
+            </div>
+            <!--end::Menu-->
+          </div>          
+        </div>
+      </div>           
+  
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table align-middle table-row-dashed fs-6 gy-3 dataTable" style="width: 100%;">
+            <thead>
+              <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                <th class="min-w-150px">Item</th>
+                <th class="min-w-125px">Codigo</th>
+                <th class="min-w-125px">Sku</th>
+                <th class="min-w-125px">Descrição Uni</th>
+                <th class="min-w-125px">Pedidos</th>
+                <th class="min-w-125px">Qty</th>
+              </tr>
+            </thead>
+            <tbody class="fw-bold text-gray-600">
+              <tr *ngFor="let item of filteredData">
+                <td>
+                  <span class="text-gray-900 text-hover-primary">{{ item.nome }}</span>
+                </td>
+                <td class=>{{ item.codigo }}</td>
+                <td class=>{{ item.sku }}</td>
+                <td class=>{{ item.descricao_uni }}</td>
+                <span
+                  class="text-hover-primary cursor-pointer text-primary"
+                  (click)="openPedidosModal(item.pedidos)"
+                >
+                  {{ item.pedidos.length }} pedidos
+                </span>
+              
+              
+                <td class=>
+                  <span class="text-gray-900 fw-bold">{{ item.quantidade }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade show d-block" tabindex="-1" *ngIf="showPedidosModal" style="background-color: rgba(0, 0, 0, 0.4);">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Pedidos</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closePedidosModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <div class="row">
+              <ng-container *ngFor="let column of getPedidosColumns(); let i = index">
+                <div class="col-2" *ngIf="column.length > 0">
+                  <ul class="list-unstyled mb-0">
+                    <li *ngFor="let pedido of column">
+                      <a (click)="editOrder(pedido)" class="text-primary text-hover-primary">{{ pedido }}</a>
+                    </li>
+                  </ul>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closePedidosModal()">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

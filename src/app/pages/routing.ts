@@ -34,6 +34,10 @@ const Routing: Routes = [
     loadChildren: () => import('../modules/sellers/sellers.module').then((m) => m.SellersModule),
   },
   {
+    path: 'expediton',
+    loadChildren: () => import('../modules/expedition/expedition.module').then((m) => m.ExpeditionModule),
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full',

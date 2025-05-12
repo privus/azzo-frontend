@@ -511,7 +511,7 @@ export class OrderListingComponent implements OnInit {
           didOpen: () => Swal.showLoading(),
         });
 
-        this.http.post(`${this.baseUrl}sells/${orderId}/label`, { totalVolumes, responsible }, { responseType: 'blob' }).subscribe({
+        this.http.post(`${this.baseUrl}sells/${orderCode}/label`, { totalVolumes, responsible }, { responseType: 'blob' }).subscribe({
           next: (pdfBlob) => {
             if (!pdfBlob || pdfBlob.size === 0) {
               Swal.fire({
@@ -614,11 +614,11 @@ export class OrderListingComponent implements OnInit {
 
       const requests = this.selectedOrders.map((order) =>
         this.http
-          .post(`${this.baseUrl}sells/${order.venda_id}/print`, { responsible }, { responseType: 'blob' })
+          .post(`${this.baseUrl}sells/${order.codigo}/print`, { responsible }, { responseType: 'blob' })
           .toPromise()
           .then((blob) => (blob && blob.size > 0 ? blob : undefined))
           .catch((err) => {
-            console.error(`Erro ao gerar PDF para pedido ${order.venda_id}:`, err);
+            console.error(`Erro ao gerar PDF para pedido ${order.codigo}:`, err);
             return undefined;
           }),
       );
