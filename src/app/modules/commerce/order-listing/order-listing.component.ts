@@ -61,7 +61,6 @@ export class OrderListingComponent implements OnInit {
     { id: '46642', label: 'Consumidor Final', icon: 'fa-house-user' },
     { id: '46643', label: 'Diversos', icon: 'fa-ellipsis-h' },
   ];
-  
 
   constructor(
     private route: ActivatedRoute,
@@ -143,10 +142,6 @@ export class OrderListingComponent implements OnInit {
 
     if (this.selectedSeller) {
       result = result.filter((order) => order.vendedor.codigo === this.selectedSeller);
-    }
-
-    if (this.selectedSegment) {
-      result = result.filter((order) => order.cliente.categoria_id === +this.selectedSegment);
     }
 
     // 4) Atualiza filteredOrders e a paginação
@@ -838,8 +833,13 @@ export class OrderListingComponent implements OnInit {
     this.updateDisplayedItems();
   }
 
-  selectCategory(id: string): void {
-    this.selectedSegment = id;
-    this.applyFilter();
+  getSegmentIcon(segmentoId: number): string {
+    const segment = this.categories.find(c => +c.id === +segmentoId);
+    return segment?.icon || 'fa-tags';
+  }
+
+  getSegmentLabel(segmentoId: number): string {
+    const segment = this.categories.find(c => +c.id === +segmentoId);
+    return segment?.label || 'Sem segmento';
   }
 }
