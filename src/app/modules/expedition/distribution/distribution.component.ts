@@ -1,12 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-distribution',
-  standalone: true,
-  imports: [],
   templateUrl: './distribution.component.html',
-  styleUrl: './distribution.component.scss'
+  styleUrls: ['./distribution.component.scss'],
 })
-export class DistributionComponent {
-
+export class DistributionComponent implements OnInit {
+  romaneioForm: FormGroup;
+  constructor(private fb: FormBuilder) {
+    this.romaneioForm = this.fb.group({
+      pedidos: this.fb.array([]),
+    });
+  }
+  ngOnInit(): void {}
 }
