@@ -172,6 +172,7 @@
                               'ki ki-down-arrow': sortDirection === 'desc'
                             }"></i>
                         </th>                          
+                        <th class="min-w-5px"></th>
                         <th class="min-w-125px">Cliente</th>
                         <th (click)="sortBy('datVenda')" class="min-w-125px cursor-pointer">
                             Data Venda
@@ -196,15 +197,14 @@
                         </td>
                         <td>{{ order.codigo }}</td>
                         <td>
-                           {{ order.cliente.nome_empresa }}
-                           <i
-                                *ngIf="order.cliente?.segmento_id"
+                            <i
                                 class="fas me-1 text-muted"
                                 [ngClass]="getSegmentIcon(order.cliente.segmento_id)"
                                 [attr.title]="getSegmentLabel(order.cliente.segmento_id)"
-                            >
+                            >                        
                             </i>
                         </td>
+                        <td>{{ order.cliente.nome_empresa }}</td>
                           
                         <td><div class="text-muted fs-7">{{ order.data_criacao | date:'dd/MM/yyyy' }}</div></td>
                         <td>{{ order.valor_final | currency:'BRL' }}</td>
