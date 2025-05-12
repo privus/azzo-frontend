@@ -49,8 +49,8 @@ export class OrderDetailsComponent implements OnInit {
     if (this.code) {
       this.orderService.getOrderById(this.code).subscribe({
         next: (order) => {
-          this.order = order;
           this.orderId = order.venda_id;
+          this.order = order;
           console.log('Order ===> ', this.order);
           this.cdr.detectChanges();
           this.patchFormWithOrder(order);
