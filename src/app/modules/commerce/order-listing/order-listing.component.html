@@ -196,14 +196,15 @@
                         </td>
                         <td>{{ order.codigo }}</td>
                         <td>
-                            <i
-                              *ngIf="order.cliente?.segmento_id"
-                              class="fas me-1 text-muted"
-                              [ngClass]="getSegmentIcon(order.cliente.segmento_id)"
-                              [attr.title]="getSegmentLabel(order.cliente.segmento_id)"
-                            ></i>
-                            {{ order.cliente.nome_empresa }}
-                          </td>
+                           {{ order.cliente.nome_empresa }}
+                           <i
+                                *ngIf="order.cliente?.segmento_id"
+                                class="fas me-1 text-muted"
+                                [ngClass]="getSegmentIcon(order.cliente.segmento_id)"
+                                [attr.title]="getSegmentLabel(order.cliente.segmento_id)"
+                            >
+                            </i>
+                        </td>
                           
                         <td><div class="text-muted fs-7">{{ order.data_criacao | date:'dd/MM/yyyy' }}</div></td>
                         <td>{{ order.valor_final | currency:'BRL' }}</td>
