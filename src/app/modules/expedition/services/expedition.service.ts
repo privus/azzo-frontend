@@ -10,4 +10,8 @@ export class ExpeditionService {
   getExpedition() {
     return this.logisticsService.getStockProjection();
   }
+
+  getRomaneio() {
+    return this.logisticsService.getRomaneio();
+  }
 }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DistributionComponent } from './distribution.component';
+import { RomaneioComponent } from './romaneio.component';
 
-describe('DistributionComponent', () => {
-  let component: DistributionComponent;
-  let fixture: ComponentFixture<DistributionComponent>;
+describe('RomaneioComponent', () => {
+  let component: RomaneioComponent;
+  let fixture: ComponentFixture<RomaneioComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DistributionComponent]
+      imports: [RomaneioComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DistributionComponent);
+    fixture = TestBed.createComponent(RomaneioComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
