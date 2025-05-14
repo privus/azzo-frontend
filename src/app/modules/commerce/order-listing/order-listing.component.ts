@@ -46,6 +46,7 @@ export class OrderListingComponent implements OnInit {
   sortField: string = '';
   selectedSeller: string = '';
   selectedSegment: string = '';
+
   categories = [
     { id: '46631', label: 'Supermercado', icon: 'fa-store' },
     { id: '46632', label: 'Conveniência/Restaurante', icon: 'fa-utensils' },
@@ -142,6 +143,10 @@ export class OrderListingComponent implements OnInit {
 
     if (this.selectedSeller) {
       result = result.filter((order) => order.vendedor.codigo === this.selectedSeller);
+    }
+
+    if (this.selectedSegment) {
+      result = result.filter((order) => order.cliente.segmento_id === +this.selectedSegment);
     }
 
     // 4) Atualiza filteredOrders e a paginação

@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header align-items-center py-5 gap-2 gap-md-5">
-        <div class="card-title">
+        <div class="d-flex flex-wrap gap-3 align-items-center w-100">
             <div class="d-flex align-items-center position-relative my-1">
                 <app-keenicon name="magnifier" class="fs-3 position-absolute ms-5"></app-keenicon>
                 <input
@@ -95,6 +95,29 @@
                 <option value="11543">Entregue</option>
               </select>
             </div>
+
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select
+                  class="form-select form-select-solid form-select-lg"
+                  [(ngModel)]="selectedSegment"
+                  (change)="applyFilter()"
+                >
+                <option value="">Segmento</option>
+                <option value="46631">Supermercado</option>
+                <option value="46632">Conv.Res</option>
+                <option value="46633">Mat. de Limp.</option>
+                <option value="46634">Barbearia</option>
+                <option value="46635">Geral</option>
+                <option value="46636">Perfumaria</option>
+                <option value="46637">Brindes</option>
+                <option value="46638">Farmácia</option>
+                <option value="46639">Sup. Cpf</option>
+                <option value="46640">Distribuidora</option>
+                <option value="46641">Dentista</option>
+                <option value="46642">Cons. Final</option>
+                <option value="46643">Diversos</option>
+                </select>
+              </div>
             <div class="d-flex align-items-center position-relative my-1 ms-8">
                 <select
                     class="form-select form-select-solid form-select-lg"
@@ -112,48 +135,50 @@
                     <option value="14">Giovani</option>
                     <option value="15">Marcio M.</option>
                 </select>
-            </div>                       
-    </div>
-    <button
-        class="btn btn-icon btn-lg h-auto btn-color-gray-500 btn-active-color-primary justify-content-end"
-        [disabled]="selectedOrders.length === 0"
-        (click)="printSelectedOrders()"
+            </div>
+            <div class="d-flex align-items-center position-relative my-1 ms-15">
+                <button
+                    class="btn btn-icon btn-lg h-auto btn-color-gray-500 btn-active-color-primary justify-content-end"
+                    [disabled]="selectedOrders.length === 0"
+                    (click)="printSelectedOrders()"
+                >
+                    <i class="ki-duotone ki-printer fs-1 me-2">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                        <span class="path3"></span>
+                        <span class="path4"></span>
+                        <span class="path5"></span>
+                    </i>
+                    Imprimir Pedidos
+                
+                </button>
+            </div>
+        <!-- <button
+            class="btn btn-icon btn-lg h-auto btn-color-gray-500 btn-active-color-primary justify-content-end me-5"
+            [disabled]="selectedOrders.length === 0"
+            (click)="generateLabelsForSelected()"
+            >
+            <i class="ki-duotone ki-printer fs-1 me-2">
+                <span class="path1"></span>
+                <span class="path2"></span>
+                <span class="path3"></span>
+            </i>
+            Imprimir Etiquetas
+        </button> -->
+        <button
+            type="button"
+            class="btn btn-icon btn-warning d-flex align-items-center position-relative my-1 ms-9"
+            (click)="openSellerRankingModal()"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            title="Ranking de Vendedores"
         >
-        <i class="ki-duotone ki-printer fs-1 me-2">
+            <i class="ki-duotone ki-star fs-2">
             <span class="path1"></span>
             <span class="path2"></span>
-            <span class="path3"></span>
-            <span class="path4"></span>
-            <span class="path5"></span>
-        </i>
-        Imprimir Pedidos
-    </button>
-    <!-- <button
-        class="btn btn-icon btn-lg h-auto btn-color-gray-500 btn-active-color-primary justify-content-end me-5"
-        [disabled]="selectedOrders.length === 0"
-        (click)="generateLabelsForSelected()"
-        >
-        <i class="ki-duotone ki-printer fs-1 me-2">
-            <span class="path1"></span>
-            <span class="path2"></span>
-            <span class="path3"></span>
-        </i>
-        Imprimir Etiquetas
-    </button> -->
-    <button
-        type="button"
-        class="btn btn-icon btn-warning d-flex align-items-center position-relative my-1 ms-9"
-        (click)="openSellerRankingModal()"
-        data-bs-toggle="tooltip"
-        data-bs-placement="top"
-        title="Ranking de Vendedores"
-    >
-        <i class="ki-duotone ki-star fs-2">
-        <span class="path1"></span>
-        <span class="path2"></span>
-        </i>
-    </button>
-
+            </i>
+        </button>                       
+        </div>
     <div *ngIf="paginatedOrders; else loading" class="card-body pt-0">
         <div class="table-responsive">
             <table
