@@ -9,11 +9,10 @@ import { StockProjection } from '../models';
 })
 export class StockProjectionComponent implements OnInit {
   stockData: StockProjection[] = [];
-  customDateRange: { start: string; end: string } = { start: '', end: '' };
   searchTerm: string = '';
   filteredData: StockProjection[] = [];
-  selectedItemPedidos: number[] = [];
   showPedidosModal = false;
+  selectedItemPedidos: { codigo: number; cliente: string; data: string }[] = [];
 
   statusOptions = [
     { id: '11138', label: 'Aguardando Aprovação' },
@@ -86,7 +85,7 @@ export class StockProjectionComponent implements OnInit {
     // TODO: Atualizar estoque baseado nos filtros aplicados
   }
 
-  openPedidosModal(pedidos: number[]): void {
+  openPedidosModal(pedidos: { codigo: number; cliente: string; data: string }[]): void {
     this.selectedItemPedidos = pedidos;
     this.showPedidosModal = true;
   }
@@ -95,9 +94,9 @@ export class StockProjectionComponent implements OnInit {
     this.showPedidosModal = false;
   }
 
-  getPedidosColumns(): number[][] {
-    const chunkSize = 5;
-    const chunks: number[][] = [];
+  getPedidosColumns(): { codigo: number; cliente: string; data: string }[][] {
+    const chunkSize = 8;
+    const chunks: { codigo: number; cliente: string; data: string }[][] = [];
 
     for (let i = 0; i < this.selectedItemPedidos.length; i += chunkSize) {
       chunks.push(this.selectedItemPedidos.slice(i, i + chunkSize));

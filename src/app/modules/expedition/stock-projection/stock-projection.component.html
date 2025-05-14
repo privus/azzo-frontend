@@ -75,26 +75,40 @@
           <h5 class="modal-title">Pedidos</h5>
           <button type="button" class="btn-close" aria-label="Close" (click)="closePedidosModal()"></button>
         </div>
-        <div class="modal-body">
-          <div class="container-fluid">
-            <div class="row">
-              <ng-container *ngFor="let column of getPedidosColumns(); let i = index">
-                <div class="col-2" *ngIf="column.length > 0">
-                  <ul class="list-unstyled mb-0">
-                    <li *ngFor="let pedido of column">
-                      <a (click)="editOrder(pedido)" class="text-primary text-hover-primary">{{ pedido }}</a>
-                    </li>
-                  </ul>
+        <div class="modal fade show d-block" tabindex="-1" *ngIf="showPedidosModal" style="background-color: rgba(0, 0, 0, 0.4);">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Pedidos</h5>
+                <button type="button" class="btn-close" aria-label="Close" (click)="closePedidosModal()"></button>
+              </div>
+              <div class="modal-body">
+                <div class="container-fluid">
+                  <div class="row">
+                    <ng-container *ngFor="let column of getPedidosColumns(); let i = index">
+                      <div class="col-md-4" *ngIf="column.length > 0">
+                        <ul class="list-unstyled mb-0">
+                          <li *ngFor="let pedido of column" class="mb-2">
+                            <div class="border p-2 rounded shadow-sm bg-light">
+                              <strong class="text-primary" (click)="editOrder(pedido.codigo)" style="cursor: pointer;">
+                                Pedido #{{ pedido.codigo }}
+                              </strong>
+                              <div><small>Cliente: {{ pedido.cliente }}</small></div>
+                              <div><small>Data: {{ pedido.data | date: 'dd/MM/yyyy' }}</small></div>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </ng-container>
+                  </div>
                 </div>
-              </ng-container>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary" (click)="closePedidosModal()">Fechar</button>
+              </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" (click)="closePedidosModal()">Fechar</button>
-        </div>
-      </div>
-    </div>
   </div>
   
   
