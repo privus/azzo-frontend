@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { StockProjectionComponent } from './stock-projection/stock-projection.component';
 import { StockProjectionResolver } from './stock-projection.resolver';
 import { RomaneioComponent } from './romaneio/romaneio.component';
+import { RomaneioResolver } from './romaneio.resolver';
 
 const routes: Routes = [
   {
@@ -15,6 +16,9 @@ const routes: Routes = [
   {
     path: 'romaneio',
     component: RomaneioComponent,
+    resolve: {
+      romaneio: RomaneioResolver,
+    },
   },
 ];
 @NgModule({

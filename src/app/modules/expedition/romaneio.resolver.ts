@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Romaneio } from './models/romaneio.model';
+import { Romaneio } from './models';
 import { ExpeditionService } from './services/expedition.service';
 
 @Injectable({

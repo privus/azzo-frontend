@@ -30,8 +30,8 @@
 <a href="javascript:;" 
    class="btn btn-sm btn-flex btn-light fw-bold" 
    [routerLink]="getSecondaryButtonLink()"
-   [class.disabled]="isDisabled()"
-   [attr.aria-disabled]="isDisabled()"
+   [class.disabled]="isDisabledSecondary()"
+   [attr.aria-disabled]="isDisabledSecondary()"
    (click)="$event.preventDefault()">
   Listar
 </a>
@@ -40,8 +40,8 @@
 <a href="javascript:;" 
    class="btn btn-sm fw-bold btn-primary" 
    data-bs-toggle="modal"
-   [class.disabled]="isDisabled()"
-   [attr.aria-disabled]="isDisabled()"
+   [class.disabled]="isDisabledPrimary()"
+   [attr.aria-disabled]="isDisabledPrimary()"
    (click)="createButton()">
   Criar
 </a>

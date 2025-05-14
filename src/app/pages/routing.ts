@@ -34,7 +34,7 @@ const Routing: Routes = [
     loadChildren: () => import('../modules/sellers/sellers.module').then((m) => m.SellersModule),
   },
   {
-    path: 'expediton',
+    path: 'expedition',
     loadChildren: () => import('../modules/expedition/expedition.module').then((m) => m.ExpeditionModule),
   },
   {

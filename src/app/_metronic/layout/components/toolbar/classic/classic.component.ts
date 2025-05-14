@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DebtCreateModalComponent } from '../../../../../modules/financial/debt-create-modal/debt-create-modal.component';
 import { CreditCreateModalComponent } from '../../../../../modules/financial/credit-create-modal/credit-create-modal.component';
+import { RomaneioCreateModalComponent } from 'src/app/modules/expedition/romaneio-create-modal/romaneio-create-modal.component';
 
 @Component({
   selector: 'app-classic',
@@ -84,6 +85,21 @@ export class ClassicComponent implements OnInit, OnDestroy {
     });
   }
 
+  openRomaneioModal() {
+    document.querySelector('app-layout')?.setAttribute('inert', '');
+
+    this.modalReference = this.modalService.open(RomaneioCreateModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+    });
+
+    this.modalReference.result.catch(() => {
+      // Modal cancelado
+      document.querySelector('app-layout')?.removeAttribute('inert');
+    });
+  }
+
   getCurrentRouteSegment(): void {
     // Captura o primeiro segmento da rota
     const urlSegments = this.router.url.split('/');
@@ -120,9 +136,15 @@ export class ClassicComponent implements OnInit, OnDestroy {
     if (fullPath.includes('financial/credits')) {
       this.openCreditModal();
     }
+    if (fullPath.includes('expedition/romaneio')) {
+      this.openRomaneioModal();
+    }
   }
 
-  isDisabled(): boolean {
+  isDisabledPrimary(): boolean {
     return this.currentRoute === 'commerce' || this.currentRoute === 'sellers';
+  }
+  isDisabledSecondary(): boolean {
+    return this.currentRoute === 'commerce' || this.currentRoute === 'sellers' || this.currentRoute === 'expedition';
   }
 }

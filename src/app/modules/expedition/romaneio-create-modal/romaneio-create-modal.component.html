@@ -1,0 +1,43 @@
+    <!-- Modal Criar Romaneio -->
+    <div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true">
+
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createRomaneioModalLabel">Criar Romaneio</h5>
+            <button type="button" class="btn-close" (click)="activeModal.dismiss()" aria-label="Close"></button>
+          </div>
+          <form [formGroup]="romaneioForm" (ngSubmit)="submitForm()">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Códigos dos Pedidos</label>
+                <input type="text" class="form-control" formControlName="vendas" placeholder="Ex: 1229, 1230" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Data de Criação</label>
+                <input type="date" class="form-control" formControlName="data_criacao" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Transportadora</label>
+                <ng-container *ngIf="!showTransInput; else inputTransportadora">
+                  <select class="form-select" formControlName="transportadora_id" (change)="toggleTransportadoraInput($event)">
+                    <option value="">Selecione</option>
+                    <option *ngFor="let t of transportadora" [value]="t.transportadora_id">{{ t.nome }}</option>
+                    <option value="">Cadastrar Transportadora</option>
+                  </select>
+                </ng-container>
+                <ng-template #inputTransportadora>
+                  <input type="text" class="form-control" formControlName="transportadora_nome" placeholder="Digite a nova transportadora" />
+                </ng-template>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Criar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <swal #noticeSwal [swalOptions]="swalOptions"></swal>
+

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LogisticsService } from '../../../core/services/logistics.service';
+import { NewRomaneio } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -13,5 +14,13 @@ export class ExpeditionService {
 
   getRomaneio() {
     return this.logisticsService.getRomaneio();
+  }
+
+  getAllTrans() {
+    return this.logisticsService.getAllTrans();
+  }
+
+  createRomaneio(romaneio: NewRomaneio) {
+    return this.logisticsService.createRomaneio(romaneio);
   }
 }

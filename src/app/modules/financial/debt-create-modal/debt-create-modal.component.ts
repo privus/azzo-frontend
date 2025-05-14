@@ -87,7 +87,6 @@ export class DebtCreateModalComponent implements OnInit {
   }
 
   submitForm() {
-    console.log('Form:', this.debtForm);
     if (this.debtForm.valid) {
       const newDebt = this.debtForm.value;
       console.log('New debt:', newDebt);

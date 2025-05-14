@@ -1,1 +1,105 @@
-<p>romaneio works!</p>
+<div class="card-body pt-2"> 
+    <div class="mb-5 d-flex justify-content-between">
+      <input
+        type="text"
+        class="form-control form-control-solid w-250px"
+        placeholder="Pesquisar por código pedido"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+      />
+    </div>
+    <div class="table-responsive">
+      <table class="table align-middle table-row-dashed fs-6 gy-3">
+        <thead>
+          <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+            <th class="min-w-100px">ID</th>
+            <th class="min-w-100px">Data</th>
+            <th class="min-w-100px">Transportadora</th>
+            <th class="min-w-50px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let r of paginatedOrders">
+            <tr>
+              <td>#{{ r.romaneio_id }}</td>
+              <td>{{ r.data_criacao | date:'dd/MM/yyyy' }}</td>
+              <td>{{ r.transportadora.nome }}</td>
+              <td>
+                <button (click)="toggleExpand(r.romaneio_id)" class="btn btn-sm btn-icon btn-light toggle">
+                  <i *ngIf="!isExpanded(r.romaneio_id)" class="ki-duotone ki-plus fs-4 m-0 toggle-off"></i>
+                  <i *ngIf="isExpanded(r.romaneio_id)" class="ki-duotone ki-minus fs-4 m-0 toggle-on"></i>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="isExpanded(r.romaneio_id)">
+              <td colspan="4">
+                <div *ngIf="r.vendas.length > 0; else noVendas">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Codigo</th>
+                        <th>Cliente</th>
+                        <th>Cidade</th>
+                        <th>Valor Nf</th>
+                        <th>Volume</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let v of r.vendas">
+                        <td>{{ v.codigo }}</td>
+                        <td>{{ v.cliente.nome }}</td>
+                        <td>{{ v.cliente.cidade_string }}</td>
+                        <td>{{ v.valor_final }}</td>
+                        <td>{{ v.volume }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <ng-template #noVendas>
+                  <p class="text-muted">Nenhuma venda associada.</p>
+                </ng-template>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Paginação -->
+    <div class="row mt-5">
+      <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
+        <div class="fs-6 fw-bold text-gray-700">
+          Mostrando {{ startItem }} - {{ endItem }} de {{ filteredRomaneio.length }} Romaneios.
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link first" type="button" aria-label="First" (click)="goToFirstPage()">
+              ‹‹ <i class="ki-duotone ki-skip-back fs-5"></i>
+            </button>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link previous" type="button" aria-label="Previous" (click)="previousPage()">
+              ‹ <i class="ki-duotone ki-left-arrow fs-5"></i>
+            </button>
+          </li>
+          <li class="page-item" *ngFor="let page of displayedPages" [class.active]="currentPage === page">
+            <button class="page-link" type="button" (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages || totalPages === 0">
+            <button class="page-link next" type="button" aria-label="Next" (click)="nextPage()">
+              › <i class="ki-duotone ki-right-arrow fs-5"></i>
+            </button>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages || totalPages === 0">
+            <button class="page-link last" type="button" aria-label="Last" (click)="goToLastPage()">
+              ›› <i class="ki-duotone ki-skip-forward fs-5"></i>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  

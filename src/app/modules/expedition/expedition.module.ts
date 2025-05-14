@@ -2,13 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExpeditionRoutingModule } from './expediton-routing.module';
 import { StockProjectionComponent } from './stock-projection/stock-projection.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExpeditionService } from './services/expedition.service';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { RomaneioComponent } from './romaneio/romaneio.component';
+import { RomaneioCreateModalComponent } from './romaneio-create-modal/romaneio-create-modal.component';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
-  declarations: [StockProjectionComponent],
-  imports: [CommonModule, ExpeditionRoutingModule, FormsModule, NgbTooltipModule],
+  declarations: [StockProjectionComponent, RomaneioComponent, RomaneioCreateModalComponent],
+  imports: [CommonModule, ExpeditionRoutingModule, FormsModule, NgbTooltipModule, ReactiveFormsModule, SweetAlert2Module.forChild()],
   providers: [ExpeditionService],
 })
 export class ExpeditionModule {}
