@@ -27,16 +27,29 @@ export class RomaneioCreateModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.romaneioForm = this.fb.group({
-      vendas: ['', Validators.required],
-      transportadora_id: [''],
-      transportadora_nome: [''],
-      data_criacao: [new Date().toISOString().substring(0, 10), [Validators.required]],
-    });
+    this.romaneioForm = this.fb.group(
+      {
+        vendas: ['', Validators.required],
+        transportadora_id: [''],
+        transportadora_nome: [''],
+        data_criacao: [new Date().toISOString().substring(0, 10), [Validators.required]],
+      },
+      { validators: this.validCatDep as any },
+    );
 
     this.expeditionService.getAllTrans().subscribe((transportadora) => {
       this.transportadora = transportadora;
     });
+  }
+
+  validCatDep(group: FormGroup) {
+    const transportadora_id = group.get('transportadora_id')?.value || null;
+    const transportadora_nome = group.get('transportadora_nome')?.value || null;
+
+    if (!transportadora_id && !transportadora_nome) {
+      return { validCatDep: true };
+    }
+    return null;
   }
 
   submitForm() {

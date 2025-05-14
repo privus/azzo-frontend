@@ -21,9 +21,15 @@
         <tbody>
           <ng-container *ngFor="let r of paginatedOrders">
             <tr>
-              <td>#{{ r.romaneio_id }}</td>
+              <td>{{ r.romaneio_id }}</td>
               <td>{{ r.data_criacao | date:'dd/MM/yyyy' }}</td>
-              <td>{{ r.transportadora.nome }}</td>
+              <td>
+                <div class="position-relative">
+                  <span class="badge bg-light text-dark fs-6">
+                    {{ r.transportadora.nome }}
+                  </span>
+                </div>
+              </td>
               <td>
                 <button (click)="toggleExpand(r.romaneio_id)" class="btn btn-sm btn-icon btn-light toggle">
                   <i *ngIf="!isExpanded(r.romaneio_id)" class="ki-duotone ki-plus fs-4 m-0 toggle-off"></i>

@@ -33,7 +33,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" (click)="activeModal.dismiss()">Cancelar</button>
-              <button type="submit" class="btn btn-primary">Criar</button>
+              <button type="submit" class="btn btn-primary" [disabled]="romaneioForm.invalid">Criar</button>
             </div>
           </form>
         </div>
