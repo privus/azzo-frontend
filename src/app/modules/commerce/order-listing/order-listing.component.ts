@@ -839,12 +839,64 @@ export class OrderListingComponent implements OnInit {
   }
 
   getSegmentIcon(segmentoId: number): string {
-    const segment = this.categories.find(c => +c.id === +segmentoId);
+    const segment = this.categories.find((c) => +c.id === +segmentoId);
     return segment?.icon || 'fa-tags';
   }
 
   getSegmentLabel(segmentoId: number): string {
-    const segment = this.categories.find(c => +c.id === +segmentoId);
+    const segment = this.categories.find((c) => +c.id === +segmentoId);
     return segment?.label || 'Sem segmento';
+  }
+
+  printSelectedOrderResume(): void {
+    if (this.selectedOrders.length === 0) return;
+
+    Swal.fire({
+      title: 'Imprimir Resumo',
+      html: `<p>Você selecionou <strong>${this.selectedOrders.length}</strong> pedido(s).</p>`,
+      showCancelButton: true,
+      confirmButtonText: 'Gerar Resumo',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      const ids = this.selectedOrders.map((o) => o.codigo);
+
+      Swal.fire({
+        title: 'Gerando Resumo...',
+        text: 'Aguarde enquanto o PDF é gerado.',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+
+      this.http.post(`${this.baseUrl}sells/printResume`, { ids }, { responseType: 'blob' }).subscribe({
+        next: (pdfBlob) => {
+          const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+          const blobUrl = URL.createObjectURL(blob);
+          const printWindow = window.open('', '_blank');
+          if (printWindow) {
+            printWindow.document.write(`
+                <html>
+                  <head><title>Resumo Pedidos</title></head>
+                  <body style="margin:0">
+                    <iframe src="${blobUrl}" style="width:100vw;height:100vh;border:none;" onload="this.contentWindow.print()"></iframe>
+                  </body>
+                </html>
+              `);
+            printWindow.document.close();
+          }
+          Swal.close();
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro!',
+            text: 'Não foi possível gerar o resumo.',
+            confirmButtonText: 'Ok',
+          });
+          console.error('Erro ao gerar resumo:', err);
+        },
+      });
+    });
   }
 }
