@@ -175,9 +175,9 @@ export class OrderListingComponent implements OnInit {
         return 'badge py-3 px-4 fs-7 badge-light-info';
       case 11541: // Pronto para Envio
         return 'badge py-3 px-4 fs-7 badge-light-info';
-      case 11542: // Enviado
+      case 13480: // Enviado
         return 'badge py-3 px-4 fs-7 badge-light-info';
-      case 11543: // Entregue
+      case 13477: // Entregue
         return 'badge py-3 px-4 fs-7 badge-light-success';
       default:
         return 'badge py-3 px-4 fs-7 badge-light-secondary';
