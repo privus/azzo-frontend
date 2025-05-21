@@ -17,6 +17,8 @@ export interface Produto {
   descricao_uni: string;
   tiny_mg?: number;
   tiny_sp?: number;
+  saldo_estoque: number;
+  estoque_liquido?: number;
 }
 
 export interface CategoriaProduto {

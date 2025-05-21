@@ -8,9 +8,10 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { RomaneioComponent } from './romaneio/romaneio.component';
 import { RomaneioCreateModalComponent } from './romaneio-create-modal/romaneio-create-modal.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { StockComponent } from './stock/stock.component';
 
 @NgModule({
-  declarations: [StockProjectionComponent, RomaneioComponent, RomaneioCreateModalComponent],
+  declarations: [StockProjectionComponent, RomaneioComponent, RomaneioCreateModalComponent, StockComponent],
   imports: [CommonModule, ExpeditionRoutingModule, FormsModule, NgbTooltipModule, ReactiveFormsModule, SweetAlert2Module.forChild()],
   providers: [ExpeditionService],
 })
