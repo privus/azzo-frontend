@@ -241,12 +241,15 @@
                         </td>
                         <td>{{ order.codigo }}</td>
                         <td>
-                            <i
-                                class="fas me-1 text-muted"
-                                [ngClass]="getSegmentIcon(order.cliente.segmento_id)"
-                                [attr.title]="getSegmentLabel(order.cliente.segmento_id)"
-                            >                        
-                            </i>
+                            <div class="d-flex flex-column align-items-center">
+                                <i
+                                    class="fas me-1 text-muted"
+                                    [ngClass]="getSegmentIcon(order.cliente.segmento_id)"
+                                    [attr.title]="getSegmentLabel(order.cliente.segmento_id)"
+                                >                        
+                                </i>
+                                <span *ngIf="order.associado" class="text-danger fs-8 text-center">{{ order.associado }}</span>
+                            </div>
                         </td>
                         <td>{{ order.cliente.nome_empresa }}</td>
                           
