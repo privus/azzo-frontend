@@ -25,8 +25,8 @@
               <th>Produto</th>
               <th class="text-end">Marca</th>
               <th class="text-end">Status</th>
-              <th class="text-end">CX C/ 12</th>
               <th class="text-end">Estoque Líq.</th>
+              <th class="text-end">QT. CX</th>
               <th class="text-end">Estoque</th>
             </tr>
           </thead>
@@ -60,11 +60,11 @@
               <td class="text-end">{{ produto.categoria.nome }}</td>
               <td class="text-end">
                 <span
-                  class="badge py-3 px-4 fs-7"
+                  class="badge py-3 px-4 fs-9"
                   [ngClass]="{
-                    'badge-light-danger': (produto?.estoque_liquido ?? 0) <= 0,
-                    'badge-light-warning': (produto?.estoque_liquido ?? 0) < 10 && (produto?.estoque_liquido ?? 0) > 0,
-                    'badge-light-primary': (produto?.estoque_liquido ?? 0) >= 10
+                    'badge-light-danger': (produto?.saldo_estoque ?? 0) <= 0,
+                    'badge-light-warning': (produto?.saldo_estoque ?? 0) < 10 && (produto?.saldo_estoque ?? 0) > 0,
+                    'badge-light-primary': (produto?.saldo_estoque ?? 0) >= 10
                   }"
                 >
                   {{
@@ -77,10 +77,10 @@
                 </span>
               </td>
               <td class="text-end text-gray-900 fw-bold">
-                {{ (produto.saldo_estoque / 12).toFixed(1) }}
+                {{ produto.estoque_liquido }}
               </td>
               <td class="text-end text-gray-900 fw-bold">
-                {{ produto.estoque_liquido }}
+                {{ produto.estoque_em_caixas }}
               </td>
               <td class="text-end text-gray-900 fw-bold">
                 {{ produto.saldo_estoque }}

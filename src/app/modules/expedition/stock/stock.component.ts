@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Produto } from '../../commerce/models';
 import { ActivatedRoute } from '@angular/router';
 import { PaginationService } from '../../../core/services/';
-import { StockProjection } from '../models';
+import { StockLiquid } from '../models';
 
 @Component({
   selector: 'app-stock',
@@ -11,7 +11,7 @@ import { StockProjection } from '../models';
 })
 export class StockComponent implements OnInit {
   products: Produto[] = [];
-  stockData: StockProjection[] = [];
+  stockLiquid: StockLiquid[] = [];
 
   filteredProducts: Produto[] = [];
   currentPage: number = 1;
@@ -29,11 +29,44 @@ export class StockComponent implements OnInit {
 
   ngOnInit(): void {
     this.products = this.route.snapshot.data['product'];
-    this.stockData = this.route.snapshot.data['stockProjection'];
+    this.stockLiquid = this.route.snapshot.data['stockLiquid'];
 
-    this.products.forEach((produto) => {
-      const proj = this.stockData.find((p) => p.codigo === produto.codigo);
-      produto.estoque_liquido = produto.saldo_estoque - (proj?.quantidade ?? 0);
+    const produtosPorEan = new Map<number, Produto[]>();
+    for (const prod of this.products) {
+      if (!prod.ean) continue;
+      const eanNum = +prod.ean;
+      if (!produtosPorEan.has(eanNum)) produtosPorEan.set(eanNum, []);
+      produtosPorEan.get(eanNum)!.push(prod);
+    }
+
+    this.products = this.products.map((prod) => {
+      const eanNum = +prod.ean;
+      const grupo = produtosPorEan.get(eanNum) || [];
+
+      const unidade = grupo.find((p) => p.qt_uni === null);
+      const caixa = grupo.find((p) => p.qt_uni !== null);
+
+      const match = this.stockLiquid.find((item) => item.codigo === prod.codigo);
+
+      let estoque_em_caixas = '';
+
+      // Cenário 1: Unidade + Caixa
+      if (unidade && caixa && unidade.saldo_estoque && caixa.qt_uni) {
+        const caixas = Math.floor(unidade.saldo_estoque / caixa.qt_uni);
+        estoque_em_caixas = `${caixas} C/ ${caixa.qt_uni}`;
+      }
+      // Cenário 2: Apenas o próprio produto com qt_uni
+      else if (prod.qt_uni && prod.saldo_estoque) {
+        const caixas = Math.floor(prod.saldo_estoque / prod.qt_uni);
+        estoque_em_caixas = `${caixas} C/ ${prod.qt_uni}`;
+      }
+
+      return {
+        ...prod,
+        estoque_liquido: match?.estoqueLiquido ?? 0,
+        quantidade_vendida: match?.quantidadeVendida ?? 0,
+        estoque_em_caixas,
+      };
     });
 
     this.applyFilter();

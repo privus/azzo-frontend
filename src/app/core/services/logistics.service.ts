@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { StockProjection } from '../../modules/expedition/models';
+import { StockLiquid, StockProjection } from '../../modules/expedition/models';
 import { NewRomaneio, Romaneio, Transportadora } from 'src/app/modules/expedition/models/romaneio.model';
 
 @Injectable()
@@ -24,5 +24,9 @@ export class LogisticsService {
 
   createRomaneio(romaneio: NewRomaneio) {
     return this.http.post<{ message: string }>(`${this.baseUrl}sells/romaneio`, romaneio);
+  }
+
+  getStockLiquid() {
+    return this.http.get<StockLiquid[]>(`${this.baseUrl}stock/liquid`);
   }
 }

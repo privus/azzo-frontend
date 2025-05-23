@@ -19,6 +19,9 @@ export interface Produto {
   tiny_sp?: number;
   saldo_estoque: number;
   estoque_liquido?: number;
+  qt_uni?: number;
+  unidade: Produto;
+  estoque_em_caixas?: string;
 }
 
 export interface CategoriaProduto {

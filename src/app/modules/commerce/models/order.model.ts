@@ -31,6 +31,7 @@ export interface Order {
   chave_acesso: string;
   anexo: number;
   nfe_link: string;
+  associado?: number;
 }
 
 export interface Vendedor {
