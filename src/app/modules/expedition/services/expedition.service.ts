@@ -27,4 +27,8 @@ export class ExpeditionService {
   getStockLiquid() {
     return this.logisticsService.getStockLiquid();
   }
+
+  getDistributors() {
+    return this.logisticsService.getDistributors();
+  }
 }
