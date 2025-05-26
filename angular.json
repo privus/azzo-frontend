@@ -76,7 +76,7 @@
               "optimization": false,
               "vendorChunk": true,
               "extractLicenses": false,
-              "sourceMap": true,
+              "sourceMap": false,
               "namedChunks": true
             }
           },
@@ -91,6 +91,9 @@
             "development": {
               "buildTarget": "azzo:build:development"
             }
+          },
+          "options": {
+            "liveReload": false
           },
           "defaultConfiguration": "development"
         },
