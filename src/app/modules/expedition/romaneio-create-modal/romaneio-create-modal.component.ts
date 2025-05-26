@@ -44,7 +44,7 @@ export class RomaneioCreateModalComponent implements OnInit {
   }
 
   validCatDep(group: FormGroup) {
-    const transportadora_id = group.get('transportadora_id')?.value || null;
+    const transportadora_id = +group.get('transportadora_id')?.value || null;
     const transportadora_nome = group.get('transportadora_nome')?.value || null;
     const cod_rastreio = group.get('cod_rastreio')?.value || null;
 

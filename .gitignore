@@ -4,8 +4,6 @@
 /src/environments/environment.ts
 /src/environments/environment.prod.ts
 
-angular.json
-
 # compiled output
 /dist
 /tmp
@@ -55,3 +53,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+angular.json
