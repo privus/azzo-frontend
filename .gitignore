@@ -4,7 +4,7 @@
 /src/environments/environment.ts
 /src/environments/environment.prod.ts
 
-/angular.json
+angular.json
 
 # compiled output
 /dist
