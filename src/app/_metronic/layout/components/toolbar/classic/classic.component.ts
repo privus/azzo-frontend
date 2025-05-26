@@ -6,6 +6,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DebtCreateModalComponent } from '../../../../../modules/financial/debt-create-modal/debt-create-modal.component';
 import { CreditCreateModalComponent } from '../../../../../modules/financial/credit-create-modal/credit-create-modal.component';
 import { RomaneioCreateModalComponent } from 'src/app/modules/expedition/romaneio-create-modal/romaneio-create-modal.component';
+import { ImportXmlModalComponent } from 'src/app/modules/expedition/import-xml-modal/import-xml-modal.component';
 
 @Component({
   selector: 'app-classic',
@@ -85,6 +86,14 @@ export class ClassicComponent implements OnInit, OnDestroy {
     });
   }
 
+  openImportXmlModal() {
+    this.modalReference = this.modalService.open(ImportXmlModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+    });
+  }
+
   openRomaneioModal() {
     document.querySelector('app-layout')?.setAttribute('inert', '');
 
@@ -139,6 +148,9 @@ export class ClassicComponent implements OnInit, OnDestroy {
     if (fullPath.includes('expedition/romaneio')) {
       this.openRomaneioModal();
     }
+    if (fullPath.includes('expedition/stock')) {
+      this.openImportXmlModal();
+    }
   }
 
   isDisabledPrimary(): boolean {
@@ -146,5 +158,14 @@ export class ClassicComponent implements OnInit, OnDestroy {
   }
   isDisabledSecondary(): boolean {
     return this.currentRoute === 'commerce' || this.currentRoute === 'sellers' || this.currentRoute === 'expedition';
+  }
+
+  getPrimaryButtonLabel(): string {
+    const fullPath = this.router.url;
+
+    if (fullPath.includes('expedition/stock')) {
+      return 'Importar Xml';
+    }
+    return 'Criar';
   }
 }

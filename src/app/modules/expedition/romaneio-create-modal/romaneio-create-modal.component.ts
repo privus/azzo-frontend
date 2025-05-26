@@ -33,6 +33,7 @@ export class RomaneioCreateModalComponent implements OnInit {
         transportadora_id: [''],
         transportadora_nome: [''],
         data_criacao: [new Date().toISOString().substring(0, 10), [Validators.required]],
+        cod_rastreio: [''],
       },
       { validators: this.validCatDep as any },
     );
@@ -45,10 +46,17 @@ export class RomaneioCreateModalComponent implements OnInit {
   validCatDep(group: FormGroup) {
     const transportadora_id = group.get('transportadora_id')?.value || null;
     const transportadora_nome = group.get('transportadora_nome')?.value || null;
+    const cod_rastreio = group.get('cod_rastreio')?.value || null;
 
     if (!transportadora_id && !transportadora_nome) {
       return { validCatDep: true };
     }
+    if (transportadora_id === 4) {
+      if (!cod_rastreio) {
+        return { validCatDep: true };
+      }
+    }
+
     return null;
   }
 
@@ -66,6 +74,7 @@ export class RomaneioCreateModalComponent implements OnInit {
         transportadora_id: Number(value.transportadora_id),
         transportadora_nome: value.transportadora_nome || null,
         data_criacao: value.data_criacao,
+        cod_rastreio: value.cod_rastreio || null,
       };
       console.log('Payload:', payload);
       this.expeditionService.createRomaneio(payload).subscribe({

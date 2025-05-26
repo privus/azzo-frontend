@@ -1,0 +1,62 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Importar Nota Fiscal XML</h5>
+        <div class="btn btn-icon btn-sm btn-active-icon-primary" (click)="activeModal.dismiss()">
+          <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+        </div>
+      </div>
+      <div class="modal-body">
+        <label for="fornecedorSelect" class="form-label">Fornecedor</label>
+        <select class="form-select mb-3" id="fornecedorSelect" [(ngModel)]="selectedFornecedorId">
+          <option [value]="null" disabled selected>Selecione...</option>
+          <option *ngFor="let f of fornecedores" [value]="f.distribuidor_id">{{ f.nome }}</option>
+        </select>
+
+        <input type="file" #fileInput hidden (change)="onFileSelected($event)" accept=".xml" />
+        <div class="mb-3">
+          <button class="btn btn-secondary me-2" (click)="triggerFileInput()" [disabled]="!!result">Selecionar Arquivo</button>
+          <button class="btn btn-primary" [disabled]="!uploadedFiles.length || loading || !!result" (click)="uploadXml()">Importar XML</button>
+        </div>        
+
+        <div class="mt-4" *ngIf="result">
+          <h5 class="text-center text-success">{{ responseMessage }}</h5>
+          <div class="mb-2">- <b>Número NF-e:</b> {{ result.numero_nf }}</div>
+          <div class="mb-2">- <b>Data de Emissão:</b> {{ result.data_emissao | date: 'dd/MM/yyyy HH:mm' }}</div>
+          <div class="mb-2">- <b>Emitente:</b> {{ result.emitente }}</div>
+          <div class="mb-2">- <b>Valor Nf:</b> R$ {{ result.valor | number:'1.2-2' }}</div>
+          <div class="mb-2">- <b>Itens Importados:</b> {{ result.qtd_itens }}</div>
+          <div class="mb-2">- <b>Produtos Não Encontrados:</b> {{ result.produtos_nao_encontrados || 'Nenhum' }}</div>
+        
+          <hr />
+          <h6>Produtos Importados:</h6>
+          <div class="table-responsive" *ngIf="result.produtos">
+            <table class="table table-bordered table-striped table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>Código</th>
+                  <th>Nome</th>
+                  <th>Qt. Cx</th>
+                  <th>Quantidade (un)</th>
+                  <th>Valor Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let p of result.produtos">
+                  <td>{{ p.codigo }}</td>
+                  <td>{{ p.nome }}</td>
+                  <td>{{ p.qt_caixa }}</td>
+                  <td>{{ p.quantidade }}</td>
+                  <td>R$ {{ p.valor_total.toFixed(2) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+        </div>
+                      
+      </div>
+    </div>
+  </div>
+</div>

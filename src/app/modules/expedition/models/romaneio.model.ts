@@ -12,6 +12,7 @@ export interface NewRomaneio {
   transportadora_id: number;
   transportadora_nome: string;
   data_criacao: string;
+  cod_rastreio?: string;
 }
 
 export interface Transportadora {

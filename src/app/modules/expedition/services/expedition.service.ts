@@ -8,7 +8,7 @@ import { NewRomaneio } from '../models';
 export class ExpeditionService {
   constructor(private readonly logisticsService: LogisticsService) {}
 
-  getExpedition() {
+  getStockProjection() {
     return this.logisticsService.getStockProjection();
   }
 
@@ -22,5 +22,13 @@ export class ExpeditionService {
 
   createRomaneio(romaneio: NewRomaneio) {
     return this.logisticsService.createRomaneio(romaneio);
+  }
+
+  getStockLiquid() {
+    return this.logisticsService.getStockLiquid();
+  }
+
+  getDistributors() {
+    return this.logisticsService.getDistributors();
   }
 }

@@ -4,8 +4,19 @@ import { StockProjectionComponent } from './stock-projection/stock-projection.co
 import { StockProjectionResolver } from './stock-projection.resolver';
 import { RomaneioComponent } from './romaneio/romaneio.component';
 import { RomaneioResolver } from './romaneio.resolver';
+import { StockComponent } from './stock/stock.component';
+import { ProductResolver } from '../commerce/product.resolver';
+import { StockLiquidResolver } from './stock-liquid.resolver';
 
 const routes: Routes = [
+  {
+    path: 'stock',
+    component: StockComponent,
+    resolve: {
+      product: ProductResolver,
+      stockLiquid: StockLiquidResolver,
+    },
+  },
   {
     path: 'stock-projection',
     component: StockProjectionComponent,

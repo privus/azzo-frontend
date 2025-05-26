@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
-import { StockProjection } from './models';
+import { StockLiquid } from './models';
 import { ExpeditionService } from './services/expedition.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class StockProjectionResolver implements Resolve<StockProjection[] | null> {
+export class StockLiquidResolver implements Resolve<StockLiquid[] | null> {
   constructor(private expeditionService: ExpeditionService) {}
 
-  resolve(): Observable<StockProjection[] | null> {
-    return this.expeditionService.getStockProjection();
+  resolve(): Observable<StockLiquid[] | null> {
+    return this.expeditionService.getStockLiquid();
   }
 }
