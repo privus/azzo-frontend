@@ -32,6 +32,7 @@ export interface Order {
   anexo: number;
   nfe_link: string;
   associado?: number;
+  fora_politica: number;
 }
 
 export interface Vendedor {

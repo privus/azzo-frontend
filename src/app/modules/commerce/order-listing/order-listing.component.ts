@@ -163,10 +163,11 @@ export class OrderListingComponent implements OnInit {
     this.router.navigate(['commerce/orders', id]);
   }
 
-  getStatusClass(statusId: number): string {
+  getStatusClass(statusId: number, fora_politica: number): string {
     switch (statusId) {
       case 11138: // Aguardando Aprovação
-        return 'badge py-3 px-4 fs-7 badge-light-warning';
+        const c = fora_politica ? 'badge py-3 px-4 fs-7 badge-light-danger' : 'badge py-3 px-4 fs-7 badge-light-warning';
+        return c;
       case 11139: // Pedido
         return 'badge py-3 px-4 fs-7 badge-light-primary';
       case 11468: // Reprovado
