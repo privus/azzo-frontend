@@ -79,4 +79,8 @@ export class SellService {
   syncroInvoiceNf() {
     return this.http.get<{ message: string }>(`${this.baseUrl}sells/syncroInvoiceNfe`);
   }
+
+  deleteOrder(id: number) {
+    return this.http.delete<{ message: string }>(`${this.baseUrl}sells/${id}`);
+  }
 }

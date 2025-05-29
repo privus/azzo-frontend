@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { RoleGuard } from '../core/guards/role.guard';
 
 const Routing: Routes = [
   {
@@ -16,10 +17,14 @@ const Routing: Routes = [
   {
     path: 'apps/users',
     loadChildren: () => import('./user/user.module').then((m) => m.UserModule),
+    canActivate: [RoleGuard],
+    data: { roles: ['Administrador'] },
   },
   {
     path: 'apps/roles',
     loadChildren: () => import('./role/role.module').then((m) => m.RoleModule),
+    canActivate: [RoleGuard],
+    data: { roles: ['Administrador'] },
   },
   {
     path: 'commerce',
@@ -28,10 +33,14 @@ const Routing: Routes = [
   {
     path: 'financial',
     loadChildren: () => import('../modules/financial/financial.module').then((m) => m.FinancialModule),
+    canActivate: [RoleGuard],
+    data: { roles: ['Administrador', 'Financeiro'] },
   },
   {
     path: 'sellers',
     loadChildren: () => import('../modules/sellers/sellers.module').then((m) => m.SellersModule),
+    canActivate: [RoleGuard],
+    data: { roles: ['Administrador', 'Financeiro'] },
   },
   {
     path: 'expedition',
