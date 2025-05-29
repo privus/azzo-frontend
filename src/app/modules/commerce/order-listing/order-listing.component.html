@@ -226,6 +226,7 @@
                             }"></i>
                         </th>                          
                         <th class="min-w-125px">Valor Pedido</th>
+                        <th class="min-w-125px">Status Pagamento</th>
                         <th class="min-w-125px">Tipo Pedido</th>
                         <th class="min-w-125px">Status Venda</th>
                         <th class="min-w-125px">Vendedor</th>
@@ -254,9 +255,14 @@
                           
                         <td><div class="text-muted fs-7">{{ order.data_criacao | date:'dd/MM/yyyy' }}</div></td>
                         <td>{{ order.valor_final | currency:'BRL' }}</td>
+                        <td>                            
+                            <span class="badge td" [ngClass]="getStatusPagClass(order.status_pagamento.status_pagamento_id)">
+                            {{ order.status_pagamento.nome }}
+                            </span>  
+                        </td>
                         <td>{{ order.tipo_pedido.nome }}</td>
                         <td>                            
-                            <span class="badge td" [ngClass]="getStatusClass(order.status_venda.status_venda_id, order.fora_politica)">
+                            <span class="badge td" [ngClass]="getStatusClass(order.status_venda.status_venda_id)">
                             {{ order.status_venda.nome }}
                             </span>  
                         </td>                                             

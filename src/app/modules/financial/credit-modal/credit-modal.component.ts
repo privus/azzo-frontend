@@ -144,7 +144,6 @@ export class CreditModalComponent implements OnInit {
           },
           () => {
             this.activeModal.close('success');
-            window.location.reload();
           },
         );
       },
