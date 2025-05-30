@@ -33,6 +33,7 @@ export interface Order {
   nfe_link: string;
   associado?: number;
   fora_politica: number;
+  valor_frete?: number;
 }
 
 export interface Vendedor {

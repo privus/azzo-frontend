@@ -76,6 +76,16 @@
                   formControlName="numero_nfe"
                 />
               </div>
+              <div *ngIf="order.vendedor.vendedor_id === 16" class="w-100">
+                <label class="form-label">Frete</label>
+                <input
+                  type="text"
+                  name="frete"
+                  class="form-control mb-2"
+                  placeholder="Valor Frete"
+                  formControlName="valor_frete"
+                />
+              </div>
               <div class="w-100 mt-5"> <!-- Adicionando margem superior para deslocar para baixo -->
                 <span 
                   class="fw-bold text-gray-800" 
