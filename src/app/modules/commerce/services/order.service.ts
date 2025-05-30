@@ -56,8 +56,4 @@ export class OrderService {
   syncroInvoiceNf() {
     return this.sellService.syncroInvoiceNf();
   }
-
-  deleteSell(id: number) {
-    return this.sellService.deleteOrder(id);
-  }
 }

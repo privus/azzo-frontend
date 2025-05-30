@@ -2,7 +2,7 @@
   <!--begin::Menu-->
   <div class="menu menu-column menu-rounded menu-sub-indention fw-semibold fs-6" id="#kt_app_sidebar_menu" data-kt-menu="true" data-kt-menu-expand="false">
     <!-- Dashboard -->
-    <div *ngIf="isRole('Administrador')" class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
       <span class="menu-link">
         <span class="menu-icon">
           <app-keenicon name="profile-user" class="fs-2"></app-keenicon>
@@ -80,7 +80,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="isRole('Administrador', 'Financeiro')" class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
       <span class="menu-link">
         <span class="menu-icon">
           <span class="menu-icon">
@@ -115,7 +115,7 @@
       </div>
     </div>
     <!-- Vendedores -->
-    <div *ngIf="isRole('Administrador', 'Financeiro')" class="menu-item menu-accordion" data-kt-menu-trigger="click">
+    <div class="menu-item menu-accordion" data-kt-menu-trigger="click">
       <span class="menu-link">
         <span class="menu-icon">
           <i class="bi bi-person-badge"></i>
