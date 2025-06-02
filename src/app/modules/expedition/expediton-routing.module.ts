@@ -6,7 +6,7 @@ import { RomaneioComponent } from './romaneio/romaneio.component';
 import { RomaneioResolver } from './romaneio.resolver';
 import { StockComponent } from './stock/stock.component';
 import { ProductResolver } from '../commerce/product.resolver';
-import { StockLiquidResolver } from './stock-liquid.resolver';
+// import { StockLiquidResolver } from './stock-liquid.resolver';
 
 const routes: Routes = [
   {
@@ -14,7 +14,7 @@ const routes: Routes = [
     component: StockComponent,
     resolve: {
       product: ProductResolver,
-      stockLiquid: StockLiquidResolver,
+      // stockLiquid: StockLiquidResolver,
     },
   },
   {

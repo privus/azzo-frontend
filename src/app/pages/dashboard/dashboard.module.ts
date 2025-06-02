@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { ModalsModule } from '../../_metronic/partials';
-import { AuthGuard } from 'src/app/core/guards/auth.guard';
+import { AuthGuard } from '../../core/guards/auth.guard';
 import { SalesComparisonResolver } from './sales-comparison.resolver';
 import { DebtsComparisonResolver } from './debts-comparison.resolver';
 import { FormsModule } from '@angular/forms';

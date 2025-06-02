@@ -46,6 +46,7 @@ export class OrderListingComponent implements OnInit {
   sortField: string = '';
   selectedSeller: string = '';
   selectedSegment: string = '';
+  cargo: string = '';
 
   categories = [
     { id: '46631', label: 'Supermercado', icon: 'fa-store' },
@@ -82,6 +83,7 @@ export class OrderListingComponent implements OnInit {
     this.applyFilter();
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
     this.user = storageInfo ? JSON.parse(storageInfo).nome : '';
+    this.cargo = storageInfo ? JSON.parse(storageInfo).cargo.nome : '';
   }
 
   showAlert(swalOptions: SweetAlertOptions) {
@@ -897,6 +899,41 @@ export class OrderListingComponent implements OnInit {
           console.error('Erro ao gerar resumo:', err);
         },
       });
+    });
+  }
+
+  deleteOrder(code: number) {
+    Swal.fire({
+      title: 'Confirmação',
+      text: `Deseja excluir o pedido ${code}? Essa ação é irreversível!`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, Excluir!',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Se o usuário confirmar, faz a exportação
+        this.orderService.deleteSell(code).subscribe({
+          next: (resp) => {
+            Swal.fire({
+              icon: 'success',
+              title: `Pedido ${code} excluído com sucesso!`,
+              text: resp.message,
+              confirmButtonText: 'Ok',
+            });
+            this.applyFilter();
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: `Erro na exclusão do pedido ${code}!`,
+              text: 'Não foi possível excluir o pedido. ' + err.error.message,
+              confirmButtonText: 'Ok',
+            });
+            console.error('Erro ao exportar para Tiny:', err);
+          },
+        });
+      }
     });
   }
 }
