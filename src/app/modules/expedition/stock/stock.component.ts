@@ -46,7 +46,7 @@ export class StockComponent implements OnInit {
       const unidade = grupo.find((p) => p.qt_uni === null);
       const caixa = grupo.find((p) => p.qt_uni !== null);
 
-      const match = this.stockLiquid.find((item) => item.codigo === prod.codigo);
+      // const match = this.stockLiquid.find((item) => item.codigo === prod.codigo);
 
       let estoque_em_caixas = '';
 
@@ -63,8 +63,6 @@ export class StockComponent implements OnInit {
 
       return {
         ...prod,
-        estoque_liquido: match?.estoqueLiquido ?? 0,
-        quantidade_vendida: match?.quantidadeVendida ?? 0,
         estoque_em_caixas,
       };
     });
