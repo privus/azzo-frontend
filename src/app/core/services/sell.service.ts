@@ -83,4 +83,8 @@ export class SellService {
   deleteOrder(id: number) {
     return this.http.delete<{ message: string }>(`${this.baseUrl}sells/${id}`);
   }
+
+  getInProduction() {
+    return this.http.get<number>(`${this.baseUrl}sells/prod`);
+  }
 }

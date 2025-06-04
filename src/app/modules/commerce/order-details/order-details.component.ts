@@ -124,9 +124,9 @@ export class OrderDetailsComponent implements OnInit {
     const statusControl = this.orderForm.get('status');
     const status = statusControl ? statusControl.value : null;
     const nfe = this.orderForm.get('numero_nfe')?.value;
-    const frete = this.orderForm.get('valor_frete')?.value;
+    const frete = this.orderForm.get('valor_frete')?.value || null;
     console.log('Updating status:', status);
-    const update = { venda_id: this.orderId, status_venda_id: Number(status), numero_nfe: Number(nfe), valor_frete: Number(frete) };
+    const update = { codigo: this.code, status_venda_id: Number(status), numero_nfe: Number(nfe), valor_frete: Number(frete) };
     this.orderService.updateSellStatus(update).subscribe({
       next: (resp) => {
         this.showAlert({

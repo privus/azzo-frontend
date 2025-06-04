@@ -60,4 +60,8 @@ export class OrderService {
   deleteSell(id: number) {
     return this.sellService.deleteOrder(id);
   }
+
+  getInProduction() {
+    return this.sellService.getInProduction();
+  }
 }

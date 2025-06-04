@@ -37,6 +37,19 @@
             </div>
 
             <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRange()">Aplicar</button>
+            <div
+                class="d-flex align-items-center position-relative my-1 ms-9"
+                style="background-color: #f5f8fa; padding: 0.5rem 1rem; border-radius: 0.5rem;"
+            >
+                <i class="bi bi-box-seam me-2">
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                </i>
+                <span class="fw-semibold fs-6 text-gray-700">
+                    Em Montagem: <strong class="text-danger">{{ emMontagem }}</strong>
+                </span>
+            </div>
+
             <button
                 class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9"
                 data-bs-toggle="tooltip"
@@ -167,8 +180,7 @@
                         <span class="path4"></span>
                         <span class="path5"></span>
                     </i>
-                    Imprimir Resumo
-                
+                    Imprimir Resumo                
                 </button>
             </div>
               
@@ -271,8 +283,8 @@
                             <div class="text-center d-flex position-relative align-items-center">
                                 <span *ngIf="order.volume" class="badge badge-light-primary fs-8">
                                     <i class="bi bi-box-seam">
-                                    <span class="path1"></span>
-                                    <span class="path2"></span>
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
                                     </i>
                                 </span>                              
                             </div>

@@ -47,6 +47,7 @@ export class OrderListingComponent implements OnInit {
   selectedSeller: string = '';
   selectedSegment: string = '';
   cargo: string = '';
+  emMontagem: number = 0;
 
   categories = [
     { id: '46631', label: 'Supermercado', icon: 'fa-store' },
@@ -84,6 +85,11 @@ export class OrderListingComponent implements OnInit {
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
     this.user = storageInfo ? JSON.parse(storageInfo).nome : '';
     this.cargo = storageInfo ? JSON.parse(storageInfo).cargo.nome : '';
+    this.orderService.getInProduction().subscribe({
+      next: (resp) => {
+        this.emMontagem = resp;
+      },
+    });
   }
 
   showAlert(swalOptions: SweetAlertOptions) {
@@ -622,9 +628,23 @@ export class OrderListingComponent implements OnInit {
   printSelectedOrders(): void {
     if (this.selectedOrders.length === 0) return;
 
+    // 🔒 Trava: impedir mais de 6 pedidos em montagem
+    const totalSelecionados = this.selectedOrders.length;
+    const totalMontagem = this.emMontagem;
+
+    if (totalMontagem + totalSelecionados > 6) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Limite atingido',
+        text: `Existem ${totalMontagem} pedidos em montagem. Finalize algum antes de liberar outro.`,
+        confirmButtonText: 'Ok',
+      });
+      return;
+    }
+
     Swal.fire({
       title: 'Imprimir Pedidos Selecionados',
-      html: `<p>Você selecionou <strong>${this.selectedOrders.length}</strong> pedido(s).</p>`,
+      html: `<p>Você selecionou <strong>${totalSelecionados}</strong> pedido(s).</p>`,
       showCancelButton: true,
       confirmButtonText: 'Sim!',
       cancelButtonText: 'Cancelar',
@@ -659,9 +679,7 @@ export class OrderListingComponent implements OnInit {
           return;
         }
 
-        // Cria novo documento PDF
         const mergedPdf = await PDFDocument.create();
-
         for (const blob of validBlobs) {
           const arrayBuffer = await blob.arrayBuffer();
           const pdfToMerge = await PDFDocument.load(arrayBuffer);
@@ -690,6 +708,7 @@ export class OrderListingComponent implements OnInit {
       });
     });
   }
+
   // generateLabelsForSelected(): void {
   //   if (this.selectedOrders.length === 0) return;
 
