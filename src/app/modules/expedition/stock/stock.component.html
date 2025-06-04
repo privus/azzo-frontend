@@ -6,6 +6,18 @@
           Total de {{ filteredProducts.length }} produtos listados
         </span>
       </h3>
+      <div class="d-flex align-items-center position-relative my-1 ms-8">
+        <select
+          class="form-select form-select-solid form-select-lg"
+          [(ngModel)]="selectedStatus"
+          (change)="applyFilter()"
+        >
+          <option value="">Todos</option>
+          <option value="disponivel">Disponível</option>
+          <option value="baixo">Estoque Baixo</option>
+          <option value="sem">Sem Estoque</option>
+        </select>
+      </div>    
       <div class="card-toolbar">
         <input
           [(ngModel)]="searchTerm"
@@ -26,7 +38,15 @@
               <th class="text-end">Marca</th>
               <th class="text-end">Status</th>
               <th class="text-end">QT. CX</th>
-              <th class="text-end">Estoque</th>
+              <th class="text-end" (click)="changeSort('saldo_estoque')" style="cursor: pointer">
+                Estoque
+                <i *ngIf="sortField === 'saldo_estoque'" class="ms-1" 
+                   [ngClass]="{
+                     'bi bi-arrow-up': sortDirection === 'asc',
+                     'bi bi-arrow-down': sortDirection === 'desc'
+                   }"></i>
+              </th>
+              
             </tr>
           </thead>
           <tbody class="fw-bold text-gray-600">
@@ -61,14 +81,14 @@
                   class="badge py-3 px-4 fs-9"
                   [ngClass]="{
                     'badge-light-danger': (produto?.saldo_estoque ?? 0) <= 0,
-                    'badge-light-warning': (produto?.saldo_estoque ?? 0) < 10 && (produto?.saldo_estoque ?? 0) > 0,
+                    'badge-light-warning': (produto?.saldo_estoque ?? 0) < 288 && (produto?.saldo_estoque ?? 0) > 0,
                     'badge-light-primary': (produto?.saldo_estoque ?? 0) >= 10
                   }"
                 >
                   {{
                     produto.saldo_estoque === 0
                       ? 'Sem estoque'
-                      : produto.saldo_estoque < 10
+                      : produto.saldo_estoque < 288
                       ? 'Estoque baixo'
                       : 'Disponível'
                   }}

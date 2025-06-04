@@ -21,6 +21,9 @@ export class StockComponent implements OnInit {
   searchTerm: string = '';
   startItem: number = 0;
   endItem: number = 0;
+  sortField: string = 'saldo_estoque';
+  sortDirection: 'asc' | 'desc' = 'desc';
+  selectedStatus: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -70,21 +73,60 @@ export class StockComponent implements OnInit {
     this.applyFilter();
   }
 
-  applyFilter(): void {
-    if (this.searchTerm.trim() === '') {
-      this.filteredProducts = [...this.products];
+  sortProducts(): void {
+    const direction = this.sortDirection === 'asc' ? 1 : -1;
+    this.filteredProducts.sort((a, b) => {
+      const fieldA = (a as any)[this.sortField] ?? 0;
+      const fieldB = (b as any)[this.sortField] ?? 0;
+      return (fieldA < fieldB ? -1 : fieldA > fieldB ? 1 : 0) * direction;
+    });
+  }
+
+  changeSort(field: string): void {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
-      const term = this.searchTerm.toLowerCase();
-      this.filteredProducts = this.products.filter(
-        (product) =>
-          product.nome.toLowerCase().includes(term) ||
-          product.categoria.nome.toLowerCase().includes(term) ||
-          product.codigo.toLowerCase().includes(term),
-      );
+      this.sortField = field;
+      this.sortDirection = 'desc';
     }
+    this.sortProducts();
+    this.updateDisplayedItems();
+  }
 
-    this.filteredProducts.sort((a, b) => b.saldo_estoque - a.saldo_estoque);
+  applyFilter(): void {
+    const term = this.searchTerm.toLowerCase().trim();
 
+    this.filteredProducts = this.products.filter((product) => {
+      // Exibe apenas produtos sem qt_uni ou do fornecedor 6
+      const visivel = !product.qt_uni || product.fornecedor?.fornecedor_id === 6;
+
+      // Busca por texto
+      const matchBusca =
+        term === '' ||
+        product.nome.toLowerCase().includes(term) ||
+        product.categoria.nome.toLowerCase().includes(term) ||
+        product.codigo.toLowerCase().includes(term);
+
+      // Filtro por status de estoque
+      const estoque = product?.saldo_estoque ?? 0;
+      let matchStatus = true;
+
+      switch (this.selectedStatus) {
+        case 'disponivel':
+          matchStatus = estoque >= 288;
+          break;
+        case 'baixo':
+          matchStatus = estoque > 0 && estoque < 288;
+          break;
+        case 'sem':
+          matchStatus = estoque <= 0;
+          break;
+      }
+
+      return visivel && matchBusca && matchStatus;
+    });
+
+    this.sortProducts();
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
