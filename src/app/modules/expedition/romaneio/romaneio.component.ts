@@ -155,7 +155,6 @@ export class RomaneioComponent implements OnInit {
 
     this.http.post<{ message: string }>(`${this.baseUrl}sells/import-fretes/${romaneioId}`, formData).subscribe({
       next: (resp) => {
-        console.log('RESP ========>', resp);
         this.showAlert(resp?.message || 'Importação concluída com sucesso!');
       },
       error: () => {
@@ -170,6 +169,8 @@ export class RomaneioComponent implements OnInit {
       text,
       icon: 'success',
       confirmButtonText: 'OK',
+    }).then(() => {
+      window.location.reload();
     });
   }
 
