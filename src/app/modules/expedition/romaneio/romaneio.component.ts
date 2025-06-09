@@ -39,7 +39,11 @@ export class RomaneioComponent implements OnInit {
   }
 
   toggleExpand(id: number): void {
-    this.expanded.has(id) ? this.expanded.delete(id) : this.expanded.add(id);
+    if (this.expanded.has(id)) {
+      this.expanded.delete(id);
+    } else {
+      this.expanded.add(id);
+    }
   }
 
   isExpanded(id: number): boolean {
@@ -151,6 +155,7 @@ export class RomaneioComponent implements OnInit {
 
     this.http.post<{ message: string }>(`${this.baseUrl}sells/import-fretes/${romaneioId}`, formData).subscribe({
       next: (resp) => {
+        console.log('RESP ========>', resp);
         this.showAlert(resp?.message || 'Importação concluída com sucesso!');
       },
       error: () => {
