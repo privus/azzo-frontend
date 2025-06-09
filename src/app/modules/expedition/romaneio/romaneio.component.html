@@ -47,7 +47,7 @@
                 <i *ngIf="isExpanded(r.romaneio_id)" class="fas fa-minus fs-4 m-0"></i>                  
               </button>
               <button 
-                disabled="r.valor_frete"
+                [disabled]="r.valor_frete"
                 class="btn btn-sm btn-icon btn-light text-primary ms-2"
                 (click)="triggerFileUpload(r.romaneio_id)"
                 title="Importar Fretes"
