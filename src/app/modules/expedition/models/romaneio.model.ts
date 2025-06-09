@@ -5,6 +5,7 @@ export interface Romaneio {
   data_criacao: string;
   vendas: Order[];
   transportadora: Transportadora;
+  valor_frete: number;
 }
 
 export interface NewRomaneio {

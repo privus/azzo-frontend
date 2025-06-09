@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Romaneio, Transportadora } from '../models/romaneio.model';
 import { PaginationService } from '../../../core/services/pagination.service';
-import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
-import { SweetAlertOptions } from 'sweetalert2';
+import Swal from 'sweetalert2';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-romaneio',
@@ -13,9 +14,8 @@ import { SweetAlertOptions } from 'sweetalert2';
 export class RomaneioComponent implements OnInit {
   romaneio: Romaneio[] = [];
   filteredRomaneio: Romaneio[] = [];
-  paginatedRomaneios: Romaneio[] = [];
-  startItem: number = 0;
-  endItem: number = 0;
+  startItem = 0;
+  endItem = 0;
   searchTerm = '';
   currentPage = 1;
   itemsPerPage = 50;
@@ -24,14 +24,13 @@ export class RomaneioComponent implements OnInit {
   showRomaneioModal = false;
   transportadora: Transportadora[] = [];
   showTransInput = false;
-  @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
-  swalOptions: SweetAlertOptions = {};
-
+  private baseUrl = environment.apiUrl;
   expanded: Set<number> = new Set();
 
   constructor(
     private route: ActivatedRoute,
     private paginationService: PaginationService,
+    private http: HttpClient,
   ) {}
 
   ngOnInit() {
@@ -40,11 +39,7 @@ export class RomaneioComponent implements OnInit {
   }
 
   toggleExpand(id: number): void {
-    if (this.expanded.has(id)) {
-      this.expanded.delete(id);
-    } else {
-      this.expanded.add(id);
-    }
+    this.expanded.has(id) ? this.expanded.delete(id) : this.expanded.add(id);
   }
 
   isExpanded(id: number): boolean {
@@ -56,15 +51,16 @@ export class RomaneioComponent implements OnInit {
   }
 
   applyFilters(): void {
+    const term = this.searchTerm.toLowerCase();
     let result = [...this.romaneio];
 
-    if (this.searchTerm) {
-      const term = this.searchTerm.toLowerCase();
-      result = result.filter((romaneio) => romaneio.vendas.some((v) => v.codigo.toString().includes(term)));
+    if (term) {
+      result = result.filter((romaneio) =>
+        romaneio.vendas.some((v) => v.codigo.toString().includes(term) || (v.numero_nfe && v.numero_nfe.toString().includes(term))),
+      );
     }
 
     this.filteredRomaneio = result;
-
     this.calculatePagination();
     this.updateDisplayedItems();
   }
@@ -72,32 +68,22 @@ export class RomaneioComponent implements OnInit {
   calculatePagination(): void {
     this.totalPages = Math.ceil(this.filteredRomaneio.length / this.itemsPerPage);
     if (this.currentPage > this.totalPages) {
-      this.currentPage = this.totalPages || 1; // Se totalPages for 0, define como 1
+      this.currentPage = this.totalPages || 1;
     }
     this.updateDisplayedPages();
   }
 
   updateDisplayedPages(): void {
-    const maxDisplayedPages = 3;
-    let startPage: number;
-    let endPage: number;
+    const maxDisplayed = 3;
+    const half = Math.floor(maxDisplayed / 2);
+    let start = Math.max(this.currentPage - half, 1);
+    let end = Math.min(start + maxDisplayed - 1, this.totalPages);
 
-    if (this.totalPages <= maxDisplayedPages) {
-      startPage = 1;
-      endPage = this.totalPages;
-    } else {
-      if (this.currentPage <= Math.ceil(maxDisplayedPages / 2)) {
-        startPage = 1;
-        endPage = maxDisplayedPages;
-      } else if (this.currentPage + Math.floor(maxDisplayedPages / 2) >= this.totalPages) {
-        startPage = this.totalPages - maxDisplayedPages + 1;
-        endPage = this.totalPages;
-      } else {
-        startPage = this.currentPage - 1;
-        endPage = this.currentPage + 1;
-      }
+    if (end - start < maxDisplayed - 1) {
+      start = Math.max(end - maxDisplayed + 1, 1);
     }
-    this.displayedPages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+
+    this.displayedPages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }
 
   updateDisplayedItems(): void {
@@ -149,5 +135,45 @@ export class RomaneioComponent implements OnInit {
   toggleTransportadoraInput(event: Event): void {
     const value = (event.target as HTMLSelectElement).value;
     this.showTransInput = value === '';
+  }
+
+  triggerFileUpload(romaneioId: number): void {
+    const input = document.getElementById(`fileInput-${romaneioId}`) as HTMLInputElement | null;
+    input?.click();
+  }
+
+  onFileSelected(event: Event, romaneioId: number): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    this.http.post<{ message: string }>(`${this.baseUrl}sells/import-fretes/${romaneioId}`, formData).subscribe({
+      next: (resp) => {
+        this.showAlert(resp?.message || 'Importação concluída com sucesso!');
+      },
+      error: () => {
+        this.showAlert('Erro ao importar planilha de fretes.');
+      },
+    });
+  }
+
+  showAlert(text: string): void {
+    Swal.fire({
+      title: 'Importação',
+      text,
+      icon: 'success',
+      confirmButtonText: 'OK',
+    });
+  }
+
+  getTotalPedidos(r: Romaneio): number {
+    return r.vendas.reduce((sum, v) => sum + (Number(v.valor_final) || 0), 0);
+  }
+
+  getFretePercentual(r: Romaneio): number {
+    const totalPedidos = this.getTotalPedidos(r);
+    return totalPedidos > 0 ? (r.valor_frete / totalPedidos) * 100 : 0;
   }
 }
