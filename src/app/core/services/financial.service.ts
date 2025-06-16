@@ -33,8 +33,8 @@ export class FinancialService {
     return this.http.get<Debt[]>(`${this.baseUrl}debts/between?fromDate=${startDate}${endDate}`);
   }
 
-  getAllDebts() {
-    return this.http.get<Debt[]>(`${this.baseUrl}debts`);
+  getAllDebts(companyId: number) {
+    return this.http.get<Debt[]>(`${this.baseUrl}debts/${companyId}`);
   }
 
   getDebtsFromDate(fromDate: string) {

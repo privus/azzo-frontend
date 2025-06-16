@@ -8,8 +8,8 @@ import { NewDebt, UpdateDebtStatus, UpdateInstallment } from '../models';
 export class DebtService {
   constructor(private readonly financialService: FinancialService) {}
 
-  getAllDebts() {
-    return this.financialService.getAllDebts();
+  getAllDebts(companyId: number) {
+    return this.financialService.getAllDebts(companyId);
   }
 
   getDebtsBetweenDates(startDate: string, endDate?: string) {
