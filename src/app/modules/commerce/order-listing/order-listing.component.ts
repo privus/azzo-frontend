@@ -85,11 +85,16 @@ export class OrderListingComponent implements OnInit {
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
     this.user = storageInfo ? JSON.parse(storageInfo).nome : '';
     this.cargo = storageInfo ? JSON.parse(storageInfo).cargo.nome : '';
+    this.onProduction();
+  }
+
+  onProduction(): void {
     this.orderService.getInProduction().subscribe({
       next: (resp) => {
         this.emMontagem = resp;
       },
     });
+    this.cdr.detectChanges();
   }
 
   showAlert(swalOptions: SweetAlertOptions) {
