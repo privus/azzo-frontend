@@ -319,7 +319,7 @@ export class DebtsListingComponent implements OnInit {
         to.setDate(to.getDate() + 2);
         const toDate = this.formatDate(to);
 
-        this.debtService.getDebtsBetweenDates(fromDate, toDate).subscribe({
+        this.debtService.getDebtsBetweenDates(this.userCompanyId, fromDate, toDate).subscribe({
           next: (debts) => {
             console.log('📦 DADOS RECEBIDOS DA API:', debts);
             this.debts = debts;
@@ -330,7 +330,7 @@ export class DebtsListingComponent implements OnInit {
         });
         return;
       } else {
-        this.debtService.getDebtsBetweenDates(fromDate).subscribe({
+        this.debtService.getDebtsBetweenDates(this.userCompanyId, fromDate).subscribe({
           next: (debts) => {
             this.debts = debts;
             this.applyFilter();
@@ -367,7 +367,7 @@ export class DebtsListingComponent implements OnInit {
         endDate.setDate(endDate.getDate() + 1);
         const t = this.formatDate(endDate);
 
-        this.debtService.getDebtsBetweenDates(f, t).subscribe({
+        this.debtService.getDebtsBetweenDates(this.userCompanyId, f, t).subscribe({
           next: (debts) => {
             this.debts = debts;
             this.applyFilter();
@@ -383,7 +383,7 @@ export class DebtsListingComponent implements OnInit {
         const from = this.formatDate(startDate);
         const to = this.formatDate(endDate);
 
-        this.debtService.getDebtsBetweenDates(from, to).subscribe({
+        this.debtService.getDebtsBetweenDates(this.userCompanyId, from, to).subscribe({
           next: (debts) => {
             this.debts = debts;
             this.applyFilter();
@@ -398,7 +398,7 @@ export class DebtsListingComponent implements OnInit {
         break;
     }
     const fromDate = this.formatDate(startDate);
-    this.debtService.getDebtsFromDate(fromDate).subscribe({
+    this.debtService.getDebtsFromDate(this.userCompanyId, fromDate).subscribe({
       next: (debts) => {
         this.debts = debts;
         this.applyFilter();

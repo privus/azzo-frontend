@@ -12,13 +12,13 @@ export class DebtService {
     return this.financialService.getAllDebts(companyId);
   }
 
-  getDebtsBetweenDates(startDate: string, endDate?: string) {
+  getDebtsBetweenDates(companyId: number, startDate: string, endDate?: string) {
     const end = endDate ? `&toDate=${endDate}` : '';
-    return this.financialService.getDebtsBetweenDates(startDate, end);
+    return this.financialService.getDebtsBetweenDates(companyId, startDate, end);
   }
 
-  getDebtsFromDate(fromDate: string) {
-    return this.financialService.getDebtsFromDate(fromDate);
+  getDebtsFromDate(companyId: number, fromDate: string) {
+    return this.financialService.getDebtsFromDate(companyId, fromDate);
   }
 
   getAllDepartaments() {
