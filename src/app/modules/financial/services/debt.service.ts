@@ -48,4 +48,8 @@ export class DebtService {
   getPerformanceDebts(fromDate1: string, toDate1: string, fromDate2: string, toDate2: string) {
     return this.financialService.performanceDebts(fromDate1, toDate1, fromDate2, toDate2);
   }
+
+  getAccount(company_id: number) {
+    return this.financialService.getAccount(company_id);
+  }
 }

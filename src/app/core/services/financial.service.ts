@@ -1,7 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { UpdateInstallment, Debt, Departamento, Credit, Categoria, NewDebt, NewCredit, UpdateDebtStatus } from '../../modules/financial/models';
+import {
+  UpdateInstallment,
+  Debt,
+  Departamento,
+  Credit,
+  Categoria,
+  NewDebt,
+  NewCredit,
+  UpdateDebtStatus,
+  Conta,
+} from '../../modules/financial/models';
 import { DebtsComparisonReport } from '../../pages/models/performance-debts.model';
 
 @Injectable()
@@ -71,5 +81,9 @@ export class FinancialService {
     return this.http.get<DebtsComparisonReport>(
       `${this.baseUrl}debts/debtsReport?fromDate1=${fromDate1}&toDate1=${toDate1}&fromDate2=${fromDate2}&toDate2=${toDate2}`,
     );
+  }
+
+  getAccount(company_id: number) {
+    return this.http.get<Conta[]>(`${this.baseUrl}debts/accounts/${company_id}`);
   }
 }

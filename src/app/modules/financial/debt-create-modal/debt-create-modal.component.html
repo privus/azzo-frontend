@@ -187,15 +187,16 @@
 
           <!--begin::Col-->
           <div class="col-md-6 fv-row">
-            <label class="required fs-6 fw-semibold mb-2">Empresa</label>
+            <label class="required fs-6 fw-semibold mb-2">Refente a Empresa</label>
             <select
                 class="form-select form-select-solid form-select-lg"
-                formControlName="empresa"
+                formControlName="empresa_id"
               >
                 <option value=""></option>
-                <option value="Azzo Distribuidora">Azzo Distribuidora</option>
-                <option value="Personizi">Personizi</option>
-                <option value="Pureli">Pureli</option>
+                <option value="1">Azzo Distribuidora</option>
+                <option value="2">Personizi</option>
+                <option value="3">Pureli</option>
+                <option value="4">Grupo Privus</option>
               </select>
             <!--end::Input-->
           </div>
@@ -203,24 +204,26 @@
         </div>
       <!-- Conta Usada -->
       <div class="d-flex flex-column mb-8">
-          <label class="required fw-semibold mb-2">Conta</label>
-          <select
-              class="form-select form-select-solid form-select-lg"
-              formControlName="conta"
-          >
-              <option value="Bradesco">Bradesco</option>
-              <option value="Gold">Gold</option>
-              <option value="Sicredi">Sicredi</option>
-              <option value="Sicoob Serrania">Sicoob Serrania</option>
-              <option value="Broker Green">Broker Green</option>
-              <option value="Broker Viceroy">Broker Viceroy</option>
-              <option value="Sicoob Alfenas">Sicoob Alfenas</option>
-              <option value="Itau">Itau</option>
-              <option value="Sicredi Cartão">Sicredi Cartão</option>
-              <option value="Bradesco Cartão">Bradesco Cartão</option>
-              <option value="Sicoob Serrania Cartão">Sicoob Serrania Cartão</option>
-              <option value="Sicoob Alfenas Cartão">Sicoob Alfenas Cartão</option>
-          </select>
+          <ng-container *ngIf="!showAccountInput; else inputAccount">
+            <select
+              class="form-select form-select-solid"
+              formControlName="conta_id"
+              (change)="toggleAccountInput($event)"
+            >
+            <option value="">Selecione Conta</option>           
+
+            <option *ngFor="let c of accounts" [value]="+c.account_id">{{ c.nome }}</option>
+            <option value="">Cadastrar conta</option>
+            </select>
+          </ng-container>
+          <ng-template #inputAccount>
+            <input
+              type="text"
+              class="form-control form-control-solid"
+              formControlName="conta_nome"
+              placeholder="Digite a nova conta"
+            />
+          </ng-template>
       </div>
       <!-- Botões de Ação -->
       <div class="text-center">

@@ -12,8 +12,8 @@ export interface Debt {
   juros: string | null;
   valor_total: string;
   atualizado_por: string | null;
-  conta: string;
-  empresa: string;
+  account: Conta;
+  company: Empresa;
   criado_por: string;
   despesa_grupo: string | null;
   datas_vencimento: string[];
@@ -56,18 +56,30 @@ export interface NewDebt {
   numero_parcelas: number;
   periodicidade: number;
   data_vencimento: string;
-  conta: string;
   juros: number;
   categoria_nome: string;
   categoria_id: number;
   departamento_nome: string;
   departamento_id: number;
-  empresa_grupo: string;
   despesa_grupo: number;
   criado_por: string;
+  account_id: number;
+  account_name: string;
+  company_id: number | null;
+  user_company_id?: number;
 }
 
 export interface UpdateDebtStatus {
   debito_id: number;
   status_pagamento_id: number;
+}
+
+export interface Conta {
+  account_id: number;
+  nome: string;
+}
+
+export interface Empresa {
+  company_id: number;
+  nome: string;
 }

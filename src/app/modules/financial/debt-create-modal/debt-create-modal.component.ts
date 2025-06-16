@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DebtService } from '../services/debt.service';
-import { Categoria, Departamento, NewDebt } from '../models';
+import { Categoria, Conta, Departamento, NewDebt } from '../models';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
@@ -16,11 +16,14 @@ export class DebtCreateModalComponent implements OnInit {
   debtForm: FormGroup;
   departments: Departamento[];
   categories: Categoria[];
+  accounts: Conta[];
   userEmail: string = '';
   showCategoryInput: boolean = false;
   showDepartmentInput: boolean = false;
+  showAccountInput: boolean = false;
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
+  userCompanyId: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -36,6 +39,7 @@ export class DebtCreateModalComponent implements OnInit {
     this.initializeForm();
     this.loadDepartments();
     this.loadCategories();
+    this.loadAccount();
   }
 
   private loadDepartments(): void {
@@ -48,6 +52,14 @@ export class DebtCreateModalComponent implements OnInit {
     this.debtService.getAllCategories().subscribe((categories) => {
       this.categories = categories;
     });
+  }
+
+  private loadAccount(): void {
+    this.userCompanyId = this.userEmail === 'mariana@azzo.com' ? 2 : 3;
+    this.debtService.getAccount(this.userCompanyId).subscribe((accounts) => {
+      this.accounts = accounts;
+    });
+    console.log('Contas carregadas:', this.accounts);
   }
 
   showAlert(swalOptions: SweetAlertOptions, callback?: () => void) {
@@ -65,9 +77,10 @@ export class DebtCreateModalComponent implements OnInit {
       {
         nome: ['', [Validators.required]],
         data_vencimento: [new Date().toISOString().substring(0, 10), [Validators.required]],
-        conta: ['', [Validators.required]],
+        conta_id: [''],
+        conta_nome: [''],
         grupo: ['', [Validators.required]],
-        empresa: ['', [Validators.required]],
+        empresa_id: ['', [Validators.required]],
         numero_parcelas: [1, [Validators.min(1)]],
         data_competencia: [new Date().toISOString().substring(0, 10), [Validators.required]],
         data_pagamento: [''],
@@ -100,14 +113,16 @@ export class DebtCreateModalComponent implements OnInit {
         data_vencimento: newDebt.data_vencimento,
         departamento_id: Number(newDebt.departamento_id),
         departamento_nome: newDebt.departamento_nome || null,
-        empresa_grupo: newDebt.empresa,
         despesa_grupo: Number(newDebt.grupo),
         juros: Number(newDebt.juros),
-        conta: newDebt.conta,
         numero_parcelas: Number(newDebt.numero_parcelas),
         periodicidade: Number(newDebt.periodicidade),
         valor_total: Number(newDebt.valor_total),
         criado_por: this.userEmail,
+        account_id: Number(newDebt.conta_id),
+        account_name: newDebt.conta_nome || null,
+        company_id: Number(newDebt.empresa_id),
+        user_company_id: this.userCompanyId,
       };
       console.log('Formatted debt:', formattedDebt);
       this.debtService.createDebt(formattedDebt).subscribe({
@@ -150,13 +165,20 @@ export class DebtCreateModalComponent implements OnInit {
     this.showDepartmentInput = value === '';
   }
 
+  toggleAccountInput(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.showAccountInput = value === '';
+  }
+
   validCatDep(group: FormGroup) {
     const category_id = group.get('categoria_id')?.value || null;
     const category_nome = group.get('categoria_nome')?.value || null;
     const departament_id = group.get('departamento_id')?.value || null;
     const departament_nome = group.get('departamento_nome')?.value || null;
+    const conta_id = group.get('conta_id')?.value || null;
+    const conta_nome = group.get('conta_nome')?.value || null;
 
-    if ((!category_id && !category_nome) || (!departament_id && !departament_nome)) {
+    if ((!category_id && !category_nome) || (!departament_id && !departament_nome) || (!conta_id && !conta_nome)) {
       return { validCatDep: true };
     }
     return null;
