@@ -55,11 +55,10 @@ export class DebtCreateModalComponent implements OnInit {
   }
 
   private loadAccount(): void {
-    this.userCompanyId = this.userEmail === 'mariana@azzo.com' ? 2 : 3;
+    this.userCompanyId = this.userEmail.includes('azzo') ? 2 : 3;
     this.debtService.getAccount(this.userCompanyId).subscribe((accounts) => {
       this.accounts = accounts;
     });
-    console.log('Contas carregadas:', this.accounts);
   }
 
   showAlert(swalOptions: SweetAlertOptions, callback?: () => void) {

@@ -171,46 +171,47 @@
           </div>
       </div>     
       <div class="row g-9 mb-8">
-          <!--begin::Col-->
           <div class="col-md-6 fv-row">
-            <label class="required fs-6 fw-semibold mb-2">Refente a Empresa</label>
-            <select
-                class="form-select form-select-solid form-select-lg"
-                formControlName="empresa_id"
+            <label class="required fs-6 fw-semibold mb-2">Conta</label>
+            <ng-container *ngIf="!showAccountInput; else inputAccount">
+              <select
+                class="form-select form-select-solid"
+                formControlName="conta_id"
+                (change)="toggleAccountInput($event)"
               >
-                <option value=""></option>
-                <option value="1">Azzo Distribuidora</option>
-                <option value="2">Personizi</option>
-                <option value="3">Pureli</option>
-                <option value="4">Grupo Privus</option>
+              <option value="">Selecione Conta</option>           
+  
+              <option *ngFor="let c of accounts" [value]="+c.account_id">{{ c.nome }}</option>
+              <option value="">Cadastrar conta</option>
               </select>
-            <!--end::Input-->
+            </ng-container>
+            <ng-template #inputAccount>
+              <input
+                type="text"
+                class="form-control form-control-solid"
+                formControlName="conta_nome"
+                placeholder="Digite a nova conta"
+              />
+            </ng-template>
           </div>
+          <div class="col-md-6 fv-row">
+            <label class="required fs-6 fw-semibold mb-2">
+              Empresa à qual este débito pertence
+            </label>
+            <select
+              class="form-select form-select-solid form-select-lg"
+              formControlName="empresa_id"
+            >
+              <option value="" disabled selected>Selecione a Empresa</option>
+              <option value="2">Azzo Distribuidora</option>
+              <option value="4">Personizi</option>
+              <option value="3">Pureli</option>
+              <option value="1">Grupo Privus</option>
+            </select>
+          </div>
+          
           <!--end::Col-->
         </div>
-      <!-- Conta Usada -->
-      <div class="d-flex flex-column mb-8">
-          <ng-container *ngIf="!showAccountInput; else inputAccount">
-            <select
-              class="form-select form-select-solid"
-              formControlName="conta_id"
-              (change)="toggleAccountInput($event)"
-            >
-            <option value="">Selecione Conta</option>           
-
-            <option *ngFor="let c of accounts" [value]="+c.account_id">{{ c.nome }}</option>
-            <option value="">Cadastrar conta</option>
-            </select>
-          </ng-container>
-          <ng-template #inputAccount>
-            <input
-              type="text"
-              class="form-control form-control-solid"
-              formControlName="conta_nome"
-              placeholder="Digite a nova conta"
-            />
-          </ng-template>
-      </div>
       <!-- Botões de Ação -->
       <div class="text-center">
         <button type="button" class="btn btn-light me-3" (click)="activeModal.dismiss()">Cancelar</button>
