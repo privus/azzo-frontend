@@ -16,6 +16,7 @@ export interface AuthUser {
     cargo_id: number;
     nome: string;
   };
+  companyId: number;
   iat: number;
   exp: number;
 }

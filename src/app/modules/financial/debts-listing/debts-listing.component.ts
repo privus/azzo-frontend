@@ -46,6 +46,7 @@ export class DebtsListingComponent implements OnInit {
   ngOnInit(): void {
     this.debts = this.route.snapshot.data['debts'];
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
+    this.userCompanyId = storageInfo ? JSON.parse(storageInfo).companyId : '';
     this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
     this.sortField = 'debito_id';
     this.sortDirection = 'desc';
@@ -69,7 +70,6 @@ export class DebtsListingComponent implements OnInit {
   }
 
   private loadAccount(): void {
-    this.userCompanyId = this.userEmail === 'mariana@azzo.com' ? 2 : 3;
     this.debtService.getAccount(this.userCompanyId).subscribe((accounts) => {
       this.accounts = accounts;
     });

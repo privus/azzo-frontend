@@ -18,8 +18,7 @@ export class DebtResolver implements Resolve<Debt[] | null> {
 
   resolve(): Observable<Debt[] | null> {
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
-    this.userCompanyId = storageInfo ? JSON.parse(storageInfo).email : '';
-    this.userCompanyId = this.userEmail.includes('azzo') ? 2 : 3;
+    this.userCompanyId = storageInfo ? JSON.parse(storageInfo).companyId : '';
     return this.debtService.getAllDebts(this.userCompanyId);
   }
 }

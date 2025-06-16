@@ -35,6 +35,7 @@ export class DebtCreateModalComponent implements OnInit {
 
   ngOnInit(): void {
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
+    this.userCompanyId = storageInfo ? JSON.parse(storageInfo).companyId : '';
     this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
     this.initializeForm();
     this.loadDepartments();
@@ -55,7 +56,6 @@ export class DebtCreateModalComponent implements OnInit {
   }
 
   private loadAccount(): void {
-    this.userCompanyId = this.userEmail.includes('azzo') ? 2 : 3;
     this.debtService.getAccount(this.userCompanyId).subscribe((accounts) => {
       this.accounts = accounts;
     });
