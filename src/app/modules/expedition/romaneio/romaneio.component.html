@@ -15,7 +15,7 @@
           <th class="min-w-25px">ID</th>
           <th class="min-w-100px">Data</th>
           <th class="min-w-100px">Transportadora</th>
-          <th class="min-w-50px"></th>
+          <th class="min-w-50px">Pedidos</th>
         </tr>
       </thead>
       <tbody>
@@ -30,6 +30,12 @@
                 </span>
               </div>
             </td>
+            <td>
+              <div class="d-flex justify-content-end">
+                <span class="badge py-3 px-4 fs-7 badge-light-primary">
+                  {{ r.vendas.length }} Pedidos
+                </span>
+              </div>
             <td>
               <div *ngIf="r.valor_frete" class="position-relative">
                 <div class="d-flex justify-content-end">
@@ -47,7 +53,7 @@
                 <i *ngIf="isExpanded(r.romaneio_id)" class="fas fa-minus fs-4 m-0"></i>                  
               </button>
               <button 
-                [disabled]="r.valor_frete"
+
                 class="btn btn-sm btn-icon btn-light text-primary ms-2"
                 (click)="triggerFileUpload(r.romaneio_id)"
                 title="Importar Fretes"

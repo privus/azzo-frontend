@@ -66,7 +66,19 @@
                     </option>
                 </select>              
             </div>
-            <div class="d-flex align-items-center position-absolute my-1 ms-8 end-0  me-10">
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select
+                    class="form-select form-select-solid form-select-lg"
+                    [(ngModel)]="selectedAccount"
+                    (change)="applyFilter()"
+                >
+                    <option value="">Conta</option>                
+                    <option *ngFor="let c of accounts" [value]="c.account_id">
+                    {{ c.nome }}
+                    </option>
+                </select>              
+            </div>
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
               <select
                     class="form-select form-select-solid form-select-lg"
                     [(ngModel)]="selectedStatus"
@@ -78,7 +90,7 @@
                     <option value="3">Em Atraso</option>
                     <option value="4">Cancelado</option>
               </select>
-            </div>
+            </div>  
     </div>
 
     <div *ngIf="paginatedDebts; else loading" class="card-body pt-0">
@@ -141,9 +153,9 @@
                     <tr *ngFor="let debt of paginatedDebts">
                         <td>{{ debt.debito_id }}</td>
                         <td>{{ debt.nome }}</td>
-                        <td>{{ nextDueDate(debt) | date:'dd/MM/yyyy' }}</td>
+                        <td>{{ nextDueDate(debt).data| date:'dd/MM/yyyy'}} - {{nextDueDate(debt).valor | currency:'BRL'}}</td>
                         <td>{{ debt.valor_total | currency:'BRL' }}</td>                        
-                        <td>{{ debt.conta }}</td>
+                        <td>{{ debt.account ? debt.account.nome : 'teste' }}</td>
                         <td>                            
                             <span class="badge td" [ngClass]="getStatusClass(debt.status_pagamento.status_pagamento_id)">
                             {{ debt.status_pagamento ? debt.status_pagamento.nome : 'Pendente' }}

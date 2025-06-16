@@ -69,6 +69,16 @@ export class RomaneioCreateModalComponent implements OnInit {
         .map((codigo: string) => Number(codigo.trim()))
         .filter((codigo: number) => !isNaN(codigo));
 
+      if (codigos.length === 0) {
+        this.showAlert({
+          icon: 'error',
+          title: 'Erro!',
+          text: 'Nenhum código de venda válido foi informado.',
+          confirmButtonText: 'Ok',
+        });
+        return;
+      }
+
       const payload: NewRomaneio = {
         codigos,
         transportadora_id: Number(value.transportadora_id),

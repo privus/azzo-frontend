@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Categoria, Debt, Departamento } from '../models';
+import { Categoria, Conta, Debt, Departamento } from '../models';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PaginationService } from '../../../core/services';
+import { LocalStorageService, PaginationService } from '../../../core/services';
 import { DebtService } from '../services/debt.service';
 
 @Component({
@@ -25,10 +25,14 @@ export class DebtsListingComponent implements OnInit {
   selectedStatus: string = '';
   selectedDepartment: string = '';
   selectedCategory: string = '';
+  selectedAccount: string = '';
   departments: Departamento[];
   categories: Categoria[];
   sortField: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
+  userCompanyId: number = 0;
+  accounts: Conta[] = [];
+  userEmail: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -36,14 +40,18 @@ export class DebtsListingComponent implements OnInit {
     private debtService: DebtService,
     private cdr: ChangeDetectorRef,
     private router: Router,
+    private localStorage: LocalStorageService,
   ) {}
 
   ngOnInit(): void {
     this.debts = this.route.snapshot.data['debts'];
+    const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
+    this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
     this.sortField = 'debito_id';
     this.sortDirection = 'desc';
     this.loadDepartments();
     this.loadCategories();
+    this.loadAccount();
     this.applyFilter();
     this.cdr.detectChanges();
 
@@ -60,6 +68,14 @@ export class DebtsListingComponent implements OnInit {
     });
   }
 
+  private loadAccount(): void {
+    this.userCompanyId = this.userEmail === 'mariana@azzo.com' ? 2 : 3;
+    this.debtService.getAccount(this.userCompanyId).subscribe((accounts) => {
+      this.accounts = accounts;
+    });
+    console.log('Contas carregadas:', this.accounts);
+  }
+
   private loadCategories(): void {
     this.debtService.getAllCategories().subscribe((categories) => {
       this.categories = categories;
@@ -72,12 +88,7 @@ export class DebtsListingComponent implements OnInit {
     // 1. Filter by search term
     const term = this.searchTerm.trim().toLowerCase();
     if (term) {
-      result = result.filter(
-        (debt) =>
-          (debt.descricao || '').toLowerCase().includes(term) ||
-          (debt.nome || '').toLowerCase().includes(term) ||
-          (debt.empresa || '').toLowerCase().includes(term),
-      );
+      result = result.filter((debt) => (debt.descricao || '').toLowerCase().includes(term) || (debt.nome || '').toLowerCase().includes(term));
     }
 
     // 2. Filter by category
@@ -93,6 +104,10 @@ export class DebtsListingComponent implements OnInit {
     // 4. Filter by status
     if (this.selectedStatus) {
       result = result.filter((debt) => debt.status_pagamento.status_pagamento_id === +this.selectedStatus);
+    }
+
+    if (this.selectedAccount) {
+      result = result.filter((debt) => debt.account.account_id === +this.selectedAccount);
     }
 
     // 5. Filter by date range (if custom dates are selected)
@@ -114,10 +129,10 @@ export class DebtsListingComponent implements OnInit {
         case 'valor_total':
           return +d.valor_total || 0;
         case 'conta':
-          return d.conta;
+          return d.account.account_id;
         case 'proxVencimento':
           const vencimento = this.nextDueDate(d);
-          return vencimento ? new Date(vencimento) : new Date(9999, 11, 31);
+          return vencimento.data ? new Date(vencimento.data) : new Date(9999, 11, 31);
         case 'datCompetencia':
           return d.data_competencia ? new Date(d.data_competencia) : new Date(9999, 11, 31);
 
@@ -254,8 +269,8 @@ export class DebtsListingComponent implements OnInit {
     this.router.navigate(['financial/debts', id]);
   }
 
-  nextDueDate(debt: Debt): string | null {
-    if (!debt?.parcela_debito?.length) return null;
+  nextDueDate(debt: Debt): { data: string | null; valor: number | null } {
+    if (!debt?.parcela_debito?.length) return { data: null, valor: null };
 
     const today = new Date();
 
@@ -264,10 +279,16 @@ export class DebtsListingComponent implements OnInit {
       .sort((a, b) => new Date(a.data_vencimento).getTime() - new Date(b.data_vencimento).getTime())[0];
 
     if (next && new Date(next.data_vencimento) === today) {
-      return next.data_vencimento; // Retorna o vencimento se for hoje
+      return {
+        data: next.data_vencimento,
+        valor: Number(next.valor),
+      };
     }
 
-    return next?.data_vencimento ?? null;
+    return {
+      data: next?.data_vencimento ?? null,
+      valor: next?.valor ? Number(next.valor) : null,
+    };
   }
 
   get totalDebts(): number {
