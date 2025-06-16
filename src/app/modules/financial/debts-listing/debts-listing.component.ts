@@ -23,9 +23,9 @@ export class DebtsListingComponent implements OnInit {
   showCustomDatePicker: boolean = false;
   customDateRange: { start: string; end: string } = { start: '', end: '' };
   selectedStatus: string = '';
-  selectedDepartment: number = 0;
-  selectedCategory: number = 0;
-  selectedAccount: number = 0;
+  selectedDepartment: string = '';
+  selectedCategory: string = '';
+  selectedAccount: string = '';
   departments: Departamento[];
   categories: Categoria[];
   sortField: string = '';

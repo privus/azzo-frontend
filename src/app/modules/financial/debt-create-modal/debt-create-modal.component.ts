@@ -79,7 +79,6 @@ export class DebtCreateModalComponent implements OnInit {
         data_vencimento: [new Date().toISOString().substring(0, 10), [Validators.required]],
         conta_id: [''],
         conta_nome: [''],
-        grupo: ['', [Validators.required]],
         empresa_id: ['', [Validators.required]],
         numero_parcelas: [1, [Validators.min(1)]],
         data_competencia: [new Date().toISOString().substring(0, 10), [Validators.required]],
