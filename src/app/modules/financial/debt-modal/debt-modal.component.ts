@@ -179,15 +179,20 @@ export class DebtModalComponent implements OnInit {
   }
 
   isFormValidForPaidStatus(): boolean {
-    if (+this.f.status_pagamento.value !== 2) return true; // Ignora se não for Pago
+    if (+this.f.status_pagamento.value !== 2) return true;
 
-    // Lista de campos obrigatórios quando status é "Pago"
-    const requiredFields = ['valor_total', 'data_pagamento', 'data_vencimento', 'conta'];
+    const isContaValida =
+      (this.f.conta_id.value && this.f.conta_id.value !== '') || (this.f.conta_nome.value && this.f.conta_nome.value.trim() !== '');
 
-    return requiredFields.every((field) => {
-      const ctrl = this.f[field];
-      return ctrl && ctrl.value !== null && ctrl.value !== '';
-    });
+    return (
+      this.f.valor_total.value !== null &&
+      this.f.valor_total.value !== '' &&
+      this.f.data_pagamento.value !== null &&
+      this.f.data_pagamento.value !== '' &&
+      this.f.data_vencimento.value !== null &&
+      this.f.data_vencimento.value !== '' &&
+      isContaValida
+    );
   }
 
   private loadAccount(): void {
