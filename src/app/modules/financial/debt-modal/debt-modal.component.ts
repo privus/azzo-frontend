@@ -64,7 +64,7 @@ export class DebtModalComponent implements OnInit {
       status_pagamento: debt.status_pagamento.status_pagamento_id,
       data_pagamento: debt.data_pagamento,
       data_competencia: debt.data_competencia,
-      conta: debt.account.nome,
+      conta_id: debt.account.account_id,
       atualizado_por: debt.atualizado_por,
       valor_total: debt.status_pagamento.status_pagamento_id === 2 ? debt.valor : null,
     });
