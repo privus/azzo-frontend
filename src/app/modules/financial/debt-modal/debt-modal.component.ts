@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ParcelaDebito, UpdateInstallment } from '../models';
+import { Conta, ParcelaDebito, UpdateInstallment } from '../models';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
@@ -19,6 +19,9 @@ export class DebtModalComponent implements OnInit {
   debtForm: FormGroup; // Add the correct type for your form
   obs: string = '';
   isPaymentDateDisabled: boolean = false;
+  userCompanyId: number = 0;
+  accounts: Conta[];
+  showAccountInput: boolean = false;
 
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
@@ -70,6 +73,7 @@ export class DebtModalComponent implements OnInit {
     this.today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
     this.initializeForm();
     this.patchFormWithDebt(this.parcelaModel);
+    this.loadAccount();
 
     if (+this.parcelaModel.status_pagamento.status_pagamento_id === 2) {
       this.debtForm.disable();
@@ -79,6 +83,7 @@ export class DebtModalComponent implements OnInit {
     console.log('Parcela:', this.parcelaModel);
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
     this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
+    this.userCompanyId = storageInfo ? JSON.parse(storageInfo).companyId : '';
   }
 
   closeModal(): void {
@@ -179,5 +184,16 @@ export class DebtModalComponent implements OnInit {
       const ctrl = this.f[field];
       return ctrl && ctrl.value !== null && ctrl.value !== '';
     });
+  }
+
+  private loadAccount(): void {
+    this.debtService.getAccount(this.userCompanyId).subscribe((accounts) => {
+      this.accounts = accounts;
+    });
+  }
+
+  toggleAccountInput(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.showAccountInput = value === '';
   }
 }
