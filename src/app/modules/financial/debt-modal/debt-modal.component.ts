@@ -72,6 +72,9 @@ export class DebtModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
+    const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
+    this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
+    this.userCompanyId = storageInfo ? JSON.parse(storageInfo).companyId : '';
     this.loadAccount();
     this.initializeForm();
     this.patchFormWithDebt(this.parcelaModel);
@@ -82,9 +85,6 @@ export class DebtModalComponent implements OnInit {
 
     this.disableDateStatus();
     console.log('Parcela:', this.parcelaModel);
-    const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
-    this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
-    this.userCompanyId = storageInfo ? JSON.parse(storageInfo).companyId : '';
   }
 
   closeModal(): void {
