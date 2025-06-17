@@ -24,6 +24,11 @@ export class SellerRankingModalComponent implements OnInit {
     }
   }
 
+  getMaxPureliSeller(sellers: any[]): number {
+    const sorted = [...sellers].sort((a, b) => b.pureli - a.pureli);
+    return sorted.length > 0 && sorted[0].pureli > 0 ? sorted[0].id : -1;
+  }
+
   loadRanking(): void {
     this.isLoading = true;
     this.orderService.getSellerRanking().subscribe({

@@ -27,6 +27,7 @@
                 <th>Posição</th>
                 <th>Vendedor</th>
                 <th>Nº Vendas</th>
+                <th>Pureli</th>                
                 <th>Valor Total</th>
                 <th>Ticket Médio</th>
                 <th>Códigos das Vendas</th>
@@ -40,11 +41,14 @@
                     'badge badge-light-primary': i === 1,
                     'badge badge-light-info': i === 2
                   }">
-                    <ng-container *ngIf="i === 0">👑 </ng-container>{{ i + 1 }}º
+                    <ng-container *ngIf="i === 0">👑 </ng-container>
+                    <ng-container *ngIf="seller.id === getMaxPureliSeller(ranking[group])">🧽 </ng-container>
+                    {{ i + 1 }}º
                   </span>
-                </td>
+                </td>                
                 <td>{{ seller.nome }}</td>
                 <td>{{ seller.numero_vendas }}</td>
+                <td>{{ seller.pureli }}</td>
                 <td>{{ seller.total | currency:'BRL' }}</td>
                 <td>{{ (seller.total / seller.numero_vendas) | currency:'BRL' }}</td>
                 <td>{{ seller.codigos_vendas.join(', ') }}</td>

@@ -74,6 +74,7 @@ export interface Ranking {
     total: number;
     numero_vendas: number;
     codigos_vendas: number[];
+    pureli: number;
   }>;
   yesterday: Array<{
     id: number;
@@ -81,5 +82,6 @@ export interface Ranking {
     total: number;
     numero_vendas: number;
     codigos_vendas: number[];
+    pureli: number;
   }>;
 }
