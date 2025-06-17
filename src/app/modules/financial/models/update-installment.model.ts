@@ -7,4 +7,7 @@ export class UpdateInstallment {
   obs?: string;
   data_vencimento?: string;
   venda_id?: number;
+  account_id?: number;
+  account_name?: string;
+  user_company_id?: number;
 }

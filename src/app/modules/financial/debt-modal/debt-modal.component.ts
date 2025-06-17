@@ -131,6 +131,9 @@ export class DebtModalComponent implements OnInit {
       atualizado_por: this.userEmail,
       obs: this.f.obs.value,
       data_vencimento: this.f.data_vencimento.value,
+      account_id: Number(this.f.conta_id.value),
+      account_name: this.f.conta_nome.value || null,
+      user_company_id: this.userCompanyId,
     };
 
     this.debtService.updateInstallment(updateData).subscribe({
