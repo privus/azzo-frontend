@@ -72,9 +72,9 @@ export class DebtModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.today = new Date().toISOString().split('T')[0]; // 'YYYY-MM-DD'
+    this.loadAccount();
     this.initializeForm();
     this.patchFormWithDebt(this.parcelaModel);
-    this.loadAccount();
 
     if (+this.parcelaModel.status_pagamento.status_pagamento_id === 2) {
       this.debtForm.disable();
