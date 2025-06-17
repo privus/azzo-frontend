@@ -190,6 +190,7 @@ export class DebtModalComponent implements OnInit {
   private loadAccount(): void {
     this.debtService.getAccount(this.userCompanyId).subscribe((accounts) => {
       this.accounts = accounts;
+      console.log('Accounts loaded:', this.accounts);
     });
   }
 
