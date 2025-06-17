@@ -24,6 +24,7 @@ export class StockComponent implements OnInit {
   sortField: string = 'saldo_estoque';
   sortDirection: 'asc' | 'desc' = 'desc';
   selectedStatus: string = '';
+  selectedSupplier: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -97,33 +98,34 @@ export class StockComponent implements OnInit {
     const term = this.searchTerm.toLowerCase().trim();
 
     this.filteredProducts = this.products.filter((product) => {
-      // Exibe apenas produtos sem qt_uni ou do fornecedor 6
       const visivel = !product.qt_uni || product.fornecedor?.fornecedor_id === 6;
 
-      // Busca por texto
       const matchBusca =
         term === '' ||
         product.nome.toLowerCase().includes(term) ||
         product.categoria.nome.toLowerCase().includes(term) ||
         product.codigo.toLowerCase().includes(term);
 
-      // Filtro por status de estoque
-      const estoque = product?.saldo_estoque ?? 0;
+      const estoque = product.saldo_estoque;
+      const estoqueMinimo = product.estoque_minimo;
+
       let matchStatus = true;
 
       switch (this.selectedStatus) {
         case 'disponivel':
-          matchStatus = estoque >= 288;
+          matchStatus = estoque >= estoqueMinimo;
           break;
         case 'baixo':
-          matchStatus = estoque > 0 && estoque < 288;
+          matchStatus = estoque > 0 && estoque < estoqueMinimo;
           break;
         case 'sem':
           matchStatus = estoque <= 0;
           break;
       }
 
-      return visivel && matchBusca && matchStatus;
+      const matchSupplier = !this.selectedSupplier || (product.fornecedor && product.fornecedor.fornecedor_id === +this.selectedSupplier);
+
+      return visivel && matchBusca && matchStatus && matchSupplier;
     });
 
     this.sortProducts();

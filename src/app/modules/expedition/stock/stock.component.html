@@ -17,7 +17,22 @@
           <option value="baixo">Estoque Baixo</option>
           <option value="sem">Sem Estoque</option>
         </select>
-      </div>    
+      </div>
+      <div class="d-flex align-items-center position-relative my-1 ms-8">
+        <select
+          class="form-select form-select-solid form-select-lg"
+          [(ngModel)]="selectedSupplier"
+          (change)="applyFilter()"
+        >
+          <option value="">Fornecedor</option>
+          <option value="1">Black Fix</option>
+          <option value="2">Green</option>
+          <option value="3">H2O</option>
+          <option value="4">Vidal</option>
+          <option value="6">Viceroy</option>
+          <option value="7">Purelli</option>
+        </select>
+      </div> 
       <div class="card-toolbar">
         <input
           [(ngModel)]="searchTerm"
@@ -86,20 +101,21 @@
                 <span
                   class="badge py-3 px-4 fs-9"
                   [ngClass]="{
-                    'badge-light-danger': (produto?.saldo_estoque ?? 0) <= 0,
-                    'badge-light-warning': (produto?.saldo_estoque ?? 0) < 288 && (produto?.saldo_estoque ?? 0) > 0,
-                    'badge-light-primary': (produto?.saldo_estoque ?? 0) >= 10
+                    'badge-light-danger': produto.saldo_estoque <= 0,
+                    'badge-light-warning': produto.saldo_estoque > 0 && produto.saldo_estoque < produto.estoque_minimo,
+                    'badge-light-primary': produto.saldo_estoque >= produto.estoque_minimo
                   }"
+                  [title]="'Estoque mínimo: ' + produto.estoque_minimo"
                 >
                   {{
                     produto.saldo_estoque === 0
                       ? 'Sem estoque'
-                      : produto.saldo_estoque < 288
+                      : produto.saldo_estoque < produto.estoque_minimo
                       ? 'Estoque baixo'
                       : 'Disponível'
                   }}
                 </span>
-              </td>
+              </td>              
               <td class="text-end text-gray-900 fw-bold">
                 {{ produto.estoque_em_caixas }}
               </td>

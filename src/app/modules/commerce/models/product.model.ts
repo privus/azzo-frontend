@@ -22,6 +22,7 @@ export interface Produto {
   qt_uni?: number;
   unidade: Produto;
   estoque_em_caixas?: string;
+  estoque_minimo: number;
 }
 
 export interface CategoriaProduto {
