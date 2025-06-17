@@ -35,6 +35,8 @@ export interface ParcelaDebito {
   data_pagamento: string | null;
   status_pagamento: StatusPagamento;
   atualizado_por: string | null;
+  account: Conta;
+  company: Empresa;
 }
 
 export interface Departamento {

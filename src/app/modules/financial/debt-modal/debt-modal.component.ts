@@ -47,7 +47,8 @@ export class DebtModalComponent implements OnInit {
       data_pagamento: [{ value: new Date().toISOString().substring(0, 10) }, [Validators.required]],
       data_competencia: [{ value: '', disabled: true }],
       obs: [{ value: '', disabled: true }],
-      conta: [{ value: '' }],
+      conta_id: [''],
+      conta_nome: [''],
       atualizado_por: [{ value: '', disabled: true }],
     });
   }
@@ -63,7 +64,7 @@ export class DebtModalComponent implements OnInit {
       status_pagamento: debt.status_pagamento.status_pagamento_id,
       data_pagamento: debt.data_pagamento,
       data_competencia: debt.data_competencia,
-      conta: debt.conta,
+      conta: debt.account.nome,
       atualizado_por: debt.atualizado_por,
       valor_total: debt.status_pagamento.status_pagamento_id === 2 ? debt.valor : null,
     });
