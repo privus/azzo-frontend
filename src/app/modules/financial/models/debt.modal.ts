@@ -69,6 +69,7 @@ export interface NewDebt {
   account_name: string;
   company_id: number | null;
   user_company_id: number;
+  tipo: string;
 }
 
 export interface UpdateDebtStatus {

@@ -67,6 +67,7 @@ export class ProductDetailsComponent implements OnInit {
       fotoUrl: [{ value: '', disabled: true }],
       tiny_mg: [{ value: '' }],
       tiny_sp: [{ value: '' }],
+      saldo_estoque: [{ value: '', disabled: true }],
     });
   }
 
@@ -87,6 +88,7 @@ export class ProductDetailsComponent implements OnInit {
       fotoUrl: product.fotoUrl,
       tiny_mg: product.tiny_mg,
       tiny_sp: product.tiny_sp,
+      saldo_estoque: product.saldo_estoque,
     });
 
     if (product.tiny_mg) this.productForm.controls['tiny_mg'].disable();
@@ -103,7 +105,7 @@ export class ProductDetailsComponent implements OnInit {
         tiny_mg: this.productForm.controls['tiny_mg'].value,
         tiny_sp: this.productForm.controls['tiny_sp'].value,
       };
-  
+
       this.productService.updateTinyCodes(this.productId, updatedFields).subscribe({
         next: (): void => {
           this.showAlert({
@@ -118,12 +120,12 @@ export class ProductDetailsComponent implements OnInit {
         },
       });
     }
-  } 
+  }
 
   isTinyValid(): boolean {
     const tinyMg = this.productForm.controls['tiny_mg'].value?.toString() || '';
     const tinySp = this.productForm.controls['tiny_sp'].value?.toString() || '';
-  
+
     return tinyMg.length === 9 && tinySp.length === 9;
   }
 

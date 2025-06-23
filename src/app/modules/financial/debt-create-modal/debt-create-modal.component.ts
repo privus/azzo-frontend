@@ -24,6 +24,8 @@ export class DebtCreateModalComponent implements OnInit {
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
   userCompanyId: number = 0;
+  categorySearch: string = '';
+  departmentSearch: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -44,14 +46,14 @@ export class DebtCreateModalComponent implements OnInit {
   }
 
   private loadDepartments(): void {
-    this.debtService.getAllDepartaments().subscribe((department) => {
-      this.departments = department;
+    this.debtService.getAllDepartaments().subscribe((departments) => {
+      this.departments = departments.sort((a, b) => a.nome.localeCompare(b.nome));
     });
   }
 
   private loadCategories(): void {
     this.debtService.getAllCategories().subscribe((categories) => {
-      this.categories = categories;
+      this.categories = categories.sort((a, b) => a.nome.localeCompare(b.nome));
     });
   }
 
@@ -92,6 +94,7 @@ export class DebtCreateModalComponent implements OnInit {
         departamento_nome: [''],
         pagamento_recorrente: [false],
         periodicidade: [null],
+        tipo: ['', Validators.required],
       },
       { validators: this.validCatDep as any },
     );
@@ -121,6 +124,7 @@ export class DebtCreateModalComponent implements OnInit {
         account_name: newDebt.conta_nome || null,
         company_id: Number(newDebt.empresa_id),
         user_company_id: this.userCompanyId,
+        tipo: this.debtForm.value.tipo,
       };
       console.log('Formatted debt:', formattedDebt);
       this.debtService.createDebt(formattedDebt).subscribe({

@@ -39,7 +39,8 @@ export class ProductsListingComponent implements OnInit {
         (product) =>
           product.nome.toLowerCase().includes(term) ||
           product.categoria.nome.toLowerCase().includes(term) ||
-          product.codigo.toLowerCase().includes(term),
+          product.codigo.toLowerCase().includes(term) ||
+          product.ean.toLowerCase().includes(term),
       );
     }
     this.currentPage = 1;

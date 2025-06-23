@@ -41,6 +41,7 @@
             <th class="min-w-125px">Categoria</th>
             <th class="min-w-125px">Preço</th>
             <th class="min-w-125px">Ncm</th>
+            <th class="min-w-125px">Saldo Estoque</th>
             <th class="text-end min-w-100px">Ações</th>
           </tr>
         </thead>
@@ -75,6 +76,7 @@
             <td>{{ product.categoria.nome }}</td>
             <td>{{ product.preco_venda | currency:'BRL' }}</td>
             <td>{{ product.ncm }}</td>
+            <td>{{ product.saldo_estoque }}</td>
             <td class="text-end">
               <button
                 class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"

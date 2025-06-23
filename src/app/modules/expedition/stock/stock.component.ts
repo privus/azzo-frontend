@@ -103,7 +103,7 @@ export class StockComponent implements OnInit {
       const matchBusca =
         term === '' ||
         product.nome.toLowerCase().includes(term) ||
-        product.categoria.nome.toLowerCase().includes(term) ||
+        product.ean.toLowerCase().includes(term) ||
         product.codigo.toLowerCase().includes(term);
 
       const estoque = product.saldo_estoque;

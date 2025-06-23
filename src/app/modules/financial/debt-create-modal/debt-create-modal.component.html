@@ -82,7 +82,7 @@
                     (change)="toggleCategoryInput($event)"
                   >
                   <option value="">Selecione a Categoria</option>    
-                  <option *ngFor="let c of categories" [value]="c.categoria_id">{{ c.nome }}</option>
+                  <option *ngFor="let c of categories | filter: categorySearch" [value]="c.categoria_id">{{ c.nome }}</option>
                   <option value="">Cadastrar Categoria</option>
                   </select>
               </ng-container>
@@ -108,7 +108,7 @@
                   >
                   <option value="">Selecione o Departamento</option>           
       
-                  <option *ngFor="let d of departments" [value]="d.departamento_id">{{ d.nome }}</option>
+                  <option  *ngFor="let d of departments | filter: departmentSearch" [value]="d.departamento_id">{{ d.nome }}</option>
                   <option value="">Cadastrar Departamento</option>
                   </select>
                 </ng-container>
@@ -169,7 +169,16 @@
               <input type="number" class="form-control form-control-solid" formControlName="periodicidade" />
             </div>
           </div>
-      </div>     
+      </div> 
+      <div class="row g-9 mb-8">
+        <div class="col-md-6 fv-row">
+          <label class="required fs-6 fw-semibold mb-2">Tipo</label>
+          <select class="form-select form-select-solid" formControlName="tipo">
+            <option value="CUSTO">Custo</option>
+            <option value="DESPESA">Despesa</option>
+          </select>
+        </div>
+      </div>          
       <div class="row g-9 mb-8">
           <div class="col-md-6 fv-row">
             <label class="required fs-6 fw-semibold mb-2">Conta</label>
