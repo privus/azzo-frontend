@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.debtsPerformance = this.route.snapshot.data['debtsPerformance'];
     console.log('Sales ==================', this.salesPerformance);
     const faturamento = this.salesPerformance.faturamentoPorMarcaMesAtual;
-    const ordemMarcas = ['H2O', 'Green', 'Viceroy', 'Pureli', 'Black Fix', 'Vidal'];
+    const ordemMarcas = ['H2O', 'Green', 'Viceroy', 'Purelli', 'Black Fix', 'Vidal'];
     this.marcas = ordemMarcas
       .filter((nome) => faturamento[nome] !== undefined)
       .map((nome, index) => ({
