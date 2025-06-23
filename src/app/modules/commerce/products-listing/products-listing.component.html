@@ -40,7 +40,7 @@
             <th class="min-w-125px">Marca</th>            
             <th class="min-w-125px">Categoria</th>
             <th class="min-w-125px">Preço</th>
-            <th class="min-w-125px">Ncm</th>
+            <th class="min-w-125px">Ean</th>
             <th class="min-w-125px">Saldo Estoque</th>
             <th class="text-end min-w-100px">Ações</th>
           </tr>
@@ -75,7 +75,7 @@
             <td>{{ product.fornecedor?.nome }}</td>
             <td>{{ product.categoria.nome }}</td>
             <td>{{ product.preco_venda | currency:'BRL' }}</td>
-            <td>{{ product.ncm }}</td>
+            <td>{{ product.ean }}</td>
             <td>{{ product.saldo_estoque }}</td>
             <td class="text-end">
               <button
