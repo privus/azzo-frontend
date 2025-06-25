@@ -26,6 +26,8 @@ export class RomaneioComponent implements OnInit {
   showTransInput = false;
   private baseUrl = environment.apiUrl;
   expanded: Set<number> = new Set();
+  sortField: 'data_criacao' | 'romaneio_id' = 'data_criacao';
+  sortDirection: 'asc' | 'desc' = 'desc';
 
   constructor(
     private route: ActivatedRoute,
@@ -54,6 +56,32 @@ export class RomaneioComponent implements OnInit {
     this.applyFilters();
   }
 
+  sortRomaneios(): void {
+    this.filteredRomaneio.sort((a, b) => {
+      let aValue = a[this.sortField];
+      let bValue = b[this.sortField];
+
+      if (this.sortField === 'data_criacao') {
+        aValue = new Date(aValue).getTime();
+        bValue = new Date(bValue).getTime();
+      }
+
+      if (aValue < bValue) return this.sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return this.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }
+
+  toggleSort(field: 'data_criacao' | 'romaneio_id'): void {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+    this.applyFilters();
+  }
+
   applyFilters(): void {
     const term = this.searchTerm.toLowerCase();
     let result = [...this.romaneio];
@@ -65,6 +93,7 @@ export class RomaneioComponent implements OnInit {
     }
 
     this.filteredRomaneio = result;
+    this.sortRomaneios();
     this.calculatePagination();
     this.updateDisplayedItems();
   }

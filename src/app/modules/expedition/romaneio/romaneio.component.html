@@ -12,8 +12,12 @@
     <table class="table align-middle table-row-dashed fs-6 gy-3">
       <thead>
         <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-          <th class="min-w-25px">ID</th>
-          <th class="min-w-100px">Data</th>
+          <th class="min-w-25px" (click)="toggleSort('romaneio_id')">
+            ID <i class="fas" [ngClass]="{'fa-sort-up': sortField === 'romaneio_id' && sortDirection === 'asc', 'fa-sort-down': sortField === 'romaneio_id' && sortDirection === 'desc'}"></i>
+          </th>
+          <th class="min-w-100px" (click)="toggleSort('data_criacao')">
+            Data <i class="fas" [ngClass]="{'fa-sort-up': sortField === 'data_criacao' && sortDirection === 'asc', 'fa-sort-down': sortField === 'data_criacao' && sortDirection === 'desc'}"></i>
+          </th>          
           <th class="min-w-100px">Transportadora</th>
           <th class="min-w-50px">Pedidos</th>
         </tr>
