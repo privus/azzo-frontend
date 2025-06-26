@@ -26,6 +26,7 @@ export class DebtCreateModalComponent implements OnInit {
   userCompanyId: number = 0;
   categorySearch: string = '';
   departmentSearch: string = '';
+  accountSearch: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -59,7 +60,7 @@ export class DebtCreateModalComponent implements OnInit {
 
   private loadAccount(): void {
     this.debtService.getAccount(this.userCompanyId).subscribe((accounts) => {
-      this.accounts = accounts;
+      this.accounts = accounts.sort((a, b) => a.nome.localeCompare(b.nome));
     });
   }
 

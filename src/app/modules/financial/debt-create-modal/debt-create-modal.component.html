@@ -190,7 +190,7 @@
               >
               <option value="">Selecione Conta</option>           
   
-              <option *ngFor="let c of accounts" [value]="+c.account_id">{{ c.nome }}</option>
+              <option *ngFor="let c of accounts | filter: categorySearch" [value]="+c.account_id">{{ c.nome }}</option>
               <option value="">Cadastrar conta</option>
               </select>
             </ng-container>
