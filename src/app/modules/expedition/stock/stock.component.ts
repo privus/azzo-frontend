@@ -116,7 +116,7 @@ export class StockComponent implements OnInit {
           matchStatus = estoque >= estoqueMinimo;
           break;
         case 'baixo':
-          matchStatus = estoque > 0 && estoque < estoqueMinimo;
+          matchStatus = estoque < estoqueMinimo;
           break;
         case 'sem':
           matchStatus = estoque <= 0;

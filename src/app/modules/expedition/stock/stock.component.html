@@ -105,16 +105,15 @@
                     'badge-light-danger': produto.saldo_estoque <= 0,
                     'badge-light-warning': produto.saldo_estoque > 0 && produto.saldo_estoque < produto.estoque_minimo,
                     'badge-light-primary': produto.saldo_estoque >= produto.estoque_minimo
-                  }"
+                  }"                  
                   [title]="'Estoque mínimo: ' + produto.estoque_minimo"
                 >
-                  {{
-                    produto.saldo_estoque === 0
-                      ? 'Sem estoque'
-                      : produto.saldo_estoque < produto.estoque_minimo
-                      ? 'Estoque baixo'
-                      : 'Disponível'
-                  }}
+                  {{ produto.saldo_estoque <= 0
+                    ? 'Sem estoque'
+                    : produto.saldo_estoque < produto.estoque_minimo
+                    ? 'Estoque baixo'
+                    : 'Disponível'
+                  }}                
                 </span>
               </td> 
               <td class="text-end">{{ produto.ean }}</td>             
