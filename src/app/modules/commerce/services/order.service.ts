@@ -17,6 +17,11 @@ export class OrderService {
     return this.sellService.getOrdersByDateRange(startDate, end);
   }
 
+  getOrdersBetweenDatesP(startDate: string, endDate?: string) {
+    const end = endDate ? `&toDate=${endDate}` : '';
+    return this.sellService.getOrdersByDateRangeP(startDate, end);
+  }
+
   addVolumeSell(id: number, volume: number) {
     return this.sellService.addVolumeSell(id, volume);
   }
@@ -25,8 +30,16 @@ export class OrderService {
     return this.sellService.getOrderById(id);
   }
 
+  getOrderByIdP(id: number) {
+    return this.sellService.getOrderByIdP(id);
+  }
+
   getOrdersByDate(fromDate: string) {
     return this.sellService.getOrdersByDate(fromDate);
+  }
+
+  getOrdersByDateP(fromDate: string) {
+    return this.sellService.getOrdersByDateP(fromDate);
   }
 
   syncroAllOrders() {
@@ -34,6 +47,10 @@ export class OrderService {
   }
 
   updateSellStatus(UpdateSellStatusDto: UpdateSellStatus) {
+    return this.sellService.updateSellStatus(UpdateSellStatusDto);
+  }
+
+  updateSellStatusP(UpdateSellStatusDto: UpdateSellStatus) {
     return this.sellService.updateSellStatus(UpdateSellStatusDto);
   }
 

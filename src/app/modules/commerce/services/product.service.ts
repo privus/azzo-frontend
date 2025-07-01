@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ProductsService } from '../../../core/services/';
-import { Produto } from '../models';
+import { UpdatedProduct } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class ProductService {
     return this.productsService.getProductByCode(id);
   }
 
-  updateTinyCodes(productId: number, data: { tiny_mg: number; tiny_sp: number }) {
-    return this.productsService.updateTinyCodes(productId, data);
+  updateProduct(productId: number, data: UpdatedProduct) {
+    return this.productsService.updateProduct(productId, data);
   }
 }

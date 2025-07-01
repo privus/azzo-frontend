@@ -23,6 +23,10 @@ export interface Produto {
   unidade: Produto;
   estoque_em_caixas?: string;
   estoque_minimo: number;
+  altura?: number;
+  largura?: number;
+  comprimento?: number;
+  peso?: number;
 }
 
 export interface CategoriaProduto {
@@ -33,4 +37,13 @@ export interface CategoriaProduto {
 export interface Fornecedor {
   fornecedor_id: number;
   nome: string;
+}
+
+export interface UpdatedProduct {
+  tiny_mg?: number;
+  tiny_sp?: number;
+  altura?: number;
+  largura?: number;
+  comprimento?: number;
+  peso_grs?: number;
 }

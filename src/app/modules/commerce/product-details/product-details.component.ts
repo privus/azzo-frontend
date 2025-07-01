@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CATEGORIAS } from 'src/app/shared/constants/user-constant';
-import { Produto } from '../models/product.model';
+import { Produto, UpdatedProduct } from '../models';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService } from '../services/product.service';
 import { Location } from '@angular/common';
@@ -65,9 +65,13 @@ export class ProductDetailsComponent implements OnInit {
       marca: [{ value: '', disabled: true }],
       descricao_uni: [{ value: '', disabled: true }],
       fotoUrl: [{ value: '', disabled: true }],
-      tiny_mg: [{ value: '' }],
-      tiny_sp: [{ value: '' }],
+      tiny_mg: [{ value: '', disabled: true }, Validators.pattern(/(^$|^\d{9}$)/)],
+      tiny_sp: [{ value: '', disabled: true }, Validators.pattern(/(^$|^\d{9}$)/)],
       saldo_estoque: [{ value: '', disabled: true }],
+      altura: [{ value: '' }, [Validators.min(0), Validators.max(999)]],
+      largura: [{ value: '' }, [Validators.min(0), Validators.max(999)]],
+      comprimento: [{ value: '' }, [Validators.min(0), Validators.max(999)]],
+      peso: [{ value: '' }, [Validators.min(0), Validators.max(999_999)]],
     });
   }
 
@@ -89,44 +93,54 @@ export class ProductDetailsComponent implements OnInit {
       tiny_mg: product.tiny_mg,
       tiny_sp: product.tiny_sp,
       saldo_estoque: product.saldo_estoque,
+      altura: product.altura,
+      largura: product.largura,
+      comprimento: product.comprimento,
+      peso: product.peso_grs,
     });
 
     if (product.tiny_mg) this.productForm.controls['tiny_mg'].disable();
     if (product.tiny_sp) this.productForm.controls['tiny_sp'].disable();
+    if (product.altura) this.productForm.controls['altura'].disable();
+    if (product.largura) this.productForm.controls['largura'].disable();
+    if (product.comprimento) this.productForm.controls['comprimento'].disable();
+    if (product.peso_grs) this.productForm.controls['peso'].disable();
   }
 
   goBack(): void {
     this.location.back();
   }
 
-  updateTinyCodes(): void {
-    if (this.productForm.controls['tiny_mg'].dirty || this.productForm.controls['tiny_sp'].dirty) {
-      const updatedFields = {
-        tiny_mg: this.productForm.controls['tiny_mg'].value,
-        tiny_sp: this.productForm.controls['tiny_sp'].value,
-      };
+  updateProduct(): void {
+    const fields = this.productForm.value;
+    const updatedFields: UpdatedProduct = {
+      tiny_mg: fields.tiny_mg,
+      tiny_sp: fields.tiny_sp,
+      altura: fields.altura,
+      largura: fields.largura,
+      comprimento: fields.comprimento,
+      peso_grs: fields.peso,
+    };
 
-      this.productService.updateTinyCodes(this.productId, updatedFields).subscribe({
-        next: (): void => {
-          this.showAlert({
+    this.productService.updateProduct(this.productId, updatedFields).subscribe({
+      next: (): void => {
+        this.showAlert(
+          {
             icon: 'success',
             title: 'Sucesso!',
-            text: 'Códigos Tiny atualizados com sucesso!',
+            text: 'Produto atualizado com sucesso!',
             confirmButtonText: 'Ok',
-          });
-        },
-        error: (err: any): void => {
-          console.error('Erro ao atualizar códigos Tiny:', err);
-        },
-      });
-    }
-  }
-
-  isTinyValid(): boolean {
-    const tinyMg = this.productForm.controls['tiny_mg'].value?.toString() || '';
-    const tinySp = this.productForm.controls['tiny_sp'].value?.toString() || '';
-
-    return tinyMg.length === 9 && tinySp.length === 9;
+          },
+          () => {
+            // Recarrega a página após o usuário fechar o alerta
+            window.location.reload();
+          },
+        );
+      },
+      error: (err: any): void => {
+        console.error('Erro ao atualizar códigos Tiny:', err);
+      },
+    });
   }
 
   showAlert(swalOptions: SweetAlertOptions, callback?: () => void) {

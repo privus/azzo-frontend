@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Order, Ranking, UpdateSellStatus } from '../../modules/commerce/models';
+import { Order, POrder, Ranking, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { BrandSales, Commissions, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
@@ -20,12 +20,24 @@ export class SellService {
     return this.http.get<Order[]>(`${this.baseUrl}sells/between?fromDate=${fromDate}${toDate}`);
   }
 
+  getOrdersByDateRangeP(fromDate: string, toDate?: string) {
+    return this.http.get<POrder[]>(`${this.baseUrl}Psells/between?fromDate=${fromDate}${toDate}`);
+  }
+
   getOrderById(id: number) {
     return this.http.get<Order>(`${this.baseUrl}sells/${id}`);
   }
 
+  getOrderByIdP(id: number) {
+    return this.http.get<POrder>(`${this.baseUrl}Psells/${id}`);
+  }
+
   getOrdersByDate(fromDate: string) {
     return this.http.get<Order[]>(`${this.baseUrl}sells?fromDate=${fromDate}`);
+  }
+
+  getOrdersByDateP(fromDate: string) {
+    return this.http.get<POrder[]>(`${this.baseUrl}Psells?fromDate=${fromDate}`);
   }
 
   syncroAllOrders() {
@@ -34,6 +46,10 @@ export class SellService {
 
   updateSellStatus(updateStatus: UpdateSellStatus) {
     return this.http.patch<{ message: string }>(`${this.baseUrl}sells/status`, updateStatus);
+  }
+
+  updateSellStatusP(updateStatus: UpdateSellStatus) {
+    return this.http.patch<{ message: string }>(`${this.baseUrl}Psells/status`, updateStatus);
   }
 
   exportTiny(id: number) {

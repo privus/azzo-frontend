@@ -1,0 +1,313 @@
+<!-- order-details-person.component.html -->
+<div id="kt_app_content_container" class="app-container container-xxl">
+    <ng-template #loading>
+      <div id="splash-screen" class="splash-screen">
+        <img src="./assets/media/logos/azzo_simbolo.svg" alt="Azzo logo" />
+        <span>Loading ...</span>
+      </div>
+    </ng-template>
+    <div *ngIf="order; else loading">
+      <form
+        class="form d-flex flex-column flex-lg-row fv-plugins-bootstrap5 fv-plugins-framework"
+        [formGroup]="orderForm"
+      >
+        <div
+          class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10"
+        >
+          <div class="card card-flush py-4">
+            <div class="card-header">
+              <h2 class="card-title">Detalhes</h2>
+            </div>
+  
+            <div class="card-body pt-0">
+              <label class="form-label">Código</label>
+              <input class="form-control mb-2" formControlName="venda_id" />
+  
+              <label class="form-label">Data/Hora</label>
+              <input
+                class="form-control mb-2"
+                [value]="order.data_criacao | date : 'dd/MM/yyyy | HH:mm:ss'"
+                disabled
+              />
+  
+              <label class="form-label">Tiny Id</label>
+              <input class="form-control mb-2" formControlName="numero_tiny" />
+  
+              <label class="form-label">Vendedor</label>
+              <input class="form-control mb-2" formControlName="vendedor" />
+  
+              <label class="form-label">Forma de Pagamento</label>
+              <input class="form-control mb-2" formControlName="forma_pagamento" />
+  
+              <label class="form-label">Nº NF-e</label>
+              <input class="form-control mb-2" formControlName="numero_nfe" />
+
+            </div>
+          </div>
+  
+          <div class="card card-flush py-4">
+            <div class="card-header">
+              <h2 class="card-title">Status</h2>
+              <div class="card-toolbar">
+                <div
+                  class="rounded-circle bg-success w-15px h-15px"
+                ></div>
+              </div>
+            </div>
+
+            <div class="card-body pt-0">
+              <span class="form-control mb-2 bg-light">
+                {{ order.status_venda.nome }}
+              </span>
+            </div>
+          </div>
+  
+          <!-- ░░ Parcelas ░░ -->
+          <div class="card card-flush h-xl-100">
+            <div class="card-header pt-7">
+              <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bold text-gray-900">Parcelas</span>
+                <span class="text-gray-500 mt-1 fw-semibold fs-6">
+                  {{ order.parcela_credito?.length || 0 }} Parcelas
+                </span>
+              </h3>
+  
+              <div class="card card-flush">
+                <span
+                  class="badge badge-light-primary text-dark fw-bold d-block p-2"
+                  style="white-space: normal"
+                >
+                  {{ order.forma_pagamento.nome }}
+                </span>
+              </div>
+            </div>
+  
+            <div class="card-body">
+              <div
+                class="hover-scroll-overlay-y pe-6 me-n6"
+                style="height: 415px"
+              >
+                <div
+                  class="border border-dashed border-gray-300 rounded px-7 py-3 mb-6"
+                  *ngFor="let parcela of order.parcela_credito"
+                >
+                  <div class="d-flex flex-stack mb-3">
+                    <div class="me-3">
+                      <a class="fw-bold text-gray-800"
+                        >Parcela #{{ parcela.numero }}</a
+                      >
+                    </div>
+  
+                    <button
+                      type="button"
+                      class="btn btn-icon btn-color-gray-500"
+                      (click)="openCreditModal(parcela)"
+                    >
+                      <i class="ki-duotone ki-dots-square fs-1">
+                        <span class="path1"></span><span class="path2"></span>
+                      </i>
+                    </button>
+                  </div>
+  
+                  <div class="d-flex flex-stack">
+                    <span class="text-gray-500">
+                      Vencimento:
+                      <span class="text-gray-800 fw-bold">
+                        {{ parcela.data_vencimento | date : 'dd/MM/yyyy' }}
+                      </span>
+                    </span>
+  
+                    <span
+                      class="badge"
+                      [ngClass]="{
+                        'badge-light-success': parcela.data_pagamento,
+                        'badge-light-danger': !parcela.data_pagamento
+                      }"
+                    >
+                      {{ parcela.status_pagamento.nome }}
+                    </span>
+                  </div>
+  
+                  <div class="d-flex flex-stack mt-3">
+                    <span class="text-gray-500">
+                      Valor:
+                      <span class="text-gray-800 fw-bold">
+                        {{ parcela.valor | currency : 'BRL' }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column flex-row-fluid gap-7 gap-lg-10">
+          <!-- ░░ Informações Cliente ░░ -->
+          <div class="card card-flush py-4">
+            <div class="card-header">
+              <h2 class="card-title">Informações Cliente</h2>
+            </div>
+  
+            <div class="card-body pt-0">
+              <!-- Campos de cliente -->
+              <label class="form-label">Nome Empresa</label>
+              <input class="form-control mb-2" formControlName="nome" />
+
+  
+              <label class="form-label">CPF/CNPJ</label>
+              <input class="form-control mb-2" formControlName="doc" />
+  
+              <label class="form-label">Cidade</label>
+              <input class="form-control mb-2" formControlName="cidade" />
+              
+              <!-- Observação opcional -->
+              <div *ngIf="order.observacao">
+                <label class="form-label">Observação</label>
+                <input class="form-control mb-2 text-danger fw-bold" formControlName="obs" />
+              </div>
+  
+              <!-- NF-e emitida -->
+              <div *ngIf="order.nfe_emitida">
+                <div class="row align-items-end">
+                  <div class="col-md-8">
+                    <label class="form-label">Chave Acesso NF-e</label>
+                    <input class="form-control" formControlName="chave_nfe" />
+                  </div>
+  
+                  <div class="col-md-4 d-flex align-items-end">
+                    <div class="flex-grow-1 me-2">
+                      <label class="form-label">Data Emissão</label>
+                      <input
+                        class="form-control"
+                        [value]="order.data_emissao_nfe | date : 'dd/MM/yyyy'"
+                        disabled
+                      />
+                    </div>
+  
+                    <div>
+                      <label class="form-label" style="visibility: hidden;">.</label>
+                      <button 
+                        type="button" 
+                        class="btn btn-sm btn-success mb-1"
+                        (click)="openNfeLink(order.nfe_link)"
+                        [disabled]="!order.nfe_link"
+                      >
+                        Abrir
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- ░░ Pedido / Itens ░░ -->
+          <div class="card card-flush py-4">
+            <div class="card-header">
+              <h2 class="card-title">Pedido</h2>
+            </div>
+  
+            <div class="card-body pt-0">
+              <div class="table-responsive">
+                <table class="table align-middle table-row-dashed fs-6 gy-5 mb-0">
+                  <thead>
+                    <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase">
+                      <th class="min-w-175px">Produto</th>
+                      <th class="min-w-100px text-end">Código</th>
+                      <th class="min-w-70px text-end">Qtd</th>
+                      <th class="min-w-100px text-end">Preço Tabela</th>
+                      <th class="min-w-100px text-end">Preço Venda</th>
+                      <th class="min-w-100px text-end">Total</th>
+                    </tr>
+                  </thead>
+  
+                  <tbody class="fw-semibold text-gray-600">
+                    <tr *ngFor="let item of order.itensVenda">
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="ms-5">
+                            <a class="fw-bold text-gray-600">
+                              {{ item.produto.nome }}
+                            </a>
+                            <div class="fs-7 text-muted">
+                              {{ item.produto.codigo }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="text-end">{{ item.quantidade }}</td>
+                      <td class="text-end">
+                        {{ item.produto.preco | currency : 'BRL' }}
+                      </td>
+                      <td class="text-end">
+                        {{ item.valor_unitario | currency : 'BRL' }}
+                      </td>
+                      <td class="text-end">
+                        {{ item.valor_total | currency : 'BRL' }}
+                      </td>
+                    </tr>
+  
+                    <!-- Desconto -->
+                    <tr>
+                      <td colspan="5" class="text-end">Desconto</td>
+                      <td class="text-end">
+                        {{
+                          order.desconto && order.desconto > 0
+                            ? (order.desconto | currency : 'BRL')
+                            : ('R$ 0,00')
+                        }}
+                      </td>
+                    </tr>
+  
+                    <!-- Valor Pedido -->
+                    <tr>
+                      <td colspan="5" class="text-end">Valor Pedido</td>
+                      <td class="text-end fw-bold">
+                        {{ order.valor_pedido | currency : 'BRL' }}
+                      </td>
+                    </tr>
+  
+                    <!-- Valor Total -->
+                    <tr>
+                      <td colspan="5" class="text-end">Valor Total</td>
+                      <td class="text-end fw-bold">
+                        {{ order.valor_final | currency : 'BRL' }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+  
+          <!-- ░░ Botões Salvar / Cancelar ░░ -->
+          <div class="d-flex justify-content-end">
+            <button
+              type="button"
+              class="btn btn-light me-5"
+              (click)="goBack()"
+            >
+              Cancelar
+            </button>
+  
+            <button
+              type="submit"
+              class="btn btn-primary"
+              (click)="updateStatus()"
+              [disabled]="!orderForm.dirty"
+            >
+              <span class="indicator-label">Salvar</span>
+              <span class="indicator-progress">
+                Aguarde...
+                <span class="spinner-border spinner-border-sm ms-2"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>  
+    <!-- SweetAlert wrapper -->
+    <swal #noticeSwal [swalOptions]="swalOptions"></swal>
+  </div>
+  

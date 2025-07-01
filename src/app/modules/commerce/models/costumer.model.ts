@@ -58,3 +58,17 @@ export interface Regiao {
   nome: string;
   vendedores: Vendedor[];
 }
+
+export interface PCliente {
+  cliente_id: number;
+  tiny_id?: number;
+  nome: string;
+  tipo_doc?: string;
+  numero_doc?: string;
+  data_criacao: Date | string;
+  ultima_compra?: Date | string;
+  valor_ultima_compra?: number;
+  cidade_string?: string;
+  cidade: Cidade;
+  status_cliente?: StatusCliente;
+}
