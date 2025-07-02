@@ -1,5 +1,5 @@
 import { PCliente } from './costumer.model';
-import { Credit } from '../../financial/models';
+import { PCredit } from '../../financial/models';
 import { StatusPagamento, Vendedor } from './order.model';
 
 export interface POrder {
@@ -27,7 +27,7 @@ export interface POrder {
   cliente: PCliente;
   forma_pagamento: PFormaPagamento;
   itensVenda: PItensVenda[];
-  parcela_credito?: Credit[];
+  parcela_credito?: PCredit[];
   status_venda: PStatusVenda;
   status_pagamento: StatusPagamento;
   vendedor: Vendedor;

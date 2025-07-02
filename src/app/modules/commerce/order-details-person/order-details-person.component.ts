@@ -1,14 +1,15 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { Location } from '@angular/common';
 import { OrderService } from '../services/order.service';
 import { CreditModalComponent } from '../../financial/credit-modal/credit-modal.component';
-import { Credit } from '../../financial/models';
-import { POrder, UpdateSellStatus } from '../models';
+import { PCredit, PGenerateCredit } from '../../financial/models';
+import { PFormaPagamento, POrder, UpdateSellStatus } from '../models';
+import { GenerateInstallmentsModalComponent } from '../generate-installments-modal/generate-installments-modal.component';
 
 @Component({
   selector: 'app-order-details-person',
@@ -20,11 +21,11 @@ export class OrderDetailsPersonComponent implements OnInit {
   order: POrder;
   orderId: number;
   code: number;
+  showPaymentM: boolean = false;
+  paymentMethods: PFormaPagamento[] = [];
 
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
-
-  private modalReference!: NgbModalRef;
 
   constructor(
     private fb: FormBuilder,
@@ -36,6 +37,7 @@ export class OrderDetailsPersonComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadPayment();
     this.initializeForm();
 
     this.code = Number(this.route.snapshot.paramMap.get('id'));
@@ -51,8 +53,15 @@ export class OrderDetailsPersonComponent implements OnInit {
         this.orderId = order.venda_id;
         this.patchFormWithOrder(order);
         this.cdr.detectChanges();
+        console.log('Order fetched successfully:', order);
       },
       error: (err) => console.error('Error fetching order:', err),
+    });
+  }
+
+  private loadPayment(): void {
+    this.orderService.getAllPaymentMethods().subscribe((payment) => {
+      this.paymentMethods = payment.sort((a, b) => a.nome.localeCompare(b.nome));
     });
   }
 
@@ -74,6 +83,9 @@ export class OrderDetailsPersonComponent implements OnInit {
       data_emissao_nfe: [{ value: '', disabled: true }],
       obs: [{ value: '', disabled: true }],
       venda_id: [{ value: '', disabled: true }],
+      status_pagamento: [{ value: '' }],
+      forma_pagamento_id: [''],
+      forma_pagamento_nome: [''],
     });
   }
 
@@ -94,6 +106,8 @@ export class OrderDetailsPersonComponent implements OnInit {
       data_emissao_nfe: order.data_emissao_nfe,
       obs: order.observacao,
       venda_id: order.venda_id,
+      status_pagamento: order.status_pagamento.status_pagamento_id,
+      forma_pagamento_id: order.forma_pagamento?.forma_pagamento_id,
     });
 
     if (order.numero_nfe) this.orderForm.get('numero_nfe')?.disable();
@@ -126,7 +140,7 @@ export class OrderDetailsPersonComponent implements OnInit {
     });
   }
 
-  openCreditModal(parcela: Credit): void {
+  openCreditModal(parcela: PCredit): void {
     const modalRef = this.modalService.open(CreditModalComponent, {
       backdrop: 'static',
       keyboard: false,
@@ -152,5 +166,32 @@ export class OrderDetailsPersonComponent implements OnInit {
 
   openNfeLink(url: string): void {
     window.open(url, '_blank');
+  }
+
+  installmentsGenerator() {
+    const modalRef = this.modalService.open(GenerateInstallmentsModalComponent, { size: 'md' });
+    modalRef.componentInstance.valorTotal = this.order.valor_final;
+    modalRef.componentInstance.dataPedido = this.order.data_criacao;
+    modalRef.result.then(
+      (parcelas: PGenerateCredit[]) => {
+        if (parcelas && parcelas.length) {
+          this.orderService.generatorinstallments(this.order.venda_id, parcelas).subscribe({
+            next: () => {
+              this.cdr.detectChanges();
+              this.showAlert({ icon: 'success', title: 'Parcelas geradas!', text: 'Parcelas cadastradas com sucesso.', confirmButtonText: 'Ok' });
+              window.location.reload();
+            },
+            error: (err) =>
+              this.showAlert({ icon: 'error', title: 'Erro!', text: err?.error?.message || 'Falha ao gerar parcelas.', confirmButtonText: 'Ok' }),
+          });
+        }
+      },
+      () => {},
+    );
+  }
+
+  togglePayment(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.showPaymentM = value === '';
   }
 }

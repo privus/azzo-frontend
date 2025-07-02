@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Order, POrder, Ranking, UpdateSellStatus } from '../../modules/commerce/models';
+import { Order, PFormaPagamento, POrder, Ranking, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { BrandSales, Commissions, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
 import { SalesComparisonReport } from 'src/app/pages/models/performance-sales.modal';
+import { PGenerateCredit } from 'src/app/modules/financial/models';
 
 @Injectable()
 export class SellService {
@@ -102,5 +103,16 @@ export class SellService {
 
   getInProduction() {
     return this.http.get<number>(`${this.baseUrl}sells/prod`);
+  }
+
+  installmentGenerate(orderId: number, parcelas: PGenerateCredit[]): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.baseUrl}Psells/installments`, {
+      venda_id: orderId,
+      parcelas,
+    });
+  }
+
+  getAllPaymentMethods() {
+    return this.http.get<PFormaPagamento[]>(`${this.baseUrl}Psells/paymentMethods`);
   }
 }

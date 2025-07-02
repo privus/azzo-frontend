@@ -77,7 +77,7 @@ export class OrderListingPersonComponent implements OnInit {
     if (term) {
       result = result.filter((order) => {
         const clienteNome = order.cliente?.nome ?? '';
-        return clienteNome.toLowerCase().includes(term) || order.numero_tiny?.toString().includes(term);
+        return clienteNome.toLowerCase().includes(term) || order.venda_id?.toString().includes(term);
       });
     }
 

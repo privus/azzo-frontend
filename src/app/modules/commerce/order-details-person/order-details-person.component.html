@@ -43,11 +43,11 @@
               <input class="form-control mb-2" formControlName="numero_nfe" />
 
             </div>
-          </div>
+          </div>         
   
           <div class="card card-flush py-4">
             <div class="card-header">
-              <h2 class="card-title">Status</h2>
+              <h2 class="card-title">Status Venda</h2>
               <div class="card-toolbar">
                 <div
                   class="rounded-circle bg-success w-15px h-15px"
@@ -60,84 +60,115 @@
                 {{ order.status_venda.nome }}
               </span>
             </div>
+            <div class="card-header">
+              <h2 class="card-title">Status Pagamento</h2>
+              <div class="card-toolbar">
+                <div
+                  class="rounded-circle bg-success w-15px h-15px"
+                ></div>
+              </div>
+            </div>
+            <div class="card-body pt-0">
+              <!--begin::Select2-->
+              <select
+                class="form-select mb-2"
+                formControlName="status_pagamento"
+                data-control="select2"
+                data-hide-search="true"
+                data-placeholder="Selecione o status"
+              >
+              <option value="1">Pendente</option>
+              <option value="2">Pago</option>
+              <option value="3">Atrasado</option>
+              <option value="4">Cancelado</option>
+              </select>
+            </div>
           </div>
   
           <!-- ░░ Parcelas ░░ -->
-          <div class="card card-flush h-xl-100">
-            <div class="card-header pt-7">
-              <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bold text-gray-900">Parcelas</span>
-                <span class="text-gray-500 mt-1 fw-semibold fs-6">
-                  {{ order.parcela_credito?.length || 0 }} Parcelas
-                </span>
-              </h3>
-  
-              <div class="card card-flush">
-                <span
-                  class="badge badge-light-primary text-dark fw-bold d-block p-2"
-                  style="white-space: normal"
+          <div class="card card-flush h-xl-100 shadow-sm">
+            <div class="card-header pt-7 d-flex flex-wrap align-items-center justify-content-between gap-4">
+              <div class="d-flex align-items-center gap-3">
+                <h3 class="card-title align-items-start flex-column mb-0 me-3">
+                  <span class="card-label fw-bold text-gray-900 fs-2">Parcelas</span>
+                  <span class="text-gray-500 mt-1 fw-semibold fs-6 d-block">
+                    {{ order.parcela_credito?.length || 0 }} Parcelas
+                  </span>
+                </h3>
+                <button
+                  type="button"
+                  class="btn btn-sm fw-bold btn-primary"
+                  (click)="installmentsGenerator()"
+                  style="border: none;"
                 >
-                  {{ order.forma_pagamento.nome }}
-                </span>
+                  Gerar Parcelas
+                </button>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <div>
+                  <label class="form-label mb-1">Forma de Pagamento</label>
+                  <select class="form-select form-select-sm" formControlName="forma_pagamento_id" style="min-width: 180px;">
+                    <option value="" disabled selected>Selecione</option>
+                    <option *ngFor="let p of paymentMethods" [value]="p.forma_pagamento_id">{{ p.nome }}</option>
+                  </select>
+                </div>
               </div>
             </div>
   
             <div class="card-body">
               <div
-                class="hover-scroll-overlay-y pe-6 me-n6"
-                style="height: 415px"
-              >
-                <div
-                  class="border border-dashed border-gray-300 rounded px-7 py-3 mb-6"
-                  *ngFor="let parcela of order.parcela_credito"
-                >
-                  <div class="d-flex flex-stack mb-3">
-                    <div class="me-3">
-                      <a class="fw-bold text-gray-800"
-                        >Parcela #{{ parcela.numero }}</a
-                      >
-                    </div>
-  
-                    <button
-                      type="button"
-                      class="btn btn-icon btn-color-gray-500"
-                      (click)="openCreditModal(parcela)"
-                    >
-                      <i class="ki-duotone ki-dots-square fs-1">
-                        <span class="path1"></span><span class="path2"></span>
-                      </i>
-                    </button>
-                  </div>
-  
-                  <div class="d-flex flex-stack">
-                    <span class="text-gray-500">
-                      Vencimento:
-                      <span class="text-gray-800 fw-bold">
-                        {{ parcela.data_vencimento | date : 'dd/MM/yyyy' }}
-                      </span>
-                    </span>
-  
-                    <span
-                      class="badge"
-                      [ngClass]="{
-                        'badge-light-success': parcela.data_pagamento,
-                        'badge-light-danger': !parcela.data_pagamento
-                      }"
-                    >
-                      {{ parcela.status_pagamento.nome }}
-                    </span>
-                  </div>
-  
-                  <div class="d-flex flex-stack mt-3">
-                    <span class="text-gray-500">
-                      Valor:
-                      <span class="text-gray-800 fw-bold">
-                        {{ parcela.valor | currency : 'BRL' }}
-                      </span>
-                    </span>
-                  </div>
+              class="border border-dashed border-gray-300 rounded px-7 py-3 mb-6"
+              *ngFor="let parcela of order.parcela_credito"
+            >
+              <div class="d-flex flex-stack mb-3">
+                <div class="me-3">
+                  <a class="fw-bold text-gray-800"
+                    >Parcela #{{ parcela.numero }}</a
+                  >
                 </div>
+
+                <button
+                  class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
+                  data-kt-menu-trigger="click"
+                  data-kt-menu-placement="bottom-end"
+                  data-kt-menu-overflow="true"
+                  (click)="openCreditModal(parcela)"
+                >
+                <i class="ki-duotone ki-dots-square fs-1">
+                    <span class="path1"></span><span class="path2"></span
+                    ><span class="path3"></span><span class="path4"></span>
+                </i>
+                </button>
               </div>
+
+              <div class="d-flex flex-stack">
+                <span class="text-gray-500">
+                  Vencimento:
+                  <span class="text-gray-800 fw-bold">
+                    {{ parcela.data_vencimento | date : 'dd/MM/yyyy' }}
+                  </span>
+                </span>
+
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'badge-light-success': parcela.data_pagamento,
+                    'badge-light-danger': !parcela.data_pagamento
+                  }"
+                >
+                  {{ parcela.status_pagamento.nome }}
+                </span>
+              </div>
+
+              <div class="d-flex flex-stack mt-3">
+                <span class="text-gray-500">
+                  Valor:
+                  <span class="text-gray-800 fw-bold">
+                    {{ parcela.valor | currency : 'BRL' }}
+                  </span>
+                </span>
+              </div>
+            </div>       
             </div>
           </div>
         </div>
@@ -214,7 +245,7 @@
                   <thead>
                     <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase">
                       <th class="min-w-175px">Produto</th>
-                      <th class="min-w-100px text-end">Código</th>
+                      <th class="min-w-100px text-end">Pedidos P/ Id</th>
                       <th class="min-w-70px text-end">Qtd</th>
                       <th class="min-w-100px text-end">Preço Tabela</th>
                       <th class="min-w-100px text-end">Preço Venda</th>
@@ -236,6 +267,7 @@
                           </div>
                         </div>
                       </td>
+                      <td class="text-end">{{ item.produto.produto_id }}</td>
                       <td class="text-end">{{ item.quantidade }}</td>
                       <td class="text-end">
                         {{ item.produto.preco | currency : 'BRL' }}
@@ -248,18 +280,6 @@
                       </td>
                     </tr>
   
-                    <!-- Desconto -->
-                    <tr>
-                      <td colspan="5" class="text-end">Desconto</td>
-                      <td class="text-end">
-                        {{
-                          order.desconto && order.desconto > 0
-                            ? (order.desconto | currency : 'BRL')
-                            : ('R$ 0,00')
-                        }}
-                      </td>
-                    </tr>
-  
                     <!-- Valor Pedido -->
                     <tr>
                       <td colspan="5" class="text-end">Valor Pedido</td>
@@ -267,7 +287,22 @@
                         {{ order.valor_pedido | currency : 'BRL' }}
                       </td>
                     </tr>
-  
+                    <tr>
+                      <td colspan="5" class="text-end">Frete</td>
+                      <td class="text-end fw-bold">
+                        {{ order.valor_frete| currency : 'BRL' }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="5" class="text-end">Desconto</td>
+                      <td class="text-end">
+                        {{
+                          order.desconto && order.desconto > 0
+                            ? (order.desconto | currency : 'BRL')
+                            : ('R$ 0.00')
+                        }}
+                      </td>
+                    </tr>
                     <!-- Valor Total -->
                     <tr>
                       <td colspan="5" class="text-end">Valor Total</td>

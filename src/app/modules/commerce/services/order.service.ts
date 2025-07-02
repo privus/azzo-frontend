@@ -1,6 +1,7 @@
 import { UpdateSellStatus } from './../models/';
 import { Injectable } from '@angular/core';
 import { SellService } from '../../../core/services';
+import { PGenerateCredit } from '../../financial/models';
 
 @Injectable({
   providedIn: 'root',
@@ -80,5 +81,13 @@ export class OrderService {
 
   getInProduction() {
     return this.sellService.getInProduction();
+  }
+
+  generatorinstallments(orderId: number, parcelas: PGenerateCredit[]) {
+    return this.sellService.installmentGenerate(orderId, parcelas);
+  }
+
+  getAllPaymentMethods() {
+    return this.sellService.getAllPaymentMethods();
   }
 }

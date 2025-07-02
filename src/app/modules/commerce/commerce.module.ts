@@ -15,6 +15,7 @@ import { SellerRankingModalComponent } from './seller-ranking-modal/seller-ranki
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OrderListingPersonComponent } from './order-listing-person/order-listing-person.component';
 import { OrderDetailsPersonComponent } from './order-details-person/order-details-person.component';
+import { GenerateInstallmentsModalComponent } from './generate-installments-modal/generate-installments-modal.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { OrderDetailsPersonComponent } from './order-details-person/order-detail
     SellerRankingModalComponent,
     OrderListingPersonComponent,
     OrderDetailsPersonComponent,
+    GenerateInstallmentsModalComponent,
   ],
   imports: [
     SharedModule,
