@@ -14,6 +14,7 @@ import { DebtCreateModalComponent } from './debt-create-modal/debt-create-modal.
 import { CreditCreateModalComponent } from './credit-create-modal/credit-create-modal.component';
 import { DebtModalComponent } from './debt-modal/debt-modal.component';
 import { FilterPipe } from '../../shared/pipes/filter.pipe';
+import { CreditModalPersonComponent } from './credit-modal-person/credit-modal-person.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { FilterPipe } from '../../shared/pipes/filter.pipe';
     DebtCreateModalComponent,
     CreditCreateModalComponent,
     DebtModalComponent,
+    CreditModalPersonComponent,
     FilterPipe,
   ],
   imports: [

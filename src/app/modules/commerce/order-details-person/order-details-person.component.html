@@ -107,10 +107,26 @@
               <div class="d-flex align-items-center gap-3">
                 <div>
                   <label class="form-label mb-1">Forma de Pagamento</label>
-                  <select class="form-select form-select-sm" formControlName="forma_pagamento_id" style="min-width: 180px;">
-                    <option value="" disabled selected>Selecione</option>
-                    <option *ngFor="let p of paymentMethods" [value]="p.forma_pagamento_id">{{ p.nome }}</option>
-                  </select>
+                  <ng-container *ngIf="!showPaymentM; else inputMethod">
+                    <select 
+                      class="form-select form-select-sm" 
+                      formControlName="forma_pagamento_id" 
+                      style="min-width: 180px;"
+                      (change)="togglePayment($event)"
+                    >
+                      <option value="" disabled selected>Selecione</option>
+                      <option *ngFor="let p of paymentMethods" [value]="p.forma_pagamento_id">{{ p.nome }}</option>
+                      <option value="">Cadastrar</option>
+                    </select>
+                  </ng-container>
+                  <ng-template #inputMethod>
+                    <input
+                        type="text"
+                        class="form-control form-control-solid"
+                        formControlName="forma_pagamento_nome"
+                        placeholder="Digite a forma de pagamento"
+                    />
+                  </ng-template>
                 </div>
               </div>
             </div>
@@ -245,7 +261,7 @@
                   <thead>
                     <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase">
                       <th class="min-w-175px">Produto</th>
-                      <th class="min-w-100px text-end">Pedidos P/ Id</th>
+                      <th class="min-w-100px text-end">pedidos_produto_id</th>
                       <th class="min-w-70px text-end">Qtd</th>
                       <th class="min-w-100px text-end">Preço Tabela</th>
                       <th class="min-w-100px text-end">Preço Venda</th>

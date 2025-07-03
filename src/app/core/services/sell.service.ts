@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Order, PFormaPagamento, POrder, Ranking, UpdateSellStatus } from '../../modules/commerce/models';
+import { Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { BrandSales, Commissions, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
@@ -45,8 +45,8 @@ export class SellService {
     return this.http.get<{ message: string }>(`${this.baseUrl}sells/syncro`);
   }
 
-  updateSellStatus(updateStatus: UpdateSellStatus) {
-    return this.http.patch<{ message: string }>(`${this.baseUrl}sells/status`, updateStatus);
+  updateSellStatus(updateStatus: UpdateSellPerson) {
+    return this.http.patch<{ message: string }>(`${this.baseUrl}Psells/status`, updateStatus);
   }
 
   updateSellStatusP(updateStatus: UpdateSellStatus) {

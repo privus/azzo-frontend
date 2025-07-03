@@ -1,6 +1,6 @@
 import { Cliente, PCliente, POrder } from './../../commerce/models/';
 import { Order, StatusPagamento } from '../../commerce/models';
-import { Categoria } from './debt.modal';
+import { Categoria, Conta } from './debt.modal';
 
 export interface Credit {
   parcela_id: number;
@@ -41,7 +41,7 @@ export interface PCredit {
   categoria: Categoria | null;
   categoria_nome: string | null;
   categoria_id: number | null;
-  conta: string | null;
+  account: Conta;
   criado_por: string;
   atualizado_por: string;
 }

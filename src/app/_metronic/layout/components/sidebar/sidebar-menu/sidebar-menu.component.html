@@ -71,7 +71,7 @@
             </span>
           </a>
         </div>
-        <div class="menu-item">
+        <div *ngIf="isRoleOrCompany('Administrador', 4)"  class="menu-item">
           <a class="menu-link without-sub" routerLinkActive="active" routerLink="/commerce/orders-person">
             <span class="menu-bullet">
               <span class="bullet bullet-dot"></span>

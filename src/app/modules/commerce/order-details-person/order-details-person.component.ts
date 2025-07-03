@@ -6,9 +6,9 @@ import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { Location } from '@angular/common';
 import { OrderService } from '../services/order.service';
-import { CreditModalComponent } from '../../financial/credit-modal/credit-modal.component';
+import { CreditModalPersonComponent } from '../../financial/credit-modal-person/credit-modal-person.component';
 import { PCredit, PGenerateCredit } from '../../financial/models';
-import { PFormaPagamento, POrder, UpdateSellStatus } from '../models';
+import { PFormaPagamento, POrder, UpdateSellPerson } from '../models';
 import { GenerateInstallmentsModalComponent } from '../generate-installments-modal/generate-installments-modal.component';
 
 @Component({
@@ -61,7 +61,7 @@ export class OrderDetailsPersonComponent implements OnInit {
 
   private loadPayment(): void {
     this.orderService.getAllPaymentMethods().subscribe((payment) => {
-      this.paymentMethods = payment.sort((a, b) => a.nome.localeCompare(b.nome));
+      this.paymentMethods = payment;
     });
   }
 
@@ -115,11 +115,14 @@ export class OrderDetailsPersonComponent implements OnInit {
   }
 
   updateStatus(): void {
-    const nfe = this.orderForm.get('numero_nfe')?.value;
+    const update = this.orderForm.value;
 
-    const payload: UpdateSellStatus = {
+    const payload: UpdateSellPerson = {
       codigo: this.code,
-      numero_nfe: nfe,
+      numero_nfe: update.numero_nfe,
+      status_pagamento_id: Number(update.status_pagamento),
+      forma_pagamento_id: Number(update.forma_pagamento_id),
+      forma_pagamento_nome: update.forma_pagamento_nome || null,
     };
 
     this.orderService.updateSellStatusP(payload).subscribe({
@@ -141,13 +144,12 @@ export class OrderDetailsPersonComponent implements OnInit {
   }
 
   openCreditModal(parcela: PCredit): void {
-    const modalRef = this.modalService.open(CreditModalComponent, {
+    const modalRef = this.modalService.open(CreditModalPersonComponent, {
       backdrop: 'static',
       keyboard: false,
       size: 'lg',
     });
 
-    /** passa cópia para o modal */
     modalRef.componentInstance.parcelaModel = {
       ...parcela,
       venda: this.order,

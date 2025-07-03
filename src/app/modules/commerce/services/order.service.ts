@@ -1,4 +1,4 @@
-import { UpdateSellStatus } from './../models/';
+import { UpdateSellPerson, UpdateSellStatus } from './../models/';
 import { Injectable } from '@angular/core';
 import { SellService } from '../../../core/services';
 import { PGenerateCredit } from '../../financial/models';
@@ -51,8 +51,8 @@ export class OrderService {
     return this.sellService.updateSellStatus(UpdateSellStatusDto);
   }
 
-  updateSellStatusP(UpdateSellStatusDto: UpdateSellStatus) {
-    return this.sellService.updateSellStatus(UpdateSellStatusDto);
+  updateSellStatusP(UpdateSellStatusDto: UpdateSellPerson) {
+    return this.sellService.updateSellStatusP(UpdateSellStatusDto);
   }
 
   exportTiny(id: number) {
