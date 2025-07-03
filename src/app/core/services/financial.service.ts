@@ -79,7 +79,7 @@ export class FinancialService {
 
   performanceDebts(company_id: number, fromDate1: string, toDate1: string, fromDate2: string, toDate2: string) {
     return this.http.get<DebtsComparisonReport>(
-      `${this.baseUrl}debts/debtsReport/${company_id}?fromDate1=${fromDate1}&toDate1=${toDate1}&fromDate2=${fromDate2}&toDate2=${toDate2}`,
+      `${this.baseUrl}debts/debtsReport?fromDate1=${fromDate1}&toDate1=${toDate1}&fromDate2=${fromDate2}&toDate2=${toDate2}&company=${company_id}`,
     );
   }
 
