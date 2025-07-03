@@ -46,7 +46,7 @@ export class SellService {
   }
 
   updateSellStatus(updateStatus: UpdateSellPerson) {
-    return this.http.patch<{ message: string }>(`${this.baseUrl}Psells/status`, updateStatus);
+    return this.http.patch<{ message: string }>(`${this.baseUrl}sells/status`, updateStatus);
   }
 
   updateSellStatusP(updateStatus: UpdateSellStatus) {

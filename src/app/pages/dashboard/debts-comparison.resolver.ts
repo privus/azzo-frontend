@@ -28,7 +28,7 @@ export class DebtsComparisonResolver implements Resolve<DebtsComparisonReport> {
     const fromDate2 = this.formatDate(startCurrentMonth);
     const toDate2 = this.formatDate(endCurrentPeriod);
 
-    return this.debtsService.getPerformanceDebts(fromDate1, toDate1, fromDate2, toDate2);
+    return this.debtsService.getPerformanceDebts(2, fromDate1, toDate1, fromDate2, toDate2);
   }
 
   private formatDate(date: Date): string {

@@ -14,4 +14,4 @@ export class ModalService {
   close() {
     this.modalService.dismissAll();
   }
-} 
+}
