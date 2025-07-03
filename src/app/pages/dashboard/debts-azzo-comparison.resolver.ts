@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { OrderService } from '../../modules/commerce/services/order.service';
 import { Observable } from 'rxjs';
-import { SalesComparisonReport } from '../models/performance-sales.modal';
+import { DebtService } from '../../modules/financial/services/debt.service';
+import { DebtsComparisonReport } from '../models/performance-debts.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SalesComparisonResolver implements Resolve<SalesComparisonReport> {
-  constructor(private orderService: OrderService) {}
+export class DebtsAzzoComparisonResolver implements Resolve<DebtsComparisonReport> {
+  constructor(private debtsService: DebtService) {}
 
-  resolve(): Observable<SalesComparisonReport> {
+  resolve(): Observable<DebtsComparisonReport> {
     const now = new Date();
 
     // Current month: 1st to today
@@ -27,12 +27,8 @@ export class SalesComparisonResolver implements Resolve<SalesComparisonReport> {
     const toDate1 = this.formatDate(endLastMonth);
     const fromDate2 = this.formatDate(startCurrentMonth);
     const toDate2 = this.formatDate(endCurrentPeriod);
-    console.log('fromDate1', fromDate1);
-    console.log('toDate1', toDate1);
-    console.log('fromDate2', fromDate2);
-    console.log('toDate2', toDate2);
 
-    return this.orderService.getPerformanceSales(fromDate1, toDate1, fromDate2, toDate2);
+    return this.debtsService.getPerformanceDebts(2, fromDate1, toDate1, fromDate2, toDate2);
   }
 
   private formatDate(date: Date): string {

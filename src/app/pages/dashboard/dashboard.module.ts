@@ -4,8 +4,9 @@ import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { ModalsModule } from '../../_metronic/partials';
 import { AuthGuard } from '../../core/guards/auth.guard';
-import { SalesComparisonResolver } from './sales-comparison.resolver';
-import { DebtsComparisonResolver } from './debts-comparison.resolver';
+import { SalesAzzoComparisonResolver } from './sales-azzo-comparison.resolver';
+import { DebtsAzzoComparisonResolver } from './debts-azzo-comparison.resolver';
+import { DebtsPersonComparisonResolver } from './debts-person-comparison.resolver';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -18,8 +19,9 @@ import { FormsModule } from '@angular/forms';
         path: '',
         component: DashboardComponent,
         resolve: {
-          salesPerformance: SalesComparisonResolver,
-          debtsPerformance: DebtsComparisonResolver,
+          salesAzzoPerformance: SalesAzzoComparisonResolver,
+          debtsAzzoPerformance: DebtsAzzoComparisonResolver,
+          debstPersonPerformance: DebtsPersonComparisonResolver,
         },
         canActivate: [AuthGuard],
       },
