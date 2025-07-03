@@ -146,7 +146,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>                                
                                 <div class="card card-flush h-md-100">
                                     <div class="card-body pt-5">
                                         <div class="mb-10 fv-row">
@@ -154,16 +154,48 @@
                                             <input type="text" class="form-control mb-2" formControlName="descricao_uni" disable />
                                         </div>
                                     </div>
-                                <div class="d-flex justify-content-center align-items-center my-5">
-                                    <div class="card w-50">
-                                        <div class="card-body text-center">
-                                            <label class="form-label fw-bold fs-5 mb-2">Saldo em Estoque</label>
-                                            <div class="fs-2 text-success">
-                                                <input type="text" class="form-control mb-2 text-center fs-2 text-success" formControlName="saldo_estoque" disable />
+                                    <div class="card-body pt-0">
+                                        <div class="d-flex gap-5">
+                                            <div class="w-25">
+                                                <label class="required form-label">Altura</label>
+                                                <div class="input-group mb-2">
+                                                    <span class="input-group-text">Cm</span>
+                                                    <input type="number" name="altura" class="form-control" placeholder="Altura" formControlName="altura" disable />
+                                                </div>
+                                            </div>
+                                            <div class="w-25">
+                                                <label class="required form-label">Largura</label>
+                                                <div class="input-group mb-2">
+                                                    <span class="input-group-text">Cm</span>
+                                                    <input type="number" name="largura" class="form-control" placeholder="Largura" formControlName="largura" disable />
+                                                </div>
+                                            </div>
+                                            <div class="w-25">
+                                                <label class="required form-label">Comprimento</label>
+                                                <div class="input-group mb-2">
+                                                    <span class="input-group-text">Cm</span>
+                                                    <input type="number" name="comprimento" class="form-control" placeholder="Comprimento" formControlName="comprimento" disable />
+                                                </div>
+                                            </div>
+                                            <div class="w-25">
+                                                <label class="required form-label">Peso</label>
+                                                <div class="input-group mb-2">
+                                                    <span class="input-group-text">Grs</span>
+                                                    <input type="number" name="peso" class="form-control" placeholder="Peso" formControlName="peso" disable />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="d-flex justify-content-center align-items-center my-5">
+                                        <div class="card w-50">
+                                            <div class="card-body text-center">
+                                                <label class="form-label fw-bold fs-5 mb-2">Saldo em Estoque</label>
+                                                <div class="fs-2 text-success">
+                                                    <input type="text" class="form-control mb-2 text-center fs-2 text-success" formControlName="saldo_estoque" disable />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!--end::Pricing-->
@@ -184,11 +216,10 @@
                     </button>
 
                     <button 
-                        type="submit" 
-                        id="kt_ecommerce_add_product_submit" 
-                        class="btn btn-primary" 
-                        (click)="updateTinyCodes()"
-                        [disabled]="!isTinyValid()"
+                        type="submit"
+                        class="btn btn-primary"
+                        (click)="updateProduct()"
+                        [disabled]="!productForm.valid || !productForm.dirty"
                     >
                         <span class="indicator-label">
                             Salvar

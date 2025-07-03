@@ -1,0 +1,50 @@
+<div class="modal-header">
+    <h4 class="modal-title">Gerar Parcelas</h4>
+    <div class="ms-4">
+      <span class="fw-bold">Valor Total:</span>
+      <span class="text-primary fs-5">{{ valorTotal | currency:'BRL' }}</span>
+    </div>
+    <button type="button" class="close" aria-label="Close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+  <div class="modal-body">
+    <form [formGroup]="form">
+      <div class="form-group">
+        <label>Quantidade de Parcelas</label>
+        <input class="form-control" type="number" min="1" max="24" formControlName="qtdParcelas" required>
+      </div>
+      <div *ngFor="let parcela of parcelasArray; let i = index" class="mb-3">
+        <div class="d-flex align-items-center mb-2">
+          <strong class="me-3">Parcela #{{ i + 1 }}</strong>
+          <label class="fs-7 fw-semibold mb-0 d-flex align-items-center">
+            <input
+              class="form-check-input me-1"
+              type="checkbox"
+              style="width: 18px; height: 18px;"
+              [formControlName]="'pagamento_efetuado' + i"
+            />
+            <span class="form-check-label fw-semibold text-muted">Pago</span>
+          </label>
+          <input *ngIf="form.get('pagamento_efetuado' + i)?.value" class="form-control form-control-sm ms-3 w-auto" type="date" [formControlName]="'data_pagamento' + i" placeholder="Data Pagamento">
+        </div>
+        <div class="row">
+          <div class="col-4">
+            <label>Valor</label>
+            <input class="form-control" type="number" [formControlName]="'valor' + i" min="0.01" step="0.01" required>
+          </div>
+          <div class="col-4">
+            <label>Vencimento</label>
+            <input class="form-control" type="date" [formControlName]="'data_vencimento' + i" required>
+          </div>
+          <div class="col-4">
+            <label>Competência</label>
+            <input class="form-control" type="date" [formControlName]="'data_competencia' + i" required>
+          </div>
+        </div>
+      </div>      
+  <div class="modal-footer">
+    <button class="btn btn-secondary" (click)="close()">Cancelar</button>
+    <button class="btn btn-primary" (click)="confirmar()" [disabled]="!form.valid">Confirmar</button>
+  </div>
+  

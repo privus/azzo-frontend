@@ -65,7 +65,21 @@
             <span class="menu-bullet">
               <span class="bullet bullet-dot"></span>
             </span>
-            <span class="menu-title">Pedidos</span>
+            <span class="menu-title d-flex align-items-center">
+              Pedidos
+              <img src="./assets/media/logos/azzo_simbolo.svg" class="ms-2" width="16" height="16" alt="Logo Azzo" style="vertical-align: middle;" />
+            </span>
+          </a>
+        </div>
+        <div *ngIf="isRoleOrCompany('Administrador', 4)"  class="menu-item">
+          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/commerce/orders-person">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title d-flex align-items-center">
+              Pedidos
+              <img src="./assets/media/logos/personizi.svg" class="ms-2" width="16" height="16" alt="Logo Personizi" style="vertical-align: middle;" />
+            </span>
           </a>
         </div>
       </div>

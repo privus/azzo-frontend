@@ -1,0 +1,292 @@
+<div class="card">
+    <!-- HEADER / CONTROLS -->
+    <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+      <div class="d-flex flex-wrap gap-3 align-items-center w-100">
+        <!-- Search -->
+        <div class="d-flex align-items-center position-relative my-1">
+          <app-keenicon name="magnifier" class="fs-3 position-absolute ms-5"></app-keenicon>
+          <input
+            type="text"
+            class="form-control form-control-solid w-360px ps-12"
+            placeholder="Pesquisar Pedido"
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+          />
+        </div>
+  
+        <!-- Status -->
+        <div class="d-flex align-items-center position-relative my-1 ms-8">
+          <select
+            class="form-select form-select-solid form-select-lg"
+            [(ngModel)]="selectedStatus"
+            (change)="applyFilter()"
+          >
+            <option value="">Status Venda</option>
+            <option value="1">Preparando envio</option>
+            <option value="2">Entregue</option>
+            <option value="3">Enviado</option>
+            <option value="4">Aprovado</option>
+            <option value="5">Pronto para envio</option>
+          </select>
+        </div>
+        <div class="d-flex align-items-center position-relative my-1 ms-8">
+          <select
+            class="form-select form-select-solid form-select-lg"
+            [(ngModel)]="selectedStatusPg"
+            (change)="applyFilter()"
+          >
+            <option value="">Status Pagamento</option>
+            <option value="1">Pendente</option>
+            <option value="2">Pago</option>
+            <option value="3">Atrasado</option>
+            <option value="4">Cancelado</option>
+          </select>
+        </div>
+
+        <!-- Itens por página -->
+        <div class="d-flex align-items-center position-relative my-1 ms-8">
+          <select
+            class="form-select form-select-solid form-select-lg"
+            [(ngModel)]="itemsPerPage"
+            (change)="onChangeItemsPerPage()"
+          >
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="100">100</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  
+    <!-- BODY -->
+    <div *ngIf="paginatedOrders; else loading" class="card-body pt-0">
+      <div class="table-responsive">
+        <table
+          id="kt_person_orders_table"
+          class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer"
+        >
+          <thead>
+            <tr
+              class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0"
+            >
+              <th (click)="sortBy('codigo')" class="min-w-60px cursor-pointer">
+                Nº Pedido
+                <i
+                  *ngIf="sortField === 'codigo'"
+                  class="ms-1"
+                  [ngClass]="{
+                    'ki ki-up-arrow': sortDirection === 'asc',
+                    'ki ki-down-arrow': sortDirection === 'desc'
+                  }"
+                ></i>
+              </th>
+              <th class="min-w-150px cursor-pointer" (click)="sortBy('cliente')">
+                Cliente
+                <i
+                  *ngIf="sortField === 'cliente'"
+                  class="ms-1"
+                  [ngClass]="{
+                    'ki ki-up-arrow': sortDirection === 'asc',
+                    'ki ki-down-arrow': sortDirection === 'desc'
+                  }"
+                ></i>
+              </th>
+              <th
+                class="min-w-100px cursor-pointer"
+                (click)="sortBy('dataVenda')"
+              >
+                Data
+                <i
+                  *ngIf="sortField === 'dataVenda'"
+                  class="ms-1"
+                  [ngClass]="{
+                    'ki ki-up-arrow': sortDirection === 'asc',
+                    'ki ki-down-arrow': sortDirection === 'desc'
+                  }"
+                ></i>
+              </th>
+              <th class="min-w-100px">Valor</th>
+              <th class="min-w-125px">Status Venda</th>
+              <th class="min-w-125px">Status Pgto.</th>
+              <th class="min-w-125px">Vendedor</th>
+              <th class="text-end min-w-70px">Ações</th>
+            </tr>
+          </thead>
+  
+          <tbody class="fw-semibold text-gray-600">
+            <tr *ngFor="let order of paginatedOrders">
+              <td>{{ order.venda_id }}</td>
+              <td>{{ order.cliente.nome }}</td>
+              <td>{{ order.data_criacao | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ order.valor_final | currency: 'BRL' }}</td>
+              <td>                            
+                <span class="badge td" [ngClass]="getStatusClass(order.status_venda.status_venda_id)">
+                {{ order.status_venda.nome }}
+                </span>  
+              </td>     
+              <td>                            
+                <span class="badge td" [ngClass]="getStatusPagClass(order.status_pagamento.status_pagamento_id)">
+                {{ order.status_pagamento.nome }}
+                </span>  
+              </td>
+              <td>{{ order.vendedor ? order.vendedor.nome : 'teste'}}</td>
+              <td class="text-end">
+                <button
+                  class="btn btn-icon btn-active-light-primary w-30px h-30px"
+                  (click)="editOrder(order.venda_id)"
+                >
+                  <i class="ki-duotone ki-pencil fs-3">
+                    <span class="path1"></span><span class="path2"></span>
+                  </i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <!-- PAGINAÇÃO -->
+      <div class="row mt-5">
+        <div
+          class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start"
+        >
+          <div class="fs-6 fw-bold text-gray-700">
+            Mostrando {{ startItem }} - {{ endItem }} de
+            {{ filteredOrders.length }} pedidos.
+          </div>
+        </div>
+  
+        <div
+          class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end"
+        >
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button
+                class="page-link first"
+                type="button"
+                aria-label="First"
+                (click)="currentPage = 1; updateDisplayedPages(); updateDisplayedItems()"
+              >
+                ‹‹
+              </button>
+            </li>
+  
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button
+                class="page-link previous"
+                type="button"
+                aria-label="Previous"
+                (click)="currentPage = currentPage - 1; updateDisplayedPages(); updateDisplayedItems()"
+              >
+                ‹
+              </button>
+            </li>
+  
+            <li
+              class="page-item"
+              *ngFor="let page of displayedPages"
+              [class.active]="currentPage === page"
+            >
+              <button
+                class="page-link"
+                type="button"
+                (click)="currentPage = page; updateDisplayedPages(); updateDisplayedItems()"
+              >
+                {{ page }}
+              </button>
+            </li>
+  
+            <li
+              class="page-item"
+              [class.disabled]="currentPage === totalPages || totalPages === 0"
+            >
+              <button
+                class="page-link next"
+                type="button"
+                aria-label="Next"
+                (click)="currentPage = currentPage + 1; updateDisplayedPages(); updateDisplayedItems()"
+              >
+                ›
+              </button>
+            </li>
+  
+            <li
+              class="page-item"
+              [class.disabled]="currentPage === totalPages || totalPages === 0"
+            >
+              <button
+                class="page-link last"
+                type="button"
+                aria-label="Last"
+                (click)="currentPage = totalPages; updateDisplayedPages(); updateDisplayedItems()"
+              >
+                ››
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+  
+      <!-- TOTALIZADORES -->
+      <div
+        class="d-flex justify-content-center align-items-center flex-wrap mt-7"
+      >
+        <!-- Total Bruto -->
+        <div class="me-5">
+          <div class="card card-flush h-md-50">
+            <div class="card-header pt-5">
+              <div class="card-title d-flex flex-column">
+                <div class="d-flex align-items-center">
+                  <span
+                    class="fs-4 fw-semibold text-gray-500 me-1 align-self-start"
+                    >R$</span
+                  >
+                  <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
+                    {{ totalBruto | number: '1.2-2' }}
+                  </span>
+                </div>
+                <span class="text-gray-500 pt-1 fw-semibold fs-6">
+                  Total Bruto
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Lucro -->
+        <div>
+          <div class="card card-flush h-md-50">
+            <div class="card-header pt-5">
+              <div class="card-title d-flex flex-column">
+                <div class="d-flex align-items-center">
+                  <span
+                    class="fs-4 fw-semibold text-gray-500 me-1 align-self-start"
+                    >R$</span
+                  >
+                  <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
+                    {{ totalLucro | number: '1.2-2' }}
+                  </span>
+                </div>
+                <span class="text-gray-500 pt-1 fw-semibold fs-6">
+                  Lucro Estimado
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- LOADING -->
+    <ng-template #loading>
+      <div id="splash-screen" class="splash-screen">
+        <img src="./assets/media/logos/azzo_simbolo.svg" alt="Azzo logo" />
+        <span>Loading ...</span>
+      </div>
+    </ng-template>
+  </div>
+  
+  <!-- SweetAlert container -->
+  <swal #noticeSwal [swalOptions]="swalOptions"></swal>
+  

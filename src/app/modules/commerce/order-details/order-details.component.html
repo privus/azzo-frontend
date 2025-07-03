@@ -97,16 +97,13 @@
           </div>
           <!--end::Status-->
   
-          <div class="card card-flush py-4" data-select2-id="select2-data-147-3qmn">
+          <div class="card card-flush py-4">
             <!--begin::Card header-->
             <div class="card-header">
               <!--begin::Card title-->
               <div class="card-title">
                 <h2>Status</h2>
               </div>
-              <!--end::Card title-->
-  
-              <!--begin::Card toolbar-->
               <div class="card-toolbar">
                 <div
                   class="rounded-circle bg-success w-15px h-15px"
@@ -115,10 +112,7 @@
               </div>
               <!--end::Card toolbar-->
             </div>
-            <!--end::Card header-->
-  
-            <!--begin::Card body-->
-            <div class="card-body pt-0" data-select2-id="select2-data-146-bwni">
+            <div class="card-body pt-0">
               <!--begin::Select2-->
               <select
                 class="form-select mb-2"
@@ -135,10 +129,6 @@
                 <option value="13477">Entregue</option>
                 <option value="13480">Aguardando Produto</option>
               </select>
-              <!--end::Select2-->
-  
-              <!--begin::Datepicker-->
-              <!--end::Datepicker-->
             </div>
             <!--end::Card body-->
           </div>
@@ -186,11 +176,11 @@
                           <!--begin::Action (menu/botão) - opcional-->
                           <div class="m-0">
                               <button
-                              class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
-                              data-kt-menu-trigger="click"
-                              data-kt-menu-placement="bottom-end"
-                              data-kt-menu-overflow="true"
-                              (click)="openCreditModal(parcela)"
+                                class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
+                                data-kt-menu-trigger="click"
+                                data-kt-menu-placement="bottom-end"
+                                data-kt-menu-overflow="true"
+                                (click)="openCreditModal(parcela)"
                               >
                               <i class="ki-duotone ki-dots-square fs-1">
                                   <span class="path1"></span><span class="path2"></span
@@ -551,12 +541,12 @@
   </ng-template>
   <swal #noticeSwal [swalOptions]="swalOptions"></swal>
   <input 
-  type="file"
-  #fileInput
-  class="d-none"
-  accept="application/pdf"
-  multiple
-  (change)="onFileChange($event)"
+    type="file"
+    #fileInput
+    class="d-none"
+    accept="application/pdf"
+    multiple
+    (change)="onFileChange($event)"
   />
 
 

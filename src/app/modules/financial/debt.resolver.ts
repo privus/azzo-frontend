@@ -9,7 +9,6 @@ import { LocalStorageService } from '../../../app/core/services/local-storage.se
   providedIn: 'root',
 })
 export class DebtResolver implements Resolve<Debt[] | null> {
-  userEmail: string = '';
   userCompanyId: number = 0;
   constructor(
     private debtService: DebtService,

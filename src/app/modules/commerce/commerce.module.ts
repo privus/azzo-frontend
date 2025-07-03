@@ -13,6 +13,9 @@ import { OrderListingComponent } from './order-listing/order-listing.component';
 import { OrderDetailsComponent } from './order-details/order-details.component';
 import { SellerRankingModalComponent } from './seller-ranking-modal/seller-ranking-modal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { OrderListingPersonComponent } from './order-listing-person/order-listing-person.component';
+import { OrderDetailsPersonComponent } from './order-details-person/order-details-person.component';
+import { GenerateInstallmentsModalComponent } from './generate-installments-modal/generate-installments-modal.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     OrderListingComponent,
     OrderDetailsComponent,
     SellerRankingModalComponent,
+    OrderListingPersonComponent,
+    OrderDetailsPersonComponent,
+    GenerateInstallmentsModalComponent,
   ],
   imports: [
     SharedModule,
