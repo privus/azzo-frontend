@@ -45,11 +45,11 @@ export class SellService {
     return this.http.get<{ message: string }>(`${this.baseUrl}sells/syncro`);
   }
 
-  updateSellStatus(updateStatus: UpdateSellPerson) {
+  updateSellStatus(updateStatus: UpdateSellStatus) {
     return this.http.patch<{ message: string }>(`${this.baseUrl}sells/status`, updateStatus);
   }
 
-  updateSellStatusP(updateStatus: UpdateSellStatus) {
+  updateSellStatusP(updateStatus: UpdateSellPerson) {
     return this.http.patch<{ message: string }>(`${this.baseUrl}Psells/status`, updateStatus);
   }
 

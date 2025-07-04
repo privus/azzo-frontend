@@ -95,3 +95,55 @@
     </div>
   </div>
 </div>
+<div class="card card-flush h-md-25 mb-5 mb-xl-10" style="width: 350px; float: left; margin-left: 20px;">
+  <div class="card-header pt-5">
+    <div class="d-flex justify-content-between align-items-start w-100">
+      <div class="card-title d-flex flex-column">
+        <div class="d-flex align-items-center">
+          <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
+          <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
+            {{ debtsPersonPerformance.DespesasMesAtual | number: '1.2-2' }}
+          </span>
+          <span class="badge fs-base" [ngClass]="getBadgeClass(debtsPersonPerformance.direcao)">
+            <i class="ki-duotone fs-10 ms-n1" [ngClass]="getBadgeIcon(debtsPersonPerformance.direcao)">
+              <span class="path1"></span><span class="path2"></span>
+            </i>
+            {{ debtsPersonPerformance.variacaoPercentual | number: '1.2-2' }}%
+          </span>
+        </div>
+        <span class="text-gray-500 pt-1 fw-semibold fs-6">Despesas {{ mesAtual | titlecase }}</span>
+      </div>
+  
+      <div class="pt-2 mt-9" style="position: relative; left: -100px;">
+        <select class="form-select form-select-sm form-select-solid" style="width: 135px;" [(ngModel)]="filtroDespesasPerson" (change)="buildChartDebtsPerson()">
+          <option value="departamento">Departamento</option>
+          <option value="categoria">Categoria</option>
+        </select>
+      </div> 
+    </div>
+  </div>
+  
+
+  <div class="card-body pt-2 pb-4 d-flex flex-column align-items-center">
+    <div class="d-flex flex-center pt-2 mb-4">
+      <div style="min-width: 100px; min-height: 100px">
+        <canvas id="chart-departamentos-personizi" width="150" height="100"></canvas>
+      </div>      
+    </div>
+
+    <div class="d-flex flex-column w-100">
+      <div
+        *ngFor="let item of (filtroDespesasPerson === 'departamento' ? departamentosPerson : categoriasPerson); let i = index"
+        class="d-flex fw-semibold align-items-center my-2 justify-content-between"
+      >
+        <div class="d-flex align-items-center">
+          <div class="bullet w-8px h-5px rounded-2 me-3" [style.backgroundColor]="item.cor"></div>
+          <div class="text-gray-500">{{ item.nome }}</div>
+        </div>
+        <div class="fw-bolder text-gray-700 text-end">
+          R$ {{ item.valor | number: '1.2-2' }}
+        </div>
+      </div>    
+    </div>
+  </div>
+</div>
