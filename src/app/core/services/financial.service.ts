@@ -13,6 +13,7 @@ import {
   Conta,
 } from '../../modules/financial/models';
 import { DebtsComparisonReport } from '../../pages/models/performance-debts.model';
+import { ComparisonReport } from '../../pages/models';
 
 @Injectable()
 export class FinancialService {
@@ -85,5 +86,9 @@ export class FinancialService {
 
   getAccount(company_id: number) {
     return this.http.get<Conta[]>(`${this.baseUrl}debts/accounts/${company_id}`);
+  }
+
+  getComparisonDebts(fromDate: string, toDate: string) {
+    return this.http.get<ComparisonReport>(`${this.baseUrl}debts/balance?fromDate=${fromDate}&toDate=${toDate}`);
   }
 }

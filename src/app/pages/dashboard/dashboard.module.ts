@@ -8,6 +8,7 @@ import { SalesAzzoComparisonResolver } from './sales-azzo-comparison.resolver';
 import { DebtsAzzoComparisonResolver } from './debts-azzo-comparison.resolver';
 import { DebtsPersonComparisonResolver } from './debts-person-comparison.resolver';
 import { FormsModule } from '@angular/forms';
+import { DebtsComparisonResolver } from './debts-comparison.resolver';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -21,7 +22,8 @@ import { FormsModule } from '@angular/forms';
         resolve: {
           salesAzzoPerformance: SalesAzzoComparisonResolver,
           debtsAzzoPerformance: DebtsAzzoComparisonResolver,
-          debstPersonPerformance: DebtsPersonComparisonResolver,
+          debtsPersonPerformance: DebtsPersonComparisonResolver,
+          debtsComparisonResolver: DebtsComparisonResolver,
         },
         canActivate: [AuthGuard],
       },
