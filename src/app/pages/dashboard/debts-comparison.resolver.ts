@@ -11,15 +11,13 @@ export class DebtsComparisonResolver implements Resolve<ComparisonReport> {
   constructor(private debtsService: DebtService) {}
 
   resolve(): Observable<ComparisonReport> {
-    let thisMonth = new Date();
+    const today = new Date();
 
-    const f = new Date(thisMonth.getFullYear(), thisMonth.getMonth() - 1);
-    const to = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 0);
-    to.setDate(to.getDate() + 1);
+    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
-    const formattedF = f.toISOString().split('T')[0];
-    const formattedTo = to.toISOString().split('T')[0];
+    const formattedStart = startOfMonth.toISOString().split('T')[0];
+    const formattedToday = today.toISOString().split('T')[0];
 
-    return this.debtsService.getComparisonDebts(formattedF, formattedTo);
+    return this.debtsService.getComparisonDebts(formattedStart, formattedToday);
   }
 }
