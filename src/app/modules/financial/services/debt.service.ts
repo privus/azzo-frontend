@@ -52,4 +52,8 @@ export class DebtService {
   getAccount(company_id: number) {
     return this.financialService.getAccount(company_id);
   }
+
+  getComparisonDebts(fromDate: string, toDate: string) {
+    return this.financialService.getComparisonDebts(fromDate, toDate);
+  }
 }
