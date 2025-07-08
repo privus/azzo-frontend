@@ -451,7 +451,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   private formatPeriodoLabel(from: string, to: string): string {
-    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit' };
 
     // PARSE STRING 'YYYY-MM-DD' COM new Date(ano, mes-1, dia)
     const [fromYear, fromMonth, fromDay] = from.split('-').map(Number);
