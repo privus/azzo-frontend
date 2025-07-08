@@ -47,7 +47,7 @@
         </span>
         
       </div>
-      <span class="text-gray-500 pt-1 fw-semibold fs-6">Faturamento {{ mesAtual | titlecase }}</span>
+      <span class="text-gray-500 pt-1 fw-semibold fs-6">Faturamento {{ periodoLabel }}</span>
     </div>
   </div>
 
@@ -92,7 +92,7 @@
             {{ debtsAzzoPerformance.variacaoPercentual | number: '1.2-2' }}%
           </span>
         </div>
-        <span class="text-gray-500 pt-1 fw-semibold fs-6">Despesas {{ mesAtual | titlecase }}</span>
+        <span class="text-gray-500 pt-1 fw-semibold fs-6">Despesas {{ periodoLabel }}</span>
       </div>
   
       <div class="pt-2 mt-9" style="position: relative; left: -100px;">
@@ -109,6 +109,18 @@
     <div class="d-flex flex-center pt-2 mb-4">
       <div style="min-width: 100px; min-height: 100px">
         <canvas id="chart-departamentos" width="150" height="100"></canvas>
+        <img 
+          src="./assets/media/logos/azzo_simbolo.svg" 
+          width="16" height="16" alt="Logo Azzo"
+          style="
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            z-index: 2;
+            opacity: 0.8;
+            pointer-events: none;
+          "
+        />
       </div>
     </div>
 
@@ -144,7 +156,7 @@
             {{ debtsPersonPerformance.variacaoPercentual | number: '1.2-2' }}%
           </span>
         </div>
-        <span class="text-gray-500 pt-1 fw-semibold fs-6">Despesas {{ mesAtual | titlecase }}</span>
+        <span class="text-gray-500 pt-1 fw-semibold fs-6">Despesas {{ periodoLabel | titlecase }}</span>
       </div>
   
       <div class="pt-2 mt-9" style="position: relative; left: -100px;">
@@ -161,6 +173,18 @@
     <div class="d-flex flex-center pt-2 mb-4">
       <div style="min-width: 100px; min-height: 100px">
         <canvas id="chart-departamentos-personizi" width="150" height="100"></canvas>
+        <img 
+          src="./assets/media/logos/personizi-black.svg" 
+          width="16" height="16" alt="Logo Azzo"
+          style="
+            position: absolute;
+            top: 4px;
+            right: 8px;
+            z-index: 2;
+            opacity: 0.8;
+            pointer-events: none;
+          "
+        />
       </div>      
     </div>
 

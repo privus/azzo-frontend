@@ -28,6 +28,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   customDateRange: { start: string; end: string } = { start: '', end: '' };
   showCustomDatePicker: boolean = false;
   dataRange: string = 'thisMonth';
+  periodoLabel: string = '';
 
   departamentosPerson: { nome: string; valor: number; cor: string }[] = [];
   categoriasPerson: { nome: string; valor: number; cor: string }[] = [];
@@ -62,7 +63,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.debtsAzzoPerformance = this.route.snapshot.data['debtsAzzoPerformance'];
     this.debtsPersonPerformance = this.route.snapshot.data['debtsPersonPerformance'];
     this.debtsComparisonReport = this.route.snapshot.data['debtsComparison'];
-    console.log('debtsComparisonReport', this.debtsComparisonReport);
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    this.periodoLabel = this.formatPeriodoLabel(this.formatDate(startOfMonth), this.formatDate(new Date()));
 
     this.mapDataToDashboard();
   }
@@ -204,8 +207,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     // Usando os dados do objeto ComparisonReport
     const data = {
-      'Azzo pagou para Personizi': this.debtsComparisonReport?.azzoPagouParaPersonizi || 0,
-      'Personizi pagou para Azzo': this.debtsComparisonReport?.personiziPagouParaAzzo || 0,
+      'Azzo pagou para Personizi': this.debtsComparisonReport.azzoPagouParaPersonizi,
+      'Personizi pagou para Azzo': this.debtsComparisonReport.personiziPagouParaAzzo,
     };
 
     const labels = Object.keys(data);
@@ -363,6 +366,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const fromDate1 = this.formatDate(from1);
     const toDate1 = this.formatDate(to1);
     console.log('[updateDash] Datas:', { fromDate1, toDate1, fromDate2, toDate2 });
+    console.log('Filtro:', { fromDate2, toDate2 });
+    this.periodoLabel = this.formatPeriodoLabel(fromDate2, toDate2);
+    console.log('Label calculado:', this.periodoLabel);
 
     // Agora passe os quatro parâmetros para cada método
     const salesPerformance$ = this.orderService.getPerformanceSales(fromDate1, toDate1, fromDate2, toDate2);
@@ -442,5 +448,22 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         cor: this.getRandomColor(),
       }))
       .sort((a, b) => a.valor - b.valor);
+  }
+
+  private formatPeriodoLabel(from: string, to: string): string {
+    const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
+
+    // PARSE STRING 'YYYY-MM-DD' COM new Date(ano, mes-1, dia)
+    const [fromYear, fromMonth, fromDay] = from.split('-').map(Number);
+    const [toYear, toMonth, toDay] = to.split('-').map(Number);
+
+    const fromDate = new Date(fromYear, fromMonth - 1, fromDay);
+    const toDate = new Date(toYear, toMonth - 1, toDay);
+
+    if (from === to) {
+      return fromDate.toLocaleDateString('pt-BR', options);
+    } else {
+      return `${fromDate.toLocaleDateString('pt-BR', options)} a ${toDate.toLocaleDateString('pt-BR', options)}`;
+    }
   }
 }
