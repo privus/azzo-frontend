@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   private chartPagamentosGrupo: Chart | null = null;
   customDateRange: { start: string; end: string } = { start: '', end: '' };
   showCustomDatePicker: boolean = false;
-  dataRange: string = 'last7';
+  dataRange: string = 'thisMonth';
 
   departamentosPerson: { nome: string; valor: number; cor: string }[] = [];
   categoriasPerson: { nome: string; valor: number; cor: string }[] = [];
@@ -61,7 +61,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.salesPerformance = this.route.snapshot.data['salesAzzoPerformance'];
     this.debtsAzzoPerformance = this.route.snapshot.data['debtsAzzoPerformance'];
     this.debtsPersonPerformance = this.route.snapshot.data['debtsPersonPerformance'];
-    this.debtsComparisonReport = this.route.snapshot.data['debtsComparisonResolver'];
+    this.debtsComparisonReport = this.route.snapshot.data['debtsComparison'];
+    console.log('debtsComparisonReport', this.debtsComparisonReport);
 
     this.mapDataToDashboard();
   }

@@ -23,7 +23,7 @@ import { DebtsComparisonResolver } from './debts-comparison.resolver';
           salesAzzoPerformance: SalesAzzoComparisonResolver,
           debtsAzzoPerformance: DebtsAzzoComparisonResolver,
           debtsPersonPerformance: DebtsPersonComparisonResolver,
-          debtsComparisonResolver: DebtsComparisonResolver,
+          debtsComparison: DebtsComparisonResolver,
         },
         canActivate: [AuthGuard],
       },
