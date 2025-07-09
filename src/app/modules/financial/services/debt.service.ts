@@ -56,4 +56,8 @@ export class DebtService {
   getComparisonDebts(fromDate: string, toDate: string) {
     return this.financialService.getComparisonDebts(fromDate, toDate);
   }
+
+  deleteDebt(id: number) {
+    return this.financialService.deleteDebt(id);
+  }
 }

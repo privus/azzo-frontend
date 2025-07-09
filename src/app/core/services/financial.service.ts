@@ -91,4 +91,8 @@ export class FinancialService {
   getComparisonDebts(fromDate: string, toDate: string) {
     return this.http.get<ComparisonReport>(`${this.baseUrl}debts/balance?fromDate=${fromDate}&toDate=${toDate}`);
   }
+
+  deleteDebt(id: number) {
+    return this.http.delete<{ message: string }>(`${this.baseUrl}debts/${id}`);
+  }
 }

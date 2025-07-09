@@ -3,6 +3,7 @@ import { Categoria, Conta, Debt, Departamento } from '../models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService, PaginationService } from '../../../core/services';
 import { DebtService } from '../services/debt.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-debts-listing',
@@ -33,6 +34,7 @@ export class DebtsListingComponent implements OnInit {
   userCompanyId: number = 0;
   accounts: Conta[] = [];
   userEmail: string = '';
+  cargo: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -48,6 +50,7 @@ export class DebtsListingComponent implements OnInit {
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
     this.userCompanyId = storageInfo ? JSON.parse(storageInfo).companyId : '';
     this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
+    this.cargo = storageInfo ? JSON.parse(storageInfo).cargo.nome : '';
     this.sortField = 'debito_id';
     this.sortDirection = 'desc';
     this.loadDepartments();
@@ -265,7 +268,7 @@ export class DebtsListingComponent implements OnInit {
     }
   }
 
-  editOrder(id: number): void {
+  editDebt(id: number): void {
     this.router.navigate(['financial/debts', id]);
   }
 
@@ -413,5 +416,41 @@ export class DebtsListingComponent implements OnInit {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  deleteDebt(id: number) {
+    Swal.fire({
+      title: 'Confirmação',
+      text: `Deseja excluir o debito ${id}? Essa ação é irreversível!`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, Excluir!',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Se o usuário confirmar, faz a exportação
+        this.debtService.deleteDebt(id).subscribe({
+          next: (resp) => {
+            Swal.fire({
+              icon: 'success',
+              title: `Debito ${id} excluído com sucesso!`,
+              text: resp.message,
+              confirmButtonText: 'Ok',
+            });
+            this.applyFilter();
+            window.location.reload();
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: `Erro na exclusão do debito ${id}!`,
+              text: 'Não foi possível excluir o debito. ' + err.error.message,
+              confirmButtonText: 'Ok',
+            });
+            console.error('Erro ao exportar para Tiny:', err);
+          },
+        });
+      }
+    });
   }
 }
