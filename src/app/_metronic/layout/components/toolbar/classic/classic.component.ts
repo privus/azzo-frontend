@@ -5,8 +5,10 @@ import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DebtCreateModalComponent } from '../../../../../modules/financial/debt-create-modal/debt-create-modal.component';
 import { CreditCreateModalComponent } from '../../../../../modules/financial/credit-create-modal/credit-create-modal.component';
-import { RomaneioCreateModalComponent } from 'src/app/modules/expedition/romaneio-create-modal/romaneio-create-modal.component';
-import { ImportXmlModalComponent } from 'src/app/modules/expedition/import-xml-modal/import-xml-modal.component';
+import { RomaneioCreateModalComponent } from '../../../../../modules/expedition/romaneio-create-modal/romaneio-create-modal.component';
+import { ImportXmlModalComponent } from '../../../../../modules/expedition/import-xml-modal/import-xml-modal.component';
+import { StockOutModalComponent } from '../../../../../modules/expedition/stock-out-modal/stock-out-modal.component';
+import { AccountService } from '../../../../../modules/account/services/account.service';
 
 @Component({
   selector: 'app-classic',
@@ -17,6 +19,7 @@ export class ClassicComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
   currentRoute: string = '';
   private modalReference: NgbModalRef;
+  userEmail: string = '';
 
   appToolbarPrimaryButton: boolean;
   appToolbarPrimaryButtonLabel: string = '';
@@ -37,6 +40,7 @@ export class ClassicComponent implements OnInit, OnDestroy {
     private layout: LayoutService,
     private modalService: NgbModal,
     private router: Router,
+    private accountService: AccountService
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +50,10 @@ export class ClassicComponent implements OnInit, OnDestroy {
       this.updateProps();
     });
     this.unsubscribe.push(subscr);
+    this.accountService.getUserInfo().subscribe((user) => {
+      this.userEmail = user?.email || '';
+      console.log('USER DO NAVBAR ======>', this.userEmail);
+    });
   }
 
   updateProps() {
@@ -167,5 +175,33 @@ export class ClassicComponent implements OnInit, OnDestroy {
       return 'Importar Xml';
     }
     return 'Criar';
+  }
+
+  getSecondaryButtonLabel(): string {
+    const fullPath = this.router.url;
+    if (fullPath.includes('expedition/stock')) {
+      return 'Saída';
+    }
+    return 'Listar';
+  }
+
+  onSecondaryButtonClick(): void {
+    const fullPath = this.router.url;
+    if (fullPath.includes('expedition/stock')) {
+      this.openStockOutModal();
+    } else {
+      // Executa ação padrão de listar (pode ser navegação)
+      this.router.navigate([this.getSecondaryButtonLink()]);
+    }
+  }
+
+  // Nova função para abrir o modal de saída de estoque
+  openStockOutModal(): void {
+    this.modalReference = this.modalService.open(StockOutModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+      size: 'lg',
+    });
+    this.modalReference.componentInstance.userEmail = this.userEmail;
   }
 }

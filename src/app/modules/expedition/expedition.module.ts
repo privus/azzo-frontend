@@ -10,9 +10,17 @@ import { RomaneioCreateModalComponent } from './romaneio-create-modal/romaneio-c
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { StockComponent } from './stock/stock.component';
 import { ImportXmlModalComponent } from './import-xml-modal/import-xml-modal.component';
+import { StockOutModalComponent } from './stock-out-modal/stock-out-modal.component';
 
 @NgModule({
-  declarations: [StockProjectionComponent, RomaneioComponent, RomaneioCreateModalComponent, StockComponent, ImportXmlModalComponent],
+  declarations: [
+    StockProjectionComponent,
+    RomaneioComponent,
+    RomaneioCreateModalComponent,
+    StockComponent,
+    ImportXmlModalComponent,
+    StockOutModalComponent,
+  ],
   imports: [CommonModule, ExpeditionRoutingModule, FormsModule, NgbTooltipModule, ReactiveFormsModule, SweetAlert2Module.forChild()],
   providers: [ExpeditionService],
 })
