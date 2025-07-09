@@ -1,0 +1,95 @@
+<div class="card-body pt-0 border rounded shadow-sm p-4 bg-white">
+    <div class="header d-flex justify-content-end">
+        <div class="btn btn-icon btn-sm btn-active-icon-primary" (click)="close()">
+            <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+        </div>
+    </div>
+    <div class="card-body pt-0">
+        <div class="d-flex flex-column gap-8">
+        <!-- Motivo da Saída -->
+        <div>
+            <label class="form-label">Motivo da saída</label>
+            <select class="form-select" [(ngModel)]="motivoSaida">
+            <option value="" disabled>Selecione</option>
+            <option value="Uso interno">Uso interno</option>
+            <option value="Pasta Vendedores">Pasta Vendedores</option>
+            <option value="Perca/Danificado">Perda/Danificado</option>
+            </select>
+        </div>
+        <!-- Observação -->
+        <div>
+            <label class="form-label">Observação</label>
+            <textarea class="form-control" [(ngModel)]="observacao" rows="2"></textarea>
+        </div>
+    
+        <div class="separator"></div>
+    
+        <!-- Busca Produto -->
+        <div class="d-flex align-items-center position-relative mb-2">
+            <i class="bi bi-search position-absolute ms-4"></i>
+            <input type="text" class="form-control ps-12"
+            placeholder="Buscar por nome, código ou EAN"
+            [(ngModel)]="searchTerm"
+            (input)="onSearchProduct()" />
+        </div>
+    
+        <!-- Lista de Produtos para Seleção -->
+        <div class="table-responsive" style="max-height:220px;overflow:auto;">
+            <table class="table align-middle table-row-dashed fs-6 gy-2">
+            <thead>
+                <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                <th></th>
+                <th>Produto</th>
+                <th>EAN</th>
+                <th>Estoque</th>
+                <th>Qtd</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let produto of filteredProducts">
+                <td>
+                    <input type="checkbox"
+                    [(ngModel)]="produto.selecionado"
+                    (change)="onToggleProduct(produto)" />
+                </td>
+                <td>{{ produto.nome }}</td>
+                <td>{{ produto.ean }}</td>
+                <td>{{ produto.saldo_estoque }}</td>
+                <td>
+                    <input type="number"
+                    class="form-control form-control-sm"
+                    style="max-width: 80px;"
+                    [disabled]="!produto.selecionado"
+                    [(ngModel)]="produto.qtd_saida"
+                    [min]="1"
+                    [max]="produto.saldo_estoque"
+                    (ngModelChange)="onQtdChange(produto)" />
+                </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+    
+        <!-- Produtos Selecionados -->
+        <div *ngIf="selectedProducts.length > 0" class="mt-2">
+            <div class="fw-bold mb-1">Produtos selecionados para saída:</div>
+            <ul>
+            <li *ngFor="let p of selectedProducts">
+                {{ p.nome }} (Qtd: {{ p.qtd_saida }}) - Estoque atual: {{ p.saldo_estoque }}
+            </li>
+            </ul>
+        </div>
+    
+        <div class="separator"></div>
+    
+        <button 
+            class="btn btn-primary" 
+            (click)="confirmarSaida()" 
+            [disabled]="!isValidSaida()"
+        >
+            Confirmar Saída
+        </button>
+        </div>
+  </div>  
+</div>
+<swal #noticeSwal [swalOptions]="swalOptions"></swal>

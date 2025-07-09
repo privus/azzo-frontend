@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LogisticsService } from '../../../core/services/logistics.service';
-import { NewRomaneio } from '../models';
+import { NewRomaneio, StockOut } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -30,5 +30,9 @@ export class ExpeditionService {
 
   getDistributors() {
     return this.logisticsService.getDistributors();
+  }
+
+  getStockOut(saida: StockOut) {
+    return this.logisticsService.getStockOut(saida);
   }
 }

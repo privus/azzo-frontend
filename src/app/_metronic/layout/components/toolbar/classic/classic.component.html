@@ -27,14 +27,14 @@
 </ng-container>
 
 <!-- Secondary Button: Listar -->
-<a href="javascript:;" 
-   class="btn btn-sm btn-flex btn-light fw-bold" 
-   [routerLink]="getSecondaryButtonLink()"
+<a href="javascript:;"
+   class="btn btn-sm btn-flex btn-light fw-bold"
    [class.disabled]="isDisabledSecondary()"
    [attr.aria-disabled]="isDisabledSecondary()"
-   (click)="$event.preventDefault()">
-  Listar
+   (click)="onSecondaryButtonClick()">
+  {{ getSecondaryButtonLabel() }}
 </a>
+
 
 <!-- Primary Button: Criar -->
 <a href="javascript:;" 
