@@ -53,7 +53,8 @@
 
               <!--begin::Input-->
               <div class="position-relative d-flex align-items-center">
-                  <input type="number" class="form-control form-control-solid" formControlName="valor_total" placeholder="Valor Total" />
+                <input currencyMask [options]="currencyOptions" class="form-control form-control-solid" formControlName="valor_total" placeholder="Valor Total"
+              />
               </div>
               <!--end::Input-->
           </div>
@@ -65,7 +66,7 @@
 
               <!--begin::Input-->
               <div class="position-relative d-flex align-items-center">
-                  <input type="number" class="form-control form-control-solid" formControlName="juros" placeholder="Valor do Juros" />
+                  <input currencyMask [options]="currencyOptions" class="form-control form-control-solid" formControlName="juros" placeholder="Valor do Juros" />
               </div>
               <!--end::Input-->
           </div>

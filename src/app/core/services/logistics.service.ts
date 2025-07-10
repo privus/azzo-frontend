@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Distributor, StockLiquid, StockOut, StockProjection } from '../../modules/expedition/models';
-import { NewRomaneio, Romaneio, Transportadora } from 'src/app/modules/expedition/models/romaneio.model';
+import { Distributor, StockById, StockLiquid, StockOut, StockProjection } from '../../modules/expedition/models';
+import { NewRomaneio, Romaneio, Transportadora } from '../../modules/expedition/models';
 
 @Injectable()
 export class LogisticsService {
@@ -36,5 +36,9 @@ export class LogisticsService {
 
   getStockOut(saida: StockOut) {
     return this.http.post<{ message: string }>(`${this.baseUrl}stock/stockOut`, saida);
+  }
+
+  getStockOutById(id: number) {
+    return this.http.get<StockById[]>(`${this.baseUrl}stock/out/${id}`);
   }
 }

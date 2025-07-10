@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Produto } from '../../commerce/models';
 import { ActivatedRoute } from '@angular/router';
 import { PaginationService } from '../../../core/services/';
-import { StockLiquid } from '../models';
+import { StockById } from '../models';
+import { ExpeditionService } from '../services/expedition.service';
 
 @Component({
   selector: 'app-stock',
@@ -11,9 +12,8 @@ import { StockLiquid } from '../models';
 })
 export class StockComponent implements OnInit {
   products: Produto[] = [];
-  stockLiquid: StockLiquid[] = [];
-
   filteredProducts: Produto[] = [];
+
   currentPage: number = 1;
   itemsPerPage: number = 50;
   totalPages: number = 0;
@@ -25,15 +25,16 @@ export class StockComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'desc';
   selectedStatus: string = '';
   selectedSupplier: string = '';
+  expanded: Set<number> = new Set();
 
   constructor(
     private route: ActivatedRoute,
     private paginationService: PaginationService,
+    private expeditionService: ExpeditionService,
   ) {}
 
   ngOnInit(): void {
-    this.products = this.route.snapshot.data['product'];
-    this.stockLiquid = this.route.snapshot.data['stockLiquid'];
+    this.products = this.route.snapshot.data['product'] as Produto[];
 
     const produtosPorEan = new Map<number, Produto[]>();
     for (const prod of this.products) {
@@ -214,5 +215,29 @@ export class StockComponent implements OnInit {
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
+  }
+
+  isExpanded(id: number): boolean {
+    return this.expanded.has(id);
+  }
+
+  toggleExpand(id: number): void {
+    if (this.expanded.has(id)) {
+      this.expanded.delete(id);
+    } else {
+      this.expanded.add(id);
+
+      const produto = this.filteredProducts.find((p) => p.produto_id === id);
+      this.expeditionService.getStockOutById(id).subscribe((saidas: StockById[]) => {
+        if (!produto) return;
+        produto.saidas = saidas || [];
+      });
+    }
+  }
+
+  splitSaidas(saidas: any[]): [any[], any[], any[]] {
+    const total = saidas?.length || 0;
+    const size = Math.ceil(total / 3);
+    return [saidas?.slice(0, size) || [], saidas?.slice(size, 2 * size) || [], saidas?.slice(2 * size) || []];
   }
 }

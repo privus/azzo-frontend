@@ -21,6 +21,13 @@ export class CreditCreateModalComponent implements OnInit {
   showDepartmentInput: boolean = false;
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};
+  public currencyOptions = {
+    prefix: 'R$ ',
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    align: 'left',
+  };
 
   constructor(
     private fb: FormBuilder,

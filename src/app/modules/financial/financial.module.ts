@@ -15,6 +15,7 @@ import { CreditCreateModalComponent } from './credit-create-modal/credit-create-
 import { DebtModalComponent } from './debt-modal/debt-modal.component';
 import { FilterPipe } from '../../shared/pipes/filter.pipe';
 import { CreditModalPersonComponent } from './credit-modal-person/credit-modal-person.component';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { CreditModalPersonComponent } from './credit-modal-person/credit-modal-p
     FinancialRoutingModule,
     CoreModule,
     SweetAlert2Module.forChild(),
+    CurrencyMaskModule,
   ],
 })
 export class FinancialModule {}

@@ -40,7 +40,7 @@ export class ClassicComponent implements OnInit, OnDestroy {
     private layout: LayoutService,
     private modalService: NgbModal,
     private router: Router,
-    private accountService: AccountService
+    private accountService: AccountService,
   ) {}
 
   ngOnInit(): void {

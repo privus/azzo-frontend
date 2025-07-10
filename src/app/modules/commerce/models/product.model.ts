@@ -1,3 +1,5 @@
+import { StockById } from '../../expedition/models';
+
 export interface Produto {
   produto_id: number;
   codigo: string;
@@ -27,6 +29,7 @@ export interface Produto {
   largura?: number;
   comprimento?: number;
   peso?: number;
+  saidas?: StockById[];
 }
 
 export interface CategoriaProduto {
@@ -47,3 +50,4 @@ export interface UpdatedProduct {
   comprimento?: number;
   peso_grs?: number;
 }
+
