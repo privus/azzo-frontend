@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Produto } from '../../commerce/models';
 import { ActivatedRoute } from '@angular/router';
 import { PaginationService } from '../../../core/services/';
@@ -13,6 +13,7 @@ import { ExpeditionService } from '../services/expedition.service';
 export class StockComponent implements OnInit {
   products: Produto[] = [];
   filteredProducts: Produto[] = [];
+  loadingSaidas: { [produtoId: number]: boolean } = {};
 
   currentPage: number = 1;
   itemsPerPage: number = 50;
@@ -31,6 +32,7 @@ export class StockComponent implements OnInit {
     private route: ActivatedRoute,
     private paginationService: PaginationService,
     private expeditionService: ExpeditionService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -226,11 +228,14 @@ export class StockComponent implements OnInit {
       this.expanded.delete(id);
     } else {
       this.expanded.add(id);
+      this.loadingSaidas[id] = true; // <-- seta loading
 
       const produto = this.filteredProducts.find((p) => p.produto_id === id);
       this.expeditionService.getStockOutById(id).subscribe((saidas: StockById[]) => {
         if (!produto) return;
-        produto.saidas = saidas || [];
+        produto.saidas = saidas;
+        this.loadingSaidas[id] = false; // <-- desativa loading
+        this.cdr.detectChanges();
       });
     }
   }

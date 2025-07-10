@@ -4,7 +4,7 @@ import { ExpeditionRoutingModule } from './expediton-routing.module';
 import { StockProjectionComponent } from './stock-projection/stock-projection.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExpeditionService } from './services/expedition.service';
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTooltipModule, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { RomaneioComponent } from './romaneio/romaneio.component';
 import { RomaneioCreateModalComponent } from './romaneio-create-modal/romaneio-create-modal.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
@@ -21,7 +21,7 @@ import { StockOutModalComponent } from './stock-out-modal/stock-out-modal.compon
     ImportXmlModalComponent,
     StockOutModalComponent,
   ],
-  imports: [CommonModule, ExpeditionRoutingModule, FormsModule, NgbTooltipModule, ReactiveFormsModule, SweetAlert2Module.forChild()],
+  imports: [CommonModule, ExpeditionRoutingModule, FormsModule, NgbTooltipModule, ReactiveFormsModule, SweetAlert2Module.forChild(), NgbCarouselModule],
   providers: [ExpeditionService],
 })
 export class ExpeditionModule {}

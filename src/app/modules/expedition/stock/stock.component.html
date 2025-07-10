@@ -138,67 +138,81 @@
               <tr *ngIf="isExpanded(produto.produto_id)">
                 <td colspan="100%" class="p-0 border-0 bg-light">
                   <div class="p-3">
-                    <div *ngIf="produto.saidas?.length; else semSaidas">
-                      <div class="row">
-                        <div class="col-md-4 border-end border-3 border-dark">
-                          <table class="table table-bordered table-sm mb-0">
-                            <thead>
-                              <tr>
-                                <th>Data</th>
-                                <th>Qtd</th>
-                                <th>Detalhes</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr *ngFor="let s of splitSaidas(produto.saidas || [])[0]">
-                                <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
-                                <td>{{ s.quantidade }}</td>
-                                <td>{{ s.observacao }}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <div class="col-md-4 border-end border-3 border-dark">
-                          <table class="table table-bordered table-sm mb-0">
-                            <thead>
-                              <tr>
-                                <th>Data</th>
-                                <th>Qtd</th>
-                                <th>Detalhes</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr *ngFor="let s of splitSaidas(produto.saidas || [])[1]">
-                                <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
-                                <td>{{ s.quantidade }}</td>
-                                <td>{{ s.observacao }}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <div class="col-md-4">
-                          <table class="table table-bordered table-sm mb-0">
-                            <thead>
-                              <tr>
-                                <th>Data</th>
-                                <th>Qtd</th>
-                                <th>Detalhes</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr *ngFor="let s of splitSaidas(produto.saidas || [])[2]">
-                                <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
-                                <td>{{ s.quantidade }}</td>
-                                <td>{{ s.observacao }}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>                    
-                      
+                    <div *ngIf="loadingSaidas[produto.produto_id]; else conteudoSaidas">
+                      <span class="text-muted">Carregando saídas...</span>
                     </div>
-                    <ng-template #semSaidas>
-                      <span class="text-muted">Nenhuma saída registrada para este produto.</span>
+                    <ng-template #conteudoSaidas>
+                      <div *ngIf="produto.saidas?.length; else semSaidas">
+                        <div class="row">
+                          <div class="col-md-4 border-end border-3">
+                            <table class="table table-bordered table-sm mb-0">
+                              <thead>
+                                <tr>
+                                  <th>
+                                    <i class="bi bi-calendar-event me-1 text-primary"></i>
+                                    Data
+                                  </th>
+                                  <th>Qtd</th>
+                                  <th>Detalhes</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let s of splitSaidas(produto.saidas || [])[0]">
+                                  <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
+                                  <td>{{ s.quantidade }}</td>
+                                  <td>{{ s.observacao }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="col-md-4 border-end border-3">
+                            <table class="table table-bordered table-sm mb-0">
+                              <thead>
+                                <tr>
+                                  <th>
+                                    <i class="bi bi-calendar-event me-1 text-primary"></i>
+                                    Data
+                                  </th>
+                                  <th>Qtd</th>
+                                  <th>Detalhes</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let s of splitSaidas(produto.saidas || [])[1]">
+                                  <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
+                                  <td>{{ s.quantidade }}</td>
+                                  <td>{{ s.observacao }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="col-md-4">
+                            <table class="table table-bordered table-sm mb-0">
+                              <thead>
+                                <tr>
+                                  <th>
+                                    <i class="bi bi-calendar-event me-1 text-primary"></i>
+                                    Data
+                                  </th>
+                                  <th>Qtd</th>
+                                  <th>Detalhes</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let s of splitSaidas(produto.saidas || [])[2]">
+                                  <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
+                                  <td>{{ s.quantidade }}</td>
+                                  <td>{{ s.observacao }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>                    
+                        
+                      </div>
+                      <ng-template #semSaidas>
+                        <span class="text-muted">Nenhuma saída registrada para este produto.</span>
+                      </ng-template>
                     </ng-template>
                   </div>
                 </td>
