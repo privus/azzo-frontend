@@ -53,7 +53,7 @@
 
                 <!--begin::Input-->
                 <div class="position-relative d-flex align-items-center">
-                    <input type="number" class="form-control form-control-solid" formControlName="valor" placeholder="Valor Total" />
+                    <input currencyMask [options]="currencyOptions" class="form-control form-control-solid" formControlName="valor" placeholder="Valor Total" />
                 </div>
                 <!--end::Input-->
             </div>

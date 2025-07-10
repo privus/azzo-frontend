@@ -66,64 +66,144 @@
             </tr>
           </thead>
           <tbody class="fw-bold text-gray-600">
-            <tr *ngFor="let produto of paginatedProducts">
-              <td>
-                <div class="d-flex align-items-center">
-                  <div class="symbol symbol-50px overflow-hidden me-3">
-                    <a href="javascript:;">
-                      <div
-                      class="symbol symbol-50px"
-                      [ngStyle]="{
-                        'background-image': produto.fotoUrl
-                          ? 'url(' + produto.fotoUrl + ')'
-                          : 'url(assets/media/logos/azzo_simbolo.svg)',
-                        'background-size': 'cover',
-                        'background-position': 'center',
-                        'background-repeat': 'no-repeat',
-                        'width': '50px',
-                        'height': '50px'
-                      }"
-                      ></div>
-                    </a>
+            <ng-container *ngFor="let produto of paginatedProducts">
+              <tr >
+                <td>
+                  <div class="d-flex align-items-center">
+                    <div class="symbol symbol-50px overflow-hidden me-3">
+                      <a href="javascript:;">
+                        <div
+                        class="symbol symbol-50px"
+                        [ngStyle]="{
+                          'background-image': produto.fotoUrl
+                            ? 'url(' + produto.fotoUrl + ')'
+                            : 'url(assets/media/logos/azzo_simbolo.svg)',
+                          'background-size': 'cover',
+                          'background-position': 'center',
+                          'background-repeat': 'no-repeat',
+                          'width': '50px',
+                          'height': '50px'
+                        }"
+                        ></div>
+                      </a>
+                    </div>
+                    <div class="d-flex flex-column">
+                      <a
+                      routerLink="/commerce/products/{{ produto.produto_id }}"
+                      class="text-gray-800 text-hover-primary mb-1"
+                      >
+                        {{ produto.nome }}
+                      </a>
+                      <span>{{ produto.codigo }}</span>
+                    </div>
                   </div>
-                  <div class="d-flex flex-column">
-                    <a
-                    routerLink="/commerce/products/{{ produto.produto_id }}"
-                    class="text-gray-800 text-hover-primary mb-1"
-                    >
-                      {{ produto.nome }}
-                    </a>
-                    <span>{{ produto.codigo }}</span>
+                </td>
+                <td class="text-end">{{ produto.fornecedor?.nome }}</td>
+                <td class="text-end">
+                  <span
+                    class="badge py-3 px-4 fs-9"
+                    [ngClass]="{
+                      'badge-light-danger': produto.saldo_estoque <= 0,
+                      'badge-light-warning': produto.saldo_estoque > 0 && produto.saldo_estoque < produto.estoque_minimo,
+                      'badge-light-primary': produto.saldo_estoque >= produto.estoque_minimo
+                    }"                  
+                    [title]="'Estoque mínimo: ' + produto.estoque_minimo"
+                  >
+                    {{ produto.saldo_estoque <= 0
+                      ? 'Sem estoque'
+                      : produto.saldo_estoque < produto.estoque_minimo
+                      ? 'Estoque baixo'
+                      : 'Disponível'
+                    }}                
+                  </span>
+                </td> 
+                <td class="text-end">{{ produto.ean }}</td>             
+                <td class="text-end text-gray-900 fw-bold">
+                  {{ produto.estoque_em_caixas }}
+                </td>
+                <td class="text-end text-gray-900 fw-bold">
+                  {{ produto.saldo_estoque }}
+                </td>
+                <td class="text-end text-gray-900 fw-bold">
+                  {{ produto.saldo_estoque }}
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-icon btn-light toggle"
+                    (click)="toggleExpand(produto.produto_id)">
+                    <i *ngIf="!isExpanded(produto.produto_id)" class="fas fa-plus fs-4 m-0"></i>
+                    <i *ngIf="isExpanded(produto.produto_id)" class="fas fa-minus fs-4 m-0"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="isExpanded(produto.produto_id)">
+                <td colspan="100%" class="p-0 border-0 bg-light">
+                  <div class="p-3">
+                    <div *ngIf="produto.saidas?.length; else semSaidas">
+                      <div class="row">
+                        <div class="col-md-4 border-end border-3 border-dark">
+                          <table class="table table-bordered table-sm mb-0">
+                            <thead>
+                              <tr>
+                                <th>Data</th>
+                                <th>Qtd</th>
+                                <th>Detalhes</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let s of splitSaidas(produto.saidas || [])[0]">
+                                <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
+                                <td>{{ s.quantidade }}</td>
+                                <td>{{ s.observacao }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="col-md-4 border-end border-3 border-dark">
+                          <table class="table table-bordered table-sm mb-0">
+                            <thead>
+                              <tr>
+                                <th>Data</th>
+                                <th>Qtd</th>
+                                <th>Detalhes</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let s of splitSaidas(produto.saidas || [])[1]">
+                                <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
+                                <td>{{ s.quantidade }}</td>
+                                <td>{{ s.observacao }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="col-md-4">
+                          <table class="table table-bordered table-sm mb-0">
+                            <thead>
+                              <tr>
+                                <th>Data</th>
+                                <th>Qtd</th>
+                                <th>Detalhes</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let s of splitSaidas(produto.saidas || [])[2]">
+                                <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
+                                <td>{{ s.quantidade }}</td>
+                                <td>{{ s.observacao }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>                    
+                      
+                    </div>
+                    <ng-template #semSaidas>
+                      <span class="text-muted">Nenhuma saída registrada para este produto.</span>
+                    </ng-template>
                   </div>
-                </div>
-              </td>
-              <td class="text-end">{{ produto.fornecedor?.nome }}</td>
-              <td class="text-end">
-                <span
-                  class="badge py-3 px-4 fs-9"
-                  [ngClass]="{
-                    'badge-light-danger': produto.saldo_estoque <= 0,
-                    'badge-light-warning': produto.saldo_estoque > 0 && produto.saldo_estoque < produto.estoque_minimo,
-                    'badge-light-primary': produto.saldo_estoque >= produto.estoque_minimo
-                  }"                  
-                  [title]="'Estoque mínimo: ' + produto.estoque_minimo"
-                >
-                  {{ produto.saldo_estoque <= 0
-                    ? 'Sem estoque'
-                    : produto.saldo_estoque < produto.estoque_minimo
-                    ? 'Estoque baixo'
-                    : 'Disponível'
-                  }}                
-                </span>
-              </td> 
-              <td class="text-end">{{ produto.ean }}</td>             
-              <td class="text-end text-gray-900 fw-bold">
-                {{ produto.estoque_em_caixas }}
-              </td>
-              <td class="text-end text-gray-900 fw-bold">
-                {{ produto.saldo_estoque }}
-              </td>
-            </tr>
+                </td>
+              </tr>              
+            </ng-container>
           </tbody>
         </table>
       </div>

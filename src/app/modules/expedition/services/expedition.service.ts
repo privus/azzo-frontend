@@ -35,4 +35,8 @@ export class ExpeditionService {
   getStockOut(saida: StockOut) {
     return this.logisticsService.getStockOut(saida);
   }
+
+  getStockOutById(id: number) {
+    return this.logisticsService.getStockOutById(id);
+  }
 }

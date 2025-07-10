@@ -18,6 +18,13 @@ export class CreditModalComponent implements OnInit {
   userEmail: string = '';
   creditForm: FormGroup;
   obs: string = '';
+  public currencyOptions = {
+    prefix: 'R$ ',
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    align: 'left',
+  };
 
   @ViewChild('noticeSwal') noticeSwal!: SwalComponent;
   swalOptions: SweetAlertOptions = {};

@@ -27,6 +27,13 @@ export class DebtCreateModalComponent implements OnInit {
   categorySearch: string = '';
   departmentSearch: string = '';
   accountSearch: string = '';
+  public currencyOptions = {
+    prefix: 'R$ ',
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    align: 'left',
+  };
 
   constructor(
     private fb: FormBuilder,
