@@ -18,7 +18,10 @@
         <div class="mb-3">
           <button class="btn btn-secondary me-2" (click)="triggerFileInput()" [disabled]="!!result">Selecionar Arquivo</button>
           <button class="btn btn-primary" [disabled]="!uploadedFiles.length || loading || !!result" (click)="uploadXml()">Importar XML</button>
-        </div>        
+        </div>
+        <div *ngIf="statusCode" class="alert alert-danger">
+          {{ responseMessage }}
+        </div>   
 
         <div class="mt-4" *ngIf="result">
           <h5 class="text-center text-success">{{ responseMessage }}</h5>
@@ -27,7 +30,12 @@
           <div class="mb-2">- <b>Emitente:</b> {{ result.emitente }}</div>
           <div class="mb-2">- <b>Valor Nf:</b> R$ {{ result.valor | number:'1.2-2' }}</div>
           <div class="mb-2">- <b>Itens Importados:</b> {{ result.qtd_itens }}</div>
-          <div class="mb-2">- <b>Produtos Não Encontrados:</b> {{ result.produtos_nao_encontrados || 'Nenhum' }}</div>
+          <div class="mb-2"
+               [ngClass]="{
+                 'bg-danger text-white': result.produtos_nao_encontrados && result.produtos_nao_encontrados !== 'Nenhum'
+               }">
+            - <b>Produtos Não Encontrados:</b> {{ result.produtos_nao_encontrados || 'Nenhum' }}
+          </div>
         
           <hr />
           <h6>Produtos Importados:</h6>
@@ -52,10 +60,8 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-          
-        </div>
-                      
+          </div>          
+        </div>                      
       </div>
     </div>
   </div>

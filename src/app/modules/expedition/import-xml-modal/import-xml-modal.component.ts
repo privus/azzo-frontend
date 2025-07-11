@@ -18,6 +18,7 @@ export class ImportXmlModalComponent implements OnInit {
   fornecedores: Distributor[] = [];
   selectedFornecedorId: number | null = null;
   formattedProdutos = '';
+  statusCode: number | null = null;
 
   loading = false;
   responseMessage = '';
@@ -65,11 +66,17 @@ export class ImportXmlModalComponent implements OnInit {
     this.http.post(`${this.baseUrl}stock/upload/${this.selectedFornecedorId}`, formData).subscribe({
       next: (res: any) => {
         this.result = res;
-        this.responseMessage = 'Nota Fiscal Importada com Sucesso!';
+        console.log('Resultado da importação:', res);
+        if (res.debito) {
+          this.responseMessage = `Nota Fiscal importada com sucesso! Débito criado: ID-${res.debito.debito_id} (${res.debito.nome}) no valor de R$ ${res.debito.valor_total} com ${res.debito.numero_parcelas} parcelas.`;
+        } else {
+          this.responseMessage = 'Nota Fiscal Importada com Sucesso!';
+        }
         this.loading = false;
       },
-      error: () => {
-        this.responseMessage = 'Erro ao importar XML';
+      error: (err) => {
+        this.responseMessage = err.error?.message || 'Erro ao importar a Nota Fiscal.';
+        this.statusCode = err.error.statusCode;
         this.loading = false;
       },
     });
