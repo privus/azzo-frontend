@@ -46,7 +46,7 @@
         </tr>
       </thead>
       <tbody class="fw-bold text-gray-600">
-        <tr *ngFor="let item of comission">
+        <tr *ngFor="let item of comissionSorted">
           <td>{{ item.vendedor }}</td>
           <td class="text-end">R$ {{ item.faturado | number: '1.2-2' }}</td>
           <td class="text-end">{{ item.pedidos }}</td>
