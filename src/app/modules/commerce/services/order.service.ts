@@ -90,4 +90,8 @@ export class OrderService {
   getAllPaymentMethods() {
     return this.sellService.getAllPaymentMethods();
   }
+
+  deleteNfData(id: number) {
+    return this.sellService.deleteNfData(id);
+  }
 }

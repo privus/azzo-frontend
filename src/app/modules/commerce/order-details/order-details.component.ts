@@ -280,4 +280,42 @@ export class OrderDetailsComponent implements OnInit {
   openNfeLink(url: string): void {
     window.open(url, '_blank');
   }
+
+  isOlderThan7Days(date: string | Date): boolean {
+    return new Date().getTime() - new Date(date).getTime() > 7 * 24 * 60 * 60 * 1000;
+  }
+
+  deleteNf(code: number) {
+    Swal.fire({
+      title: 'Confirmação',
+      text: 'Deseja realmente excluir os dados da nota fiscal?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.orderService.deleteNfData(code).subscribe({
+          next: (resp) => {
+            Swal.fire({
+              icon: 'success',
+              title: `Dados da Nf-e limpos com sucesso!`,
+              text: resp.message,
+              confirmButtonText: 'Ok',
+            });
+            this.cdr.detectChanges();
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro na exclusão dos dados da Nf-e!',
+              text: err.error?.message || 'Não foi possível excluir a nota fiscal.',
+              confirmButtonText: 'Ok',
+            });
+            console.error('Erro ao excluir nota fiscal:', err);
+          },
+        });
+      }
+    });
+  }
 }

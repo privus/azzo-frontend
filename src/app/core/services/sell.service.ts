@@ -115,4 +115,8 @@ export class SellService {
   getAllPaymentMethods() {
     return this.http.get<PFormaPagamento[]>(`${this.baseUrl}Psells/paymentMethods`);
   }
+
+  deleteNfData(id: number) {
+    return this.http.get<{ message: string }>(`${this.baseUrl}sells/clearNf/${id}`);
+  }
 }
