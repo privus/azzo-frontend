@@ -12,9 +12,10 @@ export class CommissionsResolver implements Resolve<Commissions[] | null> {
   resolve(): Observable<Commissions[] | null> {
     let thisMonth = new Date();
 
-    const f = new Date(thisMonth.getFullYear(), thisMonth.getMonth() - 1);
+    // Data inicial: primeiro dia do mês anterior
+    const f = new Date(thisMonth.getFullYear(), thisMonth.getMonth() - 1, 1);
+    // Data final: último dia do mês anterior
     const to = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 0);
-    to.setDate(to.getDate() + 1);
 
     const formattedF = f.toISOString().split('T')[0];
     const formattedTo = to.toISOString().split('T')[0];
