@@ -76,7 +76,7 @@
                   formControlName="numero_nfe"
                 />
               </div>
-              <div *ngIf="order.vendedor.vendedor_id === 16 || 9" class="w-100">
+              <div *ngIf="order.vendedor.vendedor_id === 16 || order.vendedor.vendedor_id === 9" class="w-100">
                 <label class="form-label">Frete</label>
                 <input
                   type="text"
