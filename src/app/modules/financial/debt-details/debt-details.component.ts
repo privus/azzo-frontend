@@ -7,6 +7,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DebtService } from '../services/debt.service';
 import { DebtModalComponent } from '../debt-modal/debt-modal.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-debt-details',
@@ -28,6 +29,7 @@ export class DebtDetailsComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private modalService: NgbModal,
     private debtService: DebtService,
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -108,7 +110,7 @@ export class DebtDetailsComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/debts']);
+    this.location.back();
   }
 
   getStatusPagClass(statusId: number): string {

@@ -297,14 +297,17 @@
                             </div>                            
                         </td>
                         <td class="text-end">
-                            <button
+                                <a
                                 class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
-                                (click)="editOrder(order.codigo)"       
+                                [routerLink]="['/commerce/orders', order.codigo]"
+                                rel="noopener"
+                                (click)="$event.stopPropagation()"
                             >
                                 <i class="ki-duotone ki-pencil fs-3">
-                                    <span class="path1"></span><span class="path2"></span>
+                                <span class="path1"></span><span class="path2"></span>
                                 </i>
-                            </button>
+                            </a>
+                                                 
                             <button *ngIf="this.cargo === 'Administrador'"
                                 class="btn btn-icon btn-active-light-primary w-30px h-30px"
                                 (click)="deleteOrder(order.codigo)"

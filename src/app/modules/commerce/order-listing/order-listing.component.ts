@@ -172,10 +172,6 @@ export class OrderListingComponent implements OnInit {
     this.updateDisplayedItems();
   }
 
-  editOrder(id: number): void {
-    this.router.navigate(['commerce/orders', id]);
-  }
-
   getStatusClass(statusId: number): string {
     switch (statusId) {
       case 11138: // Aguardando Aprovação
