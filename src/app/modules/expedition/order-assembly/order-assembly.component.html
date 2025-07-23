@@ -1,0 +1,129 @@
+<div class="col-xl-4">
+  <div class="card card-xl-stretch mb-5 mb-xl-8">
+    <!-- Header -->
+    <div class="card-header border-0 d-flex justify-content-between align-items-center">
+      <h3 class="card-title fw-bold text-gray-900">
+        Pedido {{ code }}
+      </h3>
+      <div class="d-flex gap-2 align-items-center">
+        <!-- Input do multiplicador -->
+        <div class="input-group input-group-sm" style="width: 6rem;">
+          <span class="input-group-text">X</span>
+          <input
+            #multInput
+            type="number"
+            class="form-control"
+            min="1"
+            [(ngModel)]="multiplicador"
+            [disabled]="!scanningEnabled || isLoading"
+            (blur)="focusScannerInput()"
+            (keyup.enter)="focusScannerInput()"
+          />
+        </div>
+        
+        <!-- Iniciar montagem -->
+        <button
+          *ngIf="!scanningEnabled && !isLoading"
+          class="btn btn-primary btn-sm"
+          (click)="startAssembly()"
+        >
+          Iniciar Montagem
+        </button>
+      </div>
+    </div>
+
+    <div class="card-body pt-2" style="position:relative; overflow-y:auto; max-height:70vh;">
+      <div 
+        *ngIf="!scanningEnabled && !isCompleted"
+        class="pause-watermark pause-watermark-paused"
+      >
+        <span class="pause-watermark-text pause-watermark-text-paused">
+          Montagem pausada
+        </span>
+      </div>
+      <div 
+        *ngIf="isCompleted"
+        class="pause-watermark pause-watermark-complete"
+      >
+        <span class="pause-watermark-text pause-watermark-text-complete">
+          Montagem concluída
+        </span>
+      </div>
+      <ng-container *ngIf="scanningEnabled">
+        <input
+          #scannerInput
+          type="text"
+          (keydown.enter)="onScan(scannerInput.value)"
+          style="
+            position:absolute; top:0; left:0;
+            width:120px; height:1px;
+            opacity:0; z-index:9999;
+          "
+          autofocus
+        />
+      </ng-container>
+
+      <!-- Loading -->
+      <div
+        *ngIf="isLoading"
+        class="d-flex justify-content-center align-items-center"
+        style="height:200px;"
+      >
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Carregando…</span>
+        </div>
+      </div>
+
+      <!-- Lista de itens -->
+      <ng-container *ngIf="!isLoading && products.length > 0; else noItems">
+        <div
+          *ngFor="let item of products"
+          class="d-flex align-items-center mb-4 item-row"
+          [ngClass]="{ 'item-complete': isFullyScanned(item) }"
+        >
+          <span
+            class="bullet bullet-vertical h-40px"
+            [ngClass]="{
+              'bg-secondary': item.scannedCount === 0,
+              'bg-warning': item.scannedCount > 0 && !isFullyScanned(item),
+              'bg-success': isFullyScanned(item)
+            }"
+          ></span>
+
+          <div class="flex-grow-1">
+            <div class="fw-bold">{{ item.produto.nome }}</div>
+            <small class="d-block">
+              {{ item.scannedCount }} / {{ item.quantidade }}
+            </small>
+            <small class="d-block">EAN: {{ item.produto.ean }}</small>
+            <small class="d-block">Cód.: {{ item.produto.codigo }}</small>
+          </div>
+
+          <span
+            class="badge fs-8 fw-bold text-dark"
+              [ngClass]="{
+                'badge-light-secondary': item.scannedCount === 0,
+                'badge-light-warning':
+                  item.scannedCount > 0 && !isFullyScanned(item),
+                'badge-light-success': isFullyScanned(item)
+              }"
+            >
+              {{
+                item.scannedCount === 0
+                  ? 'Pendente'
+                  : isFullyScanned(item)
+                    ? 'OK'
+                    : 'Parcial'
+              }}
+          </span>
+        </div>
+      </ng-container>
+
+      <ng-template #noItems>
+        <div class="text-center text-muted py-4">
+          Nenhum item neste pedido.
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

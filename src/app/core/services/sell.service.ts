@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
+import { ItensVenda, Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { BrandSales, Commissions, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
@@ -118,5 +118,16 @@ export class SellService {
 
   deleteNfData(id: number) {
     return this.http.get<{ message: string }>(`${this.baseUrl}sells/clearNf/${id}`);
+  }
+
+  startAssembly(responsavel: string, itens: ItensVenda[]): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}sells/assembly`, {
+      responsavel,
+      itens,
+    });
+  }
+
+  finishAssembly(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}sells/assembly/${id}`);
   }
 }

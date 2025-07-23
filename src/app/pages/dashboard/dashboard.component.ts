@@ -290,7 +290,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       const fromDate = this.formatDate(from);
 
       if (end) {
-        // ATENÇÃO: Não adicione +1 no toDate (só se o back pedir range fechado)
         const to = new Date(end);
         const toDate = this.formatDate(to);
 

@@ -1,4 +1,4 @@
-import { UpdateSellPerson, UpdateSellStatus } from './../models/';
+import { ItensVenda, UpdateSellPerson, UpdateSellStatus } from './../models/';
 import { Injectable } from '@angular/core';
 import { SellService } from '../../../core/services';
 import { PGenerateCredit } from '../../financial/models';
@@ -93,5 +93,13 @@ export class OrderService {
 
   deleteNfData(id: number) {
     return this.sellService.deleteNfData(id);
+  }
+
+  startAssembly(responsavel: string, itens: ItensVenda[]) {
+    return this.sellService.startAssembly(responsavel, itens);
+  }
+
+  finishAssembly(id: number) {
+    return this.sellService.finishAssembly(id);
   }
 }

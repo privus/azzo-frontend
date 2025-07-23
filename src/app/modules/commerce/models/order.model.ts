@@ -85,3 +85,7 @@ export interface Ranking {
     pureli: number;
   }>;
 }
+
+export interface AssemblyItem extends ItensVenda {
+  scannedCount: number;
+}

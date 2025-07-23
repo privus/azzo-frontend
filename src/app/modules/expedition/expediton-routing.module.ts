@@ -6,7 +6,9 @@ import { RomaneioComponent } from './romaneio/romaneio.component';
 import { RomaneioResolver } from './romaneio.resolver';
 import { StockComponent } from './stock/stock.component';
 import { ProductResolver } from '../commerce/product.resolver';
-// import { StockLiquidResolver } from './stock-liquid.resolver';
+import { OrderAssemblyComponent } from './order-assembly/order-assembly.component';
+import { AssemblyShellComponent } from './assembly-shell.component/assembly-shell.component';
+import { OrdersResolver } from './orders.resolver';
 
 const routes: Routes = [
   {
@@ -14,7 +16,6 @@ const routes: Routes = [
     component: StockComponent,
     resolve: {
       product: ProductResolver,
-      // stockLiquid: StockLiquidResolver,
     },
   },
   {
@@ -30,6 +31,15 @@ const routes: Routes = [
     resolve: {
       romaneio: RomaneioResolver,
     },
+  },
+  {
+    path: 'assembly',
+    component: AssemblyShellComponent,
+    resolve: { orders: OrdersResolver },
+    children: [
+      { path: ':step', component: OrderAssemblyComponent },
+      { path: '', redirectTo: '1', pathMatch: 'full' },
+    ],
   },
 ];
 @NgModule({

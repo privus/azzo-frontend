@@ -1,0 +1,42 @@
+.pause-watermark {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.pause-watermark-paused {
+  background: rgba(231, 76, 60, 0.15);  /* vermelho translúcido */
+}
+
+.pause-watermark-complete {
+  background: rgba(40, 167, 69, 0.13);  /* verde translúcido */
+}
+
+.pause-watermark-text {
+  font-size: 2rem;
+  font-weight: bold;
+  border-radius: 12px;
+  padding: 0.7em 2em;
+  text-align: center;
+  user-select: none;
+  color: inherit;
+  box-shadow: 0 0 8px #fff, 0 2px 12px rgba(0,0,0,0.10);
+  opacity: 0.98;
+}
+
+.pause-watermark-text-paused {
+  color: #e74c3c;
+  text-shadow: 0 0 8px #fff, 0 0 2px #e74c3c77;
+}
+
+.pause-watermark-text-complete {
+  color: #28a745;
+  text-shadow: 0 0 10px #fff, 0 0 2px #28a74566;
+}
