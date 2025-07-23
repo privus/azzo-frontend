@@ -15,12 +15,13 @@ export class OrderAssemblyComponent implements OnInit, AfterViewInit {
   order!: Order;
   products: AssemblyItem[] = [];
   isLoading = true;
-  scanningEnabled = false;
   multiplicador = 1;
   userEmail: string = '';
-  montagem: any;
-  status: string = '';
-  isCompleted = false;
+  montagens: { [codigo: number]: any } = {};
+  status: { [codigo: number]: string } = {};
+  isCompleted: { [codigo: number]: boolean } = {};
+  scanningEnabled: { [codigo: number]: boolean } = {};
+  isFullscreen = false;
 
   @ViewChild('scannerInput', { static: false })
   scannerInput!: ElementRef<HTMLInputElement>;
@@ -44,7 +45,8 @@ export class OrderAssemblyComponent implements OnInit, AfterViewInit {
           scannedCount: 0,
         }));
         this.isLoading = false;
-        this.isCompleted = false;
+        this.isCompleted[this.code] = false;
+        this.scanningEnabled[this.code] = false;
         this.cdr.detectChanges();
       });
     });
@@ -52,23 +54,23 @@ export class OrderAssemblyComponent implements OnInit, AfterViewInit {
     this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
   }
 
-  startMontagem() {
-    this.orderService.startAssembly(this.userEmail, this.order.itensVenda).subscribe((m) => {
-      this.montagem = m;
-      this.status = m.status;
+  startMontagem(order: Order) {
+    this.orderService.startAssembly(this.userEmail, order.itensVenda).subscribe((m) => {
+      this.montagens[order.codigo] = m;
+      this.status[order.codigo] = m.status;
     });
   }
 
   ngAfterViewInit() {}
 
-  startAssembly() {
-    this.scanningEnabled = true;
+  startAssembly(order: Order) {
+    this.scanningEnabled[order.codigo] = true;
     this.cdr.detectChanges();
     setTimeout(() => this.scannerInput.nativeElement.focus(), 0);
   }
 
   onScan(raw: string) {
-    if (!this.scanningEnabled) return;
+    if (!this.scanningEnabled[this.code]) return;
     const code = raw.trim();
     const prod = this.products.find((p) => p.produto.ean === code);
 
@@ -108,9 +110,9 @@ export class OrderAssemblyComponent implements OnInit, AfterViewInit {
 
     const allComplete = this.products.every((item) => item.scannedCount === item.quantidade);
     if (allComplete) {
-      this.isCompleted = true;
-      this.scanningEnabled = false;
-      this.orderService.finishAssembly(this.montagem.id);
+      this.isCompleted[this.code] = true;
+      this.scanningEnabled[this.code] = false;
+      this.orderService.finishAssembly(this.montagens[this.code].id);
       return;
     }
 
@@ -124,9 +126,15 @@ export class OrderAssemblyComponent implements OnInit, AfterViewInit {
 
   /** força o foco no input invisível do scanner */
   focusScannerInput() {
-    if (this.scanningEnabled) {
+    if (this.scanningEnabled[this.code]) {
       // timeout para garantir que o elemento já esteja no DOM
       setTimeout(() => this.scannerInput.nativeElement.focus(), 0);
     }
+  }
+
+  toggleFullscreen() {
+    this.isFullscreen = !this.isFullscreen;
+    // (Opcional) Focar o input do scanner quando entrar em fullscreen
+    if (this.isFullscreen) setTimeout(() => this.focusScannerInput(), 0);
   }
 }

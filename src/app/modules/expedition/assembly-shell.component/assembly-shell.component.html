@@ -1,62 +1,71 @@
-<div class="mb-4 d-flex align-items-center gap-2 flex-wrap">
-  <ng-container *ngFor="let o of orders; let i = index">
-    <div class="position-relative d-inline-block">
-      <button
-        class="btn btn-outline-primary btn-md"
-        [routerLink]="[i + 1]"
-        [disabled]="isAdding"
-      >
-        Pedido {{ i + 1 }} ({{ o.codigo }})
-      </button>
-      <button 
-        type="button" 
-        class="btn btn-link position-absolute top-0 start-100 translate-middle p-1"
-        aria-label="Remover"
-        (click)="removeOrder(i)" 
-        [disabled]="isAdding"
-        style="z-index:2;"
-      >
-        <i class="bi bi-x-circle text-danger fs-4"></i>
-      </button>
+<div [class.fullscreen-overlay]="isFullscreen">
+  <!-- HEADER DOS PEDIDOS E BOTÕES -->
+  <div class="mb-4 d-flex align-items-center gap-2 flex-wrap shell-header">
+    <ng-container *ngFor="let o of orders; let i = index">
+      <div class="position-relative d-inline-block order-tag-wrapper">
+        <button
+          class="btn btn-outline-primary btn-md"
+          [routerLink]="[i + 1]"
+          [disabled]="isAdding"
+        >
+          Pedido {{ i + 1 }} ({{ o.codigo }})
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-link remove-btn"
+          aria-label="Remover"
+          (click)="removeOrder(i)" 
+          [disabled]="isAdding"
+        >
+          <i class="bi bi-x-circle text-danger fs-4"></i>
+        </button>
+      </div>
+    </ng-container>
+    <!-- Botão Fullscreen -->
+    <button 
+      class="btn btn-outline-dark btn-sm"
+      (click)="toggleFullscreen()"
+      [attr.aria-label]="isFullscreen ? 'Sair do modo tela cheia' : 'Tela cheia'"
+      style="min-width:2.5rem"
+    >
+      <i class="bi" [ngClass]="isFullscreen ? 'bi-fullscreen-exit' : 'bi-fullscreen'"></i>
+    </button>
+    <!-- Botão Adicionar Pedido -->
+    <button
+      class="btn btn-outline-success btn-sm ms-3 d-flex align-items-center"
+      (click)="addOrder()"
+      [disabled]="isAdding"
+    >
+      <ng-container *ngIf="!isAdding">
+        <i class="bi bi-plus-lg me-1"></i> Adicionar
+      </ng-container>
+      <ng-container *ngIf="isAdding">
+        <span
+          class="spinner-border spinner-border-sm text-primary me-1"
+          role="status"
+        ></span>
+        Carregando...
+      </ng-container>
+    </button>
+    <!-- Alternar Todos -->
+    <button
+      class="btn btn-outline-secondary btn-sm ms-auto"
+      (click)="toggleViewAll()"
+      [disabled]="isAdding"
+    >
+      {{ viewAll ? 'Ocultar Todos' : 'Ver Todos' }}
+    </button>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <ng-container *ngIf="viewAll; else singleView">
+    <div class="row flex-fill">
+      <div class="col-md-4" *ngFor="let o of orders">
+        <app-order-assembly-card [order]="o"></app-order-assembly-card>
+      </div>
     </div>
   </ng-container>
-
-  <!-- Botão “+” com spinner -->
-  <button
-    class="btn btn-outline-success btn-sm ms-3 d-flex align-items-center"
-    (click)="addOrder()"
-    [disabled]="isAdding"
-  >
-    <ng-container *ngIf="!isAdding">
-      <i class="bi bi-plus-lg me-1"></i> Adicionar
-    </ng-container>
-    <ng-container *ngIf="isAdding">
-      <span
-        class="spinner-border spinner-border-sm text-primary me-1"
-        role="status"
-      ></span>
-      Carregando...
-    </ng-container>
-  </button>
-
-  <!-- Alternar entre todos / single -->
-  <button
-    class="btn btn-outline-secondary btn-sm ms-auto"
-    (click)="viewAll = !viewAll"
-    [disabled]="isAdding"
-  >
-    {{ viewAll ? 'Ocultar Todos' : 'Ver Todos' }}
-  </button>
+  <ng-template #singleView>
+    <router-outlet></router-outlet>
+  </ng-template>
 </div>
-
-<ng-container *ngIf="viewAll; else singleView">
-  <div class="row">
-    <div class="col-md-4" *ngFor="let o of orders">
-      <app-order-assembly-card [order]="o"></app-order-assembly-card>
-    </div>
-  </div>
-</ng-container>
-<ng-template #singleView>
-  <router-outlet></router-outlet>
-</ng-template>
-
