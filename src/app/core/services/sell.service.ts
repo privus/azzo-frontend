@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { BrandSales, Commissions, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
 import { SalesComparisonReport } from 'src/app/pages/models/performance-sales.modal';
 import { PGenerateCredit } from 'src/app/modules/financial/models';
+import { AssemblyDto, AssemblyResponse } from 'src/app/modules/expedition/models';
 
 @Injectable()
 export class SellService {
@@ -120,14 +121,12 @@ export class SellService {
     return this.http.get<{ message: string }>(`${this.baseUrl}sells/clearNf/${id}`);
   }
 
-  startAssembly(responsavel: string, itens: ItensVenda[]): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}sells/assembly`, {
-      responsavel,
-      itens,
-    });
+  updateAssembly(dto: AssemblyDto) {
+    return this.http.post<string>(`${this.baseUrl}assembly`, dto);
   }
 
-  finishAssembly(id: number): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}sells/assembly/${id}`);
+  getAssemblyProgress(codigos: number[]) {
+    const q = codigos.join(',');
+    return this.http.get<AssemblyResponse[]>(`${this.baseUrl}assembly/progress?orders=${q}`);
   }
 }

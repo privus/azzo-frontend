@@ -16,6 +16,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OrderListingPersonComponent } from './order-listing-person/order-listing-person.component';
 import { OrderDetailsPersonComponent } from './order-details-person/order-details-person.component';
 import { GenerateInstallmentsModalComponent } from './generate-installments-modal/generate-installments-modal.component';
+import { TimeAgoPipe } from '../../../app/shared/pipes/time-ago.pipe';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { GenerateInstallmentsModalComponent } from './generate-installments-moda
     OrderListingPersonComponent,
     OrderDetailsPersonComponent,
     GenerateInstallmentsModalComponent,
+    TimeAgoPipe,
   ],
   imports: [
     SharedModule,

@@ -1,10 +1,11 @@
-<div [class.fullscreen-overlay]="isFullscreen" class="assembly-card-root">
+<div #rootWrapper [class.fullscreen-overlay]="isFullscreen" class="assembly-card-root" *ngIf="order">
   <div class="card card-xl-stretch mb-5 mb-xl-8">
     <!-- Header -->
     <div class="card-header border-0 d-flex justify-content-between align-items-center">
       <h3 class="card-title fw-bold text-gray-900">
-        Pedido {{ code }}
+        Pedido {{ order.codigo }}
       </h3>
+      
       <div class="d-flex gap-2 align-items-center">
         <!-- Input do multiplicador -->
         <div class="input-group input-group-sm" style="width: 6rem;">
@@ -23,6 +24,7 @@
         
         <!-- Iniciar montagem -->
         <button
+          type="button"
           *ngIf="!scanningEnabled[order.codigo] && !isLoading"
           class="btn btn-primary btn-sm"
           (click)="startAssembly(order)"
@@ -58,7 +60,7 @@
         </span>
       </div>
     
-      <ng-container *ngIf="scanningEnabled[code]">
+      <ng-container *ngIf="scanningEnabled[order.codigo]">
         <input
           #scannerInput
           type="text"
@@ -70,7 +72,7 @@
           "
           autofocus
         />
-      </ng-container>
+      </ng-container>     
 
       <!-- Loading -->
       <div
@@ -99,7 +101,7 @@
             }"
           ></span>
 
-          <div class="flex-grow-1">
+          <div class="flex-grow-1 border-bottom">
             <div class="fw-bold">{{ item.produto.nome }}</div>
             <small class="d-block">
               {{ item.scannedCount }} / {{ item.quantidade }}

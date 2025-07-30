@@ -20,11 +20,12 @@
       </div>
       <button
         *ngIf="!scanningEnabled"
-        class="btn btn-primary btn-sm"
+        class="btn btn-primary btn-sm btn-start-montagem"
         (click)="startAssembly()"
       >
         Iniciar Montagem
-      </button>
+    </button>
+    
     </div>
   </div>
 
@@ -47,7 +48,6 @@
       </span>
     </div>
 
-    <!-- input invisível só depois de iniciar -->
     <ng-container *ngIf="scanningEnabled">
       <input
         #scannerInput
@@ -61,14 +61,12 @@
       />
     </ng-container>
 
-    <!-- Lista sempre visível -->
     <ng-container *ngIf="products.length; else noItems">
       <div
       *ngFor="let item of products"
       class="d-flex align-items-center mb-4 item-row"
       [ngClass]="{ 'item-complete': isFullyScanned(item) }"
     >
-        <!-- Bullet conforme progresso -->
         <span
           class="bullet bullet-vertical h-40px"
           [ngClass]="{
@@ -77,9 +75,7 @@
             'bg-success': isFullyScanned(item)
           }"
         ></span>
-
-        <!-- Informações e contador -->
-        <div class="flex-grow-1">
+        <div class="flex-grow-1 border-bottom"> 
           <div class="fw-bold">{{ item.produto.nome }}</div>
           <small class="d-block">
             {{ item.scannedCount }} / {{ item.quantidade }}
@@ -87,8 +83,6 @@
           <small class="d-block">EAN: {{ item.produto.ean }}</small>
           <small class="d-block">Cód.: {{ item.produto.codigo }}</small>
         </div>
-
-        <!-- Badge de status -->
         <span
         class="badge fs-8 fw-bold text-dark"
           [ngClass]="{

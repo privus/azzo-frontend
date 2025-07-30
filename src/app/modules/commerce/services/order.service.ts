@@ -1,7 +1,8 @@
-import { ItensVenda, UpdateSellPerson, UpdateSellStatus } from './../models/';
+import { UpdateSellPerson, UpdateSellStatus } from './../models/';
 import { Injectable } from '@angular/core';
 import { SellService } from '../../../core/services';
 import { PGenerateCredit } from '../../financial/models';
+import { AssemblyDto } from '../../expedition/models';
 
 @Injectable({
   providedIn: 'root',
@@ -95,11 +96,11 @@ export class OrderService {
     return this.sellService.deleteNfData(id);
   }
 
-  startAssembly(responsavel: string, itens: ItensVenda[]) {
-    return this.sellService.startAssembly(responsavel, itens);
+  updateAssemblyStatus(dto: AssemblyDto) {
+    return this.sellService.updateAssembly(dto);
   }
 
-  finishAssembly(id: number) {
-    return this.sellService.finishAssembly(id);
+  getAssemblyProgress(codigos: number[]) {
+    return this.sellService.getAssemblyProgress(codigos);
   }
 }

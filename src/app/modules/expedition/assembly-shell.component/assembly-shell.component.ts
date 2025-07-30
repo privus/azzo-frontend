@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../../commerce/services/order.service';
 import { Order } from '../../commerce/models';
+import { AssemblyResponse } from '../models';
 
 @Component({
   selector: 'app-assembly-shell',
@@ -14,6 +15,7 @@ export class AssemblyShellComponent implements OnInit {
 
   isAdding = false;
   isFullscreen = false;
+  progress: AssemblyResponse[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -22,7 +24,23 @@ export class AssemblyShellComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.data.subscribe((d) => (this.orders = d.orders));
+    this.route.data.subscribe((data) => {
+      console.log('DATA do resolver:', data);
+      this.orders = data.orders.orders;
+      this.progress = data.orders.progress;
+      console.log('PEDIDOS', this.orders, 'PROGRESS', this.progress);
+    });
+  }
+
+  getProgressForOrder(codigo: number): AssemblyResponse {
+    return (
+      this.progress.find((p) => p.codigo === codigo) || {
+        codigo,
+        progress: [],
+        status: 'iniciada',
+        montagemId: null,
+      }
+    );
   }
 
   removeOrder(index: number) {
