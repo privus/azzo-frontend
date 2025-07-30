@@ -267,7 +267,18 @@
                                 <span *ngIf="order.associado" class="text-danger fs-8 text-center">{{ order.associado }}</span>
                             </div>
                         </td>
-                        <td>{{ order.cliente.nome_empresa }}</td>
+                        <td>
+                            {{ order.cliente.nome_empresa }}
+                            <span 
+                            *ngIf="order.itens_atualizacao" 
+                            class="ms-2 d-flex align-items-center text-warning fs-7"
+                            [title]="'Carrinho atualizado em ' + (order.itens_atualizacao | date:'dd/MM/yyyy HH:mm')"
+                        >
+                            <i class="bi bi-cart-check-fill me-1"></i>
+                            <i class="bi bi-arrow-repeat me-1"></i>
+                            {{ order.itens_atualizacao | timeAgo }}
+                        </span>
+                        </td>
                           
                         <td><div class="text-muted fs-7">{{ order.data_criacao | date:'dd/MM/yyyy' }}</div></td>
                         <td>{{ order.valor_final | currency:'BRL' }}</td>

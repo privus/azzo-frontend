@@ -1,16 +1,17 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Order, AssemblyItem } from '../../commerce/models';
 import { OrderService } from '../../commerce/services/order.service';
 import { LocalStorageService } from '../../../core/services/local-storage.service';
 import Swal from 'sweetalert2';
+import { AssemblyDto, AssemblyResponse } from '../models';
 
 @Component({
   selector: 'app-order-assembly',
   templateUrl: './order-assembly.component.html',
   styleUrls: ['./order-assembly.component.scss'],
 })
-export class OrderAssemblyComponent implements OnInit, AfterViewInit {
+export class OrderAssemblyComponent implements OnInit, OnDestroy {
   code!: number;
   order!: Order;
   products: AssemblyItem[] = [];
@@ -22,6 +23,9 @@ export class OrderAssemblyComponent implements OnInit, AfterViewInit {
   isCompleted: { [codigo: number]: boolean } = {};
   scanningEnabled: { [codigo: number]: boolean } = {};
   isFullscreen = false;
+  lastCode: number | null = null;
+  private lastSavedProgress: { [itemId: number]: number } = {};
+  private isSaving = false;
 
   @ViewChild('scannerInput', { static: false })
   scannerInput!: ElementRef<HTMLInputElement>;
@@ -34,39 +38,66 @@ export class OrderAssemblyComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.parent!.data.subscribe((data) => {
-      const orders = data.orders as Order[];
-      this.route.paramMap.subscribe((params: ParamMap) => {
-        const step = Number(params.get('step')) || 1;
-        this.order = orders[step - 1];
-        this.code = this.order.codigo;
-        this.products = this.order.itensVenda.map((item) => ({
-          ...item,
-          scannedCount: 0,
-        }));
-        this.isLoading = false;
-        this.isCompleted[this.code] = false;
-        this.scanningEnabled[this.code] = false;
-        this.cdr.detectChanges();
-      });
-    });
+    this.loadUserInfo();
+    this.handleRouteData();
+  }
+
+  private loadUserInfo() {
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
     this.userEmail = storageInfo ? JSON.parse(storageInfo).email : '';
   }
 
-  startMontagem(order: Order) {
-    this.orderService.startAssembly(this.userEmail, order.itensVenda).subscribe((m) => {
-      this.montagens[order.codigo] = m;
-      this.status[order.codigo] = m.status;
+  private handleRouteData() {
+    this.route.parent!.data.subscribe((data) => {
+      const orders = data.orders.orders as Order[];
+      this.route.paramMap.subscribe((params: ParamMap) => {
+        if (this.code && this.products.some((p) => p.scannedCount > 0)) {
+          this.saveProgress();
+        }
+
+        this.isLoading = true;
+        const step = Number(params.get('step')) || 1;
+        const newOrder = orders[step - 1];
+        this.code = newOrder?.codigo;
+        this.order = newOrder;
+        this.isCompleted[this.code] = false;
+        this.scanningEnabled[this.code] = false;
+
+        this.loadAssemblyProgress();
+      });
     });
   }
 
-  ngAfterViewInit() {}
+  private loadAssemblyProgress() {
+    this.orderService.getAssemblyProgress([this.code]).subscribe((progressList: AssemblyResponse[]) => {
+      const progressData = progressList.find((p) => p.codigo === this.code);
+      const progress = progressData?.progress || [];
+      const isFinalizado = progressData?.status === 'finalizada';
+
+      this.products =
+        this.order?.itensVenda.map((item) => {
+          const scanned = progress.find((p) => p.itensVendaId === item.itens_venda_id)?.scannedCount || 0;
+          this.lastSavedProgress[item.itens_venda_id] = scanned;
+          return {
+            ...item,
+            scannedCount: scanned,
+          };
+        }) || [];
+
+      this.isCompleted[this.code] = isFinalizado;
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    });
+  }
 
   startAssembly(order: Order) {
     this.scanningEnabled[order.codigo] = true;
     this.cdr.detectChanges();
-    setTimeout(() => this.scannerInput.nativeElement.focus(), 0);
+    setTimeout(() => {
+      if (this.scannerInput?.nativeElement) {
+        this.scannerInput.nativeElement.focus();
+      }
+    }, 100);
   }
 
   onScan(raw: string) {
@@ -74,45 +105,29 @@ export class OrderAssemblyComponent implements OnInit, AfterViewInit {
     const code = raw.trim();
     const prod = this.products.find((p) => p.produto.ean === code);
 
-    this.scannerInput.nativeElement.blur();
-    this.scannerInput.nativeElement.value = ''; // LIMPA O VALOR DO INPUT AQUI
+    this.scannerInput.nativeElement.value = '';
+    setTimeout(() => {
+      this.scannerInput.nativeElement.focus();
+    }, 0);
 
-    if (prod) {
-      // Verifica se já bipou tudo ou ultrapassaria o limite
-      if (prod.scannedCount + this.multiplicador > prod.quantidade) {
-        setTimeout(() => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Quantidade excedida!',
-            text: 'Quantidade máxima deste produto já bipada!',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            this.focusScannerInput();
-          });
-        }, 0);
-        return;
-      }
-    } else {
-      setTimeout(() => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Produto não está na lista!',
-          text: 'Esse produto não está na lista do pedido. Atenção!',
-          confirmButtonText: 'OK',
-        }).then(() => {
-          this.focusScannerInput();
-        });
-      }, 0);
+    if (!prod) {
+      this.showError('Produto não está na lista!', 'Esse produto não está na lista do pedido. Atenção!');
+      return;
+    }
+
+    if (prod.scannedCount + this.multiplicador > prod.quantidade) {
+      this.showError('Quantidade excedida!', 'Quantidade máxima deste produto já bipada!');
       return;
     }
 
     prod.scannedCount = Math.min(prod.scannedCount + this.multiplicador, prod.quantidade);
 
     const allComplete = this.products.every((item) => item.scannedCount === item.quantidade);
+
     if (allComplete) {
       this.isCompleted[this.code] = true;
       this.scanningEnabled[this.code] = false;
-      this.orderService.finishAssembly(this.montagens[this.code].id);
+      this.finishAssembly();
       return;
     }
 
@@ -120,21 +135,95 @@ export class OrderAssemblyComponent implements OnInit, AfterViewInit {
     this.focusScannerInput();
   }
 
+  private showError(title: string, text: string) {
+    setTimeout(() => {
+      Swal.fire({ icon: 'error', title, text, confirmButtonText: 'OK' }).then(() => {
+        this.focusScannerInput();
+      });
+    }, 0);
+  }
+
   isFullyScanned(item: AssemblyItem): boolean {
     return item.scannedCount === item.quantidade;
   }
 
-  /** força o foco no input invisível do scanner */
   focusScannerInput() {
     if (this.scanningEnabled[this.code]) {
-      // timeout para garantir que o elemento já esteja no DOM
       setTimeout(() => this.scannerInput.nativeElement.focus(), 0);
     }
   }
 
   toggleFullscreen() {
     this.isFullscreen = !this.isFullscreen;
-    // (Opcional) Focar o input do scanner quando entrar em fullscreen
     if (this.isFullscreen) setTimeout(() => this.focusScannerInput(), 0);
+  }
+
+  saveProgress() {
+    if (this.isSaving) return;
+
+    const bipados = this.products
+      .filter((item) => item.scannedCount !== (this.lastSavedProgress[item.itens_venda_id] || 0))
+      .map((item) => ({
+        itensVendaId: item.itens_venda_id,
+        scannedCount: item.scannedCount,
+      }));
+
+    if (!bipados.length) return;
+
+    this.isSaving = true; // começa bloqueio de nova chamada
+
+    const dto: AssemblyDto = {
+      montagemId: this.montagens[this.code]?.montagem_id,
+      responsavel: this.userEmail,
+      status: 'iniciada',
+      itens: bipados,
+    };
+
+    this.orderService.updateAssemblyStatus(dto).subscribe({
+      next: () => {
+        bipados.forEach((item) => {
+          this.lastSavedProgress[item.itensVendaId] = item.scannedCount;
+        });
+        this.isSaving = false;
+      },
+      error: () => {
+        this.isSaving = false;
+        Swal.fire('Erro', 'Não foi possível salvar o progresso.', 'error');
+      },
+    });
+  }
+
+  finishAssembly() {
+    const bipados = this.products
+      .filter((item) => item.scannedCount > 0)
+      .map((item) => ({
+        itensVendaId: item.itens_venda_id,
+        scannedCount: item.scannedCount,
+      }));
+
+    if (!bipados.length) {
+      this.isCompleted[this.code] = true;
+      this.scanningEnabled[this.code] = false;
+      return;
+    }
+
+    const dto: AssemblyDto = {
+      montagemId: this.montagens[this.code]?.montagem_id,
+      responsavel: this.userEmail,
+      status: 'finalizada',
+      itens: bipados,
+    };
+
+    this.orderService.updateAssemblyStatus(dto).subscribe({
+      next: () => {
+        this.isCompleted[this.code] = true;
+        this.scanningEnabled[this.code] = false;
+      },
+      error: () => Swal.fire('Erro', 'Falha ao finalizar montagem!', 'error'),
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.saveProgress();
   }
 }

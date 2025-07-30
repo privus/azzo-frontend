@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExpeditionRoutingModule } from './expediton-routing.module';
+import { ExpeditionRoutingModule } from './expedition-routing.module';
 import { StockProjectionComponent } from './stock-projection/stock-projection.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExpeditionService } from './services/expedition.service';

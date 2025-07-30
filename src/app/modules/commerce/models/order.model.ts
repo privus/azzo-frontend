@@ -34,6 +34,7 @@ export interface Order {
   associado?: number;
   fora_politica: number;
   valor_frete?: number;
+  itens_atualizacao?: Date;
 }
 
 export interface Vendedor {
