@@ -19,9 +19,7 @@ export class SellerRankingModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (!this.ranking || (!this.ranking.today?.length && !this.ranking.yesterday?.length)) {
-      this.loadRanking();
-    }
+    this.loadRanking();
   }
 
   getMaxPureliSeller(sellers: any[]): number {
