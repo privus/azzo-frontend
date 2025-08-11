@@ -118,6 +118,7 @@ export class OrderDetailsComponent implements OnInit {
 
     if (order.numero_nfe) this.orderForm.controls['numero_nfe'].disable();
     if (order.valor_frete) this.orderForm.controls['valor_frete'].disable();
+    if (order.status_venda.status_venda_id === 11468) this.orderForm.controls['status'].disable();
   }
 
   updateStatus(): void {
