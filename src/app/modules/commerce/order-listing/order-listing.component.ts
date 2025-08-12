@@ -299,9 +299,7 @@ export class OrderListingComponent implements OnInit {
       const end = this.customDateRange.end;
 
       if (!start) return; // Se não tem início, não faz nada
-      const from = new Date(start);
-      from.setDate(from.getDate() + 1);
-      const fromDate = this.formatDate(from);
+      const fromDate = this.formatDate(this.parseLocalDate(start));
 
       if (end) {
         const toDate = this.formatDate(this.parseLocalDate(end));
