@@ -305,7 +305,6 @@ export class OrderListingComponent implements OnInit {
 
       if (end) {
         const to = new Date(end);
-        to.setDate(to.getDate() + 1);
         const toDate = this.formatDate(to);
 
         this.orderService.getOrdersBetweenDates(fromDate, toDate).subscribe({
