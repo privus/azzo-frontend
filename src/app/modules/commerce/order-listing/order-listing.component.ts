@@ -304,8 +304,7 @@ export class OrderListingComponent implements OnInit {
       const fromDate = this.formatDate(from);
 
       if (end) {
-        const to = new Date(end);
-        const toDate = this.formatDate(to);
+        const toDate = this.formatDate(this.parseLocalDate(end));
 
         this.orderService.getOrdersBetweenDates(fromDate, toDate).subscribe({
           next: (orders) => {
@@ -437,6 +436,11 @@ export class OrderListingComponent implements OnInit {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  private parseLocalDate(iso: string): Date {
+    const [y, m, d] = iso.split('-').map(Number);
+    return new Date(y, m - 1, d);
   }
 
   get totalBruto(): number {
