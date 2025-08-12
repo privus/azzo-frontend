@@ -47,14 +47,10 @@ export class CommissionsComponent implements OnInit {
 
       if (!start) return; // Se não tem início, não faz nada
 
-      const from = new Date(start);
-      from.setDate(from.getDate() + 1); // (+1 para igualar lógica do outro componente)
-      const fromDate = this.formatDate(from);
+      const fromDate = this.formatDate(this.parseLocalDate(start));
 
       if (end) {
-        const to = new Date(end);
-        to.setDate(to.getDate() + 2); // (+2 para igualar lógica do outro componente)
-        const toDate = this.formatDate(to);
+        const toDate = this.formatDate(this.parseLocalDate(end));
 
         this.sellersService.getCommissions(fromDate, toDate).subscribe({
           next: (res) => {
@@ -169,6 +165,11 @@ export class CommissionsComponent implements OnInit {
       },
       error: (err) => console.error('Erro ao filtrar por data:', err),
     });
+  }
+
+  private parseLocalDate(iso: string): Date {
+    const [y, m, d] = iso.split('-').map(Number);
+    return new Date(y, m - 1, d);
   }
 
   get comissionSorted(): Commissions[] {
