@@ -39,4 +39,8 @@ export class ExpeditionService {
   getStockOutById(id: number) {
     return this.logisticsService.getStockOutById(id);
   }
+
+  getDurationProduct() {
+    return this.logisticsService.getDurationProduct();
+  }
 }

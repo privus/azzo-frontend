@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Produto } from '../../commerce/models';
 import { ActivatedRoute } from '@angular/router';
 import { PaginationService } from '../../../core/services/';
-import { StockById } from '../models';
+import { StockById, StockDuration } from '../models';
 import { ExpeditionService } from '../services/expedition.service';
 
 @Component({
@@ -14,6 +14,7 @@ export class StockComponent implements OnInit {
   products: Produto[] = [];
   filteredProducts: Produto[] = [];
   loadingSaidas: { [produtoId: number]: boolean } = {};
+  stockDuration: StockDuration[] = [];
 
   currentPage: number = 1;
   itemsPerPage: number = 50;
@@ -36,7 +37,8 @@ export class StockComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.products = this.route.snapshot.data['product'] as Produto[];
+    this.products = this.route.snapshot.data['product'];
+    this.stockDuration = this.route.snapshot.data['stockDuration'];
 
     const produtosPorEan = new Map<number, Produto[]>();
     for (const prod of this.products) {
@@ -46,24 +48,27 @@ export class StockComponent implements OnInit {
       produtosPorEan.get(eanNum)!.push(prod);
     }
 
+    // Map: produto_id => StockDuration
+    const durationMap = new Map(this.stockDuration.map((item) => [+item.produto_id, item]));
+
+    // Adiciona diasRestantes e mediaDiaria ao objeto Produto
     this.products = this.products.map((prod) => {
+      const match = durationMap.get(prod.produto_id);
+      const diasRestantes = match?.diasRestantes ?? null;
+      const mediaDiaria = match?.mediaDiaria ?? null;
+
       const eanNum = +prod.ean;
       const grupo = produtosPorEan.get(eanNum) || [];
 
       const unidade = grupo.find((p) => p.qt_uni === null);
       const caixa = grupo.find((p) => p.qt_uni !== null);
 
-      // const match = this.stockLiquid.find((item) => item.codigo === prod.codigo);
-
       let estoque_em_caixas = '';
 
-      // Cenário 1: Unidade + Caixa
       if (unidade && caixa && unidade.saldo_estoque && caixa.qt_uni) {
         const caixas = Math.floor(unidade.saldo_estoque / caixa.qt_uni);
         estoque_em_caixas = `${caixas} C/ ${caixa.qt_uni}`;
-      }
-      // Cenário 2: Apenas o próprio produto com qt_uni
-      else if (prod.qt_uni && prod.saldo_estoque) {
+      } else if (prod.qt_uni && prod.saldo_estoque) {
         const caixas = Math.floor(prod.saldo_estoque / prod.qt_uni);
         estoque_em_caixas = `${caixas} C/ ${prod.qt_uni}`;
       }
@@ -71,6 +76,8 @@ export class StockComponent implements OnInit {
       return {
         ...prod,
         estoque_em_caixas,
+        diasRestantes,
+        mediaDiaria,
       };
     });
 

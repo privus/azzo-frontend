@@ -122,11 +122,28 @@
                   {{ produto.estoque_em_caixas }}
                 </td>
                 <td class="text-end text-gray-900 fw-bold">
-                  {{ produto.saldo_estoque }}
+                  <div>
+                    {{ produto.saldo_estoque }}
+                    <span
+                      *ngIf="produto.diasRestantes != null"
+                      class="ms-2 fs-8 fw-semibold"
+                      [ngClass]="{
+                        'text-danger': produto.diasRestantes! <= 7,
+                        'text-warning': produto.diasRestantes! > 7 && produto.diasRestantes! <= 20,
+                        'text-success': produto.diasRestantes! > 20
+                      }"
+                      title="Estimativa de duração do estoque"
+                    >
+                      · {{ produto.diasRestantes }} dia(s)
+                    </span>
+                  </div>
+                
+                  <div *ngIf="produto.mediaDiaria != null" class="mt-1 text-muted fs-8">
+                    {{ produto.mediaDiaria }} und/dia
+                  </div>
                 </td>
-                <td class="text-end text-gray-900 fw-bold">
-                  {{ produto.saldo_estoque }}
-                </td>
+                
+                
                 <td>
                   <button class="btn btn-sm btn-icon btn-light toggle"
                     (click)="toggleExpand(produto.produto_id)">

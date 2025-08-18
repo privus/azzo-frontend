@@ -30,6 +30,8 @@ export interface Produto {
   comprimento?: number;
   peso?: number;
   saidas?: StockById[];
+  diasRestantes?: number | null;
+  mediaDiaria?: number | null;
 }
 
 export interface CategoriaProduto {
@@ -50,4 +52,3 @@ export interface UpdatedProduct {
   comprimento?: number;
   peso_grs?: number;
 }
-

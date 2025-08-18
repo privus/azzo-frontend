@@ -14,3 +14,9 @@ export interface Produto {
   quantidade: number;
   valor_total: number;
 }
+
+export interface StockDuration {
+  produto_id: string;
+  mediaDiaria: number;
+  diasRestantes: number;
+}

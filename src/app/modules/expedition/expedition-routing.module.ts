@@ -9,6 +9,7 @@ import { ProductResolver } from '../commerce/product.resolver';
 import { OrderAssemblyComponent } from './order-assembly/order-assembly.component';
 import { AssemblyShellComponent } from './assembly-shell.component/assembly-shell.component';
 import { OrdersResolver } from './orders.resolver';
+import { DurationProductResolver } from './duration-product.resolver';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
     component: StockComponent,
     resolve: {
       product: ProductResolver,
+      stockDuration: DurationProductResolver,
     },
   },
   {
