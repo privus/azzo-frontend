@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Produto } from '../../commerce/models';
 import { ActivatedRoute } from '@angular/router';
 import { PaginationService } from '../../../core/services/';
-import { StockById, StockDuration } from '../models';
+import { StockById, StockDuration, StockOverview } from '../models';
 import { ExpeditionService } from '../services/expedition.service';
 
 @Component({
@@ -15,6 +15,9 @@ export class StockComponent implements OnInit {
   filteredProducts: Produto[] = [];
   loadingSaidas: { [produtoId: number]: boolean } = {};
   stockDuration: StockDuration[] = [];
+  stockOverview: StockOverview;
+  valorVenda: number = 0;
+  valorCusto: number = 0;
 
   currentPage: number = 1;
   itemsPerPage: number = 50;
@@ -38,7 +41,10 @@ export class StockComponent implements OnInit {
 
   ngOnInit(): void {
     this.products = this.route.snapshot.data['product'];
-    this.stockDuration = this.route.snapshot.data['stockDuration'];
+    this.stockOverview = this.route.snapshot.data['stockDuration'];
+    this.stockDuration = this.stockOverview.stockDuration;
+    this.valorVenda = this.stockOverview.stockValue.valor_venda;
+    this.valorCusto = this.stockOverview.stockValue.valor_custo;
 
     const produtosPorEan = new Map<number, Produto[]>();
     for (const prod of this.products) {

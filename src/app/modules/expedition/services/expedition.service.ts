@@ -40,7 +40,7 @@ export class ExpeditionService {
     return this.logisticsService.getStockOutById(id);
   }
 
-  getDurationProduct() {
-    return this.logisticsService.getDurationProduct();
+  getStockOverview() {
+    return this.logisticsService.getStockOverview();
   }
 }

@@ -19,4 +19,15 @@ export interface StockDuration {
   produto_id: string;
   mediaDiaria: number;
   diasRestantes: number;
+  valor_estoque: StockValue;
+}
+
+export interface StockValue {
+  valor_custo: number;
+  valor_venda: number;
+}
+
+export interface StockOverview {
+  stockDuration: StockDuration[];
+  stockValue: StockValue;
 }
