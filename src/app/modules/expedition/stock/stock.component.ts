@@ -41,7 +41,7 @@ export class StockComponent implements OnInit {
 
   ngOnInit(): void {
     this.products = this.route.snapshot.data['product'];
-    this.stockOverview = this.route.snapshot.data['stockDuration'];
+    this.stockOverview = this.route.snapshot.data['stockOverview'];
     this.stockDuration = this.stockOverview.stockDuration;
     this.valorVenda = this.stockOverview.stockValue.valor_venda;
     this.valorCusto = this.stockOverview.stockValue.valor_custo;
