@@ -5,29 +5,29 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor() {}
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Token fixo da API - sempre adiciona o header de autorização
     const apiToken = environment.apiBearerToken;
 
+    // Detecta upload (FormData)
+    const isFormData = typeof FormData !== 'undefined' && req.body instanceof FormData;
+
+    // Começa pelos headers atuais para não sobrescrever algo já definido no request
+    let headers = req.headers;
+
+    // Sempre adiciona Authorization se houver token
     if (apiToken) {
-      const authReq = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${apiToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      return next.handle(authReq);
+      headers = headers.set('Authorization', `Bearer ${apiToken}`);
     }
 
-    // Se não houver token configurado, adiciona apenas o Content-Type
-    const reqWithHeaders = req.clone({
-      setHeaders: {
-        'Content-Type': 'application/json',
-      },
-    });
+    // Só seta Content-Type JSON quando NÃO for FormData e quando ainda não houver Content-Type
+    if (!isFormData && !headers.has('Content-Type') && req.method !== 'GET') {
+      headers = headers.set('Content-Type', 'application/json');
+    }
 
-    return next.handle(reqWithHeaders);
+    // Clona a request com os headers ajustados.
+    // Importante: para FormData NÃO setamos Content-Type; o browser define "multipart/form-data; boundary=..."
+    const authReq = req.clone({ headers });
+
+    return next.handle(authReq);
   }
 }
