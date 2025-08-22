@@ -1,78 +1,92 @@
 <div class="card card-flush h-xl-100">
-    <div class="card-header pt-7">
-      <h3 class="card-title align-items-start flex-column">
-        <span class="card-label fw-bold text-gray-900">Relatório de Estoque</span>
-        <span class="text-gray-500 mt-1 fw-semibold fs-6">
-          Total de {{ filteredProducts.length }} produtos listados
-        </span>
-      </h3>
-      <div class="d-flex align-items-center position-relative my-1 ms-8">
-        <select
-          class="form-select form-select-solid form-select-lg"
-          [(ngModel)]="selectedStatus"
-          (change)="applyFilter()"
-        >
-          <option value="">Todos</option>
-          <option value="disponivel">Disponível</option>
-          <option value="baixo">Estoque Baixo</option>
-          <option value="sem">Sem Estoque</option>
-        </select>
-      </div>
-      <div class="d-flex align-items-center position-relative my-1 ms-8">
-        <select
-          class="form-select form-select-solid form-select-lg"
-          [(ngModel)]="selectedSupplier"
-          (change)="applyFilter()"
-        >
-          <option value="">Fornecedor</option>
-          <option value="1">Black Fix</option>
-          <option value="2">Green</option>
-          <option value="3">H2O</option>
-          <option value="4">Vidal</option>
-          <option value="6">Viceroy</option>
-          <option value="7">Pureli</option>
-        </select>
-      </div> 
-      <div class="card-toolbar">
-        <input
-          [(ngModel)]="searchTerm"
-          (input)="onSearch()"
-          type="text"
-          class="form-control form-control-sm"
-          placeholder="Buscar por nome, código ou categoria"
-        />
-      </div>
+  <div class="card-header pt-7">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bold text-gray-900">Relatório de Estoque</span>
+      <span class="text-gray-500 mt-1 fw-semibold fs-6">
+        Total de {{ filteredProducts.length }} produtos listados
+      </span>
+    </h3>
+
+    <!-- Filtro por Status (agora com "Excesso") -->
+    <div class="d-flex align-items-center position-relative my-1 ms-8">
+      <select
+        class="form-select form-select-solid form-select-lg"
+        [(ngModel)]="selectedStatus"
+        (change)="applyFilter()"
+      >
+        <option value="">Todos</option>
+        <option value="disponivel">Disponível</option>
+        <option value="baixo">Estoque Baixo</option>
+        <option value="sem">Sem Estoque</option>
+        <option value="excesso">Estoque em Excesso</option>
+      </select>
     </div>
-  
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table align-middle table-row-dashed fs-6 gy-3">
-          <thead>
-            <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
-              <th>Produto</th>
-              <th class="text-end">Marca</th>
-              <th class="text-end">Status</th>
-              <th class="text-end">Ean</th>
-              <th class="text-end">QT. CX</th>
-              <th class="text-end" (click)="changeSort('saldo_estoque')" style="cursor: pointer">
-                Estoque
-                <i *ngIf="sortField === 'saldo_estoque'" class="ms-1" 
-                   [ngClass]="{
-                     'bi bi-arrow-up': sortDirection === 'asc',
-                     'bi bi-arrow-down': sortDirection === 'desc'
-                   }"></i>
-              </th>
-              
-            </tr>
-          </thead>
-          <tbody class="fw-bold text-gray-600">
-            <ng-container *ngFor="let produto of paginatedProducts">
-              <tr >
-                <td>
-                  <div class="d-flex align-items-center">
-                    <div class="symbol symbol-50px overflow-hidden me-3">
-                      <a href="javascript:;">
-                        <div
+
+    <!-- Filtro por Fornecedor -->
+    <div class="d-flex align-items-center position-relative my-1 ms-8">
+      <select
+        class="form-select form-select-solid form-select-lg"
+        [(ngModel)]="selectedSupplier"
+        (change)="applyFilter()"
+      >
+        <option value="">Fornecedor</option>
+        <option value="1">Black Fix</option>
+        <option value="2">Green</option>
+        <option value="3">H2O</option>
+        <option value="4">Vidal</option>
+        <option value="6">Viceroy</option>
+        <option value="7">Pureli</option>
+      </select>
+    </div>
+
+    <!-- Busca -->
+    <div class="card-toolbar">
+      <input
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+        type="text"
+        class="form-control form-control-sm"
+        placeholder="Buscar por nome, código ou categoria"
+      />
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table align-middle table-row-dashed fs-6 gy-3">
+        <thead>
+          <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+            <th>Produto</th>
+            <th class="text-end">Marca</th>
+            <th class="text-end">Status</th>
+            <th class="text-end">Ean</th>
+            <th class="text-end">QT. CX</th>
+            <th
+              class="text-end"
+              (click)="changeSort('saldo_estoque')"
+              style="cursor: pointer"
+            >
+              Estoque
+              <i
+                *ngIf="sortField === 'saldo_estoque'"
+                class="ms-1"
+                [ngClass]="{
+                  'bi bi-arrow-up': sortDirection === 'asc',
+                  'bi bi-arrow-down': sortDirection === 'desc'
+                }"
+              ></i>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="fw-bold text-gray-600">
+          <ng-container *ngFor="let produto of paginatedProducts">
+            <tr>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="symbol symbol-50px overflow-hidden me-3">
+                    <a href="javascript:;">
+                      <div
                         class="symbol symbol-50px"
                         [ngStyle]="{
                           'background-image': produto.fotoUrl
@@ -84,267 +98,275 @@
                           'width': '50px',
                           'height': '50px'
                         }"
-                        ></div>
-                      </a>
-                    </div>
-                    <div class="d-flex flex-column">
-                      <a
+                      ></div>
+                    </a>
+                  </div>
+                  <div class="d-flex flex-column">
+                    <a
                       routerLink="/commerce/products/{{ produto.produto_id }}"
                       class="text-gray-800 text-hover-primary mb-1"
-                      >
-                        {{ produto.nome }}
-                      </a>
-                      <span>{{ produto.codigo }}</span>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-end">{{ produto.fornecedor?.nome }}</td>
-                <td class="text-end">
-                  <span
-                    class="badge py-3 px-4 fs-9"
-                    [ngClass]="{
-                      'badge-light-danger': produto.saldo_estoque <= 0,
-                      'badge-light-warning': produto.saldo_estoque > 0 && produto.saldo_estoque < produto.estoque_minimo,
-                      'badge-light-primary': produto.saldo_estoque >= produto.estoque_minimo
-                    }"                  
-                    [title]="'Estoque mínimo: ' + produto.estoque_minimo"
-                  >
-                    {{ produto.saldo_estoque <= 0
-                      ? 'Sem estoque'
-                      : produto.saldo_estoque < produto.estoque_minimo
-                      ? 'Estoque baixo'
-                      : 'Disponível'
-                    }}                
-                  </span>
-                </td> 
-                <td class="text-end">{{ produto.ean }}</td>             
-                <td class="text-end text-gray-900 fw-bold">
-                  {{ produto.estoque_em_caixas }}
-                </td>
-                <td class="text-end text-gray-900 fw-bold">
-                  <div>
-                    {{ produto.saldo_estoque }}
-                    <span
-                      *ngIf="produto.diasRestantes != null"
-                      class="ms-2 fs-8 fw-semibold"
-                      [ngClass]="{
-                        'text-danger': produto.diasRestantes! <= 7,
-                        'text-warning': produto.diasRestantes! > 7 && produto.diasRestantes! <= 20,
-                        'text-success': produto.diasRestantes! > 20
-                      }"
-                      title="Estimativa de duração do estoque"
                     >
-                      · {{ produto.diasRestantes }} dia(s)
-                    </span>
+                      {{ produto.nome }}
+                    </a>
+                    <span>{{ produto.codigo }}</span>
                   </div>
-                
-                  <div *ngIf="produto.mediaDiaria != null" class="mt-1 text-muted fs-8">
-                    {{ produto.mediaDiaria }} und/dia
-                  </div>
-                </td>
-                
-                
-                <td>
-                  <button class="btn btn-sm btn-icon btn-light toggle"
-                    (click)="toggleExpand(produto.produto_id)">
-                    <i *ngIf="!isExpanded(produto.produto_id)" class="fas fa-plus fs-4 m-0"></i>
-                    <i *ngIf="isExpanded(produto.produto_id)" class="fas fa-minus fs-4 m-0"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr *ngIf="isExpanded(produto.produto_id)">
-                <td colspan="100%" class="p-0 border-0 bg-light">
-                  <div class="p-3">
-                    <div *ngIf="loadingSaidas[produto.produto_id]; else conteudoSaidas">
-                      <span class="text-muted">Carregando saídas...</span>
-                    </div>
-                    <ng-template #conteudoSaidas>
-                      <div *ngIf="produto.saidas?.length; else semSaidas">
-                        <div class="row">
-                          <div class="col-md-4 border-end border-3">
-                            <table class="table table-bordered table-sm mb-0">
-                              <thead>
-                                <tr>
-                                  <th>
-                                    <i class="bi bi-calendar-event me-1 text-primary"></i>
-                                    Data
-                                  </th>
-                                  <th>Qtd</th>
-                                  <th>Detalhes</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let s of splitSaidas(produto.saidas || [])[0]">
-                                  <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
-                                  <td>{{ s.quantidade }}</td>
-                                  <td>{{ s.observacao }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div class="col-md-4 border-end border-3">
-                            <table class="table table-bordered table-sm mb-0">
-                              <thead>
-                                <tr>
-                                  <th>
-                                    <i class="bi bi-calendar-event me-1 text-primary"></i>
-                                    Data
-                                  </th>
-                                  <th>Qtd</th>
-                                  <th>Detalhes</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let s of splitSaidas(produto.saidas || [])[1]">
-                                  <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
-                                  <td>{{ s.quantidade }}</td>
-                                  <td>{{ s.observacao }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                          <div class="col-md-4">
-                            <table class="table table-bordered table-sm mb-0">
-                              <thead>
-                                <tr>
-                                  <th>
-                                    <i class="bi bi-calendar-event me-1 text-primary"></i>
-                                    Data
-                                  </th>
-                                  <th>Qtd</th>
-                                  <th>Detalhes</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr *ngFor="let s of splitSaidas(produto.saidas || [])[2]">
-                                  <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
-                                  <td>{{ s.quantidade }}</td>
-                                  <td>{{ s.observacao }}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>                    
-                        
-                      </div>
-                      <ng-template #semSaidas>
-                        <span class="text-muted">Nenhuma saída registrada para este produto.</span>
-                      </ng-template>
-                    </ng-template>
-                  </div>
-                </td>
-              </tr>              
-            </ng-container>
-          </tbody>
-        </table>
-      </div>
-      <!-- Estrutura de Paginação -->
-        <div class="row mt-5">
-            <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
-              <div class="fs-6 fw-bold text-gray-700">
-                  Mostrando {{ startItem }} - {{ endItem }} de {{ filteredProducts.length }} Produtos.
-              </div>
-            </div>
-            <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
-              <ul class="pagination">
-                  <!-- Primeira Página -->
-                  <li class="page-item" [class.disabled]="currentPage === 1">
-                    <button class="page-link" (click)="goToFirstPage()">‹‹</button>
-                  </li>
-          
-                  <!-- Anterior -->
-                  <li class="page-item" [class.disabled]="currentPage === 1">
-                    <button class="page-link" (click)="previousPage()">‹</button>
-                  </li>
-          
-                  <!-- Números das Páginas -->
-                  <li
-                    class="page-item"
-                    *ngFor="let page of displayedPages"
-                    [class.active]="currentPage === page"
+                </div>
+              </td>
+
+              <td class="text-end">{{ produto.fornecedor?.nome }}</td>
+
+              <!-- Badge de Status baseado em dias -->
+              <td class="text-end">
+                <span
+                  class="badge py-3 px-4 fs-9"
+                  [ngClass]="{
+                    'badge-light-danger': produto.statusPorDias === 'sem',
+                    'badge-light-warning': produto.statusPorDias === 'baixo',
+                    'badge-light-primary': produto.statusPorDias === 'disponivel',
+                    'badge-light-info': produto.statusPorDias === 'excesso'
+                  }"
+                  [title]="
+                    'Mínimo (dias): ' + produto.estoque_minimo +
+                    (produto.diasRestantes != null ? ' | Dias restantes: ' + produto.diasRestantes : '')
+                  "
+                >
+                  {{
+                    produto.statusPorDias === 'sem'
+                      ? 'Sem estoque'
+                      : produto.statusPorDias === 'baixo'
+                      ? 'Estoque baixo'
+                      : produto.statusPorDias === 'excesso'
+                      ? 'Estoque em excesso'
+                      : 'Disponível'
+                  }}
+                </span>
+              </td>
+
+              <td class="text-end">{{ produto.ean }}</td>
+
+              <td class="text-end text-gray-900 fw-bold">
+                {{ produto.estoque_em_caixas }}
+              </td>
+
+              <!-- Coluna Estoque + indicadores de dias (mantidos) -->
+              <td class="text-end text-gray-900 fw-bold">
+                <div>
+                  {{ produto.saldo_estoque }}
+                  <span
+                    *ngIf="produto.diasRestantes != null"
+                    class="ms-2 fs-8 fw-semibold"
+                    [ngClass]="{
+                      'text-danger': produto.diasRestantes! <= 7,
+                      'text-warning': produto.diasRestantes! > 7 && produto.diasRestantes! <= 20,
+                      'text-success': produto.diasRestantes! > 20
+                    }"
+                    title="Estimativa de duração do estoque"
                   >
-                    <button class="page-link" (click)="goToPage(page)">{{ page }}</button>
-                  </li>
-          
-                  <!-- Próxima -->
-                  <li class="page-item" [class.disabled]="currentPage === totalPages || totalPages === 0">
-                    <button class="page-link" (click)="nextPage()">›</button>
-                  </li>
-          
-                  <!-- Última Página -->
-                  <li class="page-item" [class.disabled]="currentPage === totalPages || totalPages === 0">
-                    <button class="page-link" (click)="goToLastPage()">››</button>
-                  </li>
-            </ul>
-          </div>
+                    · {{ produto.diasRestantes }} dia(s)
+                  </span>
+                </div>
+
+                <div *ngIf="produto.mediaDiaria != null" class="mt-1 text-muted fs-8">
+                  {{ produto.mediaDiaria }} und/dia
+                </div>
+              </td>
+
+              <td>
+                <button
+                  class="btn btn-sm btn-icon btn-light toggle"
+                  (click)="toggleExpand(produto.produto_id)"
+                >
+                  <i
+                    *ngIf="!isExpanded(produto.produto_id)"
+                    class="fas fa-plus fs-4 m-0"
+                  ></i>
+                  <i
+                    *ngIf="isExpanded(produto.produto_id)"
+                    class="fas fa-minus fs-4 m-0"
+                  ></i>
+                </button>
+              </td>
+            </tr>
+
+            <!-- Linha expandida com saídas -->
+            <tr *ngIf="isExpanded(produto.produto_id)">
+              <td colspan="100%" class="p-0 border-0 bg-light">
+                <div class="p-3">
+                  <div *ngIf="loadingSaidas[produto.produto_id]; else conteudoSaidas">
+                    <span class="text-muted">Carregando saídas...</span>
+                  </div>
+                  <ng-template #conteudoSaidas>
+                    <div *ngIf="produto.saidas?.length; else semSaidas">
+                      <div class="row">
+                        <div class="col-md-4 border-end border-3">
+                          <table class="table table-bordered table-sm mb-0">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <i class="bi bi-calendar-event me-1 text-primary"></i>
+                                  Data
+                                </th>
+                                <th>Qtd</th>
+                                <th>Detalhes</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let s of splitSaidas(produto.saidas || [])[0]">
+                                <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
+                                <td>{{ s.quantidade }}</td>
+                                <td>{{ s.observacao }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="col-md-4 border-end border-3">
+                          <table class="table table-bordered table-sm mb-0">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <i class="bi bi-calendar-event me-1 text-primary"></i>
+                                  Data
+                                </th>
+                                <th>Qtd</th>
+                                <th>Detalhes</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let s of splitSaidas(produto.saidas || [])[1]">
+                                <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
+                                <td>{{ s.quantidade }}</td>
+                                <td>{{ s.observacao }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="col-md-4">
+                          <table class="table table-bordered table-sm mb-0">
+                            <thead>
+                              <tr>
+                                <th>
+                                  <i class="bi bi-calendar-event me-1 text-primary"></i>
+                                  Data
+                                </th>
+                                <th>Qtd</th>
+                                <th>Detalhes</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let s of splitSaidas(produto.saidas || [])[2]">
+                                <td>{{ s.data_saida | date:'dd/MM/yyyy HH:mm' }}</td>
+                                <td>{{ s.quantidade }}</td>
+                                <td>{{ s.observacao }}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <ng-template #semSaidas>
+                      <span class="text-muted">Nenhuma saída registrada para este produto.</span>
+                    </ng-template>
+                  </ng-template>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginação -->
+    <div class="row mt-5">
+      <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start">
+        <div class="fs-6 fw-bold text-gray-700">
+          Mostrando {{ startItem }} - {{ endItem }} de {{ filteredProducts.length }} Produtos.
+        </div>
       </div>
-      <div 
-        class="d-flex justify-content-center align-items-center flex-wrap"
-        style="min-height: 200px;"
-      >
-        <div class="me-5"> <!-- me-5: um espaçamento entre os 2 cards -->
-          <div class="card card-flush h-md-50">
-            <div class="card-header pt-5">
-              <div class="card-title d-flex flex-column">
-                <div class="d-flex align-items-center">
-                  <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
-                  <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
-                    {{ valorCusto | number:'1.2-2' }}
-                  </span>
-                </div>
-                <span class="text-gray-500 pt-1 fw-semibold fs-6">
-                  Valor Custo
+      <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" (click)="goToFirstPage()">‹‹</button>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" (click)="previousPage()">‹</button>
+          </li>
+          <li
+            class="page-item"
+            *ngFor="let page of displayedPages"
+            [class.active]="currentPage === page"
+          >
+            <button class="page-link" (click)="goToPage(page)">{{ page }}</button>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages || totalPages === 0">
+            <button class="page-link" (click)="nextPage()">›</button>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages || totalPages === 0">
+            <button class="page-link" (click)="goToLastPage()">››</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Cards de totais -->
+    <div
+      class="d-flex justify-content-center align-items-center flex-wrap"
+      style="min-height: 200px;"
+    >
+      <div class="me-5">
+        <div class="card card-flush h-md-50">
+          <div class="card-header pt-5">
+            <div class="card-title d-flex flex-column">
+              <div class="d-flex align-items-center">
+                <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
+                <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
+                  {{ valorCusto | number:'1.2-2' }}
                 </span>
               </div>
-            </div>
-            <!-- Se quiser um "card-body" com gráfico ou algo -->
-            <div class="card-body pt-2 pb-4 d-flex align-items-center">
-              <!-- Conteúdo opcional -->
+              <span class="text-gray-500 pt-1 fw-semibold fs-6">
+                Valor Custo
+              </span>
             </div>
           </div>
+          <div class="card-body pt-2 pb-4 d-flex align-items-center"></div>
         </div>
-        <div>
-          <div class="card card-flush h-md-50">
-            <div class="card-header pt-5">
-              <div class="card-title d-flex flex-column">
-                <div class="d-flex align-items-center">
-                  <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
-                  <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
-                    {{ valorVenda | number:'1.2-2' }}
-                  </span>
-                </div>
-                <span class="text-gray-500 pt-1 fw-semibold fs-6">
-                  Valor Venda
+      </div>
+
+      <div>
+        <div class="card card-flush h-md-50">
+          <div class="card-header pt-5">
+            <div class="card-title d-flex flex-column">
+              <div class="d-flex align-items-center">
+                <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
+                <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
+                  {{ valorVenda | number:'1.2-2' }}
                 </span>
               </div>
-            </div>
-            <!-- Se quiser um "card-body" também -->
-            <div class="card-body pt-2 pb-4 d-flex align-items-center">
-              <!-- Conteúdo opcional -->
+              <span class="text-gray-500 pt-1 fw-semibold fs-6">
+                Valor Venda
+              </span>
             </div>
           </div>
+          <div class="card-body pt-2 pb-4 d-flex align-items-center"></div>
         </div>
-        <div>
-          <div class="card card-flush h-md-50">
-            <div class="card-header pt-5">
-              <div class="card-title d-flex flex-column">
-                <div class="d-flex align-items-center">
-                  <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
-                    {{ percentualFaturamento | number:'1.2-2' }}%
-                  </span>
-                </div>
-                <span class="text-gray-500 pt-1 fw-semibold fs-6">
-                  Sobre 60 dias
+      </div>
+
+      <div>
+        <div class="card card-flush h-md-50">
+          <div class="card-header pt-5">
+            <div class="card-title d-flex flex-column">
+              <div class="d-flex align-items-center">
+                <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
+                  {{ percentualFaturamento | number:'1.2-2' }}%
                 </span>
               </div>
-            </div>
-            <!-- Se quiser um "card-body" também -->
-            <div class="card-body pt-2 pb-4 d-flex align-items-center">
-              <!-- Conteúdo opcional -->
+              <span class="text-gray-500 pt-1 fw-semibold fs-6">
+                Sobre 60 dias
+              </span>
             </div>
           </div>
+          <div class="card-body pt-2 pb-4 d-flex align-items-center"></div>
         </div>
       </div>
     </div>
   </div>
-  
+</div>

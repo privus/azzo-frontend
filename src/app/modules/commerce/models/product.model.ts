@@ -23,15 +23,18 @@ export interface Produto {
   estoque_liquido?: number;
   qt_uni?: number;
   unidade: Produto;
-  estoque_em_caixas?: string;
-  estoque_minimo: number;
+  estoque_minimo: number; // em dias
   altura?: number;
   largura?: number;
   comprimento?: number;
   peso?: number;
   saidas?: StockById[];
+
+  // campos calculados pelo StockComponent:
+  estoque_em_caixas?: string;
   diasRestantes?: number | null;
   mediaDiaria?: number | null;
+  statusPorDias?: 'disponivel' | 'baixo' | 'sem' | 'excesso';
 }
 
 export interface CategoriaProduto {

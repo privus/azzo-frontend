@@ -63,6 +63,7 @@ export class StockComponent implements OnInit {
       const match = durationMap.get(prod.produto_id);
       const diasRestantes = match?.diasRestantes ?? null;
       const mediaDiaria = match?.mediaDiaria ?? null;
+      const status = this.statusPorDias(diasRestantes, prod.estoque_minimo);
 
       const eanNum = +prod.ean;
       const grupo = produtosPorEan.get(eanNum) || [];
@@ -85,6 +86,7 @@ export class StockComponent implements OnInit {
         estoque_em_caixas,
         diasRestantes,
         mediaDiaria,
+        statusPorDias: status,
       };
     });
 
@@ -123,21 +125,23 @@ export class StockComponent implements OnInit {
         product.ean.toLowerCase().includes(term) ||
         product.codigo.toLowerCase().includes(term);
 
-      const estoque = product.saldo_estoque;
-      const estoqueMinimo = product.estoque_minimo;
-
       let matchStatus = true;
 
       switch (this.selectedStatus) {
         case 'disponivel':
-          matchStatus = estoque >= estoqueMinimo;
+          matchStatus = product.statusPorDias === 'disponivel';
           break;
         case 'baixo':
-          matchStatus = estoque < estoqueMinimo;
+          matchStatus = product.statusPorDias === 'baixo';
           break;
         case 'sem':
-          matchStatus = estoque <= 0;
+          matchStatus = product.statusPorDias === 'sem';
           break;
+        case 'excesso':
+          matchStatus = product.statusPorDias === 'excesso';
+          break;
+        default:
+          matchStatus = true;
       }
 
       const matchSupplier = !this.selectedSupplier || (product.fornecedor && product.fornecedor.fornecedor_id === +this.selectedSupplier);
@@ -258,5 +262,14 @@ export class StockComponent implements OnInit {
     const total = saidas?.length || 0;
     const size = Math.ceil(total / 3);
     return [saidas?.slice(0, size) || [], saidas?.slice(size, 2 * size) || [], saidas?.slice(2 * size) || []];
+  }
+
+  private statusPorDias(diasRestantes: number | null, estoqueMinimoDias: number): 'disponivel' | 'baixo' | 'sem' | 'excesso' {
+    if (diasRestantes == null) return 'sem'; // fallback
+
+    if (diasRestantes <= 0) return 'sem';
+    if (diasRestantes < estoqueMinimoDias) return 'baixo';
+    if (diasRestantes >= estoqueMinimoDias * 2) return 'excesso';
+    return 'disponivel';
   }
 }
