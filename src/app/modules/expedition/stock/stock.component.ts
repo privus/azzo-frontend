@@ -18,6 +18,7 @@ export class StockComponent implements OnInit {
   stockOverview: StockOverview;
   valorVenda: number = 0;
   valorCusto: number = 0;
+  percentualFaturamento: number = 0;
 
   currentPage: number = 1;
   itemsPerPage: number = 50;
@@ -45,7 +46,7 @@ export class StockComponent implements OnInit {
     this.stockDuration = this.stockOverview.stockDuration;
     this.valorVenda = this.stockOverview.stockValue.valor_venda;
     this.valorCusto = this.stockOverview.stockValue.valor_custo;
-
+    this.percentualFaturamento = this.stockOverview.stockValue.percentual_faturamento;
     const produtosPorEan = new Map<number, Produto[]>();
     for (const prod of this.products) {
       if (!prod.ean) continue;

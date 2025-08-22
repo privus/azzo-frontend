@@ -25,6 +25,7 @@ export interface StockDuration {
 export interface StockValue {
   valor_custo: number;
   valor_venda: number;
+  percentual_faturamento: number;
 }
 
 export interface StockOverview {
