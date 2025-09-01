@@ -71,17 +71,6 @@
             </span>
           </a>
         </div>
-        <div *ngIf="isRoleOrCompany('Administrador', 4)"  class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active" routerLink="/commerce/orders-person">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title d-flex align-items-center">
-              Pedidos
-              <img src="./assets/media/logos/personizi.svg" class="ms-2" width="16" height="16" alt="Logo Personizi" style="vertical-align: middle;" />
-            </span>
-          </a>
-        </div>
       </div>
       <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
         <div class="menu-item">
@@ -153,6 +142,14 @@
               <span class="bullet bullet-dot"></span>
             </span>
             <span class="menu-title">Positivação</span>
+          </a>
+        </div>
+        <div class="menu-item">
+          <a class="menu-link without-sub" routerLink="/sellers/weekly-bonus" routerLinkActive="active">
+            <span class="menu-bullet">
+              <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title">Bônus Semanal</span>
           </a>
         </div>
       </div>

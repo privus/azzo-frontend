@@ -1,0 +1,31 @@
+<div class="card-body pt-6">
+    <div class="table-responsive">
+      <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
+        <thead>
+          <tr class="fs-7 fw-bold text-gray-500 border-bottom-0">
+            <th class="p-0 pb-3 text-start">Vendedor</th>
+            <th class="p-0 pb-3 text-end">Bônus</th>
+            <th class="p-0 pb-3 text-end">Pedidos</th>
+            <th class="p-0 pb-3 text-end">Clientes Novos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let seller of sellers">
+            <td class="text-start">
+              <span class="text-gray-800 fw-bold">{{ seller.name }}</span>
+            </td>
+            <td class="text-end">
+              <span class="text-gray-700">{{ seller.valor_total | currency:'BRL' }}</span>
+            </td>
+            <td class="text-end">
+              <span class="text-gray-700">{{ seller.pedidos }}</span>
+            </td>
+            <td class="text-end">
+              <span class="text-gray-700">{{ seller.clientes_novos }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

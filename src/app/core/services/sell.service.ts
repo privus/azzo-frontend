@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ItensVenda, Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
+import { Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { BrandSales, Commissions, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
@@ -128,5 +128,9 @@ export class SellService {
   getAssemblyProgress(codigos: number[]) {
     const q = codigos.join(',');
     return this.http.get<AssemblyResponse[]>(`${this.baseUrl}assembly/progress?orders=${q}`);
+  }
+
+  getWeeklyBonus(fromDate: string, toDate: string) {
+    return this.http.get<any>(`${this.baseUrl}sells/weeklyBonus?fromDate=${fromDate}&toDate=${toDate}`);
   }
 }

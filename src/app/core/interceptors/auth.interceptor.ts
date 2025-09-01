@@ -23,9 +23,6 @@ export class AuthInterceptor implements HttpInterceptor {
     if (!isFormData && !headers.has('Content-Type') && req.method !== 'GET') {
       headers = headers.set('Content-Type', 'application/json');
     }
-
-    // Clona a request com os headers ajustados.
-    // Importante: para FormData NÃO setamos Content-Type; o browser define "multipart/form-data; boundary=..."
     const authReq = req.clone({ headers });
 
     return next.handle(authReq);
