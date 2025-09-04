@@ -1,31 +1,34 @@
-<div class="card-body pt-6">
+<div class="card">
+  <!--begin::Body-->
+  <div class="card-body p-0">
     <div class="table-responsive">
-      <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
-        <thead>
-          <tr class="fs-7 fw-bold text-gray-500 border-bottom-0">
-            <th class="p-0 pb-3 text-start">Vendedor</th>
-            <th class="p-0 pb-3 text-end">Bônus</th>
-            <th class="p-0 pb-3 text-end">Pedidos</th>
-            <th class="p-0 pb-3 text-end">Clientes Novos</th>
+      <table class="table align-middle table-row-bordered table-row-solid gy-4 gs-6">
+        <thead class="border-gray-200 fs-6 fw-semibold bg-lighten text-uppercase">
+          <tr>
+            <th class="min-w-200px ps-9">Vendedor</th>
+            <th class="min-w-100px text-end">Pedidos</th>
+            <th class="min-w-130px text-end">Clientes Novos</th>
+            <th class="min-w-150px text-end">Bônus</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="fs-6 fw-semibold text-gray-600">
           <tr *ngFor="let seller of sellers">
-            <td class="text-start">
-              <span class="text-gray-800 fw-bold">{{ seller.name }}</span>
-            </td>
-            <td class="text-end">
-              <span class="text-gray-700">{{ seller.valor_total | currency:'BRL' }}</span>
-            </td>
-            <td class="text-end">
-              <span class="text-gray-700">{{ seller.pedidos }}</span>
-            </td>
-            <td class="text-end">
-              <span class="text-gray-700">{{ seller.clientes_novos }}</span>
+            <td class="ps-9 text-gray-900 fw-bold">{{ seller.name }}</td>
+            <td class="text-end">{{ seller.pedidos }}</td>
+            <td class="text-end">{{ seller.clientes_novos }}</td>
+            <td
+              class="text-end"
+              [ngClass]="{
+                'text-success': seller.valor_total >= 0,
+                'text-danger': seller.valor_total < 0
+              }"
+            >
+              {{ seller.valor_total | currency:'BRL' }}
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-  
+  <!--end::Body-->
+</div>

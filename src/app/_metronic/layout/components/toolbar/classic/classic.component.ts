@@ -159,6 +159,11 @@ export class ClassicComponent implements OnInit, OnDestroy {
     if (fullPath.includes('expedition/stock')) {
       this.openImportXmlModal();
     }
+    if (fullPath.includes('sellers/weekly-bonus')) {
+      const componentInstance = (window as any)['ng'].getComponent(document.querySelector('app-weekly-bonus'));
+      componentInstance?.downloadExcel();
+      return;
+    }
   }
 
   isDisabledPrimary(): boolean {
@@ -173,6 +178,9 @@ export class ClassicComponent implements OnInit, OnDestroy {
 
     if (fullPath.includes('expedition/stock')) {
       return 'Importar Xml';
+    }
+    if (fullPath.includes('sellers/weekly-bonus')) {
+      return 'Download Excel';
     }
     return 'Criar';
   }
