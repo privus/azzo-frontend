@@ -2,10 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PositivityComponent } from './positivity/positivity.component';
 import { CommissionsComponent } from './commission/commission.component';
-import { BrandSalesResolver } from './brand-sales.resolver';
-import { CommissionsResolver } from './commissions.resolver';
-import { PositivityResolver } from './positivity.resolver';
-import { PositivityAzzoResolver } from './positivity-azzo.resolver';
+import { BrandSalesResolver, CommissionsResolver, PositivityResolver, PositivityAzzoResolver, WeeklyBonusResolver } from './';
+import { WeeklyBonusComponent } from './weekly-bonus/weekly-bonus.component';
 
 const routes: Routes = [
   {
@@ -22,6 +20,13 @@ const routes: Routes = [
     component: CommissionsComponent,
     resolve: {
       commissions: CommissionsResolver,
+    },
+  },
+  {
+    path: 'weekly-bonus',
+    component: WeeklyBonusComponent,
+    resolve: {
+      bonus: WeeklyBonusResolver,
     },
   },
 ];

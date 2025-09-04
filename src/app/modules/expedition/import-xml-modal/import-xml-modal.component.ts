@@ -57,14 +57,12 @@ export class ImportXmlModalComponent implements OnInit {
 
   uploadXml(): void {
     if (this.uploadedFiles.length === 0 || !this.selectedFornecedorId) return;
-  
+
     const formData = new FormData();
     formData.append('file', this.uploadedFiles[0]);
-  
+
     this.loading = true;
-  
-    // 🚀 O interceptor já vai adicionar Authorization: Bearer <token>
-    // e não vai setar Content-Type (o browser define automaticamente).
+
     this.http.post(`${this.baseUrl}stock/upload/${this.selectedFornecedorId}`, formData).subscribe({
       next: (res: any) => {
         this.result = res;
@@ -83,7 +81,7 @@ export class ImportXmlModalComponent implements OnInit {
       },
     });
   }
-  
+
   close(): void {
     this.closed.emit();
   }

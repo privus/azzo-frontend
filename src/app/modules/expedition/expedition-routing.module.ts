@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { StockProjectionComponent } from './stock-projection/stock-projection.component';
-import { StockProjectionResolver } from './stock-projection.resolver';
+import { StockProjectionResolver, RomaneioResolver, StockOverviewResolver, OrdersResolver } from './';
 import { RomaneioComponent } from './romaneio/romaneio.component';
-import { RomaneioResolver } from './romaneio.resolver';
 import { StockComponent } from './stock/stock.component';
 import { ProductResolver } from '../commerce/product.resolver';
 import { OrderAssemblyComponent } from './order-assembly/order-assembly.component';
 import { AssemblyShellComponent } from './assembly-shell.component/assembly-shell.component';
-import { OrdersResolver } from './orders.resolver';
-import { StockOverviewResolver } from './stock-overview.resolver';
 
 const routes: Routes = [
   {

@@ -26,4 +26,8 @@ export class SellersService {
     const to = toDate ? `&toDate=${toDate}` : '';
     return this.sellService.getPositivityAzzo(fromDate, to);
   }
+
+  getWeeklyBonus(fromDate: string, toDate: string) {
+    return this.sellService.getWeeklyBonus(fromDate, toDate);
+  }
 }
