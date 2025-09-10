@@ -167,10 +167,27 @@ export class ClassicComponent implements OnInit, OnDestroy {
   }
 
   isDisabledPrimary(): boolean {
-    return this.currentRoute === 'commerce' || this.currentRoute === 'sellers';
+    const fullPath = this.router.url;
+
+    // Sempre desabilita em qualquer rota sellers/*
+    if (fullPath.startsWith('/sellers')) {
+      return true;
+    }
+
+    // Também desabilita em commerce/*
+    return fullPath.startsWith('/commerce');
   }
+
   isDisabledSecondary(): boolean {
-    return this.currentRoute === 'commerce' || this.currentRoute === 'sellers' || this.currentRoute === 'expedition';
+    const fullPath = this.router.url;
+
+    // Sellers -> desabilita sempre, exceto /sellers/weekly-bonus
+    if (fullPath.startsWith('/sellers')) {
+      return !fullPath.startsWith('/sellers/weekly-bonus');
+    }
+
+    // Commerce e Expedition -> desabilita
+    return fullPath.startsWith('/commerce') || fullPath.startsWith('/expedition');
   }
 
   getPrimaryButtonLabel(): string {

@@ -46,6 +46,7 @@ export class OrderListingComponent implements OnInit {
   sortField: string = '';
   selectedSeller: string = '';
   selectedSegment: string = '';
+  selectedType: string = '';
   cargo: string = '';
   emMontagem: number = 0;
 
@@ -160,6 +161,10 @@ export class OrderListingComponent implements OnInit {
 
     if (this.selectedSegment) {
       result = result.filter((order) => order.cliente.segmento_id === +this.selectedSegment);
+    }
+
+    if (this.selectedType) {
+      result = result.filter((order) => order.tipo_pedido.tipo_pedido_id === +this.selectedType);
     }
 
     // 4) Atualiza filteredOrders e a paginação

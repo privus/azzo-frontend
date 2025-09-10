@@ -156,6 +156,20 @@
                     <option value="19">Sergio F.</option>
                 </select>
             </div>
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select
+                    class="form-select form-select-solid form-select-lg"
+                    [(ngModel)]="selectedType"
+                    (change)="applyFilter()"
+                >
+                    <option value="">Tipo</option>
+                    <option value="10438">Venda</option>
+                    <option value="10439">Troca</option>
+                    <option value="10440">Brinde</option>
+                    <option value="10441">Bonificação</option>
+                    <option value="10442">Doação</option>
+                </select>
+            </div>
             <div class="d-flex align-items-center position-relative my-1 ms-15">
                 <button
                     class="btn btn-icon btn-lg h-auto btn-color-gray-500 btn-active-color-primary justify-content-end"
