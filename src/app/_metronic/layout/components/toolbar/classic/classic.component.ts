@@ -187,7 +187,7 @@ export class ClassicComponent implements OnInit, OnDestroy {
     }
 
     // Commerce e Expedition -> desabilita
-    return fullPath.startsWith('/commerce') || fullPath.startsWith('/expedition');
+    return fullPath.startsWith('/commerce');
   }
 
   getPrimaryButtonLabel(): string {
