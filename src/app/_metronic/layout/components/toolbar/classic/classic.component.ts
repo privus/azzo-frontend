@@ -170,7 +170,7 @@ export class ClassicComponent implements OnInit, OnDestroy {
     const fullPath = this.router.url;
 
     // Sempre desabilita em qualquer rota sellers/*
-    if (fullPath.startsWith('/sellers')) {
+    if (!fullPath.includes('weekly-bonus')) {
       return true;
     }
 
