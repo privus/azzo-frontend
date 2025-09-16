@@ -169,10 +169,6 @@ export class ClassicComponent implements OnInit, OnDestroy {
   isDisabledPrimary(): boolean {
     const fullPath = this.router.url;
 
-    // Sempre desabilita em qualquer rota sellers/*
-    if (!fullPath.includes('weekly-bonus')) {
-      return true;
-    }
 
     // Também desabilita em commerce/*
     return fullPath.startsWith('/commerce');
