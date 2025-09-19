@@ -133,4 +133,8 @@ export class SellService {
   getWeeklyBonus(fromDate: string, toDate: string) {
     return this.http.get<any>(`${this.baseUrl}sells/weeklyBonus?fromDate=${fromDate}&toDate=${toDate}`);
   }
+
+  exportBling(id: number) {
+    return this.http.get<{ message: string }>(`${this.baseUrl}sells/exportBling/${id}`);
+  }
 }

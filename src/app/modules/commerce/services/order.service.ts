@@ -103,4 +103,8 @@ export class OrderService {
   getAssemblyProgress(codigos: number[]) {
     return this.sellService.getAssemblyProgress(codigos);
   }
+
+  exportBling(id: number) {
+    return this.sellService.exportBling(id);
+  }
 }

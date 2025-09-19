@@ -961,4 +961,38 @@ export class OrderListingComponent implements OnInit {
       }
     });
   }
+
+  exportBling(id: number) {
+    Swal.fire({
+      title: 'Confirmação',
+      text: 'Deseja exportar para o Bling?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, Exportar!',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Se o usuário confirmar, faz a exportação
+        this.orderService.exportBling(id).subscribe({
+          next: (resp) => {
+            Swal.fire({
+              icon: 'success',
+              title: `Exportação concluída com sucesso!`,
+              text: resp.message,
+              confirmButtonText: 'Ok',
+            });
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: `Erro na exportação!`,
+              text: 'Não foi possível exportar o pedido. ' + err.error.message,
+              confirmButtonText: 'Ok',
+            });
+            console.error('Erro ao exportar para Tiny:', err);
+          },
+        });
+      }
+    });
+  }
 }
