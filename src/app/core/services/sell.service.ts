@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { BrandSales, Commissions, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
+import { BrandSales, Commissions, Goals, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
 import { SalesComparisonReport } from 'src/app/pages/models/performance-sales.modal';
 import { PGenerateCredit } from 'src/app/modules/financial/models';
 import { AssemblyDto, AssemblyResponse } from 'src/app/modules/expedition/models';
@@ -136,5 +136,9 @@ export class SellService {
 
   exportBling(id: number) {
     return this.http.get<{ message: string }>(`${this.baseUrl}sells/exportBling/${id}`);
+  }
+
+  saveGoals(goals: Goals[]) {
+    return this.http.post<{ message: string }>(`${this.baseUrl}sellers/goals`, goals);
   }
 }

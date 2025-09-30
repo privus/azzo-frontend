@@ -9,6 +9,7 @@ import { RomaneioCreateModalComponent } from '../../../../../modules/expedition/
 import { ImportXmlModalComponent } from '../../../../../modules/expedition/import-xml-modal/import-xml-modal.component';
 import { StockOutModalComponent } from '../../../../../modules/expedition/stock-out-modal/stock-out-modal.component';
 import { AccountService } from '../../../../../modules/account/services/account.service';
+import { GoalsModalComponent } from 'src/app/modules/sellers/goals-modal/goals-modal.component';
 
 @Component({
   selector: 'app-classic',
@@ -112,9 +113,27 @@ export class ClassicComponent implements OnInit, OnDestroy {
     });
 
     this.modalReference.result.catch(() => {
-      // Modal cancelado
       document.querySelector('app-layout')?.removeAttribute('inert');
     });
+  }
+
+  openGoalsModal(): void {
+    const componentInstance = (window as any)['ng'].getComponent(document.querySelector('app-commission'));
+    const vendedores = componentInstance?.comissionSorted;
+
+    if (!vendedores || !Array.isArray(vendedores)) {
+      alert('Lista de vendedores não encontrada.');
+      return;
+    }
+
+    this.modalReference = this.modalService.open(GoalsModalComponent, {
+      backdrop: true,
+      keyboard: true,
+      size: 'md',
+      centered: true,
+    });
+
+    this.modalReference.componentInstance.vendedores = vendedores;
   }
 
   getCurrentRouteSegment(): void {
@@ -176,11 +195,6 @@ export class ClassicComponent implements OnInit, OnDestroy {
   isDisabledSecondary(): boolean {
     const fullPath = this.router.url;
 
-    // Sellers -> desabilita sempre, exceto /sellers/weekly-bonus
-    if (fullPath.startsWith('/sellers')) {
-      return !fullPath.startsWith('/sellers/weekly-bonus');
-    }
-
     // Commerce e Expedition -> desabilita
     return fullPath.startsWith('/commerce');
   }
@@ -202,6 +216,9 @@ export class ClassicComponent implements OnInit, OnDestroy {
     if (fullPath.includes('expedition/stock')) {
       return 'Saída';
     }
+    if (fullPath.includes('sellers/commissions')) {
+      return 'Metas';
+    }
     return 'Listar';
   }
 
@@ -209,8 +226,9 @@ export class ClassicComponent implements OnInit, OnDestroy {
     const fullPath = this.router.url;
     if (fullPath.includes('expedition/stock')) {
       this.openStockOutModal();
+    } else if (fullPath.includes('sellers/commissions')) {
+      this.openGoalsModal();
     } else {
-      // Executa ação padrão de listar (pode ser navegação)
       this.router.navigate([this.getSecondaryButtonLink()]);
     }
   }
