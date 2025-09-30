@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SellService } from '../../../core/services';
+import { Goals } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -29,5 +30,9 @@ export class SellersService {
 
   getWeeklyBonus(fromDate: string, toDate: string) {
     return this.sellService.getWeeklyBonus(fromDate, toDate);
+  }
+
+  saveGoals(goals: Goals[]) {
+    return this.sellService.saveGoals(goals);
   }
 }
