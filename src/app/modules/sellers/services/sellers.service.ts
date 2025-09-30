@@ -35,4 +35,8 @@ export class SellersService {
   saveGoals(goals: Goals[]) {
     return this.sellService.saveGoals(goals);
   }
+
+  getGoals() {
+    return this.sellService.getGoals();
+  }
 }

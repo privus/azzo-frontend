@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { Order, Ranking } from '../models/order.model';
+import { Order, Ranking, Goals } from '../models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService, PaginationService } from '../../../core/services';
 import { OrderService } from '../services/order.service';
@@ -40,6 +40,7 @@ export class OrderListingComponent implements OnInit {
   private baseUrl = environment.apiUrl;
   @ViewChild('rankingModal') rankingModal!: SellerRankingModalComponent;
   ranking: Ranking[] = [];
+  meta: Goals[] = [];
   selectAll: boolean = false;
   selectedOrders: Order[] = [];
   user: string = '';
@@ -80,6 +81,7 @@ export class OrderListingComponent implements OnInit {
   ngOnInit(): void {
     this.orders = this.route.snapshot.data['orders'];
     this.ranking = this.route.snapshot.data['ranking'];
+    this.meta = this.route.snapshot.data['meta'];
     console.log('PEDIDOS ===> ', this.orders);
     this.sortBy('codigo');
     this.applyFilter();
@@ -616,7 +618,8 @@ export class OrderListingComponent implements OnInit {
       keyboard: false,
     });
 
-    modalRef.componentInstance.ranking = this.ranking; // <-- Aqui envia os dados
+    modalRef.componentInstance.ranking = this.ranking;
+    modalRef.componentInstance.meta = this.meta;
   }
 
   toggleSelectAll(): void {

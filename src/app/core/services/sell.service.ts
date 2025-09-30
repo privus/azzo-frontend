@@ -141,4 +141,8 @@ export class SellService {
   saveGoals(goals: Goals[]) {
     return this.http.post<{ message: string }>(`${this.baseUrl}sellers/goals`, goals);
   }
+
+  getGoals() {
+    return this.http.get<Goals[] | null>(`${this.baseUrl}sellers/goals`);
+  }
 }
