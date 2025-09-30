@@ -75,8 +75,7 @@
                     <div class="d-flex flex-column gap-1" style="min-width: 180px;">
                       <!-- Pedidos -->
                       <div>
-                        <small>{{ goal.ped_realizados }}/{{ goal.meta_ped }}</small>
-                        <div class="progress" style="height: 12px;">
+                        <div class="progress" style="height: 13px;">
                           <div
                             class="progress-bar bg-primary"
                             role="progressbar"
@@ -84,17 +83,16 @@
                             [attr.aria-valuenow]="goal.progress_ped"
                             aria-valuemin="0"
                             aria-valuemax="100"
-                          ></div>
+                          >
+                            {{ goal.progress_ped }}%
+
+                          </div>
                         </div>
                       </div>
 
                       <!-- Faturamento -->
                       <div>
-                        <small
-                          >R$ {{ goal.fat_realizado | number:'1.0-0' }} / R$
-                          {{ goal.meta_fat | number:'1.0-0' }}</small
-                        >
-                        <div class="progress" style="height: 12px;">
+                        <div class="progress" style="height: 13px;">
                           <div
                             class="progress-bar bg-success"
                             role="progressbar"
@@ -102,7 +100,9 @@
                             [attr.aria-valuenow]="goal.progress_fat"
                             aria-valuemin="0"
                             aria-valuemax="100"
-                          ></div>
+                          >
+                            {{ goal.progress_fat }}%
+                          </div>
                         </div>
                       </div>
                     </div>
