@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Commissions } from '../models';
 import { ActivatedRoute } from '@angular/router';
 import { SellersService } from '../services/sellers.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-commission',
@@ -10,7 +11,7 @@ import { SellersService } from '../services/sellers.service';
 })
 export class CommissionsComponent implements OnInit {
   comission: Commissions[] = [];
-  dataRange: string = 'lastMonth';
+  dataRange: string = 'thisMonth';
   showCustomDatePicker = false;
 
   customDateRange = { start: '', end: '' };
@@ -19,11 +20,12 @@ export class CommissionsComponent implements OnInit {
     private route: ActivatedRoute,
     private sellersService: SellersService,
     private cdr: ChangeDetectorRef,
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit(): void {
-    const snapshotData = this.route.snapshot.data['commissions'];
-    this.comission = Array.isArray(snapshotData) ? snapshotData.sort((a, b) => b.faturado - a.faturado) : [];
+    const snapCommissions = this.route.snapshot.data['commissions'];
+    this.comission = Array.isArray(snapCommissions) ? snapCommissions.sort((a, b) => b.faturado - a.faturado) : [];
 
     console.log('Commissions ordenadas por faturado (snapshot):', this.comission);
   }

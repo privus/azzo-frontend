@@ -42,21 +42,67 @@
           <th class="text-end pe-3 min-w-100px">Pedidos</th>
           <th class="text-end pe-3 min-w-100px">Comissão</th>
           <th class="text-end pe-3 min-w-100px">Ticket Médio</th>
-          <th class="text-end pe-3 min-w-100px">Comissão Média</th>
+          <th style="width: 20px;"></th>
+          <th class="text-center min-w-200px">Progresso Faturamento</th>
+          <th class="text-center min-w-200px">Progresso Pedidos</th>
         </tr>
       </thead>
       <tbody class="fw-bold text-gray-600">
-        <tr *ngFor="let item of comissionSorted">
-          <td>{{ item.vendedor }}</td>
-          <td class="text-end">R$ {{ item.faturado | number: '1.2-2' }}</td>
-          <td class="text-end">{{ item.pedidos }}</td>
-          <td class="text-end">R$ {{ item.comissao | number: '1.2-2' }}</td>
-          <td class="text-end">R$ {{ item.ticketMedio | number: '1.2-2' }}</td>
-          <td class="text-end">R$ {{ item.comissaoMedia | number: '1.2-2' }}</td>
-        </tr>
+        <ng-container *ngFor="let item of comissionSorted">
+          <tr>
+            <td>{{ item.vendedor }}</td>
+            <td class="text-end">R$ {{ item.faturado | number: '1.2-2' }}</td>
+            <td class="text-end">{{ item.pedidos }}</td>
+            <td class="text-end">R$ {{ item.comissao | number: '1.2-2' }}</td>
+            <td class="text-end">R$ {{ item.ticketMedio | number: '1.2-2' }}</td>
+            <td></td>
+            <!-- Faturamento -->
+            <td>
+              <div *ngIf="item.progresso_fat !== undefined && item.meta_fat !== undefined">
+                <div class="border rounded bg-light p-2">
+                  <div class="mb-1 text-muted small">
+                    Meta: R$ {{ item.meta_fat | number:'1.2-2' }}
+                  </div>
+                  <div class="progress position-relative" style="height: 20px; width: 80%;">
+                    <div
+                      class="progress-bar bg-success"
+                      role="progressbar"
+                      [style.width.%]="item.progresso_fat"
+                      [attr.aria-valuenow]="item.progresso_fat"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    >
+                      {{ item.progresso_fat }}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+            <!-- Pedidos -->
+            <td>
+              <div *ngIf="item.progresso_ped !== undefined && item.meta_ped !== undefined">
+                <div class="border rounded bg-light p-2">
+                  <div class="mb-1 text-muted small">
+                    Meta: {{ item.meta_ped }}
+                  </div>
+                  <div class="progress position-relative" style="height: 20px; width: 80%;">
+                    <div
+                      class="progress-bar bg-primary"
+                      role="progressbar"
+                      [style.width.%]="item.progresso_ped"
+                      [attr.aria-valuenow]="item.progresso_ped"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    >
+                      {{ item.progresso_ped }}%
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
       </tbody>
     </table>
   </div>
 </div>
-
-  
