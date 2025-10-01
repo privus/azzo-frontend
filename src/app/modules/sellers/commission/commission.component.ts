@@ -175,6 +175,7 @@ export class CommissionsComponent implements OnInit {
   }
 
   get comissionSorted(): Commissions[] {
+    console.log('Commissions ordenadas por faturado (component):', this.comission);
     return [...this.comission].sort((a, b) => b.faturado - a.faturado);
   }
 }
