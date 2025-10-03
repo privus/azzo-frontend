@@ -13,9 +13,6 @@ import { forkJoin } from 'rxjs';
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
   salesPerformance: SalesComparisonReport;
-  debtsAzzoPerformance: DebtsComparisonReport;
-  debtsPersonPerformance: DebtsComparisonReport;
-  debtsComparisonReport: ComparisonReport;
   private chartMarcasInstance: Chart | null = null;
 
   marcas: { nome: string; valor: number; cor: string }[] = [];
@@ -60,9 +57,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.salesPerformance = this.route.snapshot.data['salesAzzoPerformance'];
-    this.debtsAzzoPerformance = this.route.snapshot.data['debtsAzzoPerformance'];
-    this.debtsPersonPerformance = this.route.snapshot.data['debtsPersonPerformance'];
-    this.debtsComparisonReport = this.route.snapshot.data['debtsComparison'];
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     this.periodoLabel = this.formatPeriodoLabel(this.formatDate(startOfMonth), this.formatDate(new Date()));
@@ -73,10 +67,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.buildChart();
-      this.buildChartDebts();
-      this.buildChartDebtsPerson();
-      this.buildChartPagamentosCruzados();
-      this.buildChartPagamentosGrupo();
     }, 0);
   }
 
@@ -198,76 +188,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return `background-color: ${cor}`;
   }
 
-  /** Gráfico 1: Pagamentos Cruzados */
-  buildChartPagamentosCruzados(): void {
-    const ctx = document.getElementById('chart-pagamentos-cruzados') as HTMLCanvasElement;
-    if (!ctx) return;
-
-    if (this.chartPagamentosCruzados) this.chartPagamentosCruzados.destroy();
-
-    // Usando os dados do objeto ComparisonReport
-    const data = {
-      'Azzo pagou para Personizi': this.debtsComparisonReport.azzoPagouParaPersonizi,
-      'Personizi pagou para Azzo': this.debtsComparisonReport.personiziPagouParaAzzo,
-    };
-
-    const labels = Object.keys(data);
-    const valores = Object.values(data);
-
-    this.chartPagamentosCruzados = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels,
-        datasets: [
-          {
-            data: valores,
-            backgroundColor: ['#50CD89', '#009EF7'],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        cutout: '65%',
-        plugins: { legend: { display: true } },
-      },
-    });
-  }
-
-  /** Gráfico 2: Pagamentos de Despesas do Grupo */
-  buildChartPagamentosGrupo(): void {
-    const ctx = document.getElementById('chart-pagamentos-grupo') as HTMLCanvasElement;
-    if (!ctx) return;
-
-    if (this.chartPagamentosGrupo) this.chartPagamentosGrupo.destroy();
-
-    // Usando os dados do objeto ComparisonReport
-    const data = {
-      Azzo: this.debtsComparisonReport?.totalPagoPorAzzoGrupo || 0,
-      Personizi: this.debtsComparisonReport?.totalPagoPorPersoniziGrupo || 0,
-    };
-
-    const labels = Object.keys(data);
-    const valores = Object.values(data);
-
-    this.chartPagamentosGrupo = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels,
-        datasets: [
-          {
-            data: valores,
-            backgroundColor: ['#50CD89', '#009EF7'],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        cutout: '65%',
-        plugins: { legend: { display: true } },
-      },
-    });
-  }
-
   private formatDate(date: Date): string {
     return date.toISOString().split('T')[0];
   }
@@ -376,11 +296,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const debtsComparisonReport$ = this.debtsService.getComparisonDebts(fromDate2, toDate2);
 
     forkJoin([salesPerformance$, debtsAzzoPerformance$, debtsPersonPerformance$, debtsComparisonReport$]).subscribe({
-      next: ([salesPerformance, debtsAzzoPerformance, debtsPersonPerformance, debtsComparisonReport]) => {
+      next: ([salesPerformance]) => {
         this.salesPerformance = salesPerformance;
-        this.debtsAzzoPerformance = debtsAzzoPerformance;
-        this.debtsPersonPerformance = debtsPersonPerformance;
-        this.debtsComparisonReport = debtsComparisonReport;
 
         this.mapDataToDashboard();
 
@@ -389,8 +306,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.buildChart();
           this.buildChartDebts();
           this.buildChartDebtsPerson();
-          this.buildChartPagamentosCruzados();
-          this.buildChartPagamentosGrupo();
         }, 0);
       },
       error: (err) => console.error('Erro ao atualizar dashboard:', err),
@@ -407,44 +322,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         nome,
         valor: faturamento[nome],
         cor: this.CORES[index],
-      }))
-      .sort((a, b) => a.valor - b.valor);
-
-    // Despesas Azzo
-    const fatDeps = this.debtsAzzoPerformance.despesasDepartamento || {};
-    this.departamentos = Object.keys(fatDeps)
-      .map((nome, index) => ({
-        nome,
-        valor: fatDeps[nome],
-        cor: this.CORES[index % this.CORES.length],
-      }))
-      .sort((a, b) => a.valor - b.valor);
-
-    const fatCats = this.debtsAzzoPerformance.despesasCategoria || {};
-    this.categorias = Object.keys(fatCats)
-      .map((nome) => ({
-        nome,
-        valor: fatCats[nome],
-        cor: this.getRandomColor(),
-      }))
-      .sort((a, b) => a.valor - b.valor);
-
-    // Despesas Personizi
-    const fatDepsPerson = this.debtsPersonPerformance.despesasDepartamento || {};
-    this.departamentosPerson = Object.keys(fatDepsPerson)
-      .map((nome, index) => ({
-        nome,
-        valor: fatDepsPerson[nome],
-        cor: this.CORES[index % this.CORES.length],
-      }))
-      .sort((a, b) => a.valor - b.valor);
-
-    const fatCatsPerson = this.debtsPersonPerformance.despesasCategoria || {};
-    this.categoriasPerson = Object.keys(fatCatsPerson)
-      .map((nome) => ({
-        nome,
-        valor: fatCatsPerson[nome],
-        cor: this.getRandomColor(),
       }))
       .sort((a, b) => a.valor - b.valor);
   }

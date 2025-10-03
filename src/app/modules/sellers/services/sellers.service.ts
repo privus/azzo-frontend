@@ -39,4 +39,9 @@ export class SellersService {
   getGoals() {
     return this.sellService.getGoals();
   }
+
+  getCommissionsReport(fromDate: string, toDate?: string) {
+    const to = toDate ? `&toDate=${toDate}` : '';
+    return this.sellService.getCommissionsReport(fromDate, to);
+  }
 }
