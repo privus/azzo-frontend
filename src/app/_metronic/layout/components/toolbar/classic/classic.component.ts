@@ -183,6 +183,11 @@ export class ClassicComponent implements OnInit, OnDestroy {
       componentInstance?.downloadExcel();
       return;
     }
+    if (fullPath.includes('sellers/commissions')) {
+      const componentInstance = (window as any)['ng'].getComponent(document.querySelector('app-commission'));
+      componentInstance?.downloadExcel();
+      return;
+    }
   }
 
   isDisabledPrimary(): boolean {
@@ -207,6 +212,9 @@ export class ClassicComponent implements OnInit, OnDestroy {
     }
     if (fullPath.includes('sellers/weekly-bonus')) {
       return 'Download Excel';
+    }
+    if (fullPath.includes('sellers/commissions')) {
+      return 'Rel. Comissões';
     }
     return 'Criar';
   }

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { BrandSales, Commissions, Goals, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
+import { BrandSales, Commissions, CommissionsReport, Goals, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
 import { SalesComparisonReport } from 'src/app/pages/models/performance-sales.modal';
 import { PGenerateCredit } from 'src/app/modules/financial/models';
 import { AssemblyDto, AssemblyResponse } from 'src/app/modules/expedition/models';
@@ -144,5 +144,9 @@ export class SellService {
 
   getGoals() {
     return this.http.get<Goals[] | null>(`${this.baseUrl}sellers/goals`);
+  }
+
+  getCommissionsReport(fromDate: string, toDate: string) {
+    return this.http.get<CommissionsReport[]>(`${this.baseUrl}sellers/commissionsReport?fromDate=${fromDate}${toDate}`);
   }
 }
