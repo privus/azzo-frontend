@@ -77,24 +77,23 @@
                       <div>
                         <div class="progress" style="height: 13px;">
                           <div
-                            class="progress-bar bg-primary"
+                            class="progress-bar bg-primary text-warning fw-bold"
                             role="progressbar"
                             [style.width.%]="goal.progress_ped"
                             [attr.aria-valuenow]="goal.progress_ped"
                             aria-valuemin="0"
                             aria-valuemax="100"
-                            style="color: yellow !important;"
                           >
                             {{ goal.progress_ped }}%
-
                           </div>
+                        
                         </div>
                       </div>
                       <!-- Faturamento -->
                       <div>
                         <div class="progress" style="height: 13px;">
                           <div
-                            class="progress-bar bg-success"
+                            class="progress-bar bg-success text-warning fw-bold"
                             role="progressbar"
                             [style.width.%]="goal.progress_fat"
                             [attr.aria-valuenow]="goal.progress_fat"
@@ -102,7 +101,7 @@
                             aria-valuemax="100"
                           >
                             {{ goal.progress_fat }}%
-                          </div>
+                          </div>                        
                         </div>
                       </div>
                     </div>

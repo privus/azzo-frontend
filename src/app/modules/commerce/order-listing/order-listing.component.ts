@@ -641,7 +641,7 @@ export class OrderListingComponent implements OnInit {
     const totalSelecionados = this.selectedOrders.length;
     const totalMontagem = this.emMontagem;
 
-    if (totalMontagem + totalSelecionados > 6) {
+    if (totalMontagem + totalSelecionados > 10) {
       Swal.fire({
         icon: 'warning',
         title: 'Limite atingido',
