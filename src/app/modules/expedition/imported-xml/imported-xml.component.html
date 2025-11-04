@@ -1,12 +1,5 @@
 <div class="card card-flush h-xl-100">
   <div class="card-header pt-7">
-    <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bold text-gray-900">Notas Fiscais Importadas</span>
-      <span class="text-gray-500 mt-1 fw-semibold fs-6">
-        Total de {{ filteredNfsResume.length }} notas listadas
-      </span>
-    </h3>
-
     <div class="card-toolbar">
       <input
         [(ngModel)]="searchTerm"
@@ -54,27 +47,48 @@
               <td class="text-end">{{ nf.data_emissao | date:'dd/MM/yyyy' }}</td>
               <td class="text-end">{{ nf.data_entrada | date:'dd/MM/yyyy' }}</td>
               <td class="text-end">
-                <div class="d-flex flex-column align-items-start">
-                  <label class="form-check form-switch form-check-custom form-check-solid mb-2">
-                    <input type="checkbox" class="form-check-input form-check-input-sm" style="width: 3rem; height: 2rem;" />
+                <div class="d-flex flex-column align-items-start gap-1">
+                  <label class="form-check form-switch form-check-custom form-check-solid mb-1">
+                    <input 
+                      type="checkbox" 
+                      class="form-check-input form-check-input-sm" 
+                      style="width: 3rem; height: 2rem;"
+                      [checked]="nf.chegou"
+                      (click)="arrived(nf.numero_nfe)"
+                      [disabled]="nf.chegou"
+                    />
                   </label>
-                  <button
-                    class="btn btn-sm btn-icon btn-light toggle w-30px h-30px"
-                    (click)="toggleExpand(nf.nfe_resumo_id, nf.numero_nfe)"
-                    [disabled]="loadingXml.has(nf.nfe_resumo_id)"
-                  >
-                    <i
-                      *ngIf="!isExpanded(nf.nfe_resumo_id) && !loadingXml.has(nf.nfe_resumo_id)"
-                      class="fas fa-plus fs-4 m-0"
-                    ></i>
-                    <i
-                      *ngIf="isExpanded(nf.nfe_resumo_id) && !loadingXml.has(nf.nfe_resumo_id)"
-                      class="fas fa-minus fs-4 m-0"
-                    ></i>
-                    <span *ngIf="loadingXml.has(nf.nfe_resumo_id)">
-                      <i class="spinner-border spinner-border-sm text-primary"></i>
-                    </span>
-                  </button>
+                  <div class="d-flex align-items-center gap-2">
+                    <button 
+                      [ngStyle]="nf.reimportada == 1 ? {'background-color': '#e3f2fd'} : {}"
+                      style="border: none; background: none; padding: 0;"
+                      (click)="reimportNf(nf.numero_nfe)"
+                      [disabled]="nf.reimportada"
+                    >
+                      <span 
+                        class="d-flex align-items-center fs-7"
+                      >
+                        <i class="bi bi-arrow-repeat me-1"></i>
+                      </span>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-icon btn-light toggle w-30px h-30px"
+                      (click)="toggleExpand(nf.nfe_resumo_id, nf.numero_nfe)"
+                      [disabled]="loadingXml.has(nf.nfe_resumo_id)"
+                    >
+                      <i
+                        *ngIf="!isExpanded(nf.nfe_resumo_id) && !loadingXml.has(nf.nfe_resumo_id)"
+                        class="fas fa-plus fs-4 m-0"
+                      ></i>
+                      <i
+                        *ngIf="isExpanded(nf.nfe_resumo_id) && !loadingXml.has(nf.nfe_resumo_id)"
+                        class="fas fa-minus fs-4 m-0"
+                      ></i>
+                      <span *ngIf="loadingXml.has(nf.nfe_resumo_id)">
+                        <i class="spinner-border spinner-border-sm text-primary"></i>
+                      </span>
+                    </button>
+                  </div>
                 </div>
               </td>              
             </tr>
@@ -127,12 +141,7 @@
       <span class="text-gray-600 fs-7">
         Exibindo {{ filteredNfsResume.length }} registro(s)
       </span>
-      <button
-        class="btn btn-sm btn-light"
-        (click)="searchTerm=''; applyFilter()"
-      >
-        Limpar Filtro
-      </button>
     </div>
   </div>
 </div>
+<swal #noticeSwal [swalOptions]="swalOptions"></swal>
