@@ -25,4 +25,6 @@ export interface NfResume {
   valor_base_icms_st?: number | null;
   valor_pis?: number | null;
   valor_cofins?: number | null;
+  chegou: number | null;
+  reimportada: number | null;
 }
