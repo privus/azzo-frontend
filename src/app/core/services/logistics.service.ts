@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Distributor, StockById, StockLiquid, StockOut, StockOverview, StockProjection } from '../../modules/expedition/models';
+import { Distributor, NfResume, StockById, StockLiquid, StockOut, StockOverview, StockProjection, Xml } from '../../modules/expedition/models';
 import { NewRomaneio, Romaneio, Transportadora } from '../../modules/expedition/models';
-;
 
 @Injectable()
 export class LogisticsService {
@@ -45,5 +44,13 @@ export class LogisticsService {
 
   getStockOverview() {
     return this.http.get<StockOverview>(`${this.baseUrl}stock/overview`);
+  }
+
+  getNfsResume() {
+    return this.http.get<NfResume[]>(`${this.baseUrl}stock/nfsResume`);
+  }
+
+  getXml(numeroNfe: string) {
+    return this.http.get<Xml[]>(`${this.baseUrl}stock/in/${numeroNfe}`);
   }
 }
