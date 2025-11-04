@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AssemblyShellComponent } from './assembly-shell.component/assembly-shell.component';
 import { OrderAssemblyCardComponent } from './order-assembly-card/order-assembly-card.component';
 import { AssemblySessionService } from './services/assembly-session.service';
+import { ImportedXmlComponent } from './imported-xml/imported-xml.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { AssemblySessionService } from './services/assembly-session.service';
     OrderAssemblyComponent,
     AssemblyShellComponent,
     OrderAssemblyCardComponent,
+    ImportedXmlComponent,
   ],
   imports: [
     CommonModule,

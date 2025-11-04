@@ -1,0 +1,138 @@
+<div class="card card-flush h-xl-100">
+  <div class="card-header pt-7">
+    <h3 class="card-title align-items-start flex-column">
+      <span class="card-label fw-bold text-gray-900">Notas Fiscais Importadas</span>
+      <span class="text-gray-500 mt-1 fw-semibold fs-6">
+        Total de {{ filteredNfsResume.length }} notas listadas
+      </span>
+    </h3>
+
+    <div class="card-toolbar">
+      <input
+        [(ngModel)]="searchTerm"
+        (input)="applyFilter()"
+        type="text"
+        class="form-control form-control-sm"
+        placeholder="Buscar por número da NF ou emitente"
+      />
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table align-middle table-row-dashed fs-6 gy-3">
+        <thead>
+          <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+            <th>Nº NF</th>
+            <th>Emitente</th>
+            <th class="text-end">V. Produto</th>
+            <th class="text-end">V. IPI</th>
+            <th class="text-end">V. ST</th>
+            <th class="text-end">V. ICMS</th>
+            <th class="text-end">V. PIS</th>
+            <th class="text-end">V. COFINS</th>
+            <th class="text-end">V. Total NF</th>
+            <th class="text-end">Emissão</th>
+            <th class="text-end">Entrada</th>
+          </tr>
+        </thead>
+
+        <tbody class="fw-bold text-gray-600">
+          <ng-container *ngFor="let nf of filteredNfsResume">
+            <tr>
+              <td>{{ nf.numero_nfe }}</td>
+              <td>{{ nf.emitente }}</td>
+              <td class="text-end">R$ {{ nf.valor_produto | number:'1.2-2' }}</td>
+              <td class="text-end">R$ {{ nf.valor_ipi | number:'1.2-2' }}</td>
+              <td class="text-end">R$ {{ nf.valor_st | number:'1.2-2' }}</td>
+              <td class="text-end">R$ {{ nf.valor_icms || 0 | number:'1.2-2' }}</td>
+              <td class="text-end">R$ {{ nf.valor_pis || 0 | number:'1.2-2' }}</td>
+              <td class="text-end">R$ {{ nf.valor_cofins || 0 | number:'1.2-2' }}</td>
+              <td class="text-end text-primary fw-bold">
+                R$ {{ nf.valor_total_nfe | number:'1.2-2' }}
+              </td>
+              <td class="text-end">{{ nf.data_emissao | date:'dd/MM/yyyy' }}</td>
+              <td class="text-end">{{ nf.data_entrada | date:'dd/MM/yyyy' }}</td>
+              <td class="text-end">
+                <div class="d-flex flex-column align-items-start">
+                  <label class="form-check form-switch form-check-custom form-check-solid mb-2">
+                    <input type="checkbox" class="form-check-input form-check-input-sm" style="width: 3rem; height: 2rem;" />
+                  </label>
+                  <button
+                    class="btn btn-sm btn-icon btn-light toggle w-30px h-30px"
+                    (click)="toggleExpand(nf.nfe_resumo_id, nf.numero_nfe)"
+                    [disabled]="loadingXml.has(nf.nfe_resumo_id)"
+                  >
+                    <i
+                      *ngIf="!isExpanded(nf.nfe_resumo_id) && !loadingXml.has(nf.nfe_resumo_id)"
+                      class="fas fa-plus fs-4 m-0"
+                    ></i>
+                    <i
+                      *ngIf="isExpanded(nf.nfe_resumo_id) && !loadingXml.has(nf.nfe_resumo_id)"
+                      class="fas fa-minus fs-4 m-0"
+                    ></i>
+                    <span *ngIf="loadingXml.has(nf.nfe_resumo_id)">
+                      <i class="spinner-border spinner-border-sm text-primary"></i>
+                    </span>
+                  </button>
+                </div>
+              </td>              
+            </tr>
+            <tr *ngIf="isExpanded(nf.nfe_resumo_id)">
+              <td colspan="100%" class="p-0 border-0 bg-light">
+                <div class="p-4">
+                  <div *ngIf="loadingXml.has(nf.nfe_resumo_id)" class="text-center my-3">
+                    <i class="spinner-border text-primary"></i>
+                    <span class="ms-2 text-gray-600">Carregando produtos...</span>
+                  </div>
+                  <div *ngIf="getXmlForNf(nf.numero_nfe).length && !loadingXml.has(nf.nfe_resumo_id)">
+                    <div class="card shadow-sm border-0 bg-white">
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-md-4 border-end border-3" *ngFor="let col of [0,1,2]">
+                            <table class="table table-bordered table-sm mb-0">
+                              <thead>
+                                <tr>
+                                  <th>Produto</th>
+                                  <th>Qtd</th>
+                                  <th>V. Total</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let xml of splitXml(getXmlForNf(nf.numero_nfe))[col]">
+                                  <td>{{ xml.produto }}</td>
+                                  <td>{{ xml.quantidade_total }}</td>
+                                  <td>R$ {{ xml.valor_total | number:'1.2-2' }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="!getXmlForNf(nf.numero_nfe).length && !loadingXml.has(nf.nfe_resumo_id)">
+                    <span class="text-muted">Nenhum produto encontrado para esta NF.</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-5">
+      <span class="text-gray-600 fs-7">
+        Exibindo {{ filteredNfsResume.length }} registro(s)
+      </span>
+      <button
+        class="btn btn-sm btn-light"
+        (click)="searchTerm=''; applyFilter()"
+      >
+        Limpar Filtro
+      </button>
+    </div>
+  </div>
+</div>

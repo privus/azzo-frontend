@@ -5,3 +5,4 @@ export * from './distributor.model';
 export * from './stock-out.model';
 export * from './order-assembly.model.dto';
 export * from './stock-resp.model';
+export * from './xml.model';

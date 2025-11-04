@@ -43,4 +43,12 @@ export class ExpeditionService {
   getStockOverview() {
     return this.logisticsService.getStockOverview();
   }
+
+  getNfsResume() {
+    return this.logisticsService.getNfsResume();
+  }
+
+  getXml(numeroNfe: string) {
+    return this.logisticsService.getXml(numeroNfe);
+  }
 }
