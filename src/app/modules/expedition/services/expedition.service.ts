@@ -51,4 +51,12 @@ export class ExpeditionService {
   getXml(numeroNfe: string) {
     return this.logisticsService.getXml(numeroNfe);
   }
+
+  productsArrived(numeroNfe: string) {
+    return this.logisticsService.arrived(numeroNfe);
+  }
+
+  reimportProducts(numeroNfe: string) {
+    return this.logisticsService.reimport(numeroNfe);
+  }
 }

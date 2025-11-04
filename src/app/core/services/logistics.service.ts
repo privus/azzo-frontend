@@ -53,4 +53,12 @@ export class LogisticsService {
   getXml(numeroNfe: string) {
     return this.http.get<Xml[]>(`${this.baseUrl}stock/in/${numeroNfe}`);
   }
+
+  arrived(numeroNfe: string) {
+    return this.http.get<{ message: string }>(`${this.baseUrl}stock/arrived/${numeroNfe}`);
+  }
+
+  reimport(numeroNfe: string) {
+    return this.http.get<{ message: string }>(`${this.baseUrl}stock/reimport/${numeroNfe}`);
+  }
 }
