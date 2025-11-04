@@ -193,15 +193,13 @@ export class ClassicComponent implements OnInit, OnDestroy {
   isDisabledPrimary(): boolean {
     const fullPath = this.router.url;
 
-    // Também desabilita em commerce/*
-    return fullPath.startsWith('/commerce');
+    return fullPath.startsWith('/commerce') || fullPath.startsWith('/expedition/imported-xml');
   }
 
   isDisabledSecondary(): boolean {
     const fullPath = this.router.url;
 
-    // Commerce e Expedition -> desabilita
-    return fullPath.startsWith('/commerce');
+    return fullPath.startsWith('/commerce') || fullPath.startsWith('/expedition/imported-xml');
   }
 
   getPrimaryButtonLabel(): string {
