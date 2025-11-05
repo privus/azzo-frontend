@@ -47,8 +47,15 @@
               <td class="text-end">{{ nf.data_emissao | date:'dd/MM/yyyy' }}</td>
               <td class="text-end">{{ nf.data_entrada | date:'dd/MM/yyyy' }}</td>
               <td class="text-end">
-                <div class="d-flex flex-column align-items-start gap-1">
-                  <label class="form-check form-switch form-check-custom form-check-solid mb-1">
+                <div class="d-flex flex-column align-items-center gap-1">
+                  <span 
+                    class="fs-9 mb-1"
+                    *ngIf="nf.chegou"
+                    style="display: block; width: 100%; text-align: center;"
+                  >
+                    Chegou
+                  </span>
+                  <label class="form-check form-switch form-check-custom form-check-solid m-0 d-flex flex-column align-items-center w-100">
                     <input 
                       type="checkbox" 
                       class="form-check-input form-check-input-sm" 
@@ -63,7 +70,7 @@
                       [ngStyle]="nf.reimportada == 1 ? {'background-color': '#e3f2fd'} : {}"
                       style="border: none; background: none; padding: 0;"
                       (click)="reimportNf(nf.numero_nfe)"
-                      [disabled]="nf.reimportada"
+                      [disabled]="nf.reimportada || nf.chegou"
                     >
                       <span 
                         class="d-flex align-items-center fs-7"
