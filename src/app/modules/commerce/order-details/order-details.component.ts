@@ -319,4 +319,37 @@ export class OrderDetailsComponent implements OnInit {
       }
     });
   }
+
+  exportBling() {
+    Swal.fire({
+      title: 'Confirmação',
+      text: 'Deseja exportar para o Bling?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, Exportar!',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.orderService.exportBling(this.orderId).subscribe({
+          next: (resp) => {
+            Swal.fire({
+              icon: 'success',
+              title: `Exportação concluída com sucesso!`,
+              text: resp.message,
+              confirmButtonText: 'Ok',
+            });
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: `Erro na exportação!`,
+              text: 'Não foi possível exportar o pedido. ' + err.error.message,
+              confirmButtonText: 'Ok',
+            });
+            console.error('Erro ao exportar para Tiny:', err);
+          },
+        });
+      }
+    });
+  }
 }
