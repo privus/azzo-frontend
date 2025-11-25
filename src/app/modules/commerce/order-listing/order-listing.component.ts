@@ -70,7 +70,6 @@ export class OrderListingComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private paginationService: PaginationService,
-    private router: Router,
     private readonly orderService: OrderService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,

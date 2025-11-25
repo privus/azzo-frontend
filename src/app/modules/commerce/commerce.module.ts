@@ -17,6 +17,7 @@ import { OrderListingPersonComponent } from './order-listing-person/order-listin
 import { OrderDetailsPersonComponent } from './order-details-person/order-details-person.component';
 import { GenerateInstallmentsModalComponent } from './generate-installments-modal/generate-installments-modal.component';
 import { TimeAgoPipe } from '../../../app/shared/pipes/time-ago.pipe';
+import { EcommerceComponent } from './e-commerce/e-commerce.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { TimeAgoPipe } from '../../../app/shared/pipes/time-ago.pipe';
     OrderDetailsPersonComponent,
     GenerateInstallmentsModalComponent,
     TimeAgoPipe,
+    EcommerceComponent,
   ],
   imports: [
     SharedModule,

@@ -59,4 +59,8 @@ export class ExpeditionService {
   reimportProducts(numeroNfe: string) {
     return this.logisticsService.reimport(numeroNfe);
   }
+
+  getStockOutByEcommerceId(id: number) {
+    return this.logisticsService.getStockOutByEcommerceId(id);
+  }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
+import { Ecommerce, Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { BrandSales, Commissions, CommissionsReport, Goals, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
@@ -148,5 +148,13 @@ export class SellService {
 
   getCommissionsReport(fromDate: string, toDate: string) {
     return this.http.get<CommissionsReport[]>(`${this.baseUrl}sellers/commissionsReport?fromDate=${fromDate}${toDate}`);
+  }
+
+  syncroEcommerce() {
+    return this.http.get<{ message: string }>(`${this.baseUrl}sells/syncroEcommerce`);
+  }
+
+  getAllOrdersEcommerce() {
+    return this.http.get<Ecommerce[]>(`${this.baseUrl}sells/ecommerce`);
   }
 }

@@ -107,4 +107,12 @@ export class OrderService {
   exportBling(id: number) {
     return this.sellService.exportBling(id);
   }
+
+  syncroEcommerce() {
+    return this.sellService.syncroEcommerce();
+  }
+
+  getAllOrdersEcommerce() {
+    return this.sellService.getAllOrdersEcommerce();
+  }
 }
