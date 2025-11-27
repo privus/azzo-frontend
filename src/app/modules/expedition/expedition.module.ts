@@ -13,7 +13,7 @@ import { ImportXmlModalComponent } from './import-xml-modal/import-xml-modal.com
 import { StockOutModalComponent } from './stock-out-modal/stock-out-modal.component';
 import { OrderAssemblyComponent } from './order-assembly/order-assembly.component';
 import { MatIconModule } from '@angular/material/icon';
-import { AssemblyShellComponent } from './assembly-shell.component/assembly-shell.component';
+import { AssemblyShellComponent } from './assembly-shell/assembly-shell.component';
 import { OrderAssemblyCardComponent } from './order-assembly-card/order-assembly-card.component';
 import { AssemblySessionService } from './services/assembly-session.service';
 import { ImportedXmlComponent } from './imported-xml/imported-xml.component';

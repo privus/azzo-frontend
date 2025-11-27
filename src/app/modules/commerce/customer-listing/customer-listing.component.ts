@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente, Regiao, StatusCliente } from '../models';
 import { PaginationService } from '../../../core/services/';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-customer',
@@ -178,5 +180,58 @@ export class CustomerListingComponent implements OnInit {
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
+  }
+
+  exportFilteredCustomers(): void {
+    if (!this.filteredCustomers.length) {
+      return;
+    }
+
+    const worksheetData = this.filteredCustomers.map((customer) => ({
+      codigo: customer.codigo,
+      nome: customer.nome,
+      nome_empresa: customer.nome_empresa,
+      endereco: customer.endereco,
+      num_endereco: customer.num_endereco,
+      bairro: customer.bairro,
+      complemento: customer.complemento,
+      cidade_string: customer.cidade_string,
+      categoria: customer.categoria.nome,
+      celular: customer.celular,
+      valor_ultima_compra: customer.valor_ultima_compra ?? '',
+      status_cliente: customer.status_cliente?.nome,
+      regiao: customer.regiao?.nome,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(worksheetData);
+    const workbook = { Sheets: { Clientes: worksheet }, SheetNames: ['Clientes'] };
+
+    let fileName = 'clientes';
+    const today = new Date();
+    const formattedDate = today.toISOString().slice(0, 10);
+
+    let regionString = '';
+    let statusString = '';
+
+    if (this.selectedRegion) {
+      const clienteComRegiao = this.filteredCustomers.find((c) => c.regiao?.regiao_id?.toString() === this.selectedRegion);
+      regionString = clienteComRegiao && clienteComRegiao.regiao?.nome ? '-' + clienteComRegiao.regiao.nome.toLowerCase().replace(/\s+/g, '-') : '';
+    }
+
+    if (this.selectedStatus) {
+      const clienteComStatus = this.filteredCustomers.find((c) => c.status_cliente?.status_cliente_id?.toString() === this.selectedStatus);
+      statusString =
+        clienteComStatus && clienteComStatus.status_cliente?.nome
+          ? '-' + clienteComStatus.status_cliente.nome.toLowerCase().replace(/\s+/g, '-')
+          : '';
+    }
+
+    fileName += regionString;
+    fileName += statusString;
+    fileName += `-${formattedDate}.xlsx`;
+
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(blob, fileName);
   }
 }

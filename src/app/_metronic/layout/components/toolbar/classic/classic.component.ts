@@ -188,12 +188,26 @@ export class ClassicComponent implements OnInit, OnDestroy {
       componentInstance?.downloadExcel();
       return;
     }
+    if (fullPath.includes('commerce/customers')) {
+      const componentInstance = (window as any)['ng'].getComponent(document.querySelector('app-customer'));
+      componentInstance?.exportFilteredCustomers();
+      return;
+    }
+  }
+
+  exportFilteredCustomers(): void {
+    const componentInstance = (window as any)['ng'].getComponent(document.querySelector('app-customer'));
+    componentInstance?.exportFilteredCustomers();
   }
 
   isDisabledPrimary(): boolean {
     const fullPath = this.router.url;
 
-    return fullPath.startsWith('/commerce') || fullPath.startsWith('/expedition/imported-xml');
+    if (fullPath.startsWith('/commerce')) {
+      return fullPath !== '/commerce/customers';
+    }
+
+    return fullPath.startsWith('/expedition/imported-xml');
   }
 
   isDisabledSecondary(): boolean {
@@ -213,6 +227,9 @@ export class ClassicComponent implements OnInit, OnDestroy {
     }
     if (fullPath.includes('sellers/commissions')) {
       return 'Rel. Comissões';
+    }
+    if (fullPath.includes('commerce/customers')) {
+      return 'Download Excel';
     }
     return 'Criar';
   }

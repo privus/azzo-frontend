@@ -6,7 +6,7 @@ import { RomaneioComponent } from './romaneio/romaneio.component';
 import { StockComponent } from './stock/stock.component';
 import { ProductResolver } from '../commerce/product.resolver';
 import { OrderAssemblyComponent } from './order-assembly/order-assembly.component';
-import { AssemblyShellComponent } from './assembly-shell.component/assembly-shell.component';
+import { AssemblyShellComponent } from './assembly-shell/assembly-shell.component';
 import { ImportedXmlComponent } from './imported-xml/imported-xml.component';
 
 const routes: Routes = [
