@@ -14,4 +14,8 @@ export class CustomerService {
   getCustomerByCode(codigo: number) {
     return this.clientService.getCustomerByCode(codigo);
   }
+
+  getStatusHistory(regiao_id: number) {
+    return this.clientService.getStatusHistory(regiao_id);
+  }
 }

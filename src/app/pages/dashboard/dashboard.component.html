@@ -76,3 +76,33 @@
     </div>
   </div>
 </div>
+
+<!-- Gráficos por Região -->
+<div class="row g-5 g-xl-8 mb-5">
+  <div class="col-xl-4" *ngFor="let regiaoId of regioesIds">
+    <div class="card card-flush h-md-100">
+      <div class="card-body pt-2 pb-4 d-flex flex-column align-items-center">
+        <!-- Chart area -->
+        <div class="d-flex flex-center pt-2 mb-4" style="min-height: 200px; width: 100%; position: relative;">
+          <canvas [id]="'chart-regiao-' + regiaoId" style="max-width: 100%; max-height: 200px;"></canvas>
+        </div>
+
+        <!-- Status abaixo do gráfico -->
+        <div class="d-flex flex-column w-100" *ngIf="getRegiaoData(regiaoId)">
+          <div
+            *ngFor="let status of getRegiaoData(regiaoId)!.status"
+            class="d-flex fw-semibold align-items-center my-2 justify-content-between"
+          >
+            <div class="d-flex align-items-center">
+              <div class="bullet w-8px h-5px rounded-2 me-3" [style.backgroundColor]="status.cor"></div>
+              <div class="text-gray-500">{{ status.nome }}</div>
+            </div>
+            <div class="fw-bolder text-gray-700 text-end">
+              {{ status.quantidade }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

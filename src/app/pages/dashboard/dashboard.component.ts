@@ -1,9 +1,11 @@
 import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SalesComparisonReport, Direcao, DebtsComparisonReport, ComparisonReport } from '../models';
+import { SalesComparisonReport, Direcao, StatusAnalyticsByRegion } from '../models';
 import Chart from 'chart.js/auto';
 import { DebtService } from 'src/app/modules/financial/services/debt.service';
 import { OrderService } from 'src/app/modules/commerce/services/order.service';
+import { CustomerService } from 'src/app/modules/commerce/services/customer.service';
+import { Cliente } from 'src/app/modules/commerce/models';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -39,6 +41,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   percentualPermance: number = 0;
   mesAtual: string = new Date().toLocaleString('default', { month: 'long' });
 
+  // Gráficos por região
+  regioesIds: number[] = [5, 7, 6, 4, 10, 2];
+  regioesCharts: Map<number, Chart | null> = new Map();
+  regioesData: Map<number, { nome: string; status: { nome: string; quantidade: number; cor: string; statusId: number }[] }> = new Map();
+  customers: Cliente[] = [];
+  statusAnalyticsData: StatusAnalyticsByRegion[] = [];
+
   readonly CORES = [
     '#1B5E20', // H2O
     '#50CD89', // Green
@@ -52,21 +61,25 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private debtsService: DebtService,
     private orderService: OrderService,
+    private customerService: CustomerService,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.salesPerformance = this.route.snapshot.data['salesAzzoPerformance'];
+    this.statusAnalyticsData = this.route.snapshot.data['statusAnalytics'];
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     this.periodoLabel = this.formatPeriodoLabel(this.formatDate(startOfMonth), this.formatDate(new Date()));
 
     this.mapDataToDashboard();
+    this.loadCustomers();
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.buildChart();
+      this.buildRegioesCharts();
     }, 0);
   }
 
@@ -341,5 +354,230 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     } else {
       return `${fromDate.toLocaleDateString('pt-BR', options)} a ${toDate.toLocaleDateString('pt-BR', options)}`;
     }
+  }
+
+  private loadCustomers(): void {
+    this.customerService.getAllCustomers().subscribe({
+      next: (customers) => {
+        this.customers = customers || [];
+        this.processRegioesData();
+        setTimeout(() => {
+          this.buildRegioesCharts();
+        }, 0);
+      },
+      error: (err) => console.error('Erro ao carregar clientes:', err),
+    });
+  }
+
+  private processRegioesData(): void {
+    this.regioesIds.forEach((regiaoId) => {
+      const clientesRegiao = this.customers.filter((c) => c.regiao?.regiao_id === regiaoId);
+      const nomeRegiao = clientesRegiao[0]?.regiao?.nome || `Região ${regiaoId}`;
+
+      // Agrupar por status
+      const statusMap = new Map<number, { nome: string; quantidade: number; statusId: number }>();
+
+      clientesRegiao.forEach((cliente) => {
+        if (cliente.status_cliente) {
+          const statusId = cliente.status_cliente.status_cliente_id;
+          const statusNome = cliente.status_cliente.nome;
+
+          if (statusMap.has(statusId)) {
+            statusMap.get(statusId)!.quantidade++;
+          } else {
+            statusMap.set(statusId, { nome: statusNome, quantidade: 1, statusId });
+          }
+        }
+      });
+
+      // Converter para array e adicionar cores
+      const statusArray = Array.from(statusMap.values()).map((status) => ({
+        nome: status.nome,
+        quantidade: status.quantidade,
+        cor: this.getStatusColorById(status.statusId),
+        statusId: status.statusId,
+      }));
+
+      this.regioesData.set(regiaoId, {
+        nome: nomeRegiao,
+        status: statusArray,
+      });
+    });
+  }
+
+  private getStatusColorById(statusId: number): string {
+    // Cores baseadas nos status conhecidos (101, 102, 103)
+    switch (statusId) {
+      case 101:
+        return '#50CD89'; // Verde - Ativo
+      case 104:
+        return '#FFC700'; // Amarelo - Atenção
+      case 103:
+        return '#F1416C'; // Vermelho - Inativo
+      case 102:
+        return '#009EF7'; // Azul - Frio
+      default:
+        // Cores padrão para outros status
+        return this.CORES[statusId % this.CORES.length];
+    }
+  }
+
+  private buildRegioesCharts(): void {
+    this.regioesIds.forEach((regiaoId) => {
+      const chartId = `chart-regiao-${regiaoId}`;
+      const ctx = document.getElementById(chartId) as HTMLCanvasElement;
+      if (!ctx) return;
+
+      // Destroi o gráfico anterior, se existir
+      const existingChart = this.regioesCharts.get(regiaoId);
+      if (existingChart) {
+        existingChart.destroy();
+      }
+
+      const regiaoData = this.regioesData.get(regiaoId);
+      if (!regiaoData || regiaoData.status.length === 0) return;
+
+      const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: regiaoData.status.map((s) => s.nome),
+          datasets: [
+            {
+              data: regiaoData.status.map((s) => s.quantidade),
+              backgroundColor: regiaoData.status.map((s) => s.cor),
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '70%',
+          plugins: {
+            legend: {
+              display: true,
+              position: 'right',
+              labels: {
+                generateLabels: (chart) => {
+                  const data = chart.data;
+                  if (data.labels?.length && data.datasets.length && data.datasets[0]) {
+                    const dataset = data.datasets[0];
+                    const backgroundColor = Array.isArray(dataset.backgroundColor) ? dataset.backgroundColor : [];
+                    return data.labels.map((label, i) => {
+                      const value = Array.isArray(dataset.data) ? (dataset.data[i] as number) : 0;
+                      const color = (backgroundColor[i] as string) || '#000000';
+                      return {
+                        text: `${label}: ${value}`,
+                        fillStyle: color,
+                        hidden: false,
+                        index: i,
+                      };
+                    });
+                  }
+                  return [];
+                },
+                usePointStyle: true,
+                padding: 15,
+                font: {
+                  size: 12,
+                  weight: 'bold',
+                },
+              },
+            },
+            title: {
+              display: true,
+              text: regiaoData.nome,
+              position: 'top',
+            },
+            tooltip: {
+              enabled: true,
+            },
+          },
+        },
+        plugins: [
+          {
+            id: 'legendVariation',
+            afterDraw: (chart) => {
+              const legend = chart.legend;
+              if (!legend || !legend.legendItems) return;
+
+              const ctx = chart.ctx;
+              const legendOptions = chart.options.plugins?.legend;
+              if (!legendOptions || legendOptions.position !== 'right') return;
+
+              // Obtém a posição e dimensões da legenda
+              const legendBox = (legend as any).legendHitBoxes;
+              if (!legendBox || legendBox.length === 0) return;
+
+              legend.legendItems.forEach((item: any, index: number) => {
+                const statusAtual = regiaoData.status[index];
+                const variation = this.getStatusVariation(regiaoId, statusAtual.statusId);
+
+                if (variation && variation.variacao !== 0 && legendBox[index]) {
+                  const direction = this.getStatusVariationDirection(regiaoId, statusAtual.statusId);
+                  const arrow = direction === 'aumento' ? '↑' : '↓';
+                  const variationColor = direction === 'aumento' ? '#50CD89' : '#F1416C';
+                  const variationText = `${arrow} ${Math.abs(variation.variacao)}`;
+
+                  // Usa a posição do hitbox da legenda
+                  const box = legendBox[index];
+                  const textX = box.left + box.width + 5;
+                  const textY = box.top + box.height / 2;
+
+                  // Desenha o texto de variação
+                  ctx.save();
+                  ctx.font = 'bold 12px Arial';
+                  ctx.fillStyle = variationColor;
+                  ctx.textAlign = 'left';
+                  ctx.textBaseline = 'middle';
+                  ctx.fillText(variationText, textX, textY);
+                  ctx.restore();
+                }
+              });
+            },
+          },
+        ],
+      });
+
+      this.regioesCharts.set(regiaoId, chart);
+    });
+  }
+
+  getRegiaoData(regiaoId: number): { nome: string; status: { nome: string; quantidade: number; cor: string; statusId: number }[] } | undefined {
+    return this.regioesData.get(regiaoId);
+  }
+
+  private getStatusVariation(regiaoId: number, statusId: number): { quantidadeAnterior: number; variacao: number } | null {
+    const statusAnalytics = this.statusAnalyticsData.find((s) => s.regiaoId === regiaoId);
+    if (!statusAnalytics) return null;
+
+    const historicoStatus = statusAnalytics.historico.find((h) => h.id === statusId);
+    if (!historicoStatus) return null;
+
+    const regiaoData = this.regioesData.get(regiaoId);
+    if (!regiaoData) return null;
+
+    const statusAtual = regiaoData.status.find((s) => s.statusId === statusId);
+    if (!statusAtual) return null;
+
+    const quantidadeAnterior = historicoStatus.quantidade;
+    const quantidadeAtual = statusAtual.quantidade;
+    const variacao = quantidadeAtual - quantidadeAnterior;
+
+    return {
+      quantidadeAnterior,
+      variacao,
+    };
+  }
+
+  private getStatusVariationDirection(regiaoId: number, statusId: number): Direcao | null {
+    const variation = this.getStatusVariation(regiaoId, statusId);
+    if (!variation) return null;
+
+    if (variation.variacao > 0) {
+      return 'aumento';
+    } else if (variation.variacao < 0) {
+      return 'queda';
+    }
+    return null;
   }
 }
