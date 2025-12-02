@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SalesComparisonReport, Direcao, StatusAnalyticsByRegion } from '../models';
+import { SalesComparisonReport, Direcao } from '../models';
 import Chart from 'chart.js/auto';
 import { DebtService } from 'src/app/modules/financial/services/debt.service';
 import { OrderService } from 'src/app/modules/commerce/services/order.service';
@@ -46,7 +46,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   regioesCharts: Map<number, Chart | null> = new Map();
   regioesData: Map<number, { nome: string; status: { nome: string; quantidade: number; cor: string; statusId: number }[] }> = new Map();
   customers: Cliente[] = [];
-  statusAnalyticsData: StatusAnalyticsByRegion[] = [];
 
   readonly CORES = [
     '#1B5E20', // H2O
@@ -67,19 +66,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.salesPerformance = this.route.snapshot.data['salesAzzoPerformance'];
-    this.statusAnalyticsData = this.route.snapshot.data['statusAnalytics'];
+    this.customers = this.route.snapshot.data['customers'];
+
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     this.periodoLabel = this.formatPeriodoLabel(this.formatDate(startOfMonth), this.formatDate(new Date()));
 
     this.mapDataToDashboard();
-    this.loadCustomers();
+    this.processRegioesData(); // ✅ processa antes de buildar os gráficos
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.buildChart();
-      this.buildRegioesCharts();
+      this.buildRegioesCharts(); // já usa dados prontos
     }, 0);
   }
 
@@ -356,20 +356,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private loadCustomers(): void {
-    this.customerService.getAllCustomers().subscribe({
-      next: (customers) => {
-        this.customers = customers || [];
-        this.processRegioesData();
-        setTimeout(() => {
-          this.buildRegioesCharts();
-        }, 0);
-      },
-      error: (err) => console.error('Erro ao carregar clientes:', err),
-    });
-  }
-
   private processRegioesData(): void {
+    this.regioesData.clear(); // evita duplicações
+
+    const ordemStatus = [101, 104, 102, 103]; // ATIVO → ATENÇÃO → FRIO → INATIVO
+
     this.regioesIds.forEach((regiaoId) => {
       const clientesRegiao = this.customers.filter((c) => c.regiao?.regiao_id === regiaoId);
       const nomeRegiao = clientesRegiao[0]?.regiao?.nome || `Região ${regiaoId}`;
@@ -390,13 +381,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         }
       });
 
-      // Converter para array e adicionar cores
-      const statusArray = Array.from(statusMap.values()).map((status) => ({
-        nome: status.nome,
-        quantidade: status.quantidade,
-        cor: this.getStatusColorById(status.statusId),
-        statusId: status.statusId,
-      }));
+      // Converter para array, aplicar cores e ordenar pela sequência fixa
+      const statusArray = Array.from(statusMap.values())
+        .map((status) => ({
+          nome: status.nome,
+          quantidade: status.quantidade,
+          cor: this.getStatusColorById(status.statusId),
+          statusId: status.statusId,
+        }))
+        .sort((a, b) => ordemStatus.indexOf(a.statusId) - ordemStatus.indexOf(b.statusId)); // ✅ ordem forçada
 
       this.regioesData.set(regiaoId, {
         nome: nomeRegiao,
@@ -428,11 +421,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       const ctx = document.getElementById(chartId) as HTMLCanvasElement;
       if (!ctx) return;
 
-      // Destroi o gráfico anterior, se existir
       const existingChart = this.regioesCharts.get(regiaoId);
-      if (existingChart) {
-        existingChart.destroy();
-      }
+      if (existingChart) existingChart.destroy();
 
       const regiaoData = this.regioesData.get(regiaoId);
       if (!regiaoData || regiaoData.status.length === 0) return;
@@ -450,92 +440,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false,
+          maintainAspectRatio: false, // permite controlar o tamanho pelo CSS
           cutout: '70%',
           plugins: {
-            legend: {
-              display: true,
-              position: 'right',
-              labels: {
-                generateLabels: (chart) => {
-                  const data = chart.data;
-                  if (data.labels?.length && data.datasets.length && data.datasets[0]) {
-                    const dataset = data.datasets[0];
-                    const backgroundColor = Array.isArray(dataset.backgroundColor) ? dataset.backgroundColor : [];
-                    return data.labels.map((label, i) => {
-                      const value = Array.isArray(dataset.data) ? (dataset.data[i] as number) : 0;
-                      const color = (backgroundColor[i] as string) || '#000000';
-                      return {
-                        text: `${label}: ${value}`,
-                        fillStyle: color,
-                        hidden: false,
-                        index: i,
-                      };
-                    });
-                  }
-                  return [];
-                },
-                usePointStyle: true,
-                padding: 15,
-                font: {
-                  size: 12,
-                  weight: 'bold',
-                },
-              },
-            },
+            legend: { display: false },
             title: {
-              display: true,
-              text: regiaoData.nome,
-              position: 'top',
-            },
-            tooltip: {
-              enabled: true,
+              display: false,
             },
           },
         },
-        plugins: [
-          {
-            id: 'legendVariation',
-            afterDraw: (chart) => {
-              const legend = chart.legend;
-              if (!legend || !legend.legendItems) return;
-
-              const ctx = chart.ctx;
-              const legendOptions = chart.options.plugins?.legend;
-              if (!legendOptions || legendOptions.position !== 'right') return;
-
-              // Obtém a posição e dimensões da legenda
-              const legendBox = (legend as any).legendHitBoxes;
-              if (!legendBox || legendBox.length === 0) return;
-
-              legend.legendItems.forEach((item: any, index: number) => {
-                const statusAtual = regiaoData.status[index];
-                const variation = this.getStatusVariation(regiaoId, statusAtual.statusId);
-
-                if (variation && variation.variacao !== 0 && legendBox[index]) {
-                  const direction = this.getStatusVariationDirection(regiaoId, statusAtual.statusId);
-                  const arrow = direction === 'aumento' ? '↑' : '↓';
-                  const variationColor = direction === 'aumento' ? '#50CD89' : '#F1416C';
-                  const variationText = `${arrow} ${Math.abs(variation.variacao)}`;
-
-                  // Usa a posição do hitbox da legenda
-                  const box = legendBox[index];
-                  const textX = box.left + box.width + 5;
-                  const textY = box.top + box.height / 2;
-
-                  // Desenha o texto de variação
-                  ctx.save();
-                  ctx.font = 'bold 12px Arial';
-                  ctx.fillStyle = variationColor;
-                  ctx.textAlign = 'left';
-                  ctx.textBaseline = 'middle';
-                  ctx.fillText(variationText, textX, textY);
-                  ctx.restore();
-                }
-              });
-            },
-          },
-        ],
       });
 
       this.regioesCharts.set(regiaoId, chart);
@@ -544,40 +457,5 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   getRegiaoData(regiaoId: number): { nome: string; status: { nome: string; quantidade: number; cor: string; statusId: number }[] } | undefined {
     return this.regioesData.get(regiaoId);
-  }
-
-  private getStatusVariation(regiaoId: number, statusId: number): { quantidadeAnterior: number; variacao: number } | null {
-    const statusAnalytics = this.statusAnalyticsData.find((s) => s.regiaoId === regiaoId);
-    if (!statusAnalytics) return null;
-
-    const historicoStatus = statusAnalytics.historico.find((h) => h.id === statusId);
-    if (!historicoStatus) return null;
-
-    const regiaoData = this.regioesData.get(regiaoId);
-    if (!regiaoData) return null;
-
-    const statusAtual = regiaoData.status.find((s) => s.statusId === statusId);
-    if (!statusAtual) return null;
-
-    const quantidadeAnterior = historicoStatus.quantidade;
-    const quantidadeAtual = statusAtual.quantidade;
-    const variacao = quantidadeAtual - quantidadeAnterior;
-
-    return {
-      quantidadeAnterior,
-      variacao,
-    };
-  }
-
-  private getStatusVariationDirection(regiaoId: number, statusId: number): Direcao | null {
-    const variation = this.getStatusVariation(regiaoId, statusId);
-    if (!variation) return null;
-
-    if (variation.variacao > 0) {
-      return 'aumento';
-    } else if (variation.variacao < 0) {
-      return 'queda';
-    }
-    return null;
   }
 }
