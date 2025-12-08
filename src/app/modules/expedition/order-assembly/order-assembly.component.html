@@ -16,7 +16,7 @@
             class="form-control"
             min="1"
             [(ngModel)]="multiplicador"
-            [disabled]="!scanningEnabled || isLoading"
+            [disabled]="!scanningEnabled[order.codigo] || isLoading"
             (blur)="focusScannerInput()"
             (keyup.enter)="focusScannerInput()"
           />
@@ -42,7 +42,8 @@
       </div>
     </div>
 
-    <div class="card-body pt-2" style="position:relative; overflow-y:auto; max-height:70vh;">
+    <div #cardBody class="card-body pt-2">
+      <!-- Watermark de pausa/conclusão -->
       <div 
         *ngIf="!scanningEnabled[code] && !isCompleted[code]"
         class="pause-watermark pause-watermark-paused"
@@ -60,6 +61,7 @@
         </span>
       </div>
     
+      <!-- Input do scanner -->
       <ng-container *ngIf="scanningEnabled[order.codigo]">
         <input
           #scannerInput
@@ -78,7 +80,7 @@
       <div
         *ngIf="isLoading"
         class="d-flex justify-content-center align-items-center"
-        style="height:200px;"
+        style="height:200px; position:relative; z-index:30;"
       >
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Carregando…</span>
@@ -101,8 +103,10 @@
             }"
           ></span>
 
-          <div class="flex-grow-1 border-bottom">
-            <div class="fw-bold">{{ item.produto.nome }}</div>
+          <div
+            class="flex-grow-1 border-bottom"
+          >
+            <div class="fw-bold" [ngStyle]="item.produto.unidade ? { color: '#007bff' } : {}">{{ item.produto.nome }}</div>
             <small class="d-block">
               {{ item.scannedCount }} / {{ item.quantidade }}
             </small>
@@ -131,7 +135,7 @@
       </ng-container>
 
       <ng-template #noItems>
-        <div class="text-center text-muted py-4">
+        <div class="text-center text-muted py-4" style="position:relative; z-index:30;">
           Nenhum item neste pedido.
         </div>
       </ng-template>

@@ -1,17 +1,15 @@
 .pause-watermark {
-  position: sticky;
-  top: 50%;
+  position: absolute;
+  top: 0;
   left: 0;
   width: 100%;
-  z-index: 200;
+  height: 100%;
+  z-index: 10;
   display: flex;
   justify-content: center;
+  align-items: center;
   pointer-events: none;
   user-select: none;
-  transform: translateY(-50%);
-  align-items: center;
-  min-height: 120px; /* ajuste opcional, aumenta área da marca d’água */
-  margin-bottom: -100px;
 }
 
 .pause-watermark-paused {
@@ -67,6 +65,19 @@
   margin: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.fullscreen-overlay .card-header {
+  flex-shrink: 0;
+}
+
+.fullscreen-overlay .card-body {
+  max-height: none !important;
+  height: auto !important;
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
 }
 
 .assembly-card-root,
@@ -93,6 +104,13 @@
   flex: 1 1 auto;
   overflow-y: auto;
   min-height: 0;
+  position: relative;
+  max-height: 70vh;
+}
+
+.item-row {
+  position: relative;
+  z-index: 20;
 }
 
 

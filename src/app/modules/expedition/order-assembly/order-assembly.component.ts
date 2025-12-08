@@ -30,6 +30,9 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
   @ViewChild('scannerInput', { static: false })
   scannerInput!: ElementRef<HTMLInputElement>;
 
+  @ViewChild('cardBody', { static: false })
+  cardBody!: ElementRef<HTMLDivElement>;
+
   constructor(
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
@@ -105,6 +108,9 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
     const code = raw.trim();
     const prod = this.products.find((p) => p.produto.ean === code);
 
+    // Salva a posição de scroll antes de atualizar
+    const scrollPosition = this.cardBody?.nativeElement?.scrollTop || 0;
+
     this.scannerInput.nativeElement.value = '';
     setTimeout(() => {
       this.scannerInput.nativeElement.focus();
@@ -121,6 +127,16 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
     }
 
     prod.scannedCount = Math.min(prod.scannedCount + this.multiplicador, prod.quantidade);
+
+    // Restaura a posição de scroll após a atualização do DOM
+    // Usa requestAnimationFrame para garantir que a renderização aconteceu
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        if (this.cardBody?.nativeElement) {
+          this.cardBody.nativeElement.scrollTop = scrollPosition;
+        }
+      }, 0);
+    });
 
     const allComplete = this.products.every((item) => item.scannedCount === item.quantidade);
 
