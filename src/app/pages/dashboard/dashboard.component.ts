@@ -5,8 +5,9 @@ import Chart from 'chart.js/auto';
 import { DebtService } from 'src/app/modules/financial/services/debt.service';
 import { OrderService } from 'src/app/modules/commerce/services/order.service';
 import { CustomerService } from 'src/app/modules/commerce/services/customer.service';
-import { Cliente } from 'src/app/modules/commerce/models';
+import { Cliente, ProductRankingItem } from 'src/app/modules/commerce/models';
 import { forkJoin } from 'rxjs';
+import { ProductsService } from 'src/app/core/services/products.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -46,6 +47,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   regioesCharts: Map<number, Chart | null> = new Map();
   regioesData: Map<number, { nome: string; status: { nome: string; quantidade: number; cor: string; statusId: number }[] }> = new Map();
   customers: Cliente[] = [];
+  productRanking: ProductRankingItem[] = [];
+  rankingLimit: number = 100;
 
   readonly CORES = [
     '#1B5E20', // H2O
@@ -61,12 +64,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     private debtsService: DebtService,
     private orderService: OrderService,
     private customerService: CustomerService,
+    private productsService: ProductsService,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.salesPerformance = this.route.snapshot.data['salesAzzoPerformance'];
     this.customers = this.route.snapshot.data['customers'];
+    this.productRanking = this.route.snapshot.data['productRanking'] || [];
 
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
@@ -304,17 +309,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     // Agora passe os quatro parâmetros para cada método
     const salesPerformance$ = this.orderService.getPerformanceSales(fromDate1, toDate1, fromDate2, toDate2);
-    const debtsAzzoPerformance$ = this.debtsService.getPerformanceDebts(2, fromDate1, toDate1, fromDate2, toDate2);
-    const debtsPersonPerformance$ = this.debtsService.getPerformanceDebts(4, fromDate1, toDate1, fromDate2, toDate2);
-    const debtsComparisonReport$ = this.debtsService.getComparisonDebts(fromDate2, toDate2);
+    const productRanking$ = this.productsService.getProductRanking(fromDate2, toDate2);
 
-    forkJoin([salesPerformance$, debtsAzzoPerformance$, debtsPersonPerformance$, debtsComparisonReport$]).subscribe({
-      next: ([salesPerformance]) => {
+    forkJoin([salesPerformance$, productRanking$]).subscribe({
+      next: ([salesPerformance, productRanking]) => {
         this.salesPerformance = salesPerformance;
+        this.productRanking = productRanking || [];
 
         this.mapDataToDashboard();
 
-        // Redesenhe seus gráficos aqui
         setTimeout(() => {
           this.buildChart();
           this.buildChartDebts();
@@ -457,5 +460,31 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   getRegiaoData(regiaoId: number): { nome: string; status: { nome: string; quantidade: number; cor: string; statusId: number }[] } | undefined {
     return this.regioesData.get(regiaoId);
+  }
+
+  getRankingBadgeClass(direcao: 'aumento' | 'queda' | 'neutro'): string {
+    switch (direcao) {
+      case 'aumento':
+        return 'badge-light-success';
+      case 'queda':
+        return 'badge-light-danger';
+      default:
+        return 'badge-light-secondary';
+    }
+  }
+
+  getRankingBadgeIcon(direcao: 'aumento' | 'queda' | 'neutro'): string {
+    switch (direcao) {
+      case 'aumento':
+        return 'ki-duotone ki-arrow-up fs-5 text-success ms-n1';
+      case 'queda':
+        return 'ki-duotone ki-arrow-down fs-5 text-danger ms-n1';
+      default:
+        return '';
+    }
+  }
+
+  getDisplayedRanking(): ProductRankingItem[] {
+    return this.productRanking.slice(0, this.rankingLimit);
   }
 }

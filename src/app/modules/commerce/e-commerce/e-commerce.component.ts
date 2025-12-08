@@ -47,6 +47,8 @@ export class EcommerceComponent implements OnInit {
 
   ngOnInit(): void {
     this.ecommerces = this.route.snapshot.data['ecommerces'] || [];
+    // Ordenar por código
+    this.ecommerces = this.ecommerces.sort((a, b) => a.codigo - b.codigo);
     this.filteredEcommerces = [...this.ecommerces];
     this.calculatePagination();
     this.updateDisplayedItems();
@@ -70,6 +72,9 @@ export class EcommerceComponent implements OnInit {
     if (this.selectedEcommerce) {
       result = result.filter((order) => String(order.loja_id) === this.selectedEcommerce);
     }
+
+    // Ordenar por código
+    result = result.sort((a, b) => a.codigo - b.codigo);
 
     this.filteredEcommerces = result;
     this.currentPage = 1;

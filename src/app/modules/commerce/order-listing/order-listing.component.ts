@@ -75,6 +75,7 @@ export class OrderListingComponent implements OnInit {
     private http: HttpClient,
     private modalService: NgbModal,
     private localStorage: LocalStorageService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -996,5 +997,11 @@ export class OrderListingComponent implements OnInit {
         });
       }
     });
+  }
+
+  startAssembly(): void {
+    if (this.selectedOrders.length === 0) return;
+
+    this.router.navigate(['/expedition/assembly'], { queryParams: { orders: this.selectedOrders.map((o) => o.codigo).join(',') } });
   }
 }

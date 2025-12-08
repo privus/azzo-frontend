@@ -31,50 +31,129 @@
     </button>
   </div>
 </div>
-<div class="card card-flush h-md-25 mb-5 mb-xl-10" style="width: 300px; float: left;">
-  <div class="card-header pt-5">
-    <div class="card-title d-flex flex-column">
-      <div class="d-flex align-items-center">
-        <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
-        <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
-          {{ salesPerformance.faturamentoMesAtual | number: '1.2-2' }}
-        </span>
-        <span class="badge fs-base" [ngClass]="getBadgeClass(salesPerformance.direcao)">
-          <i class="ki-duotone fs-10 ms-n1" [ngClass]="getBadgeIcon(salesPerformance.direcao)">
-            <span class="path1"></span><span class="path2"></span>
-          </i>
-          {{ salesPerformance.variacaoPercentual | number: '1.2-2' }}%
-        </span>
-        
-      </div>
-      <span class="text-gray-500 pt-1 fw-semibold fs-9">Faturamento {{ periodoLabel }}</span>
-    </div>
-  </div>
 
-  <div class="card-body pt-2 pb-4 d-flex flex-column align-items-center">
-    <!-- Chart area -->
-    <div class="d-flex flex-center pt-2 mb-4">
-      <div style="min-width: 100px; min-height: 100px">
-        <canvas id="chart-marcas" width="150" height="100"></canvas>
-      </div>
-    </div>
-
-    <!-- Marcas abaixo do gráfico -->
-    <div class="d-flex flex-column w-100">
-      <div
-        *ngFor="let marca of marcas; let i = index"
-        class="d-flex fw-semibold align-items-center my-2 justify-content-between"
-      >
+<!-- Container para Faturamento e Ranking -->
+<div style="width: 320px; float: left;">
+  <!-- Card de Faturamento -->
+  <div class="card card-flush h-md-25 mb-5 mb-xl-10">
+    <div class="card-header pt-5">
+      <div class="card-title d-flex flex-column">
         <div class="d-flex align-items-center">
-          <div class="bullet w-8px h-5px rounded-2 me-3" [style.backgroundColor]="marca.cor"></div>
-          <div class="text-gray-500">{{ marca.nome }}</div>
+          <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
+          <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
+            {{ salesPerformance.faturamentoMesAtual | number: '1.2-2' }}
+          </span>
+          <span class="badge fs-base" [ngClass]="getBadgeClass(salesPerformance.direcao)">
+            <i class="ki-duotone fs-10 ms-n1" [ngClass]="getBadgeIcon(salesPerformance.direcao)">
+              <span class="path1"></span><span class="path2"></span>
+            </i>
+            {{ salesPerformance.variacaoPercentual | number: '1.2-2' }}%
+          </span>
+          
         </div>
-        <div class="fw-bolder text-gray-700 text-end">
-          R$ {{ marca.valor | number: '1.2-2' }}
+        <span class="text-gray-500 pt-1 fw-semibold fs-9">Faturamento {{ periodoLabel }}</span>
+      </div>
+    </div>
+
+    <div class="card-body pt-2 pb-4 d-flex flex-column align-items-center">
+      <!-- Chart area -->
+      <div class="d-flex flex-center pt-2 mb-4">
+        <div style="min-width: 100px; min-height: 100px">
+          <canvas id="chart-marcas" width="150" height="100"></canvas>
+        </div>
+      </div>
+
+      <!-- Marcas abaixo do gráfico -->
+      <div class="d-flex flex-column w-100">
+        <div
+          *ngFor="let marca of marcas; let i = index"
+          class="d-flex fw-semibold align-items-center my-2 justify-content-between"
+        >
+          <div class="d-flex align-items-center">
+            <div class="bullet w-8px h-5px rounded-2 me-3" [style.backgroundColor]="marca.cor"></div>
+            <div class="text-gray-500">{{ marca.nome }}</div>
+          </div>
+          <div class="fw-bolder text-gray-700 text-end">
+            R$ {{ marca.valor | number: '1.2-2' }}
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="card card-flush bg-white text-dark border-0 shadow-sm rounded-3">
+    <div class="card-body py-4 px-5">   
+      <ng-container *ngFor="let produto of getDisplayedRanking(); let last = last">
+        <!--begin::Item-->
+        <div class="d-flex align-items-center justify-content-between py-3 flex-nowrap">
+          
+          <!-- Imagem + Nome -->
+          <div class="d-flex align-items-center flex-grow-1 min-w-0">
+            <!-- Foto / Placeholder -->
+            <div class="symbol symbol-40px me-3 flex-shrink-0">
+              <img
+                *ngIf="produto.fotoUrl"
+                [src]="produto.fotoUrl"
+                class="h-40px w-40px rounded-2 border border-gray-300"
+                [alt]="produto.nome"
+              />
+              <div
+                *ngIf="!produto.fotoUrl"
+                class="symbol-label bg-light text-gray-600 fw-bold rounded-2 border border-gray-300"
+              >
+                {{ produto.codigo.substring(0, 2).toUpperCase() }}
+              </div>
+            </div>
+  
+            <!-- Texto -->
+            <div class="min-w-0">
+              <div
+                class="fw-bold text-gray-800 text-hover-primary text-truncate fs-6"
+                [ngbTooltip]="produto.quantidade_vendida.toString() + ' unidades'"
+              >
+                {{ produto.nome }}
+              </div>
+              <div class="text-gray-500 fw-semibold fs-7 text-truncate">
+                {{ produto.fornecedor }}
+              </div>
+            </div>
+          </div>
+  
+          <!-- Valor e Badge -->
+          <div class="text-end ms-3 flex-shrink-0">
+            <div class="fw-bold text-gray-900 fs-6">
+              R$ {{ produto.valor_total_vendido | number: '1.2-2' }}
+            </div>
+            <span
+              class="badge fs-8 fw-bold py-1 px-2"
+              [ngClass]="{
+                'badge-light-success': produto.direcao === 'aumento',
+                'badge-light-danger': produto.direcao === 'queda',
+                'badge-light-secondary': produto.direcao === 'neutro'
+              }"
+            >
+              <i
+                class="ki-duotone fs-7 ms-n1 me-1"
+                [ngClass]="{
+                  'ki-arrow-up text-success': produto.direcao === 'aumento',
+                  'ki-arrow-down text-danger': produto.direcao === 'queda',
+                  'ki-minus text-muted': produto.direcao === 'neutro'
+                }"
+              >
+                <span class="path1"></span><span class="path2"></span>
+              </i>
+              {{ produto.variacao_percentual | number: '1.1-1' }}%
+            </span>
+          </div>
+        </div>
+        <!--end::Item-->
+  
+        <!-- Separador pontilhado preto -->
+        <div class="separator-dashed border-dark opacity-50 my-2" *ngIf="!last"></div>
+      </ng-container>
+  
+    </div>
+  </div>
+  
 </div>
 
 <!-- Gráficos por Região -->

@@ -8,7 +8,6 @@
   min-height: 280px;
 }
 
-
 .regiao-titulo {
   font-size: 0.95rem;
   font-weight: 600;
@@ -99,5 +98,65 @@
 
   .legend-item {
     width: 90%;
+  }
+}
+
+.card.bg-white {
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+}
+
+.symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.symbol img {
+  object-fit: cover;
+}
+
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.separator-dashed {
+  border: none; /* reseta qualquer estilo herdado */
+  border-top: 1px dashed rgba(0, 0, 0, 0.3); /* define a linha pontilhada */
+  width: 100%;
+  margin: 0.5rem 0; /* espaçamento vertical */
+}
+
+.badge-light-success {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
+}
+
+.badge-light-danger {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+}
+
+.badge-light-secondary {
+  background-color: rgba(107, 114, 128, 0.15);
+  color: #6b7280;
+}
+
+/* Remove scroll horizontal e ajusta layout */
+.card-body {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 520px;
+  scrollbar-width: thin;
+}
+
+@media (max-width: 768px) {
+  .text-truncate {
+    max-width: 120px;
   }
 }

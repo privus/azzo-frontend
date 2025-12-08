@@ -11,12 +11,15 @@ import { FormsModule } from '@angular/forms';
 import { DebtsComparisonResolver } from './debts-comparison.resolver';
 import { StatusAnalyticsResolver } from './status-analytics.resolver';
 import { CustomerResolver } from '../../modules/commerce/customer.resolver';
+import { ProductRankingResolver } from './product-ranking.resolver';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
     CommonModule,
     FormsModule,
+    NgbModule,
     RouterModule.forChild([
       {
         path: '',
@@ -28,6 +31,7 @@ import { CustomerResolver } from '../../modules/commerce/customer.resolver';
           debtsComparison: DebtsComparisonResolver,
           statusAnalytics: StatusAnalyticsResolver,
           customers: CustomerResolver,
+          productRanking: ProductRankingResolver,
         },
         canActivate: [AuthGuard],
       },
