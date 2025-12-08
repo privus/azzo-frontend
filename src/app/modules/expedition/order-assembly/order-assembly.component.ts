@@ -98,7 +98,7 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
     setTimeout(() => {
       if (this.scannerInput?.nativeElement) {
-        this.scannerInput.nativeElement.focus();
+        this.scannerInput.nativeElement.focus({ preventScroll: true });
       }
     }, 100);
   }
@@ -112,9 +112,6 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
     const scrollPosition = this.cardBody?.nativeElement?.scrollTop || 0;
 
     this.scannerInput.nativeElement.value = '';
-    setTimeout(() => {
-      this.scannerInput.nativeElement.focus();
-    }, 0);
 
     if (!prod) {
       this.showError('Produto não está na lista!', 'Esse produto não está na lista do pedido. Atenção!');
@@ -128,14 +125,23 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
 
     prod.scannedCount = Math.min(prod.scannedCount + this.multiplicador, prod.quantidade);
 
+    // Força detecção de mudanças sem causar scroll
+    this.cdr.detectChanges();
+
     // Restaura a posição de scroll após a atualização do DOM
-    // Usa requestAnimationFrame para garantir que a renderização aconteceu
+    // Usa múltiplos requestAnimationFrame para garantir que a renderização completa aconteceu
     requestAnimationFrame(() => {
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         if (this.cardBody?.nativeElement) {
           this.cardBody.nativeElement.scrollTop = scrollPosition;
         }
-      }, 0);
+        // Foca o input após restaurar o scroll
+        setTimeout(() => {
+          if (this.scannerInput?.nativeElement) {
+            this.scannerInput.nativeElement.focus({ preventScroll: true });
+          }
+        }, 0);
+      });
     });
 
     const allComplete = this.products.every((item) => item.scannedCount === item.quantidade);
@@ -148,7 +154,6 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
     }
 
     this.multiplicador = 1;
-    this.focusScannerInput();
   }
 
   private showError(title: string, text: string) {
@@ -163,15 +168,24 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
     return item.scannedCount === item.quantidade;
   }
 
+  trackByItemId(index: number, item: AssemblyItem): number {
+    return item.itens_venda_id;
+  }
+
   focusScannerInput() {
-    if (this.scanningEnabled[this.code]) {
-      setTimeout(() => this.scannerInput.nativeElement.focus(), 0);
+    if (this.scanningEnabled[this.code] && this.scannerInput?.nativeElement) {
+      // Usa preventScroll para evitar que o focus cause scroll automático
+      setTimeout(() => {
+        this.scannerInput.nativeElement.focus({ preventScroll: true });
+      }, 0);
     }
   }
 
   toggleFullscreen() {
     this.isFullscreen = !this.isFullscreen;
-    if (this.isFullscreen) setTimeout(() => this.focusScannerInput(), 0);
+    if (this.isFullscreen) {
+      setTimeout(() => this.focusScannerInput(), 0);
+    }
   }
 
   saveProgress() {

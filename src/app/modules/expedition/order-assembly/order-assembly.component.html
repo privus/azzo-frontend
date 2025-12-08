@@ -90,7 +90,7 @@
       <!-- Lista de itens -->
       <ng-container *ngIf="!isLoading && products.length > 0; else noItems">
         <div
-          *ngFor="let item of products"
+          *ngFor="let item of products; trackBy: trackByItemId"
           class="d-flex align-items-center mb-4 item-row"
           [ngClass]="{ 'item-complete': isFullyScanned(item) }"
         >
