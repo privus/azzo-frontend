@@ -637,72 +637,72 @@ export class OrderListingComponent implements OnInit {
   printSelectedOrders(): void {
     if (this.selectedOrders.length === 0) return;
 
-    // 🔒 Trava: impedir mais de 6 pedidos em montagem
-    const totalSelecionados = this.selectedOrders.length;
-    const totalMontagem = this.emMontagem;
+    // // 🔒 Trava: impedir mais de 6 pedidos em montagem
+    // const totalSelecionados = this.selectedOrders.length;
+    // const totalMontagem = this.emMontagem;
 
-    if (totalMontagem + totalSelecionados > 10) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Limite atingido',
-        text: `Existem ${totalMontagem} pedidos em montagem. Finalize algum antes de liberar outro.`,
-        confirmButtonText: 'Ok',
-      });
-      return;
-    }
+    // if (totalMontagem + totalSelecionados > 10) {
+    //   Swal.fire({
+    //     icon: 'warning',
+    //     title: 'Limite atingido',
+    //     text: `Existem ${totalMontagem} pedidos em montagem. Finalize algum antes de liberar outro.`,
+    //     confirmButtonText: 'Ok',
+    //   });
+    //   return;
+    // }
+
+    // Swal.fire({
+    //   title: 'Imprimir Pedidos Selecionados',
+    //   html: `<p>Você selecionou <strong>${totalSelecionados}</strong> pedido(s).</p>`,
+    //   showCancelButton: true,
+    //   confirmButtonText: 'Sim!',
+    //   cancelButtonText: 'Cancelar',
+    // }).then((result) => {
+    //   if (!result.isConfirmed) return;
+
+    const responsible = this.user;
 
     Swal.fire({
-      title: 'Imprimir Pedidos Selecionados',
-      html: `<p>Você selecionou <strong>${totalSelecionados}</strong> pedido(s).</p>`,
-      showCancelButton: true,
-      confirmButtonText: 'Sim!',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (!result.isConfirmed) return;
+      title: 'Gerando...',
+      text: 'Aguarde enquanto os arquivos estão sendo processados.',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
 
-      const responsible = this.user;
+    const requests = this.selectedOrders.map((order) =>
+      this.http
+        .post(`${this.baseUrl}sells/${order.codigo}/print`, { responsible }, { responseType: 'blob' })
+        .toPromise()
+        .then((blob) => (blob && blob.size > 0 ? blob : undefined))
+        .catch((err) => {
+          console.error(`Erro ao gerar PDF para pedido ${order.codigo}:`, err);
+          return undefined;
+        }),
+    );
 
-      Swal.fire({
-        title: 'Gerando...',
-        text: 'Aguarde enquanto os arquivos estão sendo processados.',
-        allowOutsideClick: false,
-        didOpen: () => Swal.showLoading(),
-      });
+    Promise.all(requests).then(async (results: (Blob | undefined)[]) => {
+      const validBlobs = results.filter((b): b is Blob => !!b);
+      if (validBlobs.length === 0) {
+        Swal.close();
+        Swal.fire('Erro', 'Nenhum PDF foi gerado com sucesso.', 'error');
+        return;
+      }
 
-      const requests = this.selectedOrders.map((order) =>
-        this.http
-          .post(`${this.baseUrl}sells/${order.codigo}/print`, { responsible }, { responseType: 'blob' })
-          .toPromise()
-          .then((blob) => (blob && blob.size > 0 ? blob : undefined))
-          .catch((err) => {
-            console.error(`Erro ao gerar PDF para pedido ${order.codigo}:`, err);
-            return undefined;
-          }),
-      );
+      const mergedPdf = await PDFDocument.create();
+      for (const blob of validBlobs) {
+        const arrayBuffer = await blob.arrayBuffer();
+        const pdfToMerge = await PDFDocument.load(arrayBuffer);
+        const copiedPages = await mergedPdf.copyPages(pdfToMerge, pdfToMerge.getPageIndices());
+        copiedPages.forEach((page) => mergedPdf.addPage(page));
+      }
 
-      Promise.all(requests).then(async (results: (Blob | undefined)[]) => {
-        const validBlobs = results.filter((b): b is Blob => !!b);
-        if (validBlobs.length === 0) {
-          Swal.close();
-          Swal.fire('Erro', 'Nenhum PDF foi gerado com sucesso.', 'error');
-          return;
-        }
+      const mergedPdfBytes = await mergedPdf.save();
+      const mergedBlob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+      const mergedUrl = URL.createObjectURL(mergedBlob);
 
-        const mergedPdf = await PDFDocument.create();
-        for (const blob of validBlobs) {
-          const arrayBuffer = await blob.arrayBuffer();
-          const pdfToMerge = await PDFDocument.load(arrayBuffer);
-          const copiedPages = await mergedPdf.copyPages(pdfToMerge, pdfToMerge.getPageIndices());
-          copiedPages.forEach((page) => mergedPdf.addPage(page));
-        }
-
-        const mergedPdfBytes = await mergedPdf.save();
-        const mergedBlob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
-        const mergedUrl = URL.createObjectURL(mergedBlob);
-
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-          printWindow.document.write(`
+      const printWindow = window.open('', '_blank');
+      if (printWindow) {
+        printWindow.document.write(`
             <html>
               <head><title>Pedidos</title></head>
               <body style="margin:0">
@@ -710,12 +710,12 @@ export class OrderListingComponent implements OnInit {
               </body>
             </html>
           `);
-          printWindow.document.close();
-        }
+        printWindow.document.close();
+      }
 
-        Swal.close();
-      });
+      Swal.close();
     });
+    // });
   }
 
   // generateLabelsForSelected(): void {
