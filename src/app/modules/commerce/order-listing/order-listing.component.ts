@@ -1002,6 +1002,12 @@ export class OrderListingComponent implements OnInit {
   startAssembly(): void {
     if (this.selectedOrders.length === 0) return;
 
-    this.router.navigate(['/expedition/assembly'], { queryParams: { orders: this.selectedOrders.map((o) => o.codigo).join(',') } });
+    const orderCodes = this.selectedOrders.map((o) => o.codigo).join(',');
+    const urlTree = this.router.createUrlTree(['/expedition/assembly'], {
+      queryParams: { orders: orderCodes },
+    });
+    const url = this.router.serializeUrl(urlTree);
+
+    window.open(url, '_blank');
   }
 }
