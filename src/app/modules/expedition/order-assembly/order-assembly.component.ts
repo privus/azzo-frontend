@@ -33,6 +33,12 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
   @ViewChild('cardBody', { static: false })
   cardBody!: ElementRef<HTMLDivElement>;
 
+  @ViewChild('errorSound', { static: false })
+  errorSound!: ElementRef<HTMLAudioElement>;
+
+  @ViewChild('errorMaxSound', { static: false })
+  errorMaxSound!: ElementRef<HTMLAudioElement>;
+
   constructor(
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
@@ -108,17 +114,16 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
     const code = raw.trim();
     const prod = this.products.find((p) => p.produto.ean === code);
 
-    // Salva a posição de scroll antes de atualizar
-    const scrollPosition = this.cardBody?.nativeElement?.scrollTop || 0;
-
     this.scannerInput.nativeElement.value = '';
 
     if (!prod) {
+      this.playErrorSound();
       this.showError('Produto não está na lista!', 'Esse produto não está na lista do pedido. Atenção!');
       return;
     }
 
     if (prod.scannedCount + this.multiplicador > prod.quantidade) {
+      this.playErrorMaxSound();
       this.showError('Quantidade excedida!', 'Quantidade máxima deste produto já bipada!');
       return;
     }
@@ -128,21 +133,8 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
     // Força detecção de mudanças sem causar scroll
     this.cdr.detectChanges();
 
-    // Restaura a posição de scroll após a atualização do DOM
-    // Usa múltiplos requestAnimationFrame para garantir que a renderização completa aconteceu
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (this.cardBody?.nativeElement) {
-          this.cardBody.nativeElement.scrollTop = scrollPosition;
-        }
-        // Foca o input após restaurar o scroll
-        setTimeout(() => {
-          if (this.scannerInput?.nativeElement) {
-            this.scannerInput.nativeElement.focus({ preventScroll: true });
-          }
-        }, 0);
-      });
-    });
+    // Faz scroll até o produto bipado e destaca ele
+    this.scrollToProductAndHighlight(prod);
 
     const allComplete = this.products.every((item) => item.scannedCount === item.quantidade);
 
@@ -162,6 +154,64 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
         this.focusScannerInput();
       });
     }, 0);
+  }
+
+  private playErrorSound() {
+    if (this.errorSound?.nativeElement) {
+      this.errorSound.nativeElement.currentTime = 0;
+      this.errorSound.nativeElement.play().catch(() => {
+        // Ignora erros de reprodução (ex: navegador bloqueando autoplay)
+      });
+    }
+  }
+
+  private playErrorMaxSound() {
+    if (this.errorMaxSound?.nativeElement) {
+      this.errorMaxSound.nativeElement.currentTime = 0;
+      this.errorMaxSound.nativeElement.play().catch(() => {
+        // Ignora erros de reprodução (ex: navegador bloqueando autoplay)
+      });
+    }
+  }
+
+  private scrollToProductAndHighlight(prod: AssemblyItem) {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const productElement = document.querySelector(`[data-product-id="${prod.itens_venda_id}"]`) as HTMLElement;
+
+        if (productElement && this.cardBody?.nativeElement) {
+          // Calcula a posição do elemento relativo ao container
+          const container = this.cardBody.nativeElement;
+          const elementRect = productElement.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+
+          // Calcula a posição de scroll necessária
+          const elementTop = elementRect.top - containerRect.top + container.scrollTop;
+          const scrollTop = elementTop - (container.clientHeight / 2) + (productElement.offsetHeight / 2);
+
+          // Faz scroll suave até o produto
+          container.scrollTo({
+            top: Math.max(0, scrollTop),
+            behavior: 'smooth'
+          });
+
+          // Adiciona destaque visual temporário
+          productElement.classList.add('product-highlight');
+
+          // Remove o destaque após 2 segundos
+          setTimeout(() => {
+            productElement.classList.remove('product-highlight');
+          }, 2000);
+        }
+
+        // Foca o input após o scroll
+        setTimeout(() => {
+          if (this.scannerInput?.nativeElement) {
+            this.scannerInput.nativeElement.focus({ preventScroll: true });
+          }
+        }, 300);
+      });
+    });
   }
 
   isFullyScanned(item: AssemblyItem): boolean {
