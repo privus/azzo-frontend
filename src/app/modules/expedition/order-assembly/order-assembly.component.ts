@@ -306,4 +306,15 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.saveProgress();
   }
+
+  ngAfterViewInit() {
+    document.body.addEventListener(
+      'click',
+      () => {
+        this.errorSound.nativeElement.load();
+        this.errorMaxSound.nativeElement.load();
+      },
+      { once: true },
+    );
+  }
 }
