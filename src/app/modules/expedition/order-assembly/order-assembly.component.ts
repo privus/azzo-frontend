@@ -187,12 +187,12 @@ export class OrderAssemblyComponent implements OnInit, OnDestroy {
 
           // Calcula a posição de scroll necessária
           const elementTop = elementRect.top - containerRect.top + container.scrollTop;
-          const scrollTop = elementTop - (container.clientHeight / 2) + (productElement.offsetHeight / 2);
+          const scrollTop = elementTop - container.clientHeight / 2 + productElement.offsetHeight / 2;
 
           // Faz scroll suave até o produto
           container.scrollTo({
             top: Math.max(0, scrollTop),
-            behavior: 'smooth'
+            behavior: 'smooth',
           });
 
           // Adiciona destaque visual temporário
