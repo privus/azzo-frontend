@@ -56,7 +56,7 @@
             <td class="text-end">{{ item.pedidos }}</td>
             <td class="text-end">R$ {{ item.comissao | number: '1.2-2' }}</td>
             <td class="text-end">R$ {{ item.ticketMedio | number: '1.2-2' }}</td>
-            <td class="text-end">R$ {{ item.bonificado | number: '1.2-2' }}</td>
+            <td class="text-end">R$ {{ +item.bonificado | number: '1.2-2' }}</td>
             <td></td>
             <!-- Faturamento -->
             <td>
