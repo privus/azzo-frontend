@@ -27,8 +27,6 @@ export class CommissionsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dateRange(); // Inicializa customDateRange com base em dataRange
-
     const commissions = this.route.snapshot.data['commissions'];
     console.log('COMMISSIONS ===> ', commissions);
 
