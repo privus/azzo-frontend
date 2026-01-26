@@ -23,15 +23,16 @@ export class CommissionsComponent implements OnInit {
     private route: ActivatedRoute,
     private sellersService: SellersService,
     private cdr: ChangeDetectorRef,
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit(): void {
     this.dateRange(); // Inicializa customDateRange com base em dataRange
 
     const commissions = this.route.snapshot.data['commissions'];
+    console.log('COMMISSIONS ===> ', commissions);
 
     this.comission = Array.isArray(commissions) ? commissions.sort((a, b) => b.faturado - a.faturado) : [];
-    console.log('COMISION SORTED ===> ', this.comission);
   }
 
   private dateRange(): void {
@@ -94,6 +95,7 @@ export class CommissionsComponent implements OnInit {
       next: (res) => {
         this.comission = res.sort((a, b) => b.faturado - a.faturado);
         this.cdr.detectChanges();
+        console.log('COMISION SORTED ===> ', this.comission);
       },
       error: (err) => console.error('Erro ao buscar comissões:', err),
     });
