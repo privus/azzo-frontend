@@ -21,6 +21,8 @@ export class CommissionsResolver implements Resolve<Commissions[] | null> {
     const formattedStart = start.toISOString().split('T')[0];
     const formattedEnd = end.toISOString().split('T')[0];
 
-    return this.sellersService.getCommissions(formattedStart, formattedEnd);
+    const commissions = this.sellersService.getCommissions(formattedStart, formattedEnd);
+    console.log('COMMISSIONS ===> ', commissions);
+    return commissions;
   }
 }
