@@ -42,6 +42,7 @@
           <th class="text-end pe-3 min-w-100px">Pedidos</th>
           <th class="text-end pe-3 min-w-100px">Comissão</th>
           <th class="text-end pe-3 min-w-100px">Ticket Médio</th>
+          <th class="text-end pe-3 min-w-100px">Valor em Bonificações</th>
           <th style="width: 20px;"></th>
           <th class="text-center min-w-200px">Progresso Faturamento</th>
           <th class="text-center min-w-200px">Progresso Pedidos</th>
@@ -55,6 +56,7 @@
             <td class="text-end">{{ item.pedidos }}</td>
             <td class="text-end">R$ {{ item.comissao | number: '1.2-2' }}</td>
             <td class="text-end">R$ {{ item.ticketMedio | number: '1.2-2' }}</td>
+            <td class="text-end">R$ {{ item.bonificacao | number: '1.2-2' }}</td>
             <td></td>
             <!-- Faturamento -->
             <td>
