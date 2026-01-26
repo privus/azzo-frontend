@@ -30,6 +30,7 @@ export class CommissionsComponent implements OnInit {
     this.dateRange(); // Inicializa customDateRange com base em dataRange
 
     const commissions = this.route.snapshot.data['commissions'];
+    console.log('COMMISSIONS ===> ', commissions);
 
     this.comission = Array.isArray(commissions) ? commissions.sort((a, b) => b.faturado - a.faturado) : [];
   }
