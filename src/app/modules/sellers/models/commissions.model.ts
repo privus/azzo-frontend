@@ -9,7 +9,7 @@ export interface Commissions {
   meta_fat?: number;
   progresso_ped?: number;
   progresso_fat?: number;
-  bonificado?: number;
+  bonificado: number;
 }
 
 export interface CommissionsReport {
