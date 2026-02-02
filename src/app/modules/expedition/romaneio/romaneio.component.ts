@@ -41,6 +41,7 @@ export class RomaneioComponent implements OnInit {
 
   ngOnInit() {
     this.romaneio = this.route.snapshot.data['romaneio'];
+    console.log(this.romaneio);
     this.applyFilters();
   }
 
