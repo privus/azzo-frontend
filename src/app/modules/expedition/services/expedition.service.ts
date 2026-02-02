@@ -63,4 +63,8 @@ export class ExpeditionService {
   getStockOutByEcommerceId(id: number) {
     return this.logisticsService.getStockOutByEcommerceId(id);
   }
+
+  shippingValue(romaneioId: number, shippingValue: number) {
+    return this.logisticsService.shippingValue(romaneioId, shippingValue);
+  }
 }

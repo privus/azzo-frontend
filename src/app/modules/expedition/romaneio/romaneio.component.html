@@ -52,25 +52,68 @@
               </div>
             </td>
             <td>
-              <button (click)="toggleExpand(r.romaneio_id)" class="btn btn-sm btn-icon btn-light toggle">
-                <i *ngIf="!isExpanded(r.romaneio_id)" class="fas fa-plus fs-4 m-0"></i>
-                <i *ngIf="isExpanded(r.romaneio_id)" class="fas fa-minus fs-4 m-0"></i>                  
-              </button>
-              <button 
+                <div class="d-flex align-items-center gap-2 justify-content-end">
+                  <ng-container *ngIf="r.transportadora.transportadora_id === 1">
+                    <button
+                      class="btn btn-sm btn-icon btn-light text-primary"
+                      (click)="triggerFileUpload(r.romaneio_id)"
+                      title="Importar Fretes"
+                    >
+                      <i class="fas fa-file-import fs-4"></i>
+                    </button>
+              
+                    <input
+                      type="file"
+                      [id]="'fileInput-' + r.romaneio_id"
+                      (change)="onFileSelected($event, r.romaneio_id)"
+                      accept=".xlsx"
+                      class="d-none"
+                    />
+                  </ng-container>
+              
+                  <ng-container *ngIf="r.transportadora.transportadora_id !== 1">
 
-                class="btn btn-sm btn-icon btn-light text-primary ms-2"
-                (click)="triggerFileUpload(r.romaneio_id)"
-                title="Importar Fretes"
-              >
-                  <i class="fas fa-file-import fs-4"></i>
-              </button>            
-              <input
-                type="file"
-                [id]="'fileInput-' + r.romaneio_id"
-                (change)="onFileSelected($event, r.romaneio_id)"
-                accept=".xlsx"
-                class="d-none"
-              />            
+                    <!-- 🔘 Botão (abre o input) -->
+                    <button
+                      *ngIf="openFreteRomaneioId !== r.romaneio_id"
+                      class="btn btn-sm btn-light-primary"
+                      (click)="openFreteInput(r.romaneio_id)"
+                      title="Informar frete"
+                    >
+                      <i class="fas fa-pen"></i>
+                    </button>
+                  
+                    <!-- ✍️ Input + salvar -->
+                    <div
+                      *ngIf="openFreteRomaneioId === r.romaneio_id"
+                      class="d-flex align-items-center gap-2"
+                    >
+                      <input
+                        type="number"
+                        class="form-control form-control-sm w-100px"
+                        placeholder="Frete"
+                        [(ngModel)]="shippingValue"
+                      />
+                  
+                      <button
+                        class="btn btn-sm btn-light-success"
+                        (click)="applyShippingValue(r.romaneio_id, shippingValue); closeFreteInput()"
+                        title="Aplicar frete"
+                        [disabled]="!shippingValue || shippingValue <= 0"
+                      >
+                        <i class="fas fa-check"></i>
+                      </button>
+                  
+                      <button
+                        class="btn btn-sm btn-light-danger"
+                        (click)="closeFreteInput()"
+                        title="Cancelar"
+                      >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </ng-container>
+                </div>
             </td>
           </tr>
           <tr *ngIf="isExpanded(r.romaneio_id)">

@@ -5,6 +5,7 @@ import { PaginationService } from '../../../core/services/pagination.service';
 import Swal from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { ExpeditionService } from '../services/expedition.service';
 
 @Component({
   selector: 'app-romaneio',
@@ -28,11 +29,14 @@ export class RomaneioComponent implements OnInit {
   expanded: Set<number> = new Set();
   sortField: 'data_criacao' | 'romaneio_id' = 'data_criacao';
   sortDirection: 'asc' | 'desc' = 'desc';
+  openFreteRomaneioId: number | null = null;
+  shippingValue: number = 0;
 
   constructor(
     private route: ActivatedRoute,
     private paginationService: PaginationService,
     private http: HttpClient,
+    private expeditionService: ExpeditionService,
   ) {}
 
   ngOnInit() {
@@ -210,5 +214,26 @@ export class RomaneioComponent implements OnInit {
   getFretePercentual(r: Romaneio): number {
     const totalPedidos = this.getTotalPedidos(r);
     return totalPedidos > 0 ? (r.valor_frete / totalPedidos) * 100 : 0;
+  }
+
+  applyShippingValue(romaneioId: number, shippingValue: number): void {
+    this.expeditionService.shippingValue(romaneioId, shippingValue).subscribe({
+      next: (resp) => {
+        this.showAlert(resp?.message || 'Frete aplicado com sucesso!');
+      },
+      error: () => {
+        this.showAlert('Erro ao aplicar frete.');
+      },
+    });
+  }
+
+  openFreteInput(romaneioId: number): void {
+    this.openFreteRomaneioId = romaneioId;
+    this.shippingValue = 0;
+  }
+
+  closeFreteInput(): void {
+    this.openFreteRomaneioId = null;
+    this.shippingValue = 0;
   }
 }
