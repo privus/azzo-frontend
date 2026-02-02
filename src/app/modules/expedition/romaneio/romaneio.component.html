@@ -53,6 +53,10 @@
             </td>
             <td>
                 <div class="d-flex align-items-center gap-2 justify-content-end">
+                  <button (click)="toggleExpand(r.romaneio_id)" class="btn btn-sm btn-icon btn-light toggle">
+                    <i *ngIf="!isExpanded(r.romaneio_id)" class="fas fa-plus fs-4 m-0"></i>
+                    <i *ngIf="isExpanded(r.romaneio_id)" class="fas fa-minus fs-4 m-0"></i>                  
+                  </button>
                   <ng-container *ngIf="r.transportadora.transportadora_id === 1">
                     <button
                       class="btn btn-sm btn-icon btn-light text-primary"
