@@ -38,6 +38,8 @@ export class CommissionsComponent implements OnInit {
     this.exportService.onExport('commissions').subscribe(() => {
       this.downloadExcel();
     });
+
+    this.exportService.setVendedores(this.comissionSorted);
   }
 
   private dateRange(): void {

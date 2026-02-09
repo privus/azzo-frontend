@@ -120,8 +120,7 @@ export class ClassicComponent implements OnInit, OnDestroy {
   }
 
   openGoalsModal(): void {
-    const componentInstance = (window as any)['ng'].getComponent(document.querySelector('app-commission'));
-    const vendedores = componentInstance?.comissionSorted;
+    const vendedores = this.exportService.getVendedores();
 
     if (!vendedores || !Array.isArray(vendedores)) {
       alert('Lista de vendedores não encontrada.');
