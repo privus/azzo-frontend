@@ -10,6 +10,7 @@ import { ImportXmlModalComponent } from '../../../../../modules/expedition/impor
 import { StockOutModalComponent } from '../../../../../modules/expedition/stock-out-modal/stock-out-modal.component';
 import { AccountService } from '../../../../../modules/account/services/account.service';
 import { GoalsModalComponent } from 'src/app/modules/sellers/goals-modal/goals-modal.component';
+import { ExportService } from '../../../core/export.service';
 
 @Component({
   selector: 'app-classic',
@@ -42,6 +43,7 @@ export class ClassicComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private router: Router,
     private accountService: AccountService,
+    private exportService: ExportService,
   ) {}
 
   ngOnInit(): void {
@@ -179,18 +181,15 @@ export class ClassicComponent implements OnInit, OnDestroy {
       this.openImportXmlModal();
     }
     if (fullPath.includes('sellers/weekly-bonus')) {
-      const componentInstance = (window as any)['ng'].getComponent(document.querySelector('app-weekly-bonus'));
-      componentInstance?.downloadExcel();
+      this.exportService.triggerExport('weeklyBonus');
       return;
     }
     if (fullPath.includes('sellers/commissions')) {
-      const componentInstance = (window as any)['ng'].getComponent(document.querySelector('app-commission'));
-      componentInstance?.downloadExcel();
+      this.exportService.triggerExport('commissions');
       return;
     }
     if (fullPath.includes('commerce/customers')) {
-      const componentInstance = (window as any)['ng'].getComponent(document.querySelector('app-customer'));
-      componentInstance?.exportFilteredCustomers();
+      this.exportService.triggerExport('customers');
       return;
     }
   }

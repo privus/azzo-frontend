@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cliente, Regiao, StatusCliente } from '../models';
 import { PaginationService } from '../../../core/services/';
+import { ExportService } from '../../../_metronic/layout/core/export.service';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -33,6 +34,7 @@ export class CustomerListingComponent implements OnInit {
     private route: ActivatedRoute,
     private paginationService: PaginationService,
     private router: Router,
+    private exportService: ExportService,
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +42,10 @@ export class CustomerListingComponent implements OnInit {
     this.statusClientes = this.route.snapshot.data['statusClientes'];
     console.log('CLIENTE ===> ', this.customers);
     this.applyFilter();
+
+    this.exportService.onExport('customers').subscribe(() => {
+      this.exportFilteredCustomers();
+    });
   }
 
   applyFilter(): void {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ExportService } from '../../../_metronic/layout/core/export.service';
 import { SellerBonus, WeeklyBonus } from '../models';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
@@ -12,7 +13,10 @@ import { saveAs } from 'file-saver';
 export class WeeklyBonusComponent implements OnInit {
   sellers: SellerBonus[] = [];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private exportService: ExportService,
+  ) {}
 
   ngOnInit(): void {
     const data: WeeklyBonus = this.route.snapshot.data['bonus'];
@@ -21,6 +25,9 @@ export class WeeklyBonusComponent implements OnInit {
       ...stats,
       name: sellerName,
     }));
+    this.exportService.onExport('weeklyBonus').subscribe(() => {
+      this.downloadExcel();
+    });
   }
 
   downloadExcel(): void {

@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ExportService } from '../../../_metronic/layout/core/export.service';
 import { Commissions, CommissionsReport } from '../models';
 import { ActivatedRoute } from '@angular/router';
 import { SellersService } from '../services/sellers.service';
@@ -24,6 +25,7 @@ export class CommissionsComponent implements OnInit {
     private sellersService: SellersService,
     private cdr: ChangeDetectorRef,
     private modalService: NgbModal,
+    private exportService: ExportService,
   ) {}
 
   ngOnInit(): void {
@@ -32,6 +34,10 @@ export class CommissionsComponent implements OnInit {
     const commissions = this.route.snapshot.data['commissions'];
 
     this.comission = Array.isArray(commissions) ? commissions.sort((a, b) => b.faturado - a.faturado) : [];
+
+    this.exportService.onExport('commissions').subscribe(() => {
+      this.downloadExcel();
+    });
   }
 
   private dateRange(): void {
@@ -94,7 +100,6 @@ export class CommissionsComponent implements OnInit {
       next: (res) => {
         this.comission = res.sort((a, b) => b.faturado - a.faturado);
         this.cdr.detectChanges();
-        console.log('COMISION SORTED ===> ', this.comission);
       },
       error: (err) => console.error('Erro ao buscar comissões:', err),
     });
