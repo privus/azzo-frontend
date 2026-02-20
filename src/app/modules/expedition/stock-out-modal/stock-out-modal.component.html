@@ -11,12 +11,34 @@
             <label class="form-label">Motivo da saída</label>
             <select class="form-select" [(ngModel)]="motivoSaida">
             <option value="" disabled>Selecione</option>
-            <option value="Uso interno">Uso interno</option>
+            <option value="Pedido Colaborador">Pedido Colaborador</option>
             <option value="Pasta Vendedores">Pasta Vendedores</option>
+            <option value="Uso interno">Uso interno</option>
             <option value="Perca/Danificado">Perda/Danificado</option>
             <option value="E-commerce">E-commerce</option>
-            <option value="Pedido Interno">Pedido Interno</option>
             </select>
+        </div>
+        <div *ngIf="motivoSaida === 'Pedido Colaborador'">
+            <label class="required fs-6 fw-semibold mb-2">Colaborador</label>
+            <ng-container *ngIf="!showCollaboratorInput; else inputCollaborate">
+                <select
+                  class="form-select form-select-solid"
+                  [(ngModel)]="colaborador_id"
+                  (change)="toggleCollaborateInput($event)"
+                >
+                <option value="">Selecione a Colaborador</option>    
+                <option *ngFor="let c of collaborators" [value]="c.colaborador_id">{{ c.nome }}</option>
+                <option value="novo">Cadastrar Colaborador</option>
+                </select>
+            </ng-container>
+            <ng-template #inputCollaborate>
+                <input
+                    type="text"
+                    class="form-control form-control-solid"
+                    [(ngModel)]="colaborador_nome"
+                    placeholder="Digite o nome do Colaborador"
+                />
+            </ng-template>
         </div>
         <!-- Observação -->
         <div>
@@ -83,6 +105,15 @@
         </div>
     
         <div class="separator"></div>
+        <div 
+            *ngIf="motivoSaida === 'Pedido Colaborador' && selectedProducts.length > 0" 
+            class="alert alert-info mt-3 d-flex justify-content-between align-items-center"
+            >
+            <span class="fw-bold">Total do Pedido:</span>
+            <span class="fs-5 fw-bolder text-primary">
+                R$ {{ totalCollaboratorRequest | number:'1.2-2' }}
+            </span>
+        </div>
     
         <button 
             class="btn btn-primary" 

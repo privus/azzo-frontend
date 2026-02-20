@@ -67,4 +67,8 @@ export class ExpeditionService {
   shippingValue(romaneioId: number, shippingValue: number) {
     return this.logisticsService.shippingValue(romaneioId, shippingValue);
   }
+
+  getAllCollaborators() {
+    return this.logisticsService.getAllCollaborators();
+  }
 }

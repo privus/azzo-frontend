@@ -3,9 +3,12 @@ export interface ProdutoSaida {
   quantidade: number;
 }
 
-export interface StockOut {
+export class StockOut {
   observacao: string;
   produtos: ProdutoSaida[];
+  colaborador_id?: number;
+  colaborador_nome?: string;
+  tipo_saida?: string;
 }
 
 export interface StockById {
@@ -13,4 +16,9 @@ export interface StockById {
   quantidade: number;
   data_saida: string;
   observacao: string;
+}
+
+export interface Collaborate {
+  colaborador_id: number;
+  nome: string;
 }

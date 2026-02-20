@@ -1,7 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Distributor, NfResume, StockById, StockLiquid, StockOut, StockOverview, StockProjection, Xml } from '../../modules/expedition/models';
+import {
+  Collaborate,
+  Distributor,
+  NfResume,
+  StockById,
+  StockLiquid,
+  StockOut,
+  StockOverview,
+  StockProjection,
+  Xml,
+} from '../../modules/expedition/models';
 import { NewRomaneio, Romaneio, Transportadora } from '../../modules/expedition/models';
 import { ProductOrderEcommerce } from 'src/app/modules/commerce/models/ecommerce.model';
 
@@ -69,5 +79,9 @@ export class LogisticsService {
 
   shippingValue(romaneioId: number, shippingValue: number) {
     return this.http.post<{ message: string }>(`${this.baseUrl}sells/shippingValue/${romaneioId}`, { shippingValue });
+  }
+
+  getAllCollaborators() {
+    return this.http.get<Collaborate[]>(`${this.baseUrl}stock/collaborators`);
   }
 }

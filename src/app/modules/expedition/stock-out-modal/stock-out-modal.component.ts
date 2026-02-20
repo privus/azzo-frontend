@@ -4,7 +4,7 @@ import { ProductService } from '../../commerce/services/product.service';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { SweetAlertOptions } from 'sweetalert2';
 import { ExpeditionService } from '../services/expedition.service';
-import { StockOut } from '../models';
+import { Collaborate, StockOut } from '../models';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -15,6 +15,12 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class StockOutModalComponent {
   products: Produto[] = [];
   public userEmail: string = '';
+  valorSaida: number;
+  showCollaborateInput: boolean = false;
+  collaborators: Collaborate[] = [];
+  public showCollaboratorInput: boolean = false;
+  colaborador_id?: number;
+  colaborador_nome?: string;
 
   motivoSaida: string = '';
   observacao: string = '';
@@ -32,7 +38,6 @@ export class StockOutModalComponent {
   ) {}
 
   ngOnInit() {
-    // Crie cópia local para manter seleção independente
     this.productService.getAllProducts().subscribe((data) => {
       this.products = data.map((p) => ({
         ...p,
@@ -41,6 +46,7 @@ export class StockOutModalComponent {
       }));
       this.filteredProducts = [...this.products]; // Inicialmente todos os produtos estão filtrados
     });
+    this.loadCollaborators();
   }
 
   onSearchProduct() {
@@ -81,13 +87,25 @@ export class StockOutModalComponent {
   }
 
   confirmarSaida() {
-    // Envie os dados para o backend ou feche modal retornando os produtos
+    const nomeColaboradorFinal =
+      this.motivoSaida === 'Pedido Colaborador'
+        ? this.colaborador_nome || this.collaborators.find((c) => c.colaborador_id === this.colaborador_id)?.nome || ''
+        : '';
+
+    const observacao =
+      this.motivoSaida === 'Pedido Colaborador'
+        ? `${this.motivoSaida} ${nomeColaboradorFinal} - ${this.observacao} - ${this.userEmail}`
+        : `${this.motivoSaida} - ${this.observacao} - ${this.userEmail}`;
+
     const saida: StockOut = {
-      observacao: `${this.motivoSaida} - ${this.observacao} - ${this.userEmail}`,
+      observacao,
+      tipo_saida: this.motivoSaida,
       produtos: this.selectedProducts.map((p) => ({
         produto_id: p.produto_id,
         quantidade: p.qtd_saida,
       })),
+      colaborador_id: this.colaborador_id,
+      colaborador_nome: this.colaborador_nome,
     };
 
     this.expeditionService.getStockOut(saida).subscribe({
@@ -111,11 +129,7 @@ export class StockOutModalComponent {
         console.error('Erro ao registrar saída de estoque:', error);
       },
     });
-
-    console.log('Saída do estoque:', saida);
-    // TODO: Fechar modal ou limpar
   }
-
   async showAlert(swalOptions: SweetAlertOptions): Promise<void> {
     this.swalOptions = swalOptions;
     this.cdr.detectChanges();
@@ -128,5 +142,33 @@ export class StockOutModalComponent {
 
   isValidSaida(): boolean {
     return !!this.motivoSaida && !!this.observacao && this.selectedProducts.length > 0;
+  }
+
+  private loadCollaborators(): void {
+    this.expeditionService.getAllCollaborators().subscribe((collaborators) => {
+      this.collaborators = collaborators;
+    });
+  }
+
+  toggleCollaborateInput(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+
+    if (value === 'novo') {
+      this.showCollaboratorInput = true;
+      this.colaborador_id = undefined;
+    } else {
+      this.showCollaboratorInput = false;
+      this.colaborador_id = Number(value);
+    }
+  }
+
+  get totalCollaboratorRequest(): number {
+    if (this.motivoSaida !== 'Pedido Colaborador') return 0;
+
+    return this.selectedProducts.reduce((total, produto) => {
+      const preco = Number(produto.preco_venda || 0);
+      const qtd = Number(produto.qtd_saida || 0);
+      return total + preco * qtd;
+    }, 0);
   }
 }
