@@ -8,3 +8,11 @@ export interface Goals {
   progress_ped: number;
   progress_fat: number;
 }
+
+export interface AssemblyGoal {
+  meta_id: number;
+  meta_diaria: number;
+  meta_realizada: number;
+  valor_acumulado: number;
+  valor_condicional: number;
+}

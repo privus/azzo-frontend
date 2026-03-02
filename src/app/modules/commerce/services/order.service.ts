@@ -84,6 +84,10 @@ export class OrderService {
     return this.sellService.getInProduction();
   }
 
+  getAssemblyGoal() {
+    return this.sellService.getAssemblyGoal();
+  }
+
   generatorinstallments(orderId: number, parcelas: PGenerateCredit[]) {
     return this.sellService.installmentGenerate(orderId, parcelas);
   }

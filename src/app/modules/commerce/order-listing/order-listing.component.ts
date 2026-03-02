@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { Order, Ranking, Goals } from '../models';
+import { Order, Ranking, Goals, AssemblyGoal } from '../models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LocalStorageService, PaginationService } from '../../../core/services';
 import { OrderService } from '../services/order.service';
@@ -50,6 +50,7 @@ export class OrderListingComponent implements OnInit {
   selectedType: string = '';
   cargo: string = '';
   emMontagem: number = 0;
+  assemblyGoal: AssemblyGoal;
 
   categories = [
     { id: '46631', label: 'Supermercado', icon: 'fa-store' },
@@ -95,9 +96,15 @@ export class OrderListingComponent implements OnInit {
     this.orderService.getInProduction().subscribe({
       next: (resp) => {
         this.emMontagem = resp;
+        this.cdr.detectChanges();
       },
     });
-    this.cdr.detectChanges();
+    this.orderService.getAssemblyGoal().subscribe({
+      next: (resp) => {
+        this.assemblyGoal = resp;
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   showAlert(swalOptions: SweetAlertOptions) {

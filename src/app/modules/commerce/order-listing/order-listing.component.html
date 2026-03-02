@@ -38,21 +38,43 @@
 
             <button class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9" (click)="onDateRange()">Aplicar</button>
             <div
-                class="d-flex align-items-center position-relative my-1 ms-9"
-                style="background-color: #f5f8fa; padding: 0.5rem 1rem; border-radius: 0.5rem;"
-            >
+            class="d-flex align-items-center position-relative my-1 ms-9"
+            style="background-color: #111827; padding: 0.5rem 1rem; border-radius: 0.5rem;"
+          >
+          
             <button
                 (click)="onProduction()"
                 style="border: none; background: none;">
-                <i class="bi bi-box-seam me-2">
+                <i class="bi bi-box-seam me-2 text-primary">
                     <span class="path1"></span>
                     <span class="path2"></span>
                 </i>
             </button>
-                <span class="fw-semibold fs-6 text-gray-700">
-                    Em Montagem: <strong class="text-danger">{{ emMontagem }}</strong>
+          
+            <div class="d-flex flex-column">
+
+                <!-- META -->
+                <span class="fw-semibold fs-6 text-light">
+                    <i class="bi bi-bullseye me-1 text-danger"></i>
+                    <strong class="text-danger">
+                        {{ assemblyGoal.meta_diaria }}
+                    </strong>
                 </span>
+          
+                <!-- REALIZADA -->
+                <span class="fw-semibold fs-6 text-success mb-1">
+                    <i class="bi bi-check-circle-fill me-1 text-success"></i>
+                    {{ assemblyGoal.meta_realizada }}
+                </span>
+          
+                <!-- VALOR -->
+                <span class="fw-semibold fs-6 text-primary">
+                    {{ assemblyGoal.valor_condicional | currency:'BRL' }}
+                </span>
+          
             </div>
+          
+          </div>
 
             <button
                 class="btn btn-primary d-flex align-items-center position-relative my-1 ms-9"

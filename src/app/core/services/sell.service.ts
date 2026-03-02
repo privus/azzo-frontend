@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Ecommerce, Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
+import { AssemblyGoal, Ecommerce, Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { BrandSales, Commissions, CommissionsReport, Goals, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
@@ -156,5 +156,9 @@ export class SellService {
 
   getAllOrdersEcommerce() {
     return this.http.get<Ecommerce[]>(`${this.baseUrl}sells/ecommerce`);
+  }
+
+  getAssemblyGoal() {
+    return this.http.get<AssemblyGoal>(`${this.baseUrl}sells/assemblyGoal`);
   }
 }
