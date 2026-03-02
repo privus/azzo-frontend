@@ -50,7 +50,13 @@ export class OrderListingComponent implements OnInit {
   selectedType: string = '';
   cargo: string = '';
   emMontagem: number = 0;
-  assemblyGoal: AssemblyGoal;
+  assemblyGoal: AssemblyGoal = {
+    meta_id: 0,
+    valor_acumulado: 0,
+    meta_diaria: 0,
+    meta_realizada: 0,
+    valor_condicional: 0,
+  };
 
   categories = [
     { id: '46631', label: 'Supermercado', icon: 'fa-store' },
