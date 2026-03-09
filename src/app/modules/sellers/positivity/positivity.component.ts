@@ -273,12 +273,20 @@ export class PositivityComponent implements OnInit, AfterViewInit {
               label: function (ctx) {
                 const marca = ctx.dataset.label || '';
                 const value = typeof ctx.raw === 'number' ? ctx.raw : 0;
+
+                const vendedorIndex = ctx.dataIndex;
+                const vendedor = vendedoresOrdenados[vendedorIndex];
+                const total = vendedor?.totalFaturado || 0;
+
+                const percent = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+
                 const formattedValue = new Intl.NumberFormat('pt-BR', {
                   style: 'currency',
                   currency: 'BRL',
                   minimumFractionDigits: 2,
                 }).format(value);
-                return `${marca}: ${formattedValue}`;
+
+                return `${marca}: ${formattedValue} (${percent}%)`;
               },
             },
           },
