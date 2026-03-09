@@ -205,6 +205,7 @@ export class CustomerListingComponent implements OnInit {
       categoria: customer.categoria_cliente.nome,
       celular: customer.celular,
       valor_ultima_compra: customer.valor_ultima_compra ?? '',
+      data_ultima_compra: customer.ultima_compra ?? '',
       status_cliente: customer.status_cliente?.nome,
       regiao: customer.regiao?.nome,
     }));
