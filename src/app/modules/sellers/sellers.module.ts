@@ -8,9 +8,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GoalsModalComponent } from './goals-modal/goals-modal.component';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { GoalsRankingModalComponent } from './goals-ranking-modal/goals-ranking-modal.component';
 
 @NgModule({
-  declarations: [PositivityComponent, CommissionsComponent, WeeklyBonusComponent, GoalsModalComponent],
+  declarations: [PositivityComponent, CommissionsComponent, WeeklyBonusComponent, GoalsModalComponent, GoalsRankingModalComponent],
   imports: [CommonModule, SellersRoutingModule, FormsModule, ReactiveFormsModule, CurrencyMaskModule, SweetAlert2Module],
   providers: [CurrencyPipe],
 })

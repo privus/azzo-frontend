@@ -6,6 +6,7 @@ import { SellersService } from '../services/sellers.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { GoalsRankingModalComponent } from '../goals-ranking-modal/goals-ranking-modal.component';
 
 @Component({
   selector: 'app-commission',
@@ -193,6 +194,15 @@ export class CommissionsComponent implements OnInit {
         console.error('Erro ao baixar relatório detalhado:', err);
         alert('Erro ao gerar o relatório detalhado de comissões.');
       },
+    });
+  }
+
+  openGoalsRankingModal(): void {
+    this.modalService.open(GoalsRankingModalComponent, {
+      size: 'lg',
+      centered: true,
+      backdrop: 'static',
+      keyboard: false,
     });
   }
 }

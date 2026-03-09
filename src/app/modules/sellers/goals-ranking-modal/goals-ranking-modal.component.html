@@ -1,0 +1,116 @@
+<div class="card-body p-10">
+
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <h3 class="modal-title">Ranking de Metas 🎯👑</h3>
+    <button
+      type="button"
+      class="btn btn-sm btn-icon btn-light"
+      (click)="activeModal.dismiss()"
+      aria-label="Close"
+    >
+      <i class="ki-duotone ki-cross fs-1"></i>
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="d-flex justify-content-center my-10">
+
+    <div class="spinner-border text-primary"></div>
+
+  </div>
+
+  <!-- Ranking -->
+  <div *ngIf="!isLoading">
+
+    <div class="table-responsive">
+
+      <table class="table table-row-bordered table-striped">
+
+        <thead>
+
+          <tr class="fw-bold fs-6 text-gray-800">
+
+            <th>
+              <span class="badge badge-light-primary fs-6">
+                Posição
+              </span>
+            </th>
+            <th>Vendedor</th>
+            <th class="text-center">Progresso da Meta</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let seller of ranking; let i = index">
+
+            <td>
+
+              <span
+                [ngClass]="{
+                  'badge badge-light-success': i === 0,
+                  'badge badge-light-primary': i === 1,
+                  'badge badge-light-info': i === 2
+                }"
+              >
+                <ng-container *ngIf="i === 0">👑</ng-container>
+                {{ i + 1 }}º
+              </span>
+
+            </td>
+
+            <td>
+              {{ seller.vendedor.split(' ').slice(0,2).join(' ') }}
+            </td>
+
+            <td>
+
+              <div class="progress" style="height:22px">
+
+                <div
+                  class="progress-bar bg-success fw-bold"
+                  [style.width.%]="seller.progress"
+                >
+
+                  {{ seller.progress }}%
+
+                </div>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+
+  <div class="text-center pt-10">
+
+    <button
+      type="button"
+      class="btn btn-light me-3"
+      (click)="activeModal.dismiss()"
+    >
+      Fechar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="loadGoalsRanking()"
+    >
+      Atualizar
+    </button>
+
+  </div>
+
+</div>

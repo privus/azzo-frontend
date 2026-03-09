@@ -404,7 +404,6 @@
                                 <label class="form-label" style="visibility: hidden;">.</label>
                                 <button class="btn btn-icon btn-active-light-primary w-30px h-30px"
                                   (click)="deleteNf(order.codigo)"
-                                  [disabled]="isOlderThan7Days(order.data_emissao_nfe) || !order.nfe_link"
                                 >
                                   <i class="ki-duotone ki-trash fs-3">
                                     <span class="path1"></span><span class="path2"></span>

@@ -3,7 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { AssemblyGoal, Ecommerce, Order, PFormaPagamento, POrder, Ranking, UpdateSellPerson, UpdateSellStatus } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
-import { BrandSales, Commissions, CommissionsReport, Goals, PositivityByBrandResponse, VendedorPositivacao } from '../../modules/sellers/models';
+import {
+  BrandSales,
+  Commissions,
+  CommissionsReport,
+  Goals,
+  GoalsRanking,
+  PositivityByBrandResponse,
+  VendedorPositivacao,
+} from '../../modules/sellers/models';
 import { SalesComparisonReport } from 'src/app/pages/models/performance-sales.modal';
 import { PGenerateCredit } from 'src/app/modules/financial/models';
 import { AssemblyDto, AssemblyResponse } from 'src/app/modules/expedition/models';
@@ -160,5 +168,9 @@ export class SellService {
 
   getAssemblyGoal() {
     return this.http.get<AssemblyGoal>(`${this.baseUrl}sells/assemblyGoal`);
+  }
+
+  getGoalsRanking() {
+    return this.http.get<GoalsRanking[]>(`${this.baseUrl}sellers/goalsRanking`);
   }
 }

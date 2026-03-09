@@ -202,7 +202,7 @@ export class CustomerListingComponent implements OnInit {
       bairro: customer.bairro,
       complemento: customer.complemento,
       cidade_string: customer.cidade_string,
-      categoria: customer.categoria.nome,
+      categoria: customer.categoria_cliente.nome,
       celular: customer.celular,
       valor_ultima_compra: customer.valor_ultima_compra ?? '',
       status_cliente: customer.status_cliente?.nome,

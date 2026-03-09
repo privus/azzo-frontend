@@ -8,3 +8,8 @@ export interface Goals {
   progress_ped: number;
   progress_fat: number;
 }
+
+export interface GoalsRanking {
+  vendedor: string;
+  progress: number;
+}

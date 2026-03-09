@@ -44,4 +44,8 @@ export class SellersService {
     const to = toDate ? `&toDate=${toDate}` : '';
     return this.sellService.getCommissionsReport(fromDate, to);
   }
+
+  getGoalsRanking() {
+    return this.sellService.getGoalsRanking();
+  }
 }
