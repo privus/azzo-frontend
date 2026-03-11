@@ -315,11 +315,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
         this.mapDataToDashboard();
 
-        setTimeout(() => {
-          this.buildChart();
-          this.buildChartDebts();
-          this.buildChartDebtsPerson();
-        }, 0);
+        this.cdr.detectChanges(); // força atualização da view
+
+        this.buildChart();
+        this.buildChartDebts();
+        this.buildChartDebtsPerson();
       },
       error: (err) => console.error('Erro ao atualizar dashboard:', err),
     });
