@@ -290,11 +290,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     let to1: Date;
 
     if (this.comparisonMode === 'lastMonth') {
-      from1 = new Date(from2.getFullYear(), from2.getMonth() - 1, from2.getDate());
-      to1 = new Date(to2.getFullYear(), to2.getMonth() - 1, to2.getDate());
+      from1 = new Date(from2);
+      to1 = new Date(to2);
+
+      from1.setMonth(from1.getMonth() - 1);
+      to1.setMonth(to1.getMonth() - 1);
     } else {
-      from1 = new Date(from2.getFullYear() - 1, from2.getMonth(), 1);
-      to1 = new Date(to2.getFullYear() - 1, to2.getMonth(), to2.getDate());
+      from1 = new Date(from2);
+      to1 = new Date(to2);
+
+      from1.setFullYear(from1.getFullYear() - 1);
+      to1.setFullYear(to1.getFullYear() - 1);
     }
 
     const fromDate1 = this.formatDate(from1);
