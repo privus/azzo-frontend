@@ -7,18 +7,17 @@ import { SalesComparisonReport } from '../models/performance-sales.modal';
 @Injectable({
   providedIn: 'root',
 })
-export class SalesPersonComparisonResolver implements Resolve<SalesComparisonReport> {
+export class SalesAzzoComparisonResolver implements Resolve<SalesComparisonReport> {
   constructor(private orderService: OrderService) {}
 
   resolve(): Observable<SalesComparisonReport> {
     const now = new Date();
 
-    // Período atual: do dia 1 até hoje
+    // Current month: 1st to today
     const startCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const endCurrentPeriod = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     endCurrentPeriod.setDate(endCurrentPeriod.getDate() + 1);
 
-    // Mesmo período do ano passado
     const startLastYear = new Date(now.getFullYear() - 1, now.getMonth(), 1);
     const endLastYear = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
     endLastYear.setDate(endLastYear.getDate() + 1);
