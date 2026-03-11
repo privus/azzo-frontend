@@ -280,48 +280,50 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.updateDash(fromDate, toDate);
   }
 
-  private updateDash(fromDate2: string, toDate2: string) {
-    const [y1, m1, d1] = fromDate2.split('-').map(Number);
-    const [y2, m2, d2] = toDate2.split('-').map(Number);
+  private parseDate(dateStr: string): Date {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
 
-    const from2 = new Date(y1, m1 - 1, d1);
-    const to2 = new Date(y2, m2 - 1, d2);
-    let from1: Date;
-    let to1: Date;
+  private getComparisonPeriod(from: Date, to: Date) {
+    const from1 = new Date(from);
+    const to1 = new Date(to);
 
     if (this.comparisonMode === 'lastMonth') {
-      from1 = new Date(from2);
-      to1 = new Date(to2);
-
       from1.setMonth(from1.getMonth() - 1);
       to1.setMonth(to1.getMonth() - 1);
     } else {
-      from1 = new Date(from2);
-      to1 = new Date(to2);
-
       from1.setFullYear(from1.getFullYear() - 1);
       to1.setFullYear(to1.getFullYear() - 1);
     }
 
+    return { from1, to1 };
+  }
+
+  private updateDash(fromDate2: string, toDate2: string) {
+    const from2 = this.parseDate(fromDate2);
+    const to2 = this.parseDate(toDate2);
+
+    const { from1, to1 } = this.getComparisonPeriod(from2, to2);
+
     const fromDate1 = this.formatDate(from1);
     const toDate1 = this.formatDate(to1);
-    console.log('[updateDash] Datas:', { fromDate1, toDate1, fromDate2, toDate2 });
-    console.log('Filtro:', { fromDate2, toDate2 });
+
+    console.log('[updateDash]', { fromDate1, toDate1, fromDate2, toDate2 });
+
     this.periodoLabel = this.formatPeriodoLabel(fromDate2, toDate2);
-    console.log('Label calculado:', this.periodoLabel);
 
-    // Agora passe os quatro parâmetros para cada método
-    const salesPerformance$ = this.orderService.getPerformanceSales(fromDate1, toDate1, fromDate2, toDate2);
-    const productRanking$ = this.productsService.getProductRanking(fromDate2, toDate2);
-
-    forkJoin([salesPerformance$, productRanking$]).subscribe({
+    forkJoin([
+      this.orderService.getPerformanceSales(fromDate1, toDate1, fromDate2, toDate2),
+      this.productsService.getProductRanking(fromDate2, toDate2),
+    ]).subscribe({
       next: ([salesPerformance, productRanking]) => {
         this.salesPerformance = salesPerformance;
         this.productRanking = productRanking || [];
 
         this.mapDataToDashboard();
 
-        this.cdr.detectChanges(); // força atualização da view
+        this.cdr.detectChanges();
 
         this.buildChart();
         this.buildChartDebts();
