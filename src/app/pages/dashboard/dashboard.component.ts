@@ -289,8 +289,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       from1 = new Date(from2.getFullYear(), from2.getMonth() - 1, from2.getDate());
       to1 = new Date(to2.getFullYear(), to2.getMonth() - 1, to2.getDate());
     } else {
-      // default: mesmo período ano passado
-      from1 = new Date(from2.getFullYear() - 1, from2.getMonth(), from2.getDate());
+      from1 = new Date(from2.getFullYear() - 1, from2.getMonth(), 1);
       to1 = new Date(to2.getFullYear() - 1, to2.getMonth(), to2.getDate());
     }
 
