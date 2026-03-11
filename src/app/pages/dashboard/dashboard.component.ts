@@ -193,9 +193,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   private formatDate(date: Date): string {
-    return date.toISOString().split('T')[0];
-  }
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
+    return `${year}-${month}-${day}`;
+  }
   onDateRange(): void {
     const selectedRange = this.dataRange;
 
@@ -278,10 +281,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   private updateDash(fromDate2: string, toDate2: string) {
-    // Calcule o período anterior:
-    const from2 = new Date(fromDate2);
-    const to2 = new Date(toDate2);
+    const [y1, m1, d1] = fromDate2.split('-').map(Number);
+    const [y2, m2, d2] = toDate2.split('-').map(Number);
 
+    const from2 = new Date(y1, m1 - 1, d1);
+    const to2 = new Date(y2, m2 - 1, d2);
     let from1: Date;
     let to1: Date;
 
