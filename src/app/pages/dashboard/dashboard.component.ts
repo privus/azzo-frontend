@@ -250,7 +250,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
       case 'thisMonth':
         startDate = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
-        endDate = new Date(); // hoje
+        endDate = new Date(startDate.getFullYear(), startDate.getMonth(), new Date().getDate());
         break;
 
       case 'lastMonth':
@@ -290,9 +290,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const to1 = new Date(to);
 
     if (this.comparisonMode === 'lastMonth') {
+      // mantém o mesmo dia
       from1.setMonth(from1.getMonth() - 1);
       to1.setMonth(to1.getMonth() - 1);
     } else {
+      // mantém exatamente o mesmo intervalo de dias
       from1.setFullYear(from1.getFullYear() - 1);
       to1.setFullYear(to1.getFullYear() - 1);
     }
