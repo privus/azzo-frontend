@@ -13,21 +13,20 @@ export class SalesPersonComparisonResolver implements Resolve<SalesComparisonRep
   resolve(): Observable<SalesComparisonReport> {
     const now = new Date();
 
-    // Período atual: do dia 1 até hoje
+    // Current month: 1st to today
     const startCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const endCurrentPeriod = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     endCurrentPeriod.setDate(endCurrentPeriod.getDate() + 1);
 
-    // Mesmo período do ano passado
-    const startLastYear = new Date(now.getFullYear() - 1, now.getMonth(), 1);
-    const endLastYear = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-    endLastYear.setDate(endLastYear.getDate() + 1);
+    // Last month: 1st to same day as today
+    const startLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const endLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+    endLastMonth.setDate(endLastMonth.getDate() + 1);
 
-    const fromDate1 = this.formatDate(startLastYear);
-    const toDate1 = this.formatDate(endLastYear);
+    const fromDate1 = this.formatDate(startLastMonth);
+    const toDate1 = this.formatDate(endLastMonth);
     const fromDate2 = this.formatDate(startCurrentMonth);
     const toDate2 = this.formatDate(endCurrentPeriod);
-
     console.log('fromDate1', fromDate1);
     console.log('toDate1', toDate1);
     console.log('fromDate2', fromDate2);
