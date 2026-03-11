@@ -274,9 +274,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
 
     const fromDate = this.formatDate(startDate);
+
+    endDate.setDate(endDate.getDate() + 1); // igual ao resolver
     const toDate = this.formatDate(endDate);
 
-    // Sempre passa os dois!
     this.updateDash(fromDate, toDate);
   }
 
@@ -330,7 +331,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.buildChart();
         this.buildChartDebts();
         this.buildChartDebtsPerson();
-        console.log('performance =====>', this.salesPerformance);
       },
       error: (err) => console.error('Erro ao atualizar dashboard:', err),
     });
