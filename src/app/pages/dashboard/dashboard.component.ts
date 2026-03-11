@@ -330,6 +330,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.buildChart();
         this.buildChartDebts();
         this.buildChartDebtsPerson();
+        console.log('performance =====>', this.salesPerformance);
       },
       error: (err) => console.error('Erro ao atualizar dashboard:', err),
     });
