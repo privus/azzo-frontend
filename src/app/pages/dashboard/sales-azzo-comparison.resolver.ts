@@ -19,8 +19,8 @@ export class SalesAzzoComparisonResolver implements Resolve<SalesComparisonRepor
     endCurrentPeriod.setDate(endCurrentPeriod.getDate() + 1);
 
     // Last month: 1st to same day as today
-    const startLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const endLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+    const startLastMonth = new Date(now.getFullYear() - 1, now.getMonth() - 1, 1);
+    const endLastMonth = new Date(now.getFullYear() - 1, now.getMonth() - 1, now.getDate());
     endLastMonth.setDate(endLastMonth.getDate() + 1);
 
     const fromDate1 = this.formatDate(startLastMonth);

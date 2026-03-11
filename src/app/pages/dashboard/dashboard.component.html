@@ -22,7 +22,6 @@
       <label class="form-label ms-3">Para:</label>
       <input type="date" class="form-control form-control-solid w-150px ps-12 ms-3" [(ngModel)]="customDateRange.end" />
     </div>
-    <!-- Botão Aplicar -->
     <button 
       class="btn btn-primary d-flex align-items-center position-relative my-1"
       (click)="onDateRange()"
@@ -37,21 +36,43 @@
   <!-- Card de Faturamento -->
   <div class="card card-flush h-md-25 mb-5 mb-xl-10">
     <div class="card-header pt-5">
-      <div class="card-title d-flex flex-column">
-        <div class="d-flex align-items-center">
-          <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
-          <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
-            {{ salesPerformance.faturamentoMesAtual | number: '1.2-2' }}
-          </span>
-          <span class="badge fs-base" [ngClass]="getBadgeClass(salesPerformance.direcao)">
-            <i class="ki-duotone fs-10 ms-n1" [ngClass]="getBadgeIcon(salesPerformance.direcao)">
-              <span class="path1"></span><span class="path2"></span>
-            </i>
-            {{ salesPerformance.variacaoPercentual | number: '1.2-2' }}%
-          </span>
-          
+      <div class="d-flex align-items-center">
+        <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
+      
+        <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
+          {{ salesPerformance.faturamentoMesAtual | number: '1.2-2' }}
+        </span>
+      
+        <div class="d-flex align-items-start ms-2">
+          <div class="d-flex flex-column align-items-center" style="font-size:0.85rem;">
+            <span class="badge fs-base"
+              [ngClass]="getBadgeClass(salesPerformance.direcao)">
+              <i class="ki-duotone fs-10 ms-n1" [ngClass]="getBadgeIcon(salesPerformance.direcao)">
+                <span class="path1"></span><span class="path2"></span>
+              </i>
+              {{ salesPerformance.variacaoPercentual | number: '1.1-1' }}%
+            </span>
+            <div class="btn-group btn-group-xs mt-1">
+              <button
+                class="btn py-1 px-2"
+                style="font-size:0.82em; height:1.8em;"
+                [ngClass]="comparisonMode === 'lastYear' ? 'btn-primary' : 'btn-light'"
+                (click)="comparisonMode = 'lastYear'; onDateRange()"
+              >
+                Ano
+              </button>
+              <button
+                class="btn py-1 px-2"
+                style="font-size:0.82em; height:1.8em;"
+                [ngClass]="comparisonMode === 'lastMonth' ? 'btn-primary' : 'btn-light'"
+                (click)="comparisonMode = 'lastMonth'; onDateRange()"
+              >
+                Mês
+              </button>
+            </div>
+          </div>
+     
         </div>
-        <span class="text-gray-500 pt-1 fw-semibold fs-9">Faturamento {{ periodoLabel }}</span>
       </div>
     </div>
 

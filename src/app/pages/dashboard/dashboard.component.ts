@@ -2,9 +2,7 @@ import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/co
 import { ActivatedRoute } from '@angular/router';
 import { SalesComparisonReport, Direcao } from '../models';
 import Chart from 'chart.js/auto';
-import { DebtService } from 'src/app/modules/financial/services/debt.service';
 import { OrderService } from 'src/app/modules/commerce/services/order.service';
-import { CustomerService } from 'src/app/modules/commerce/services/customer.service';
 import { Cliente, ProductRankingItem } from 'src/app/modules/commerce/models';
 import { forkJoin } from 'rxjs';
 import { ProductsService } from 'src/app/core/services/products.service';
@@ -23,8 +21,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   departamentosP: { nome: string; valor: number; cor: string }[] = [];
   categorias: { nome: string; valor: number; cor: string }[] = [];
   categoriasP: { nome: string; valor: number; cor: string }[] = [];
-  private chartPagamentosCruzados: Chart | null = null;
-  private chartPagamentosGrupo: Chart | null = null;
   customDateRange: { start: string; end: string } = { start: '', end: '' };
   showCustomDatePicker: boolean = false;
   dataRange: string = 'thisMonth';
@@ -49,6 +45,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   customers: Cliente[] = [];
   productRanking: ProductRankingItem[] = [];
   rankingLimit: number = 100;
+  comparisonMode: 'lastYear' | 'lastMonth' = 'lastYear';
 
   readonly CORES = [
     '#1B5E20', // H2O
@@ -61,9 +58,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
-    private debtsService: DebtService,
     private orderService: OrderService,
-    private customerService: CustomerService,
     private productsService: ProductsService,
     private cdr: ChangeDetectorRef,
   ) {}
@@ -86,15 +81,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       this.buildChart();
       this.buildRegioesCharts(); // já usa dados prontos
     }, 0);
-  }
-
-  private getRandomColor(): string {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
   }
 
   buildChart(): void {
@@ -296,9 +282,17 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const from2 = new Date(fromDate2);
     const to2 = new Date(toDate2);
 
-    // Use new Date para não alterar o objeto original!
-    const from1 = new Date(from2.getFullYear(), from2.getMonth() - 1, from2.getDate());
-    const to1 = new Date(to2.getFullYear(), to2.getMonth() - 1, to2.getDate());
+    let from1: Date;
+    let to1: Date;
+
+    if (this.comparisonMode === 'lastMonth') {
+      from1 = new Date(from2.getFullYear(), from2.getMonth() - 1, from2.getDate());
+      to1 = new Date(to2.getFullYear(), to2.getMonth() - 1, to2.getDate());
+    } else {
+      // default: mesmo período ano passado
+      from1 = new Date(from2.getFullYear() - 1, from2.getMonth(), from2.getDate());
+      to1 = new Date(to2.getFullYear() - 1, to2.getMonth(), to2.getDate());
+    }
 
     const fromDate1 = this.formatDate(from1);
     const toDate1 = this.formatDate(to1);
