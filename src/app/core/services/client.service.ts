@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Cliente } from '../../modules/commerce/models';
 import { environment } from '../../../environments/environment';
-import { StatusAnalyticsHistory } from 'src/app/pages/models';
+import { StatusAnalyticsByRegion } from '../../pages/models';
 
 @Injectable()
 export class ClientService {
@@ -18,7 +18,7 @@ export class ClientService {
     return this.http.get<Cliente>(`${this.baseUrl}customers/${codigo}`);
   }
 
-  getStatusHistory(regiao_id: number) {
-    return this.http.get<StatusAnalyticsHistory[]>(`${this.baseUrl}customers/regiao/${regiao_id}/status`);
+  getStatusHistory(regiao_id: number, data: Date) {
+    return this.http.get<StatusAnalyticsByRegion>(`${this.baseUrl}customers/regiao/${regiao_id}/status?data_registro=${data.toISOString()}`);
   }
 }

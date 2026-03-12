@@ -1,6 +1,6 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SalesComparisonReport, Direcao } from '../models';
+import { SalesComparisonReport, Direcao, StatusAnalyticsByRegion, RegionDashboardData } from '../models';
 import Chart from 'chart.js/auto';
 import { OrderService } from 'src/app/modules/commerce/services/order.service';
 import { Cliente, ProductRankingItem } from 'src/app/modules/commerce/models';
@@ -12,7 +12,7 @@ import { ProductsService } from 'src/app/core/services/products.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit, AfterViewInit {
+export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   salesPerformance: SalesComparisonReport;
   private chartMarcasInstance: Chart | null = null;
 
@@ -22,9 +22,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   categorias: { nome: string; valor: number; cor: string }[] = [];
   categoriasP: { nome: string; valor: number; cor: string }[] = [];
   customDateRange: { start: string; end: string } = { start: '', end: '' };
-  showCustomDatePicker: boolean = false;
-  dataRange: string = 'thisMonth';
-  periodoLabel: string = '';
+  showCustomDatePicker = false;
+  dataRange = 'thisMonth';
+  periodoLabel = '';
 
   departamentosPerson: { nome: string; valor: number; cor: string }[] = [];
   categoriasPerson: { nome: string; valor: number; cor: string }[] = [];
@@ -35,17 +35,20 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   private chartDebtsInstance: Chart | null = null;
   private chartDebtsPersonInstance: Chart | null = null;
 
-  percentualPermance: number = 0;
+  percentualPermance = 0;
   mesAtual: string = new Date().toLocaleString('default', { month: 'long' });
 
   // Gráficos por região
   regioesIds: number[] = [5, 7, 6, 4, 10, 2];
   regioesCharts: Map<number, Chart | null> = new Map();
-  regioesData: Map<number, { nome: string; status: { nome: string; quantidade: number; cor: string; statusId: number }[] }> = new Map();
+  regioesData: Map<number, RegionDashboardData> = new Map();
+  regioesDataList: { regiaoId: number; data: RegionDashboardData }[] = [];
+
   customers: Cliente[] = [];
   productRanking: ProductRankingItem[] = [];
-  rankingLimit: number = 100;
+  rankingLimit = 100;
   comparisonMode: 'lastYear' | 'lastMonth' = 'lastYear';
+  statusDiff: Map<number, StatusAnalyticsByRegion> = new Map();
 
   readonly CORES = [
     '#1B5E20', // H2O
@@ -55,6 +58,15 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     '#5E6278', // Black Fix
     '#FF69B4', // Vidal
   ];
+
+  readonly MARCA_COLORS: Record<string, string> = {
+    H2O: '#1B5E20',
+    Green: '#50CD89',
+    Viceroy: '#009EF7',
+    Pureli: '#FFC700',
+    'Black Fix': '#5E6278',
+    Vidal: '#FF69B4',
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -68,101 +80,126 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.customers = this.route.snapshot.data['customers'];
     this.productRanking = this.route.snapshot.data['productRanking'] || [];
 
+    const statusAnalytics = this.route.snapshot.data['statusAnalytics'] || [];
+
+    statusAnalytics.forEach((item: StatusAnalyticsByRegion) => {
+      this.statusDiff.set(item.regiao_id, item);
+    });
+
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
     this.periodoLabel = this.formatPeriodoLabel(this.formatDate(startOfMonth), this.formatDate(new Date()));
 
     this.mapDataToDashboard();
-    this.processRegioesData(); // ✅ processa antes de buildar os gráficos
+    this.processRegioesData();
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.buildChart();
-      this.buildRegioesCharts(); // já usa dados prontos
-    }, 0);
+    this.buildAllCharts();
+  }
+
+  ngOnDestroy(): void {
+    this.destroyAllCharts();
+  }
+
+  private buildAllCharts(): void {
+    this.buildChart();
+    this.buildChartDebts();
+    this.buildChartDebtsPerson();
+    this.buildRegioesCharts();
+  }
+
+  private destroyAllCharts(): void {
+    if (this.chartMarcasInstance) {
+      this.chartMarcasInstance.destroy();
+      this.chartMarcasInstance = null;
+    }
+
+    if (this.chartDebtsInstance) {
+      this.chartDebtsInstance.destroy();
+      this.chartDebtsInstance = null;
+    }
+
+    if (this.chartDebtsPersonInstance) {
+      this.chartDebtsPersonInstance.destroy();
+      this.chartDebtsPersonInstance = null;
+    }
+
+    this.regioesCharts.forEach((chart) => {
+      if (chart) chart.destroy();
+    });
+    this.regioesCharts.clear();
+  }
+
+  private createDoughnutChart(
+    canvasId: string,
+    labels: string[],
+    values: number[],
+    colors: string[],
+    existingChart: Chart | null,
+    maintainAspectRatio = true,
+  ): Chart | null {
+    const ctx = document.getElementById(canvasId) as HTMLCanvasElement | null;
+    if (!ctx) return existingChart;
+
+    if (existingChart) {
+      existingChart.destroy();
+    }
+
+    return new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels,
+        datasets: [
+          {
+            data: values,
+            backgroundColor: colors,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio,
+        cutout: '70%',
+        plugins: {
+          legend: { display: false },
+        },
+      },
+    });
   }
 
   buildChart(): void {
-    const ctx = document.getElementById('chart-marcas') as HTMLCanvasElement;
-    if (!ctx) return;
-
-    // ⚠️ Destroi o gráfico anterior, se existir!
-    if (this.chartMarcasInstance) {
-      this.chartMarcasInstance.destroy();
-    }
-
-    this.chartMarcasInstance = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: this.marcas.map((m) => m.nome),
-        datasets: [
-          {
-            data: this.marcas.map((m) => m.valor),
-            backgroundColor: this.marcas.map((m) => m.cor),
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        cutout: '70%',
-        plugins: { legend: { display: false } },
-      },
-    });
+    this.chartMarcasInstance = this.createDoughnutChart(
+      'chart-marcas',
+      this.marcas.map((m) => m.nome),
+      this.marcas.map((m) => m.valor),
+      this.marcas.map((m) => m.cor),
+      this.chartMarcasInstance,
+    );
   }
 
   buildChartDebts(): void {
-    const ctx = document.getElementById('chart-departamentos') as HTMLCanvasElement;
-    if (!ctx) return;
-
-    if (this.chartDebtsInstance) this.chartDebtsInstance.destroy();
-
     const dataSet = this.filtroDespesas === 'categoria' ? this.categorias : this.departamentos;
 
-    this.chartDebtsInstance = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: dataSet.map((item) => item.nome),
-        datasets: [
-          {
-            data: dataSet.map((item) => item.valor),
-            backgroundColor: dataSet.map((item) => item.cor),
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        cutout: '70%',
-        plugins: { legend: { display: false } },
-      },
-    });
+    this.chartDebtsInstance = this.createDoughnutChart(
+      'chart-departamentos',
+      dataSet.map((item) => item.nome),
+      dataSet.map((item) => item.valor),
+      dataSet.map((item) => item.cor),
+      this.chartDebtsInstance,
+    );
   }
 
   buildChartDebtsPerson(): void {
-    const ctx = document.getElementById('chart-departamentos-personizi') as HTMLCanvasElement;
-    if (!ctx) return;
-
-    if (this.chartDebtsPersonInstance) this.chartDebtsPersonInstance.destroy();
-
     const dataSet = this.filtroDespesasPerson === 'categoria' ? this.categoriasPerson : this.departamentosPerson;
 
-    this.chartDebtsPersonInstance = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: dataSet.map((item) => item.nome),
-        datasets: [
-          {
-            data: dataSet.map((item) => item.valor),
-            backgroundColor: dataSet.map((item) => item.cor),
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        cutout: '70%',
-        plugins: { legend: { display: false } },
-      },
-    });
+    this.chartDebtsPersonInstance = this.createDoughnutChart(
+      'chart-departamentos-personizi',
+      dataSet.map((item) => item.nome),
+      dataSet.map((item) => item.valor),
+      dataSet.map((item) => item.cor),
+      this.chartDebtsPersonInstance,
+    );
   }
 
   getBadgeClass(direcao: Direcao): string {
@@ -183,8 +220,18 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       case 'queda':
         return 'ki-arrow-down text-danger';
       default:
-        return '';
+        return 'ki-minus text-muted';
     }
+  }
+
+  getDirecaoFromNumber(value: number): Direcao {
+    if (value > 0) return 'aumento';
+    if (value < 0) return 'queda';
+    return 'neutro';
+  }
+
+  getAbsoluteValue(value: number): number {
+    return Math.abs(value);
   }
 
   colorStyle(index: number): string {
@@ -199,6 +246,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     return `${year}-${month}-${day}`;
   }
+
   onDateRange(): void {
     const selectedRange = this.dataRange;
 
@@ -219,7 +267,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       if (end) {
         const to = new Date(end);
         const toDate = this.formatDate(to);
-
         this.updateDash(fromDate, toDate);
       } else {
         this.updateDash(fromDate, fromDate);
@@ -258,24 +305,22 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
         break;
 
-      case 'lastWeek':
+      case 'lastWeek': {
         const dayOfWeek = startDate.getDay();
-        // Começo da semana anterior
         startDate.setDate(startDate.getDate() - dayOfWeek - 7);
-        // Final da semana anterior
         endDate = new Date(startDate);
         endDate.setDate(startDate.getDate() + 6);
         break;
+      }
 
       default:
-        // Período só de hoje
         endDate = new Date(startDate);
         break;
     }
 
     const fromDate = this.formatDate(startDate);
 
-    endDate.setDate(endDate.getDate() + 1); // igual ao resolver
+    endDate.setDate(endDate.getDate() + 1);
     const toDate = this.formatDate(endDate);
 
     this.updateDash(fromDate, toDate);
@@ -291,11 +336,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     const to1 = new Date(to);
 
     if (this.comparisonMode === 'lastMonth') {
-      // mantém o mesmo dia
       from1.setMonth(from1.getMonth() - 1);
       to1.setMonth(to1.getMonth() - 1);
     } else {
-      // mantém exatamente o mesmo intervalo de dias
       from1.setFullYear(from1.getFullYear() - 1);
       to1.setFullYear(to1.getFullYear() - 1);
     }
@@ -303,7 +346,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     return { from1, to1 };
   }
 
-  private updateDash(fromDate2: string, toDate2: string) {
+  private updateDash(fromDate2: string, toDate2: string): void {
     const from2 = this.parseDate(fromDate2);
     const to2 = this.parseDate(toDate2);
 
@@ -327,25 +370,22 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.mapDataToDashboard();
 
         this.cdr.detectChanges();
-
-        this.buildChart();
-        this.buildChartDebts();
-        this.buildChartDebtsPerson();
+        this.buildAllCharts();
       },
       error: (err) => console.error('Erro ao atualizar dashboard:', err),
     });
   }
 
-  private mapDataToDashboard() {
-    // Marcas Azzo
-    const faturamento = this.salesPerformance.faturamentoPorMarcaMesAtual || {};
+  private mapDataToDashboard(): void {
+    const faturamento = this.salesPerformance?.faturamentoPorMarcaMesAtual || {};
     const ordemMarcas = ['H2O', 'Green', 'Viceroy', 'Pureli', 'Black Fix', 'Vidal'];
+
     this.marcas = ordemMarcas
       .filter((nome) => faturamento[nome] !== undefined)
-      .map((nome, index) => ({
+      .map((nome) => ({
         nome,
         valor: faturamento[nome],
-        cor: this.CORES[index],
+        cor: this.MARCA_COLORS[nome] || this.CORES[0],
       }))
       .sort((a, b) => a.valor - b.valor);
   }
@@ -353,7 +393,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   private formatPeriodoLabel(from: string, to: string): string {
     const options: Intl.DateTimeFormatOptions = { day: '2-digit', month: '2-digit' };
 
-    // PARSE STRING 'YYYY-MM-DD' COM new Date(ano, mes-1, dia)
     const [fromYear, fromMonth, fromDay] = from.split('-').map(Number);
     const [toYear, toMonth, toDay] = to.split('-').map(Number);
 
@@ -362,21 +401,32 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     if (from === to) {
       return fromDate.toLocaleDateString('pt-BR', options);
-    } else {
-      return `${fromDate.toLocaleDateString('pt-BR', options)} a ${toDate.toLocaleDateString('pt-BR', options)}`;
     }
+
+    return `${fromDate.toLocaleDateString('pt-BR', options)} a ${toDate.toLocaleDateString('pt-BR', options)}`;
   }
 
   private processRegioesData(): void {
-    this.regioesData.clear(); // evita duplicações
+    this.regioesData.clear();
 
-    const ordemStatus = [101, 104, 102, 103]; // ATIVO → ATENÇÃO → FRIO → INATIVO
+    const ordemStatus = [101, 104, 102, 103];
+    const customersByRegion = new Map<number, Cliente[]>();
+
+    this.customers.forEach((customer) => {
+      const regiaoId = customer.regiao?.regiao_id;
+      if (!regiaoId) return;
+
+      if (!customersByRegion.has(regiaoId)) {
+        customersByRegion.set(regiaoId, []);
+      }
+
+      customersByRegion.get(regiaoId)!.push(customer);
+    });
 
     this.regioesIds.forEach((regiaoId) => {
-      const clientesRegiao = this.customers.filter((c) => c.regiao?.regiao_id === regiaoId);
+      const clientesRegiao = customersByRegion.get(regiaoId) || [];
       const nomeRegiao = clientesRegiao[0]?.regiao?.nome || `Região ${regiaoId}`;
 
-      // Agrupar por status
       const statusMap = new Map<number, { nome: string; quantidade: number; statusId: number }>();
 
       clientesRegiao.forEach((cliente) => {
@@ -387,90 +437,114 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           if (statusMap.has(statusId)) {
             statusMap.get(statusId)!.quantidade++;
           } else {
-            statusMap.set(statusId, { nome: statusNome, quantidade: 1, statusId });
+            statusMap.set(statusId, {
+              nome: statusNome,
+              quantidade: 1,
+              statusId,
+            });
           }
         }
       });
 
-      // Converter para array, aplicar cores e ordenar pela sequência fixa
       const statusArray = Array.from(statusMap.values())
-        .map((status) => ({
-          nome: status.nome,
-          quantidade: status.quantidade,
-          cor: this.getStatusColorById(status.statusId),
-          statusId: status.statusId,
-        }))
-        .sort((a, b) => ordemStatus.indexOf(a.statusId) - ordemStatus.indexOf(b.statusId)); // ✅ ordem forçada
+        .map((status) => {
+          const diff = this.statusDiff.get(regiaoId);
+
+          let diffValue = 0;
+
+          if (diff) {
+            switch (status.statusId) {
+              case 101:
+                diffValue = diff.ativo;
+                break;
+              case 104:
+                diffValue = diff.atencao;
+                break;
+              case 102:
+                diffValue = diff.frio;
+                break;
+              case 103:
+                diffValue = diff.inativo;
+                break;
+              default:
+                diffValue = 0;
+                break;
+            }
+          }
+
+          return {
+            nome: status.nome,
+            quantidade: status.quantidade,
+            cor: this.getStatusColorById(status.statusId),
+            statusId: status.statusId,
+            diff: diffValue,
+          };
+        })
+        .sort((a, b) => ordemStatus.indexOf(a.statusId) - ordemStatus.indexOf(b.statusId));
 
       this.regioesData.set(regiaoId, {
         nome: nomeRegiao,
         status: statusArray,
       });
     });
+
+    this.regioesDataList = this.regioesIds
+      .map((regiaoId) => ({
+        regiaoId,
+        data: this.regioesData.get(regiaoId),
+      }))
+      .filter(
+        (
+          item,
+        ): item is {
+          regiaoId: number;
+          data: RegionDashboardData;
+        } => !!item.data,
+      );
   }
 
   private getStatusColorById(statusId: number): string {
-    // Cores baseadas nos status conhecidos (101, 102, 103)
     switch (statusId) {
       case 101:
-        return '#50CD89'; // Verde - Ativo
+        return '#50CD89'; // Ativo
       case 104:
-        return '#FFC700'; // Amarelo - Atenção
+        return '#FFC700'; // Atenção
       case 103:
-        return '#F1416C'; // Vermelho - Inativo
+        return '#F1416C'; // Inativo
       case 102:
-        return '#009EF7'; // Azul - Frio
+        return '#009EF7'; // Frio
       default:
-        // Cores padrão para outros status
         return this.CORES[statusId % this.CORES.length];
     }
   }
 
   private buildRegioesCharts(): void {
     this.regioesIds.forEach((regiaoId) => {
-      const chartId = `chart-regiao-${regiaoId}`;
-      const ctx = document.getElementById(chartId) as HTMLCanvasElement;
-      if (!ctx) return;
-
-      const existingChart = this.regioesCharts.get(regiaoId);
-      if (existingChart) existingChart.destroy();
-
       const regiaoData = this.regioesData.get(regiaoId);
       if (!regiaoData || regiaoData.status.length === 0) return;
 
-      const chart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: regiaoData.status.map((s) => s.nome),
-          datasets: [
-            {
-              data: regiaoData.status.map((s) => s.quantidade),
-              backgroundColor: regiaoData.status.map((s) => s.cor),
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false, // permite controlar o tamanho pelo CSS
-          cutout: '70%',
-          plugins: {
-            legend: { display: false },
-            title: {
-              display: false,
-            },
-          },
-        },
-      });
+      const chartId = `chart-regiao-${regiaoId}`;
+
+      const existingChart = this.regioesCharts.get(regiaoId) || null;
+
+      const chart = this.createDoughnutChart(
+        chartId,
+        regiaoData.status.map((s) => s.nome),
+        regiaoData.status.map((s) => s.quantidade),
+        regiaoData.status.map((s) => s.cor),
+        existingChart,
+        false,
+      );
 
       this.regioesCharts.set(regiaoId, chart);
     });
   }
 
-  getRegiaoData(regiaoId: number): { nome: string; status: { nome: string; quantidade: number; cor: string; statusId: number }[] } | undefined {
+  getRegiaoData(regiaoId: number): RegionDashboardData | undefined {
     return this.regioesData.get(regiaoId);
   }
 
-  getRankingBadgeClass(direcao: 'aumento' | 'queda' | 'neutro'): string {
+  getRankingBadgeClass(direcao: Direcao): string {
     switch (direcao) {
       case 'aumento':
         return 'badge-light-success';
@@ -481,18 +555,34 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getRankingBadgeIcon(direcao: 'aumento' | 'queda' | 'neutro'): string {
+  getRankingBadgeIcon(direcao: Direcao): string {
     switch (direcao) {
       case 'aumento':
         return 'ki-duotone ki-arrow-up fs-5 text-success ms-n1';
       case 'queda':
         return 'ki-duotone ki-arrow-down fs-5 text-danger ms-n1';
       default:
-        return '';
+        return 'ki-duotone ki-minus fs-5 text-muted ms-n1';
     }
   }
 
   getDisplayedRanking(): ProductRankingItem[] {
     return this.productRanking.slice(0, this.rankingLimit);
+  }
+
+  trackByRegiao(_: number, item: { regiaoId: number; data: RegionDashboardData }): number {
+    return item.regiaoId;
+  }
+
+  trackByStatus(_: number, item: { statusId: number }): number {
+    return item.statusId;
+  }
+
+  trackByMarca(_: number, item: { nome: string }): string {
+    return item.nome;
+  }
+
+  trackByProduto(_: number, item: ProductRankingItem): string | number {
+    return item.codigo || item.nome;
   }
 }

@@ -5,6 +5,20 @@ export interface StatusAnalyticsHistory {
 }
 
 export interface StatusAnalyticsByRegion {
-  regiaoId: number;
-  historico: StatusAnalyticsHistory[];
+  regiao_id: number;
+  ativo: number;
+  frio: number;
+  atencao: number;
+  inativo: number;
+}
+
+export interface RegionDashboardData {
+  nome: string;
+  status: {
+    nome: string;
+    quantidade: number;
+    cor: string;
+    statusId: number;
+    diff: number;
+  }[];
 }

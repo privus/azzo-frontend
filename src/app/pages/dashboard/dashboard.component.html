@@ -1,14 +1,13 @@
 <div class="card-title">
   <div class="d-flex align-items-center gap-3 flex-wrap">
-    <!-- Date Filter -->
-    <select 
-      class="form-select w-auto"  
+    <select
+      class="form-select w-auto"
       id="filterDate"
-      [(ngModel)]="dataRange" 
+      [(ngModel)]="dataRange"
       (ngModelChange)="showCustomDatePicker = dataRange === 'custom'"
-    >   
+    >
       <option value="">Selecione o Período:</option>
-      <option value="last7" selected>Últimos 7 Dias</option>
+      <option value="last7">Últimos 7 Dias</option>
       <option value="last15">Últimos 15 Dias</option>
       <option value="last30">Últimos 30 Dias</option>
       <option value="thisMonth">Este Mês</option>
@@ -16,13 +15,24 @@
       <option value="lastWeek">Semana Passada</option>
       <option value="custom">Entre Datas</option>
     </select>
+
     <div *ngIf="showCustomDatePicker" class="d-flex align-items-center position-relative my-1 ms-8">
       <label class="form-label">De:</label>
-      <input type="date" class="form-control form-control-solid w-150px ps-12" [(ngModel)]="customDateRange.start" />
+      <input
+        type="date"
+        class="form-control form-control-solid w-150px ps-12"
+        [(ngModel)]="customDateRange.start"
+      />
+
       <label class="form-label ms-3">Para:</label>
-      <input type="date" class="form-control form-control-solid w-150px ps-12 ms-3" [(ngModel)]="customDateRange.end" />
+      <input
+        type="date"
+        class="form-control form-control-solid w-150px ps-12 ms-3"
+        [(ngModel)]="customDateRange.end"
+      />
     </div>
-    <button 
+
+    <button
       class="btn btn-primary d-flex align-items-center position-relative my-1"
       (click)="onDateRange()"
     >
@@ -38,24 +48,27 @@
     <div class="card-header pt-5">
       <div class="d-flex align-items-center">
         <span class="fs-4 fw-semibold text-gray-500 me-1 align-self-start">R$</span>
-      
+
         <span class="fs-2hx fw-bold text-gray-900 me-2 lh-1 ls-n2">
           {{ salesPerformance.faturamentoMesAtual | number: '1.2-2' }}
         </span>
-      
+
         <div class="d-flex align-items-start ms-2">
-          <div class="d-flex flex-column align-items-center" style="font-size:0.85rem;">
-            <span class="badge fs-base"
-              [ngClass]="getBadgeClass(salesPerformance.direcao)">
-              <i class="ki-duotone fs-10 ms-n1" [ngClass]="getBadgeIcon(salesPerformance.direcao)">
+          <div class="d-flex flex-column align-items-center" style="font-size: 0.85rem;">
+            <span class="badge fs-base" [ngClass]="getBadgeClass(salesPerformance.direcao)">
+              <i
+                class="ki-duotone fs-10 ms-n1"
+                [ngClass]="getBadgeIcon(salesPerformance.direcao)"
+              >
                 <span class="path1"></span><span class="path2"></span>
               </i>
               {{ salesPerformance.variacaoPercentual | number: '1.1-1' }}%
             </span>
+
             <div class="btn-group btn-group-xs mt-1">
               <button
                 class="btn py-1 px-2"
-                style="font-size:0.82em; height:1.8em;"
+                style="font-size: 0.82em; height: 1.8em;"
                 [ngClass]="comparisonMode === 'lastYear' ? 'btn-primary' : 'btn-light'"
                 (click)="comparisonMode = 'lastYear'; onDateRange()"
               >
@@ -63,7 +76,7 @@
               </button>
               <button
                 class="btn py-1 px-2"
-                style="font-size:0.82em; height:1.8em;"
+                style="font-size: 0.82em; height: 1.8em;"
                 [ngClass]="comparisonMode === 'lastMonth' ? 'btn-primary' : 'btn-light'"
                 (click)="comparisonMode = 'lastMonth'; onDateRange()"
               >
@@ -71,29 +84,30 @@
               </button>
             </div>
           </div>
-     
         </div>
       </div>
     </div>
 
     <div class="card-body pt-2 pb-4 d-flex flex-column align-items-center">
-      <!-- Chart area -->
       <div class="d-flex flex-center pt-2 mb-4">
         <div style="min-width: 100px; min-height: 100px">
           <canvas id="chart-marcas" width="150" height="100"></canvas>
         </div>
       </div>
 
-      <!-- Marcas abaixo do gráfico -->
       <div class="d-flex flex-column w-100">
         <div
-          *ngFor="let marca of marcas; let i = index"
+          *ngFor="let marca of marcas; let i = index; trackBy: trackByMarca"
           class="d-flex fw-semibold align-items-center my-2 justify-content-between"
         >
           <div class="d-flex align-items-center">
-            <div class="bullet w-8px h-5px rounded-2 me-3" [style.backgroundColor]="marca.cor"></div>
+            <div
+              class="bullet w-8px h-5px rounded-2 me-3"
+              [style.backgroundColor]="marca.cor"
+            ></div>
             <div class="text-gray-500">{{ marca.nome }}</div>
           </div>
+
           <div class="fw-bolder text-gray-700 text-end">
             R$ {{ marca.valor | number: '1.2-2' }}
           </div>
@@ -101,15 +115,15 @@
       </div>
     </div>
   </div>
+
+  <!-- Ranking -->
   <div class="card card-flush bg-white text-dark border-0 shadow-sm rounded-3">
-    <div class="card-body py-4 px-5">   
-      <ng-container *ngFor="let produto of getDisplayedRanking(); let last = last">
-        <!--begin::Item-->
+    <div class="card-body py-4 px-5">
+      <ng-container
+        *ngFor="let produto of getDisplayedRanking(); let last = last; trackBy: trackByProduto"
+      >
         <div class="d-flex align-items-center justify-content-between py-3 flex-nowrap">
-          
-          <!-- Imagem + Nome -->
           <div class="d-flex align-items-center flex-grow-1 min-w-0">
-            <!-- Foto / Placeholder -->
             <div class="symbol symbol-40px me-3 flex-shrink-0">
               <img
                 *ngIf="produto.fotoUrl"
@@ -117,15 +131,15 @@
                 class="h-40px w-40px rounded-2 border border-gray-300"
                 [alt]="produto.nome"
               />
+
               <div
                 *ngIf="!produto.fotoUrl"
                 class="symbol-label bg-light text-gray-600 fw-bold rounded-2 border border-gray-300"
               >
-                {{ produto.codigo.substring(0, 2).toUpperCase() }}
+                {{ produto.codigo ? produto.codigo.substring(0, 2).toUpperCase() : '' }}
               </div>
             </div>
-  
-            <!-- Texto -->
+
             <div class="min-w-0">
               <div
                 class="fw-bold text-gray-800 text-hover-primary text-truncate fs-6"
@@ -133,32 +147,24 @@
               >
                 {{ produto.nome }}
               </div>
+
               <div class="text-gray-500 fw-semibold fs-7 text-truncate">
                 {{ produto.fornecedor }}
               </div>
             </div>
           </div>
-  
-          <!-- Valor e Badge -->
+
           <div class="text-end ms-3 flex-shrink-0">
             <div class="fw-bold text-gray-900 fs-6">
               R$ {{ produto.valor_total_vendido | number: '1.2-2' }}
             </div>
+
             <span
               class="badge fs-8 fw-bold py-1 px-2"
-              [ngClass]="{
-                'badge-light-success': produto.direcao === 'aumento',
-                'badge-light-danger': produto.direcao === 'queda',
-                'badge-light-secondary': produto.direcao === 'neutro'
-              }"
+              [ngClass]="getRankingBadgeClass(produto.direcao)"
             >
               <i
-                class="ki-duotone fs-7 ms-n1 me-1"
-                [ngClass]="{
-                  'ki-arrow-up text-success': produto.direcao === 'aumento',
-                  'ki-arrow-down text-danger': produto.direcao === 'queda',
-                  'ki-minus text-muted': produto.direcao === 'neutro'
-                }"
+                [ngClass]="getRankingBadgeIcon(produto.direcao)"
               >
                 <span class="path1"></span><span class="path2"></span>
               </i>
@@ -166,50 +172,59 @@
             </span>
           </div>
         </div>
-        <!--end::Item-->
-  
-        <!-- Separador pontilhado preto -->
+
         <div class="separator-dashed border-dark opacity-50 my-2" *ngIf="!last"></div>
       </ng-container>
-  
     </div>
   </div>
-  
 </div>
 
 <!-- Gráficos por Região -->
 <div class="row g-5 g-xl-8 mb-5">
-  <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12" *ngFor="let regiaoId of regioesIds">
+  <div
+    class="col-xl-4 col-lg-6 col-md-6 col-sm-12"
+    *ngFor="let regiao of regioesDataList; trackBy: trackByRegiao"
+  >
     <div class="card card-flush h-md-100 shadow-sm">
-      <div class="card-body pt-4 pb-4 d-flex flex-column align-items-center justify-content-start text-center position-relative">
-
-        <!-- Nome da Região -->
+      <div
+        class="card-body pt-4 pb-4 d-flex flex-column align-items-center justify-content-start text-center position-relative"
+      >
         <h6 class="fw-bold text-gray-800 mb-4 text-center regiao-titulo">
-          {{ getRegiaoData(regiaoId)?.nome }}
+          {{ regiao.data.nome }}
         </h6>
 
-        <!-- Gráfico -->
         <div class="chart-container position-relative flex-shrink-0 mb-4">
-          <canvas [id]="'chart-regiao-' + regiaoId" class="chart-fixed"></canvas>
+          <canvas [id]="'chart-regiao-' + regiao.regiaoId" class="chart-fixed"></canvas>
         </div>
 
-        <!-- Legenda -->
         <div
           class="d-flex flex-column w-100 align-items-center justify-content-center legend-container"
-          *ngIf="getRegiaoData(regiaoId)"
         >
           <div
-            *ngFor="let status of getRegiaoData(regiaoId)?.status"
+            *ngFor="let status of regiao.data.status; trackBy: trackByStatus"
             class="d-flex fw-semibold align-items-center my-1 justify-content-between legend-item"
           >
-            <!-- Bullet -->
             <div class="d-flex align-items-center">
               <div class="bullet me-3" [style.backgroundColor]="status.cor"></div>
               <div class="text-gray-500">{{ status.nome }}</div>
             </div>
-            <!-- Valor -->
-            <div class="fw-bolder text-gray-700 text-end">
-              {{ status.quantidade }}
+
+            <div class="fw-bolder text-gray-700 text-end d-flex align-items-center">
+              <span>{{ status.quantidade }}</span>
+
+              <span
+                class="badge fs-8 fw-bold py-1 px-2 ms-2"
+                [ngClass]="getBadgeClass(getDirecaoFromNumber(status.diff))"
+              >
+                <i
+                  class="ki-duotone fs-7 ms-n1 me-1"
+                  [ngClass]="getBadgeIcon(getDirecaoFromNumber(status.diff))"
+                >
+                  <span class="path1"></span><span class="path2"></span>
+                </i>
+
+                {{ getAbsoluteValue(status.diff) }}
+              </span>
             </div>
           </div>
         </div>
