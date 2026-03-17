@@ -15,7 +15,11 @@ export class CustomerService {
     return this.clientService.getCustomerByCode(codigo);
   }
 
-  getStatusHistory(regiao_id: number, data: Date) {
+  getStatusHistory(regiao_id: number, data: string) {
     return this.clientService.getStatusHistory(regiao_id, data);
+  }
+
+  getStatusDates() {
+    return this.clientService.getStatusDates();
   }
 }

@@ -2,10 +2,11 @@ import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef } from '
 import { ActivatedRoute } from '@angular/router';
 import { SalesComparisonReport, Direcao, StatusAnalyticsByRegion, RegionDashboardData } from '../models';
 import Chart from 'chart.js/auto';
-import { OrderService } from 'src/app/modules/commerce/services/order.service';
-import { Cliente, ProductRankingItem } from 'src/app/modules/commerce/models';
+import { OrderService } from '../../modules/commerce/services/order.service';
+import { Cliente, ProductRankingItem } from '../../modules/commerce/models';
 import { forkJoin } from 'rxjs';
-import { ProductsService } from 'src/app/core/services/products.service';
+import { ProductsService } from '../../core/services/products.service';
+import { CustomerService } from '../../modules/commerce/services/customer.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,6 +26,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   showCustomDatePicker = false;
   dataRange = 'thisMonth';
   periodoLabel = '';
+  statusDates: string[] = [];
+  selectedStatusDate: string = '';
 
   departamentosPerson: { nome: string; valor: number; cor: string }[] = [];
   categoriasPerson: { nome: string; valor: number; cor: string }[] = [];
@@ -73,6 +76,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     private orderService: OrderService,
     private productsService: ProductsService,
     private cdr: ChangeDetectorRef,
+    private customerService: CustomerService,
   ) {}
 
   ngOnInit(): void {
@@ -92,10 +96,12 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.mapDataToDashboard();
     this.processRegioesData();
+    this.loadStatusDates();
   }
 
   ngAfterViewInit(): void {
     this.buildAllCharts();
+    this.buildRegioesCharts();
   }
 
   ngOnDestroy(): void {
@@ -584,5 +590,41 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   trackByProduto(_: number, item: ProductRankingItem): string | number {
     return item.codigo || item.nome;
+  }
+
+  private loadStatusDates(): void {
+    this.customerService.getStatusDates().subscribe((dates) => {
+      const sorted = dates.sort((a, b) => b.localeCompare(a));
+
+      if (sorted.length >= 2) {
+        this.selectedStatusDate = sorted[1];
+      }
+
+      this.statusDates = sorted;
+    });
+  }
+
+  updateStatusAnalytics(): void {
+    if (!this.selectedStatusDate) return;
+
+    const date = this.selectedStatusDate;
+
+    const observables = this.regioesIds.map((regiaoId) => this.customerService.getStatusHistory(regiaoId, date));
+
+    forkJoin(observables).subscribe({
+      next: (result) => {
+        this.statusDiff.clear();
+
+        result.forEach((item: StatusAnalyticsByRegion) => {
+          this.statusDiff.set(item.regiao_id, item);
+        });
+
+        this.processRegioesData();
+
+        this.cdr.detectChanges();
+        this.buildRegioesCharts();
+      },
+      error: (err) => console.error('Erro ao atualizar status:', err),
+    });
   }
 }

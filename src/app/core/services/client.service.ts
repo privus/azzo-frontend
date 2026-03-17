@@ -18,7 +18,11 @@ export class ClientService {
     return this.http.get<Cliente>(`${this.baseUrl}customers/${codigo}`);
   }
 
-  getStatusHistory(regiao_id: number, data: Date) {
-    return this.http.get<StatusAnalyticsByRegion>(`${this.baseUrl}customers/regiao/${regiao_id}/status?data_registro=${data.toISOString()}`);
+  getStatusHistory(regiao_id: number, data: string) {
+    return this.http.get<StatusAnalyticsByRegion>(`${this.baseUrl}customers/regiao/${regiao_id}/status?data_registro=${data}`);
+  }
+
+  getStatusDates() {
+    return this.http.get<string[]>(`${this.baseUrl}customers/dataHistorico`);
   }
 }

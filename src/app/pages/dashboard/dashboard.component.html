@@ -1,45 +1,66 @@
 <div class="card-title">
-  <div class="d-flex align-items-center gap-3 flex-wrap">
-    <select
-      class="form-select w-auto"
-      id="filterDate"
-      [(ngModel)]="dataRange"
-      (ngModelChange)="showCustomDatePicker = dataRange === 'custom'"
-    >
-      <option value="">Selecione o Período:</option>
-      <option value="last7">Últimos 7 Dias</option>
-      <option value="last15">Últimos 15 Dias</option>
-      <option value="last30">Últimos 30 Dias</option>
-      <option value="thisMonth">Este Mês</option>
-      <option value="lastMonth">Mês Passado</option>
-      <option value="lastWeek">Semana Passada</option>
-      <option value="custom">Entre Datas</option>
-    </select>
-
-    <div *ngIf="showCustomDatePicker" class="d-flex align-items-center position-relative my-1 ms-8">
-      <label class="form-label">De:</label>
-      <input
-        type="date"
-        class="form-control form-control-solid w-150px ps-12"
-        [(ngModel)]="customDateRange.start"
-      />
-
-      <label class="form-label ms-3">Para:</label>
-      <input
-        type="date"
-        class="form-control form-control-solid w-150px ps-12 ms-3"
-        [(ngModel)]="customDateRange.end"
-      />
+  <div class="card-title">
+    <div class="d-flex align-items-center justify-content-between flex-wrap">
+  
+      <!-- ESQUERDA -->
+      <div class="d-flex align-items-center gap-3 flex-wrap">
+        <select
+          class="form-select w-auto"
+          id="filterDate"
+          [(ngModel)]="dataRange"
+          (ngModelChange)="showCustomDatePicker = dataRange === 'custom'"
+        >
+          <option value="">Selecione o Período:</option>
+          <option value="last7">Últimos 7 Dias</option>
+          <option value="last15">Últimos 15 Dias</option>
+          <option value="last30">Últimos 30 Dias</option>
+          <option value="thisMonth">Este Mês</option>
+          <option value="lastMonth">Mês Passado</option>
+          <option value="lastWeek">Semana Passada</option>
+          <option value="custom">Entre Datas</option>
+        </select>
+  
+        <div *ngIf="showCustomDatePicker" class="d-flex align-items-center gap-2">
+          <label class="form-label mb-0">De:</label>
+          <input
+            type="date"
+            class="form-control w-auto"
+            [(ngModel)]="customDateRange.start"
+          />
+  
+          <label class="form-label mb-0">Para:</label>
+          <input
+            type="date"
+            class="form-control w-auto"
+            [(ngModel)]="customDateRange.end"
+          />
+        </div>
+  
+        <button
+          class="btn btn-primary"
+          (click)="onDateRange()"
+        >
+          Aplicar
+        </button>
+      </div>
+  
+      <!-- DIREITA -->
+      <div class="d-flex align-items-center ms-auto pe-5">
+        <select
+          class="form-select w-auto"
+          [(ngModel)]="selectedStatusDate"
+          (ngModelChange)="updateStatusAnalytics()"
+        >
+          <option value="">Selecione</option>
+          <option *ngFor="let date of statusDates" [value]="date">
+            {{ date | date: 'dd/MM/yyyy' }}
+          </option>
+        </select>
+      </div>
+  
     </div>
-
-    <button
-      class="btn btn-primary d-flex align-items-center position-relative my-1"
-      (click)="onDateRange()"
-    >
-      Aplicar
-    </button>
   </div>
-</div>
+
 
 <!-- Container para Faturamento e Ranking -->
 <div style="width: 320px; float: left;">
