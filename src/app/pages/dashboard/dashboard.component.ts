@@ -230,26 +230,43 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getDirecaoStatus(statusId: number, value: number): Direcao {
-    if (value === 0) return 'neutro';
+  getBadgeIconByStatus(direcao: Direcao, statusId: number): string {
+    const isRuim = this.isBadStatus(statusId);
 
-    const isGoodStatus = statusId === 101; // ATIVO
-
-    if (isGoodStatus) {
-      return value > 0 ? 'aumento' : 'queda';
-    } else {
-      // 🔥 invertido para status ruins
-      return value > 0 ? 'queda' : 'aumento';
+    if (!isRuim) {
+      // NORMAL
+      switch (direcao) {
+        case 'aumento':
+          return 'ki-arrow-up text-success';
+        case 'queda':
+          return 'ki-arrow-down text-danger';
+        default:
+          return 'ki-minus text-muted';
+      }
     }
+
+    switch (direcao) {
+      case 'aumento':
+        return 'ki-arrow-up text-danger'; // pior
+      case 'queda':
+        return 'ki-arrow-down text-success'; // melhor
+      default:
+        return 'ki-minus text-muted';
+    }
+  }
+
+  isBadStatus(statusId: number): boolean {
+    return statusId != 101;
+  }
+
+  getDirecaoFromNumber(value: number): Direcao {
+    if (value > 0) return 'aumento';
+    if (value < 0) return 'queda';
+    return 'neutro';
   }
 
   getAbsoluteValue(value: number): number {
     return Math.abs(value);
-  }
-
-  colorStyle(index: number): string {
-    const cor = this.CORES[index % this.CORES.length];
-    return `background-color: ${cor}`;
   }
 
   private formatDate(date: Date): string {
@@ -553,10 +570,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getRegiaoData(regiaoId: number): RegionDashboardData | undefined {
-    return this.regioesData.get(regiaoId);
-  }
-
   getRankingBadgeClass(direcao: Direcao): string {
     switch (direcao) {
       case 'aumento':
@@ -576,6 +589,30 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         return 'ki-duotone ki-arrow-down fs-5 text-danger ms-n1';
       default:
         return 'ki-duotone ki-minus fs-5 text-muted ms-n1';
+    }
+  }
+
+  getBadgeClassByStatus(direcao: Direcao, statusId: number): string {
+    const isBad = this.isBadStatus(statusId);
+
+    if (!isBad) {
+      switch (direcao) {
+        case 'aumento':
+          return 'badge-light-success';
+        case 'queda':
+          return 'badge-light-danger';
+        default:
+          return 'badge-light-secondary';
+      }
+    }
+
+    switch (direcao) {
+      case 'aumento':
+        return 'badge-light-danger'; // pior
+      case 'queda':
+        return 'badge-light-success'; // melhor
+      default:
+        return 'badge-light-secondary';
     }
   }
 
