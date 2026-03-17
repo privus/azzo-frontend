@@ -84,7 +84,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.customers = this.route.snapshot.data['customers'];
     this.productRanking = this.route.snapshot.data['productRanking'] || [];
 
-    const statusAnalytics = this.route.snapshot.data['statusAnalytics'] || [];
+    const resolved = this.route.snapshot.data['statusAnalytics'];
+
+    this.statusDates = resolved.dates;
+    const statusAnalytics = resolved.analytics;
 
     statusAnalytics.forEach((item: StatusAnalyticsByRegion) => {
       this.statusDiff.set(item.regiao_id, item);

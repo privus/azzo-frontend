@@ -12,6 +12,11 @@ export interface StatusAnalyticsByRegion {
   inativo: number;
 }
 
+export interface StatusAnalyticsResolvedData {
+  dates: string[];
+  analytics: StatusAnalyticsByRegion[];
+}
+
 export interface RegionDashboardData {
   nome: string;
   status: {
