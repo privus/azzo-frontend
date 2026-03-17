@@ -235,11 +235,11 @@
 
               <span
                 class="badge fs-8 fw-bold py-1 px-2 ms-2"
-                [ngClass]="getBadgeClass(getDirecaoFromNumber(status.diff))"
+                [ngClass]="getBadgeClass(getDirecaoStatus(status.statusId, status.diff))"
               >
                 <i
                   class="ki-duotone fs-7 ms-n1 me-1"
-                  [ngClass]="getBadgeIcon(getDirecaoFromNumber(status.diff))"
+                  [ngClass]="getBadgeIcon(getDirecaoStatus(status.statusId, status.diff))"
                 >
                   <span class="path1"></span><span class="path2"></span>
                 </i>

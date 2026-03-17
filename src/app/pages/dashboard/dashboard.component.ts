@@ -230,10 +230,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getDirecaoFromNumber(value: number): Direcao {
-    if (value > 0) return 'aumento';
-    if (value < 0) return 'queda';
-    return 'neutro';
+  getDirecaoStatus(statusId: number, value: number): Direcao {
+    if (value === 0) return 'neutro';
+
+    const isGoodStatus = statusId === 101; // ATIVO
+
+    if (isGoodStatus) {
+      return value > 0 ? 'aumento' : 'queda';
+    } else {
+      // 🔥 invertido para status ruins
+      return value > 0 ? 'queda' : 'aumento';
+    }
   }
 
   getAbsoluteValue(value: number): number {
