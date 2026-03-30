@@ -9,7 +9,7 @@ import { CustomerService } from '../../../app/modules/commerce/services/customer
   providedIn: 'root',
 })
 export class StatusAnalyticsResolver implements Resolve<StatusAnalyticsResolvedData> {
-  private regioesIds: number[] = [5, 7, 6, 4, 10, 2];
+  private regioesIds: number[] = [5, 7, 6, 4, 10, 2, 8];
 
   constructor(private customerService: CustomerService) {}
 
