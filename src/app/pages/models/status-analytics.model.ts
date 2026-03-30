@@ -1,4 +1,4 @@
-import { StatusRecord } from './status-record.model';
+import { StatusRecord } from './status.model';
 
 export interface StatusAnalyticsHistory {
   id: number;

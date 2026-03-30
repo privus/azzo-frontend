@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SalesComparisonReport, Direcao, StatusAnalyticsByRegion, RegionDashboardData, StatusRecord } from '../models';
+import { SalesComparisonReport, Direcao, StatusAnalyticsByRegion, RegionDashboardData, StatusRecord, StatusByRegion } from '../models';
 import Chart from 'chart.js/auto';
 import { OrderService } from '../../modules/commerce/services/order.service';
 import { Cliente, ProductRankingItem } from '../../modules/commerce/models';
@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedStatusDate: string = '';
   statusRecord: StatusRecord[] = [];
   statusRecordMap = new Map<number, StatusRecord[]>();
+  statusByRegion: StatusByRegion[];
 
   departamentosPerson: { nome: string; valor: number; cor: string }[] = [];
   categoriasPerson: { nome: string; valor: number; cor: string }[] = [];
@@ -49,7 +50,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   regioesData: Map<number, RegionDashboardData> = new Map();
   regioesDataList: { regiaoId: number; data: RegionDashboardData }[] = [];
 
-  customers: Cliente[] = [];
   productRanking: ProductRankingItem[] = [];
   rankingLimit = 100;
   comparisonMode: 'lastYear' | 'lastMonth' = 'lastYear';
@@ -83,7 +83,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.salesPerformance = this.route.snapshot.data['salesAzzoPerformance'];
-    this.customers = this.route.snapshot.data['customers'];
+    this.statusByRegion = this.route.snapshot.data['statusByRegion'] || [];
     this.productRanking = this.route.snapshot.data['productRanking'] || [];
 
     const resolved = this.route.snapshot.data['statusAnalytics'];
@@ -448,96 +448,54 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private processRegioesData(): void {
     this.regioesData.clear();
 
-    const ordemStatus = [101, 104, 102, 103];
-    const customersByRegion = new Map<number, Cliente[]>();
+    const statusMapByRegion = new Map<number, StatusByRegion>();
 
-    // 🔹 Agrupar clientes por região
-    this.customers.forEach((customer) => {
-      const regiaoId = customer.regiao?.regiao_id;
-      if (!regiaoId) return;
-
-      if (!customersByRegion.has(regiaoId)) {
-        customersByRegion.set(regiaoId, []);
-      }
-
-      customersByRegion.get(regiaoId)!.push(customer);
-    });
-
-    // 🔥 Agrupar vendedores (statusRecord) por região
-    const vendedoresByRegion = new Map<number, StatusRecord[]>();
-
-    this.statusRecord.forEach((item: StatusRecord) => {
-      if (!vendedoresByRegion.has(item.regiao_id)) {
-        vendedoresByRegion.set(item.regiao_id, []);
-      }
-
-      vendedoresByRegion.get(item.regiao_id)!.push(item);
+    this.statusByRegion.forEach((item) => {
+      statusMapByRegion.set(item.regiao_id, item);
     });
 
     this.regioesIds.forEach((regiaoId) => {
-      const clientesRegiao = customersByRegion.get(regiaoId) || [];
-      const nomeRegiao = clientesRegiao[0]?.regiao?.nome || `Região ${regiaoId}`;
+      const region = statusMapByRegion.get(regiaoId);
 
-      const statusMap = new Map<number, { nome: string; quantidade: number; statusId: number }>();
+      if (!region) return;
 
-      // 🔹 montar status
-      clientesRegiao.forEach((cliente) => {
-        if (cliente.status_cliente) {
-          const statusId = cliente.status_cliente.status_cliente_id;
-          const statusNome = cliente.status_cliente.nome;
+      const statusArray = [
+        {
+          nome: 'Ativo',
+          quantidade: region.ativo,
+          cor: this.getStatusColorById(101),
+          statusId: 101,
+          diff: this.statusDiff.get(regiaoId)?.ativo || 0,
+        },
+        {
+          nome: 'Atenção',
+          quantidade: region.atencao,
+          cor: this.getStatusColorById(104),
+          statusId: 104,
+          diff: this.statusDiff.get(regiaoId)?.atencao || 0,
+        },
+        {
+          nome: 'Frio',
+          quantidade: region.frio,
+          cor: this.getStatusColorById(102),
+          statusId: 102,
+          diff: this.statusDiff.get(regiaoId)?.frio || 0,
+        },
+        {
+          nome: 'Inativo',
+          quantidade: region.inativo,
+          cor: this.getStatusColorById(103),
+          statusId: 103,
+          diff: this.statusDiff.get(regiaoId)?.inativo || 0,
+        },
+      ];
 
-          if (statusMap.has(statusId)) {
-            statusMap.get(statusId)!.quantidade++;
-          } else {
-            statusMap.set(statusId, {
-              nome: statusNome,
-              quantidade: 1,
-              statusId,
-            });
-          }
-        }
-      });
-
-      const statusArray = Array.from(statusMap.values())
-        .map((status) => {
-          const diff = this.statusDiff.get(regiaoId);
-
-          let diffValue = 0;
-
-          if (diff) {
-            switch (status.statusId) {
-              case 101:
-                diffValue = diff.ativo;
-                break;
-              case 104:
-                diffValue = diff.atencao;
-                break;
-              case 102:
-                diffValue = diff.frio;
-                break;
-              case 103:
-                diffValue = diff.inativo;
-                break;
-            }
-          }
-
-          return {
-            nome: status.nome,
-            quantidade: status.quantidade,
-            cor: this.getStatusColorById(status.statusId),
-            statusId: status.statusId,
-            diff: diffValue,
-          };
-        })
-        .sort((a, b) => ordemStatus.indexOf(a.statusId) - ordemStatus.indexOf(b.statusId));
-
-      // 🔥 pegar vendedores da região
-      const vendedores = vendedoresByRegion.get(regiaoId) || [];
+      const vendedores = this.statusRecordMap.get(regiaoId) || [];
 
       this.regioesData.set(regiaoId, {
-        nome: nomeRegiao,
+        nome: region.regiao_nome,
         status: statusArray,
-        vendedores, // 🔥 NOVO
+        vendedores,
       });
     });
 

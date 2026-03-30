@@ -4,16 +4,9 @@ import { RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { ModalsModule } from '../../_metronic/partials';
 import { AuthGuard } from '../../core/guards/auth.guard';
-import { SalesAzzoComparisonResolver } from './sales-azzo-comparison.resolver';
-import { DebtsAzzoComparisonResolver } from './debts-azzo-comparison.resolver';
-import { DebtsPersonComparisonResolver } from './debts-person-comparison.resolver';
 import { FormsModule } from '@angular/forms';
-import { DebtsComparisonResolver } from './debts-comparison.resolver';
-import { StatusAnalyticsResolver } from './status-analytics.resolver';
-import { CustomerResolver } from '../../modules/commerce/customer.resolver';
-import { ProductRankingResolver } from './product-ranking.resolver';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { StatusRecordeResolver } from './status-record.resolver';
+import { StatusRecordeResolver, ProductRankingResolver, StatusAnalyticsResolver, StatusByRegionResolver, SalesAzzoComparisonResolver } from './';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -27,11 +20,8 @@ import { StatusRecordeResolver } from './status-record.resolver';
         component: DashboardComponent,
         resolve: {
           salesAzzoPerformance: SalesAzzoComparisonResolver,
-          debtsAzzoPerformance: DebtsAzzoComparisonResolver,
-          debtsPersonPerformance: DebtsPersonComparisonResolver,
-          debtsComparison: DebtsComparisonResolver,
           statusAnalytics: StatusAnalyticsResolver,
-          customers: CustomerResolver,
+          statusByRegion: StatusByRegionResolver,
           productRanking: ProductRankingResolver,
           statusRecord: StatusRecordeResolver,
         },
