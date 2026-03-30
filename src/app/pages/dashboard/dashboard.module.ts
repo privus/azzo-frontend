@@ -13,6 +13,7 @@ import { StatusAnalyticsResolver } from './status-analytics.resolver';
 import { CustomerResolver } from '../../modules/commerce/customer.resolver';
 import { ProductRankingResolver } from './product-ranking.resolver';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { StatusRecordeResolver } from './status-record.resolver';
 
 @NgModule({
   declarations: [DashboardComponent],
@@ -32,6 +33,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
           statusAnalytics: StatusAnalyticsResolver,
           customers: CustomerResolver,
           productRanking: ProductRankingResolver,
+          statusRecord: StatusRecordeResolver,
         },
         canActivate: [AuthGuard],
       },

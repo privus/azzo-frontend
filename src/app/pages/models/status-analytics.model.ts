@@ -1,3 +1,5 @@
+import { StatusRecord } from './status-record.model';
+
 export interface StatusAnalyticsHistory {
   id: number;
   nome: string;
@@ -26,4 +28,5 @@ export interface RegionDashboardData {
     statusId: number;
     diff: number;
   }[];
+  vendedores?: StatusRecord[];
 }

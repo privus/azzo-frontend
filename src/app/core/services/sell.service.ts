@@ -12,9 +12,9 @@ import {
   PositivityByBrandResponse,
   VendedorPositivacao,
 } from '../../modules/sellers/models';
-import { SalesComparisonReport } from 'src/app/pages/models/performance-sales.modal';
-import { PGenerateCredit } from 'src/app/modules/financial/models';
-import { AssemblyDto, AssemblyResponse } from 'src/app/modules/expedition/models';
+import { SalesComparisonReport, StatusRecord } from '../../pages/models';
+import { PGenerateCredit } from '../../modules/financial/models';
+import { AssemblyDto, AssemblyResponse } from '../../modules/expedition/models';
 
 @Injectable()
 export class SellService {
@@ -172,5 +172,9 @@ export class SellService {
 
   getGoalsRanking() {
     return this.http.get<GoalsRanking[]>(`${this.baseUrl}sellers/goalsRanking`);
+  }
+
+  getStatusRecord() {
+    return this.http.get<StatusRecord[]>(`${this.baseUrl}sellers/statusRecord`);
   }
 }

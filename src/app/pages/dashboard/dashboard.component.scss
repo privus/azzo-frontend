@@ -160,3 +160,15 @@
     max-width: 120px;
   }
 }
+
+.record-target {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #eef6ff;
+  color: #0d6efd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}

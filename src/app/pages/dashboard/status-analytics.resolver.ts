@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { StatusAnalyticsByRegion, StatusAnalyticsResolvedData } from '../models';
-import { CustomerService } from 'src/app/modules/commerce/services/customer.service';
+import { StatusAnalyticsResolvedData } from '../models';
+import { CustomerService } from '../../../app/modules/commerce/services/customer.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,6 @@ export class StatusAnalyticsResolver implements Resolve<StatusAnalyticsResolvedD
   resolve(): Observable<StatusAnalyticsResolvedData> {
     return this.customerService.getStatusDates().pipe(
       switchMap((dates: string[]) => {
-
         const normalizedDates = dates.map((d) => d.substring(0, 10));
         const sortedDates = normalizedDates.sort((a, b) => b.localeCompare(a));
 

@@ -48,4 +48,8 @@ export class SellersService {
   getGoalsRanking() {
     return this.sellService.getGoalsRanking();
   }
+
+  getStatusRecord() {
+    return this.sellService.getStatusRecord();
+  }
 }

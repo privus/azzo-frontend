@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SalesComparisonReport, Direcao, StatusAnalyticsByRegion, RegionDashboardData } from '../models';
+import { SalesComparisonReport, Direcao, StatusAnalyticsByRegion, RegionDashboardData, StatusRecord } from '../models';
 import Chart from 'chart.js/auto';
 import { OrderService } from '../../modules/commerce/services/order.service';
 import { Cliente, ProductRankingItem } from '../../modules/commerce/models';
@@ -28,6 +28,8 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   periodoLabel = '';
   statusDates: string[] = [];
   selectedStatusDate: string = '';
+  statusRecord: StatusRecord[] = [];
+  statusRecordMap = new Map<number, StatusRecord[]>();
 
   departamentosPerson: { nome: string; valor: number; cor: string }[] = [];
   categoriasPerson: { nome: string; valor: number; cor: string }[] = [];
@@ -42,7 +44,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   mesAtual: string = new Date().toLocaleString('default', { month: 'long' });
 
   // Gráficos por região
-  regioesIds: number[] = [5, 7, 6, 4, 10, 2];
+  regioesIds: number[] = [5, 7, 6, 4, 10, 2, 8];
   regioesCharts: Map<number, Chart | null> = new Map();
   regioesData: Map<number, RegionDashboardData> = new Map();
   regioesDataList: { regiaoId: number; data: RegionDashboardData }[] = [];
@@ -88,6 +90,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.statusDates = resolved.dates;
     const statusAnalytics = resolved.analytics;
+
+    this.statusRecord = this.route.snapshot.data['statusRecord'] || [];
+
+    this.mapStatusRecord();
 
     statusAnalytics.forEach((item: StatusAnalyticsByRegion) => {
       this.statusDiff.set(item.regiao_id, item);
@@ -445,6 +451,7 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const ordemStatus = [101, 104, 102, 103];
     const customersByRegion = new Map<number, Cliente[]>();
 
+    // 🔹 Agrupar clientes por região
     this.customers.forEach((customer) => {
       const regiaoId = customer.regiao?.regiao_id;
       if (!regiaoId) return;
@@ -456,12 +463,24 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       customersByRegion.get(regiaoId)!.push(customer);
     });
 
+    // 🔥 Agrupar vendedores (statusRecord) por região
+    const vendedoresByRegion = new Map<number, StatusRecord[]>();
+
+    this.statusRecord.forEach((item: StatusRecord) => {
+      if (!vendedoresByRegion.has(item.regiao_id)) {
+        vendedoresByRegion.set(item.regiao_id, []);
+      }
+
+      vendedoresByRegion.get(item.regiao_id)!.push(item);
+    });
+
     this.regioesIds.forEach((regiaoId) => {
       const clientesRegiao = customersByRegion.get(regiaoId) || [];
       const nomeRegiao = clientesRegiao[0]?.regiao?.nome || `Região ${regiaoId}`;
 
       const statusMap = new Map<number, { nome: string; quantidade: number; statusId: number }>();
 
+      // 🔹 montar status
       clientesRegiao.forEach((cliente) => {
         if (cliente.status_cliente) {
           const statusId = cliente.status_cliente.status_cliente_id;
@@ -499,9 +518,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
               case 103:
                 diffValue = diff.inativo;
                 break;
-              default:
-                diffValue = 0;
-                break;
             }
           }
 
@@ -515,9 +531,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
         })
         .sort((a, b) => ordemStatus.indexOf(a.statusId) - ordemStatus.indexOf(b.statusId));
 
+      // 🔥 pegar vendedores da região
+      const vendedores = vendedoresByRegion.get(regiaoId) || [];
+
       this.regioesData.set(regiaoId, {
         nome: nomeRegiao,
         status: statusArray,
+        vendedores, // 🔥 NOVO
       });
     });
 
@@ -673,5 +693,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (err) => console.error('Erro ao atualizar status:', err),
     });
+  }
+
+  private mapStatusRecord(): void {
+    this.statusRecordMap.clear();
+
+    for (const item of this.statusRecord) {
+      if (!this.statusRecordMap.has(item.regiao_id)) {
+        this.statusRecordMap.set(item.regiao_id, []);
+      }
+
+      this.statusRecordMap.get(item.regiao_id)!.push(item);
+    }
   }
 }
