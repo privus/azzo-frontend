@@ -22,4 +22,8 @@ export class CustomerService {
   getStatusDates() {
     return this.clientService.getStatusDates();
   }
+
+  getStatusRecord() {
+    return this.clientService.getStatusRecord();
+  }
 }
