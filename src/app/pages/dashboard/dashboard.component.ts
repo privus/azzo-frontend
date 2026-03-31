@@ -119,8 +119,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private buildAllCharts(): void {
     this.buildChart();
-    this.buildChartDebts();
-    this.buildChartDebtsPerson();
     this.buildRegioesCharts();
   }
 
@@ -190,30 +188,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.marcas.map((m) => m.valor),
       this.marcas.map((m) => m.cor),
       this.chartMarcasInstance,
-    );
-  }
-
-  buildChartDebts(): void {
-    const dataSet = this.filtroDespesas === 'categoria' ? this.categorias : this.departamentos;
-
-    this.chartDebtsInstance = this.createDoughnutChart(
-      'chart-departamentos',
-      dataSet.map((item) => item.nome),
-      dataSet.map((item) => item.valor),
-      dataSet.map((item) => item.cor),
-      this.chartDebtsInstance,
-    );
-  }
-
-  buildChartDebtsPerson(): void {
-    const dataSet = this.filtroDespesasPerson === 'categoria' ? this.categoriasPerson : this.departamentosPerson;
-
-    this.chartDebtsPersonInstance = this.createDoughnutChart(
-      'chart-departamentos-personizi',
-      dataSet.map((item) => item.nome),
-      dataSet.map((item) => item.valor),
-      dataSet.map((item) => item.cor),
-      this.chartDebtsPersonInstance,
     );
   }
 
@@ -359,7 +333,6 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const fromDate = this.formatDate(startDate);
 
-    endDate.setDate(endDate.getDate() + 1);
     const toDate = this.formatDate(endDate);
 
     this.updateDash(fromDate, toDate);
