@@ -51,7 +51,7 @@
           [(ngModel)]="selectedStatusDate"
           (ngModelChange)="updateStatusAnalytics()"
         >
-          <option value="">Selecione</option>
+          <option value="">Compare</option>
           <option *ngFor="let date of statusDates" [value]="date">
             {{ date | date: 'dd/MM/yyyy' }}
           </option>

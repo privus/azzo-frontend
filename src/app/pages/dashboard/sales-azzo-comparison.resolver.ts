@@ -13,14 +13,12 @@ export class SalesAzzoComparisonResolver implements Resolve<SalesComparisonRepor
   resolve(): Observable<SalesComparisonReport> {
     const now = new Date();
 
-    // Current month: 1st to today
+    // Current month: 1st to today (inclusive)
     const startCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     const endCurrentPeriod = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    endCurrentPeriod.setDate(endCurrentPeriod.getDate() + 1);
 
     const startLastYear = new Date(now.getFullYear() - 1, now.getMonth(), 1);
     const endLastYear = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
-    endLastYear.setDate(endLastYear.getDate() + 1);
 
     const fromDate1 = this.formatDate(startLastYear);
     const toDate1 = this.formatDate(endLastYear);
