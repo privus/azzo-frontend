@@ -58,6 +58,7 @@
           <tr class="text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
             <th>Produto</th>
             <th class="text-end">Marca</th>
+            <th class="text-end">Preço</th>
             <th class="text-end">Status</th>
             <th class="text-end">Ean</th>
             <th class="text-end">QT. CX</th>
@@ -112,6 +113,8 @@
                   </div>
                 </div>
               </td>
+
+              <td class="text-end">{{ produto.preco_venda | currency: 'BRL' }}</td>
 
               <td class="text-end">{{ produto.fornecedor?.nome }}</td>
 
