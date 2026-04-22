@@ -53,10 +53,10 @@ export class WeeklyBonusComponent implements OnInit {
     const today = new Date();
 
     const lastSunday = new Date(today);
-    lastSunday.setDate(today.getDate() - today.getDay() - 7); // Sunday last week
+    lastSunday.setDate(today.getDate() - today.getDay() - 7);
 
     const nextSaturday = new Date(lastSunday);
-    nextSaturday.setDate(lastSunday.getDate() + 6); // Saturday last week
+    nextSaturday.setDate(lastSunday.getDate() + 6);
 
     const formattedFrom = lastSunday.toISOString().split('T')[0];
     const formattedTo = nextSaturday.toISOString().split('T')[0];
@@ -65,7 +65,8 @@ export class WeeklyBonusComponent implements OnInit {
       next: (data: WeeklyBonusDetails) => {
         console.log('WeeklyAidDetails:', data);
 
-        if (!data || Object.keys(data).length === 0) {
+        // 🔒 proteção total
+        if (!data || typeof data !== 'object' || Object.keys(data).length === 0) {
           alert('Nenhum dado encontrado.');
           return;
         }
@@ -75,63 +76,46 @@ export class WeeklyBonusComponent implements OnInit {
         for (const vendedorNome of Object.keys(data)) {
           const vendedor = data[vendedorNome];
 
+          // 🔒 garante estrutura
+          if (!vendedor) continue;
+
+          const pedidos50 = vendedor.pedidos_50 ?? [];
+          const pedidos30 = vendedor.pedidos_30 ?? [];
+          const valorInvalido = vendedor.valor_invalido ?? [];
+          const intervaloInvalido = vendedor.intervalo_invalido ?? [];
+
           const linhas: any[] = [];
 
           // ✅ PEDIDOS 50
-          vendedor.pedidos_50.forEach((id: number) => {
-            linhas.push({
-              Codigo: id,
-              Tipo: '50',
-            });
+          pedidos50.forEach((id: number) => {
+            linhas.push({ Codigo: id, Tipo: '50' });
           });
 
           // ✅ PEDIDOS 30
-          vendedor.pedidos_30.forEach((id: number) => {
-            linhas.push({
-              Codigo: id,
-              Tipo: '30',
-            });
+          pedidos30.forEach((id: number) => {
+            linhas.push({ Codigo: id, Tipo: '30' });
           });
 
           // ❌ INVALIDOS VALOR
-          vendedor.valor_invalido.forEach((id: number) => {
-            linhas.push({
-              Codigo: id,
-              Tipo: 'Valor Inválido',
-            });
+          valorInvalido.forEach((id: number) => {
+            linhas.push({ Codigo: id, Tipo: 'Valor Inválido' });
           });
 
           // ❌ INVALIDOS INTERVALO
-          vendedor.intervalo_invalido.forEach((id: number) => {
-            linhas.push({
-              Codigo: id,
-              Tipo: 'Intervalo Inválido',
-            });
+          intervaloInvalido.forEach((id: number) => {
+            linhas.push({ Codigo: id, Tipo: 'Intervalo Inválido' });
           });
+
           linhas.sort((a, b) => a.Tipo.localeCompare(b.Tipo));
 
           // 🔥 RESUMO FINAL
-          linhas.push({
-            Codigo: 'TOTAL',
-            Tipo: '',
-          });
+          linhas.push(
+            { Codigo: 'TOTAL', Tipo: '' },
+            { Codigo: 'Valor Total', Tipo: vendedor.valor_total ?? 0 },
+            { Codigo: 'Pedidos', Tipo: vendedor.pedidos ?? 0 },
+            { Codigo: 'Clientes Novos', Tipo: vendedor.clientes_novos ?? 0 },
+          );
 
-          linhas.push({
-            Codigo: 'Valor Total',
-            Tipo: vendedor.valor_total,
-          });
-
-          linhas.push({
-            Codigo: 'Pedidos',
-            Tipo: vendedor.pedidos,
-          });
-
-          linhas.push({
-            Codigo: 'Clientes Novos',
-            Tipo: vendedor.clientes_novos,
-          });
-
-          // cria sheet
           sheets[vendedorNome.substring(0, 31)] = XLSX.utils.json_to_sheet(linhas);
         }
 
@@ -151,6 +135,7 @@ export class WeeklyBonusComponent implements OnInit {
 
         saveAs(blob, `bonus_detalhado_${formattedFrom}_a_${formattedTo}.xlsx`);
       },
+
       error: (err) => {
         console.error('Erro ao gerar Excel:', err);
         alert('Erro ao gerar relatório.');
