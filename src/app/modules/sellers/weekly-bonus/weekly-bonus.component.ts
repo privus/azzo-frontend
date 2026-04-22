@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ExportService } from '../../../_metronic/layout/core/export.service';
-import { SellerBonus, WeeklyAidDetails, WeeklyBonus } from '../models';
+import { SellerBonus, WeeklyBonusDetails, WeeklyBonus } from '../models';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { SellersService } from '../services/sellers.service';
@@ -31,7 +31,7 @@ export class WeeklyBonusComponent implements OnInit {
       this.downloadExcel();
     });
     this.exportService.onExport('weeklyBonusDetails').subscribe(() => {
-      this.WeeklyAidDetails();
+      this.WeeklyBonusDetails();
     });
   }
 
@@ -49,7 +49,7 @@ export class WeeklyBonusComponent implements OnInit {
     saveAs(blob, 'bonus_semanal.xlsx');
   }
 
-  WeeklyAidDetails(): void {
+  WeeklyBonusDetails(): void {
     const today = new Date();
 
     const lastSunday = new Date(today);
@@ -62,7 +62,7 @@ export class WeeklyBonusComponent implements OnInit {
     const formattedTo = nextSaturday.toISOString().split('T')[0];
 
     this.sellersService.getWeeklyAidDetails(formattedFrom, formattedTo).subscribe({
-      next: (data: WeeklyAidDetails) => {
+      next: (data: WeeklyBonusDetails) => {
         console.log('WeeklyAidDetails:', data);
 
         if (!data || Object.keys(data).length === 0) {

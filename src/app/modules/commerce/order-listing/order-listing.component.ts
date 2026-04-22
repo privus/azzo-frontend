@@ -12,6 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SellerRankingModalComponent } from '../seller-ranking-modal/seller-ranking-modal.component';
 import { PDFDocument } from 'pdf-lib';
 import Swal from 'sweetalert2';
+import * as bootstrap from 'bootstrap';
 
 @Component({
   selector: 'app-order-listing',
@@ -96,6 +97,11 @@ export class OrderListingComponent implements OnInit {
     this.user = storageInfo ? JSON.parse(storageInfo).nome : '';
     this.cargo = storageInfo ? JSON.parse(storageInfo).cargo.nome : '';
     this.onProduction();
+  }
+
+  ngAfterViewInit(): void {
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltipTriggerList.forEach((el) => new bootstrap.Tooltip(el));
   }
 
   onProduction(): void {

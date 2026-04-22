@@ -10,7 +10,7 @@ export interface WeeklyBonus {
   [nome: string]: SellerBonus;
 }
 
-export interface WeeklyAidDetails {
+export interface WeeklyBonusDetails {
   [vendedor: string]: {
     valor_total: number;
     pedidos: number;
