@@ -9,3 +9,17 @@ export interface SellerBonus {
 export interface WeeklyBonus {
   [nome: string]: SellerBonus;
 }
+
+export interface WeeklyAidDetails {
+  [vendedor: string]: {
+    valor_total: number;
+    pedidos: number;
+    clientes_novos: number;
+
+    pedidos_30: number[];
+    pedidos_50: number[];
+
+    valor_invalido: number[];
+    intervalo_invalido: number[];
+  };
+}

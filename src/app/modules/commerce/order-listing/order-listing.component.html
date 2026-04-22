@@ -44,6 +44,10 @@
           
             <button
                 (click)="onProduction()"
+                class="btn-tooltip"
+                data-bs-toggle="tooltip"
+                data-bs-placement="top"
+                [attr.data-bs-original-title]="assemblyGoal.valor_acumulado | currency:'BRL'"
                 style="border: none; background: none;">
                 <i class="bi bi-box-seam me-2 text-primary">
                     <span class="path1"></span>

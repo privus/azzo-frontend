@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Commissions } from '../../../modules/sellers/models/commissions.model';
 
-export type ExportTarget = 'commissions' | 'weeklyBonus' | 'customers';
+export type ExportTarget = 'commissions' | 'weeklyBonus' | 'weeklyBonusDetails' | 'customers';
 
 @Injectable({ providedIn: 'root' })
 export class ExportService {
@@ -11,6 +11,7 @@ export class ExportService {
   private exportSubjects: { [key in ExportTarget]: Subject<void> } = {
     commissions: new Subject<void>(),
     weeklyBonus: new Subject<void>(),
+    weeklyBonusDetails: new Subject<void>(),
     customers: new Subject<void>(),
   };
 

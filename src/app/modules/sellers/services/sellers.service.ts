@@ -32,6 +32,10 @@ export class SellersService {
     return this.sellService.getWeeklyBonus(fromDate, toDate);
   }
 
+  getWeeklyAidDetails(fromDate: string, toDate: string) {
+    return this.sellService.getWeeklyAidDetails(fromDate, toDate);
+  }
+
   saveGoals(goals: Goals[]) {
     return this.sellService.saveGoals(goals);
   }

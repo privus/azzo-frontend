@@ -11,6 +11,7 @@ import {
   GoalsRanking,
   PositivityByBrandResponse,
   VendedorPositivacao,
+  WeeklyAidDetails,
 } from '../../modules/sellers/models';
 import { SalesComparisonReport, StatusRecord } from '../../pages/models';
 import { PGenerateCredit } from '../../modules/financial/models';
@@ -140,6 +141,10 @@ export class SellService {
 
   getWeeklyBonus(fromDate: string, toDate: string) {
     return this.http.get<any>(`${this.baseUrl}sells/weeklyBonus?fromDate=${fromDate}&toDate=${toDate}`);
+  }
+
+  getWeeklyAidDetails(fromDate: string, toDate: string) {
+    return this.http.get<WeeklyAidDetails>(`${this.baseUrl}sells/weeklyAidDetails?fromDate=${fromDate}&toDate=${toDate}`);
   }
 
   exportBling(id: number) {

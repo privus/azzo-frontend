@@ -240,6 +240,9 @@ export class ClassicComponent implements OnInit, OnDestroy {
     if (fullPath.includes('sellers/commissions')) {
       return 'Metas';
     }
+    if (fullPath.includes('sellers/weekly-bonus')) {
+      return 'Bônus Detalhado';
+    }
     return 'Listar';
   }
 
@@ -249,12 +252,13 @@ export class ClassicComponent implements OnInit, OnDestroy {
       this.openStockOutModal();
     } else if (fullPath.includes('sellers/commissions')) {
       this.openGoalsModal();
+    } else if (fullPath.includes('sellers/weekly-bonus')) {
+      this.exportService.triggerExport('weeklyBonusDetails');
     } else {
       this.router.navigate([this.getSecondaryButtonLink()]);
     }
   }
 
-  // Nova função para abrir o modal de saída de estoque
   openStockOutModal(): void {
     this.modalReference = this.modalService.open(StockOutModalComponent, {
       backdrop: 'static',
