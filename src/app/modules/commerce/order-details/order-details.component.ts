@@ -92,6 +92,7 @@ export class OrderDetailsComponent implements OnInit {
       numero_nfe: [{ value: '' }],
       valor_frete: [{ value: '' }],
       obs: [{ value: '', disabled: true }],
+      cliente_codigo: [{ value: '', disabled: true }],
     });
   }
 
@@ -114,6 +115,7 @@ export class OrderDetailsComponent implements OnInit {
       numero_nfe: order.numero_nfe,
       obs: order.observacao,
       valor_frete: order.valor_frete || null,
+      cliente_codigo: order.cliente.codigo,
     });
 
     if (order.numero_nfe) this.orderForm.controls['numero_nfe'].disable();

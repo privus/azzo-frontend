@@ -1,3 +1,4 @@
+import { Transportadora } from '../../expedition/models';
 import { Vendedor } from './';
 
 export interface Cliente {
@@ -28,6 +29,7 @@ export interface Cliente {
   valor_ultima_compra?: number;
   categoria_cliente: CategoriaCliente;
   segmento_id: number;
+  transportadora?: Transportadora;
 }
 
 export interface Cidade {

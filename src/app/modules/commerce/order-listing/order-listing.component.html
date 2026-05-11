@@ -242,8 +242,7 @@
                         <span class="path4"></span>
                         <span class="path5"></span>
                     </i>
-                    Iniciar Montagem
-                
+                    Iniciar Montagem                
                 </button>
             </div>
               
@@ -317,6 +316,7 @@
                         <td>{{ order.codigo }}</td>
                         <td>
                             <div class="d-flex flex-column align-items-center">
+                                <span *ngIf="order.cliente.transportadora" class="bi bi-truck text-danger fs-7" title="Transportadora"></span>
                                 <i
                                     class="fas me-1 text-muted"
                                     [ngClass]="getSegmentIcon(order.cliente.segmento_id)"
