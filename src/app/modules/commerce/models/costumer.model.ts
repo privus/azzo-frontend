@@ -30,6 +30,7 @@ export interface Cliente {
   categoria_cliente: CategoriaCliente;
   segmento_id: number;
   transportadora?: Transportadora;
+  observacao?: string;
 }
 
 export interface Cidade {

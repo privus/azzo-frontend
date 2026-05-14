@@ -92,6 +92,7 @@ export class OrderDetailsComponent implements OnInit {
       numero_nfe: [{ value: '' }],
       valor_frete: [{ value: '' }],
       obs: [{ value: '', disabled: true }],
+      obs_cliente: [{ value: '', disabled: true }],
       cliente_codigo: [{ value: '', disabled: true }],
     });
   }
@@ -114,6 +115,7 @@ export class OrderDetailsComponent implements OnInit {
       data_emissao_nfe: order.data_emissao_nfe,
       numero_nfe: order.numero_nfe,
       obs: order.observacao,
+      obs_cliente: order.cliente.observacao,
       valor_frete: order.valor_frete || null,
       cliente_codigo: order.cliente.codigo,
     });

@@ -48,6 +48,7 @@ export class OrderListingComponent implements OnInit {
   selectedSeller: string = '';
   selectedSegment: string = '';
   selectedType: string = '';
+  selectedTransp: string = '';
   cargo: string = '';
   emMontagem: number = 0;
   assemblyGoal: AssemblyGoal = {
@@ -90,7 +91,7 @@ export class OrderListingComponent implements OnInit {
     this.ranking = this.route.snapshot.data['ranking'];
     this.meta = this.route.snapshot.data['meta'];
     console.log('PEDIDOS ===> ', this.orders);
-    this.sortBy('codigo');
+    this.sortBy('datVenda');
     this.applyFilter();
     const storageInfo = this.localStorage.get('STORAGE_MY_INFO');
     this.user = storageInfo ? JSON.parse(storageInfo).nome : '';
@@ -182,11 +183,19 @@ export class OrderListingComponent implements OnInit {
       result = result.filter((order) => order.tipo_pedido.tipo_pedido_id === +this.selectedType);
     }
 
+    if (this.selectedTransp) {
+      if (this.selectedTransp === 'none') {
+        result = result.filter((order) => !order.cliente.transportadora?.transportadora_id);
+      } else {
+        result = result.filter((order) => order.cliente.transportadora?.transportadora_id === +this.selectedTransp);
+      }
+    }
+
     // 4) Atualiza filteredOrders e a paginação
     this.filteredOrders = result;
     // Ordene os pedidos filtrados por data
-    this.sortDirection = 'asc';
-    this.sortBy('codigo');
+    this.sortField = '';
+    this.sortBy('datVenda');
     this.currentPage = 1;
     this.calculatePagination();
     this.updateDisplayedItems();
@@ -852,7 +861,7 @@ export class OrderListingComponent implements OnInit {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
       this.sortField = field;
-      this.sortDirection = 'asc';
+      this.sortDirection = field === 'datVenda' ? 'desc' : 'asc';
     }
 
     this.filteredOrders.sort((a, b) => {

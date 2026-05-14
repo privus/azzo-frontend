@@ -361,6 +361,20 @@
                           />
                         </div>
                       </div>
+                      <div *ngIf="order.cliente.observacao" class="card-body pt-0">
+                        <div>
+                          <label class="form-label">Observação Cliente</label>
+                          <input
+                            type="text"
+                            name="observacao_cliente"
+                            class="form-control"
+                            placeholder="Observação Cliente"
+                            formControlName="obs_cliente"
+                            disable
+                            style="color: red;"
+                          />
+                        </div>
+                      </div>
                       <div *ngIf="order.observacao" class="card-body pt-0">
                         <div>
                           <label class="form-label">Observação</label>
@@ -375,6 +389,7 @@
                           />
                         </div>
                       </div>
+
                       <div *ngIf="order.nfe_emitida" class="card-body pt-0">
                         <div class="row align-items-end">
                           <!-- Chave de Acesso -->

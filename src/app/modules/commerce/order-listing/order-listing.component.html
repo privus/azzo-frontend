@@ -171,15 +171,8 @@
                     <option value="1">Nivaldo</option>
                     <option value="2">Marcio L.</option>
                     <option value="3">Eduardo</option>
-                    <option value="6">Glaucio</option>
-                    <option value="9">Sindy</option>
-                    <option value="11">Vitor</option>
                     <option value="12">Eliel</option>
-                    <option value="14">Giovani</option>
-                    <option value="15">Marcio M.</option>
                     <option value="8">Sergio P.</option>
-                    <option value="17">Maximiliano</option>
-                    <option value="19">Sergio F.</option>
                 </select>
             </div>
             <div class="d-flex align-items-center position-relative my-1 ms-8">
@@ -196,6 +189,18 @@
                     <option value="10442">Doação</option>
                 </select>
             </div>
+            <div class="d-flex align-items-center position-relative my-1 ms-8">
+                <select
+                    class="form-select form-select-solid form-select-lg"
+                    [(ngModel)]="selectedTransp"
+                    (change)="applyFilter()"
+                >
+                    <option value="">Transporte</option>
+                    <option value="7">Paulo Aldofo</option>
+                    <option value="24">Contratar</option>
+                    <option value="none">Bruno</option>
+                </select>
+            </div>            
             <div class="d-flex align-items-center position-relative my-1 ms-15">
                 <button
                     class="btn btn-icon btn-lg h-auto btn-color-gray-500 btn-active-color-primary justify-content-end"
@@ -316,7 +321,8 @@
                         <td>{{ order.codigo }}</td>
                         <td>
                             <div class="d-flex flex-column align-items-center">
-                                <span *ngIf="order.cliente.transportadora" class="bi bi-truck text-danger fs-7" title="Transportadora"></span>
+                                <span *ngIf="order.cliente.transportadora?.transportadora_id === 24" class="bi bi-truck text-danger fs-7" title="A Contratar"></span>
+                                <span *ngIf="order.cliente.transportadora?.transportadora_id === 7" class="bi bi-truck text-blue fs-7" title="Paulo Aldolfo"></span>
                                 <i
                                     class="fas me-1 text-muted"
                                     [ngClass]="getSegmentIcon(order.cliente.segmento_id)"
